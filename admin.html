@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - NECO Payment</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div id="adminLogin" class="admin-login-box">
+            <h2>Admin Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Login</button>
+            </form>
+        </div>
+
+        <div id="adminDashboard" style="display:none;">
+            <div class="admin-header">
+                <h2>Admin Dashboard</h2>
+                <button id="logoutBtn" class="btn-secondary">Logout</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Requests</h3>
+                    <div id="totalRequests">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Approval</h3>
+                    <div id="pendingApproval">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Approved</h3>
+                    <div id="approvedCount">0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Payment Completed</h3>
+                    <div id="completedCount">0</div>
+                </div>
+            </div>
+
+            <div class="table-controls">
+                <input type="text" id="searchInput" placeholder="Search by name, email, account..." class="search-input">
+                <select id="statusFilter" class="status-filter">
+                    <option value="all">All Requests</option>
+                    <option value="pending">Pending Approval</option>
+                    <option value="approved">Approved (Pending Payment)</option>
+                    <option value="paid">Paid (Awaiting Receipt)</option>
+                    <option value="completed">Completed</option>
+                </select>
+            </div>
+
+            <div class="payments-table-container">
+                <table class="payments-table">
+                    <thead>
+                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Account</th><th>Amount</th><th>Service</th><th>Status</th><th>Receipt</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="requestsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div id="receiptModal" class="modal">
+        <div class="modal-content modal-large">
+            <span class="close-receipt">&times;</span>
+            <h3>Upload Payment Receipt</h3>
+            <form id="receiptForm">
+                <input type="hidden" id="receiptRequestId">
+                <div class="form-group">
+                    <label>Transaction Reference</label>
+                    <input type="text" id="transactionRef" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount Paid</label>
+                    <input type="number" id="paidAmount" required>
+                </div>
+                <div class="form-group">
+                    <label>Upload Receipt (Image/PDF)</label>
+                    <input type="file" id="receiptFile" accept="image/*,.pdf" required>
+                    <small>Upload payment slip or screenshot</small>
+                </div>
+                <button type="submit" class="btn-primary">Submit Receipt</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

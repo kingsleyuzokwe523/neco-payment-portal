@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Payment Request - NECO</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <span>🎓 NECO Payment Portal</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="payment.html" class="active">Make Payment</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="payment-section">
+        <div class="container">
+            <div class="payment-container">
+                <div class="payment-form-container">
+                    <h2>Submit Payment Request</h2>
+                    <p class="subtitle">Fill the form below. Admin will review and approve.</p>
+                    
+                    <form id="paymentRequestForm" class="payment-form">
+                        <div class="form-group">
+                            <label for="fullName">Full Name *</label>
+                            <input type="text" id="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address *</label>
+                            <input type="email" id="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Phone Number *</label>
+                            <input type="tel" id="phone" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="accountNumber">Account Number (NECO Account) *</label>
+                            <input type="text" id="accountNumber" placeholder="Enter your NECO account number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="serviceType">Service Type *</label>
+                            <select id="serviceType" required>
+                                <option value="">Select Service</option>
+                                <option value="SSCE Registration">SSCE Registration - ₦15,000</option>
+                                <option value="Result Checker">Result Checker - ₦3,000</option>
+                                <option value="Certificate Reissuance">Certificate Reissuance - ₦25,000</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Amount (₦)</label>
+                            <input type="number" id="amount" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="purpose">Purpose of Payment *</label>
+                            <textarea id="purpose" rows="3" required></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-pay">Submit Request</button>
+                    </form>
+                </div>
+
+                <div class="payment-info">
+                    <div class="info-card">
+                        <h3>📌 Important</h3>
+                        <ul>
+                            <li>After submission, admin will review your request</li>
+                            <li>You will receive approval via email</li>
+                            <li>Once approved, you can make payment</li>
+                            <li>Upload your payment receipt for confirmation</li>
+                        </ul>
+                    </div>
+                    <div class="info-card">
+                        <h3>🏦 NECO Account Details</h3>
+                        <p><strong>Bank:</strong> First Bank of Nigeria</p>
+                        <p><strong>Account Name:</strong> NECO Headquarters</p>
+                        <p><strong>Account Number:</strong> 2024678123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalMessage">
+                <h3>✅ Request Submitted!</h3>
+                <p>Your payment request has been submitted.</p>
+                <p>Request ID: <strong id="requestId"></strong></p>
+                <p>You will receive an email once admin approves.</p>
+                <button onclick="window.location.href='index.html'" class="btn-primary">Go Home</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NECO Payment Portal - Home</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-content">
+                <div class="logo">
+                    <span>🎓 NECO Payment Portal</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html" class="active">Home</a>
+                    <a href="payment.html">Make Payment</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Welcome to NECO Payment Portal</h1>
+                <p>Submit your payment request and get approval from NECO admin</p>
+                <a href="payment.html" class="btn-primary">Request Payment</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="services">
+        <div class="container">
+            <h2>How It Works</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="icon">📝</div>
+                    <h3>Step 1</h3>
+                    <p>Submit your payment request with account details</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon">✅</div>
+                    <h3>Step 2</h3>
+                    <p>Admin approves your request</p>
+                </div>
+                <div class="service-card">
+                    <div class="icon">💳</div>
+                    <h3>Step 3</h3>
+                    <p>Make payment and upload receipt</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="recent-payments">
+        <div class="container">
+            <h2>Recent Requests</h2>
+            <div class="payments-list" id="recentPayments">
+                <div class="loading">Loading recent requests...</div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
