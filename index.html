@@ -4,80 +4,506 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Payment Portal</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===== COMPLETE CSS FROM NECO SITE ===== */
+        *, :before, :after {
+            box-sizing: border-box;
+            border-width: 0;
+            border-style: solid;
+            border-color: #e5e7eb;
+        }
+        html {
+            line-height: 1.5;
+            -webkit-text-size-adjust: 100%;
+            font-family: CircularStd, CircularStdBold, system-ui, sans-serif;
+        }
+        body {
+            margin: 0;
+            line-height: inherit;
+            font-family: CircularStd, CircularStdBold, system-ui, sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .container {
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 1rem;
+            padding-right: 1rem;
+            max-width: 1280px;
+        }
+        @media (min-width: 1280px) {
+            .container {
+                padding-left: 4rem;
+                padding-right: 4rem;
+            }
+        }
+        .shadow-md {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .bg-white {
+            background-color: #fff;
+        }
+        .sticky {
+            position: sticky;
+        }
+        .w-full {
+            width: 100%;
+        }
+        .z-10 {
+            z-index: 10;
+        }
+        .top-0 {
+            top: 0;
+        }
+        .py-2 {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        .relative {
+            position: relative;
+        }
+        .flex {
+            display: flex;
+        }
+        .justify-between {
+            justify-content: space-between;
+        }
+        .items-center {
+            align-items: center;
+        }
+        .h-14 {
+            height: 3.5rem;
+        }
+        .w-14 {
+            width: 3.5rem;
+        }
+        .hidden {
+            display: none;
+        }
+        @media (min-width: 1024px) {
+            .lg\:flex {
+                display: flex;
+            }
+            .lg\:items-center {
+                align-items: center;
+            }
+            .lg\:gap-8 {
+                gap: 2rem;
+            }
+            .lg\:text-xs {
+                font-size: 0.75rem;
+                line-height: 1rem;
+            }
+        }
+        @media (min-width: 1280px) {
+            .xl\:text-sm {
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+        }
+        .text-slate-600 {
+            color: #475569;
+        }
+        .text-white {
+            color: #fff;
+        }
+        .hover\:bg-green-500:hover {
+            background-color: #22c55e;
+        }
+        .group {
+            display: flex;
+            align-items: center;
+        }
+        .text-sm {
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        .font-medium {
+            font-weight: 500;
+        }
+        .rounded {
+            border-radius: 0.25rem;
+        }
+        .p-2 {
+            padding: 0.5rem;
+        }
+        .bg-green-600 {
+            background-color: #16a34a;
+        }
+        .lg\:hidden {
+            display: none;
+        }
+        @media (max-width: 1023px) {
+            .lg\:hidden {
+                display: block;
+            }
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+        .h-8 {
+            height: 2rem;
+        }
+        .w-8 {
+            width: 2rem;
+        }
+        .mt-10 {
+            margin-top: 2.5rem;
+        }
+        .flex-col {
+            flex-direction: column;
+        }
+        .gap-10 {
+            gap: 2.5rem;
+        }
+        @media (min-width: 768px) {
+            .md\:flex-row {
+                flex-direction: row;
+            }
+            .md\:w-1\/2 {
+                width: 50%;
+            }
+        }
+        .bg-primary-400 {
+            background-color: #f5fbf5;
+        }
+        .text-xs {
+            font-size: 0.75rem;
+            line-height: 1rem;
+        }
+        .w-fit {
+            width: fit-content;
+        }
+        .gap-2 {
+            gap: 0.5rem;
+        }
+        .rounded-full {
+            border-radius: 9999px;
+        }
+        .text-primary-600 {
+            color: #009515;
+        }
+        .bg-primary-600 {
+            background-color: #009515;
+        }
+        .text-\[\#F2FFF4\] {
+            color: #f2fff4;
+        }
+        .p-1 {
+            padding: 0.25rem;
+        }
+        .text-3xl {
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+        }
+        .font-CircularStdBold {
+            font-family: CircularStdBold, sans-serif;
+        }
+        .my-5 {
+            margin-top: 1.25rem;
+            margin-bottom: 1.25rem;
+        }
+        .tracking-tight {
+            letter-spacing: -0.025em;
+        }
+        @media (min-width: 768px) {
+            .md\:text-6xl {
+                font-size: 3.75rem;
+                line-height: 1;
+            }
+            .md\:my-10 {
+                margin-top: 2.5rem;
+                margin-bottom: 2.5rem;
+            }
+            .md\:leading-tight {
+                line-height: 1.25;
+            }
+        }
+        @media (min-width: 1536px) {
+            .\32xl\:w-3\/4 {
+                width: 75%;
+            }
+        }
+        @media (min-width: 1280px) {
+            .xl\:w-4\/5 {
+                width: 80%;
+            }
+        }
+        .mt-7 {
+            margin-top: 1.75rem;
+        }
+        .w-full {
+            width: 100%;
+        }
+        @media (min-width: 768px) {
+            .md\:w-fit {
+                width: fit-content;
+            }
+        }
+        .py-3 {
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .px-5 {
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+        }
+        .hover\:bg-green-500:hover {
+            background-color: #22c55e;
+        }
+        .hover\:cursor-pointer:hover {
+            cursor: pointer;
+        }
+        .md\:justify-end {
+            justify-content: flex-end;
+        }
+        .grid-cols-3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .grid {
+            display: grid;
+        }
+        @media (min-width: 768px) {
+            .md\:w-5\/6 {
+                width: 83.333333%;
+            }
+        }
+        .bg-\[\#0CA60C\] {
+            background-color: #0ca60c;
+        }
+        .p-5 {
+            padding: 1.25rem;
+        }
+        .h-full {
+            height: 100%;
+        }
+        .bg-\[\#145596\] {
+            background-color: #145596;
+        }
+        .row-span-2 {
+            grid-row: span 2 / span 2;
+        }
+        .col-span-2 {
+            grid-column: span 2 / span 2;
+        }
+        .bg-\[\#642D56\] {
+            background-color: #642d56;
+        }
+        .bg-\[\#1887EB\] {
+            background-color: #1887eb;
+        }
+        .py-10 {
+            padding-top: 2.5rem;
+            padding-bottom: 2.5rem;
+        }
+        .bg-pattern {
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23e5e7eb"><circle cx="10" cy="10" r="2"/><circle cx="30" cy="20" r="1.5"/><circle cx="50" cy="10" r="2"/><circle cx="70" cy="25" r="1"/><circle cx="90" cy="15" r="2"/></svg>');
+            background-repeat: repeat;
+        }
+        .h-40 {
+            height: 10rem;
+        }
+        .bg-contain {
+            background-size: contain;
+        }
+        .bg-no-repeat {
+            background-repeat: no-repeat;
+        }
+        .text-\[\#4E4E4E\] {
+            color: #4e4e4e;
+        }
+        .text-primary-500 {
+            color: #378b3d;
+        }
+        .grid-cols-1 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        @media (min-width: 768px) {
+            .md\:grid-cols-3 {
+                grid-template-columns: repeat(3, minmax(0, 1fr));
+            }
+        }
+        .bg-primary-200 {
+            background-color: #f8fff8;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .bg-\[\#51B55F\] {
+            background-color: #51b55f;
+        }
+        .font-semibold {
+            font-weight: 600;
+        }
+        .mt-5 {
+            margin-top: 1.25rem;
+        }
+        .px-14 {
+            padding-left: 3.5rem;
+            padding-right: 3.5rem;
+        }
+        @font-face {
+            font-family: CircularStd;
+            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.otf');
+        }
+        @font-face {
+            font-family: CircularStdBold;
+            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.otf');
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="nav-content">
-                <div class="logo">
-                    <span class="logo-text">NECO Payment Portal</span>
-                </div>
-                <div class="nav-links">
-                    <a href="index.html" class="active">Home</a>
-                    <a href="payment.html">Make Payment</a>
-                </div>
-            </div>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <div class="hero-content">
-                <h1>Welcome to NECO Payment Portal</h1>
-                <p>Secure and convenient online payment for NECO registration, result checking, and other services</p>
-                <a href="payment.html" class="btn-primary">Make Payment Now</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Services Section -->
-    <section class="services">
-        <div class="container">
-            <h2>Our Services</h2>
-            <div class="services-grid">
-                <div class="service-card">
-                    <div class="icon">📝</div>
-                    <h3>Registration Fee</h3>
-                    <p>Pay for NECO SSCE registration</p>
-                    <span class="price">₦15,000</span>
-                </div>
-                <div class="service-card">
-                    <div class="icon">🔍</div>
-                    <h3>Result Checker</h3>
-                    <p>Purchase result checking token</p>
-                    <span class="price">₦3,000</span>
-                </div>
-                <div class="service-card">
-                    <div class="icon">📜</div>
-                    <h3>Certificate</h3>
-                    <p>Request certificate reissuance</p>
-                    <span class="price">₦25,000</span>
+    <div id="app">
+        <div class="router">
+            <!-- Navigation Bar -->
+            <div class="shadow-md bg-white sticky w-full z-10 top-0">
+                <div class="container py-2 relative">
+                    <nav class="flex justify-between items-center">
+                        <div class="h-14 w-14">
+                            <a href="https://neco.gov.ng/">
+                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'%3E%3Crect width='100' height='50' fill='%230CA60C'/%3E%3Ctext x='10' y='30' fill='white' font-size='16' font-weight='bold'%3ENECO%3C/text%3E%3C/svg%3E" alt="NECO Logo" style="height: 100%; width: auto;">
+                            </a>
+                        </div>
+                        <div>
+                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+                                <li>
+                                    <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="lg:hidden" id="mobile-menu-btn">
+                            <span class="sr-only">Open main menu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                            </svg>
+                        </button>
+                    </nav>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <!-- Recent Transactions -->
-    <section class="recent-payments">
-        <div class="container">
-            <h2>Recent Transactions</h2>
-            <div class="payments-list" id="recentPayments">
-                <div class="loading">Loading recent requests...</div>
+            <!-- Main Content -->
+            <div class="container mt-10">
+                <!-- Hero Section -->
+                <div class="flex items-center flex-col md:flex-row gap-10">
+                    <div class="md:w-1/2">
+                        <div class="flex bg-primary-400 text-xs w-fit gap-2 rounded-full items-center p-2 text-primary-600">
+                            <p class="bg-primary-600 text-[#F2FFF4] rounded-full p-1">Note</p>
+                            <p>You do not need an account to make payment</p>
+                        </div>
+                        <h1 class="text-3xl md:text-6xl font-CircularStdBold my-5 md:my-10 md:leading-tight 2xl:w-3/4 xl:w-4/5 tracking-tight">
+                            NECO Payments Just Got Faster and Simpler.
+                        </h1>
+                        <div class="2xl:w-3/5 xl:w-3/4">
+                            <div class="mt-7 w-full">
+                                <a href="payment.html" class="w-full md:w-fit py-3 px-5 rounded text-white bg-green-600 hover:bg-green-500 hover:cursor-pointer inline-block text-center">Make payment</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md:w-1/2 flex md:justify-end">
+                        <div class="grid-cols-3 grid md:w-5/6">
+                            <div class="bg-[#0CA60C] p-5 w-full h-full" style="background-color:#0CA60C; padding:20px; text-align:center;">📘</div>
+                            <div class="p-5 w-full h-full" style="background-color:#f5f5f5; padding:20px; text-align:center;">💳</div>
+                            <div class="bg-[#145596] p-5 w-full h-full" style="background-color:#145596; padding:20px; text-align:center;">⭐</div>
+                            <div class="w-full row-span-2" style="padding:20px; text-align:center;">👨‍🎓</div>
+                            <div class="w-full h-full col-span-2" style="padding:20px; text-align:center;">👧</div>
+                            <div class="w-full row-span-2" style="background-color:#145596; padding:20px; text-align:center;">👩‍🎓</div>
+                            <div class="bg-[#642D56] h-full w-full" style="background-color:#642D56; padding:20px; text-align:center;">🎒</div>
+                            <div class="w-full h-full bg-[#1887EB] p-5" style="background-color:#1887EB; padding:20px; text-align:center;">✧</div>
+                            <div class="w-full h-full bg-[#642D56] p-5" style="background-color:#642D56; padding:20px; text-align:center;">🦋</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- How It Works Section -->
+                <section class="py-10">
+                    <div class="bg-pattern h-40 flex items-center bg-contain bg-no-repeat">
+                        <p class="text-3xl font-CircularStdBold">How it works</p>
+                    </div>
+                    <p class="md:w-1/2 text-xs mt-5 text-[#4E4E4E]">
+                        NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website 
+                        <span class="text-primary-500">(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
+                        <!-- Step 1 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">📄</span>
+                            </div>
+                            <p class="font-semibold mt-5">Select Payment Item</p>
+                            <p class="mt-5 text-xs">Select or search for a payment category or a payment item you want to make payment for i.e Correction of Name, Syllabus, Exam Bag e.t.c</p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">🔍</span>
+                            </div>
+                            <p class="font-semibold mt-5">Get Payment Item Code</p>
+                            <p class="mt-5 text-xs">Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-600">www.neco.gov.ng.</span> Ensure to verify your payment before proceeding to Pay and note that Refund is not applicable once payment is completed.</p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">✏️</span>
+                            </div>
+                            <p class="font-semibold mt-5">Fill the Payment Form</p>
+                            <p class="mt-5 text-xs">Fill the form in the box to the right and proceed to payment</p>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">💳</span>
+                            </div>
+                            <p class="font-semibold mt-5">Select Mode of Payment</p>
+                            <p class="mt-5 text-xs">Select mode of payment i.e Bank branch payment or Debit card payment.</p>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">✓</span>
+                            </div>
+                            <p class="font-semibold mt-5">Confirm Your Payment</p>
+                            <p class="mt-5 text-xs">Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed</p>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
+                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                <span style="font-size: 24px;">📋</span>
+                            </div>
+                            <p class="font-semibold mt-5">Evidence of Payment</p>
+                            <p class="mt-5 text-xs">Present Evidence of Payment to your nearest NECO office.</p>
+                        </div>
+                    </div>
+                </section>
             </div>
         </div>
-    </section>
+    </div>
 
-    <!-- Admin Footer Link -->
-    <footer class="footer">
-        <div class="container">
-            <p>© 2024 NECO Payment Portal. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+    <script>
+        // Mobile menu toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        if (menuBtn) {
+            menuBtn.addEventListener('click', function() {
+                alert('Navigation menu - In production, this would open mobile menu');
+            });
+        }
+    </script>
 </body>
 </html>
