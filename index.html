@@ -3,15 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NECO Payment Portal - Home</title>
+    <title>NECO Payment Portal</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navigation -->
     <nav class="navbar">
         <div class="container">
             <div class="nav-content">
                 <div class="logo">
-                    <span>🎓 NECO Payment Portal</span>
+                    <span class="logo-text">NECO Payment Portal</span>
                 </div>
                 <div class="nav-links">
                     <a href="index.html" class="active">Home</a>
@@ -21,47 +23,60 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
                 <h1>Welcome to NECO Payment Portal</h1>
-                <p>Submit your payment request and get approval from NECO admin</p>
-                <a href="payment.html" class="btn-primary">Request Payment</a>
+                <p>Secure and convenient online payment for NECO registration, result checking, and other services</p>
+                <a href="payment.html" class="btn-primary">Make Payment Now</a>
             </div>
         </div>
     </section>
 
+    <!-- Services Section -->
     <section class="services">
         <div class="container">
-            <h2>How It Works</h2>
+            <h2>Our Services</h2>
             <div class="services-grid">
                 <div class="service-card">
                     <div class="icon">📝</div>
-                    <h3>Step 1</h3>
-                    <p>Submit your payment request with account details</p>
+                    <h3>Registration Fee</h3>
+                    <p>Pay for NECO SSCE registration</p>
+                    <span class="price">₦15,000</span>
                 </div>
                 <div class="service-card">
-                    <div class="icon">✅</div>
-                    <h3>Step 2</h3>
-                    <p>Admin approves your request</p>
+                    <div class="icon">🔍</div>
+                    <h3>Result Checker</h3>
+                    <p>Purchase result checking token</p>
+                    <span class="price">₦3,000</span>
                 </div>
                 <div class="service-card">
-                    <div class="icon">💳</div>
-                    <h3>Step 3</h3>
-                    <p>Make payment and upload receipt</p>
+                    <div class="icon">📜</div>
+                    <h3>Certificate</h3>
+                    <p>Request certificate reissuance</p>
+                    <span class="price">₦25,000</span>
                 </div>
             </div>
         </div>
     </section>
 
+    <!-- Recent Transactions -->
     <section class="recent-payments">
         <div class="container">
-            <h2>Recent Requests</h2>
+            <h2>Recent Transactions</h2>
             <div class="payments-list" id="recentPayments">
                 <div class="loading">Loading recent requests...</div>
             </div>
         </div>
     </section>
+
+    <!-- Admin Footer Link -->
+    <footer class="footer">
+        <div class="container">
+            <p>© 2024 NECO Payment Portal. All rights reserved.</p>
+        </div>
+    </footer>
 
     <script src="script.js"></script>
 </body>
