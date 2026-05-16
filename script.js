@@ -1,9 +1,13 @@
-const STORAGE_KEYS = {
-    REQUESTS: 'payment_requests'
+// Service prices
+const servicePrices = {
+    'SSCE Registration': 15000,
+    'Result Checker': 3000,
+    'Certificate Reissuance': 25000
 };
 
+// Storage functions
 function getRequests() {
-    const data = localStorage.getItem(STORAGE_KEYS.REQUESTS);
+    const data = localStorage.getItem('payment_requests');
     return data ? JSON.parse(data) : [];
 }
 
@@ -14,16 +18,11 @@ function saveRequest(request) {
     request.date = new Date().toISOString();
     request.receipt = null;
     requests.push(request);
-    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(requests));
+    localStorage.setItem('payment_requests', JSON.stringify(requests));
     return request;
 }
 
-const servicePrices = {
-    'SSCE Registration': 15000,
-    'Result Checker': 3000,
-    'Certificate Reissuance': 25000
-};
-
+// Payment form handling
 if (document.getElementById('paymentRequestForm')) {
     const serviceSelect = document.getElementById('serviceType');
     const amountInput = document.getElementById('amount');
@@ -58,11 +57,10 @@ if (document.getElementById('paymentRequestForm')) {
         this.reset();
         amountInput.value = '';
         
-        if (typeof displayRecentPayments === 'function') {
-            displayRecentPayments();
-        }
+        displayRecentPayments();
     });
     
+    // Modal close
     const modal = document.getElementById('successModal');
     const closeBtn = document.querySelector('.close');
     if (closeBtn) {
@@ -73,6 +71,7 @@ if (document.getElementById('paymentRequestForm')) {
     };
 }
 
+// Display recent payments on homepage
 if (document.getElementById('recentPayments')) {
     displayRecentPayments();
 }
@@ -107,7 +106,8 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
-if (!localStorage.getItem(STORAGE_KEYS.REQUESTS)) {
+// Sample data for demo
+if (!localStorage.getItem('payment_requests')) {
     const sampleRequests = [
         {
             id: 1700000000001,
@@ -136,5 +136,5 @@ if (!localStorage.getItem(STORAGE_KEYS.REQUESTS)) {
             receipt: null
         }
     ];
-    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(sampleRequests));
+    localStorage.setItem('payment_requests', JSON.stringify(sampleRequests));
 }
