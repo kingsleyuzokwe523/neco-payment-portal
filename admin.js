@@ -1,22 +1,21 @@
-const STORAGE_KEYS = {
-    REQUESTS: 'payment_requests'
-};
-
+// Storage functions
 function getRequests() {
-    const data = localStorage.getItem(STORAGE_KEYS.REQUESTS);
+    const data = localStorage.getItem('payment_requests');
     return data ? JSON.parse(data) : [];
 }
 
 function saveRequests(requests) {
-    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(requests));
+    localStorage.setItem('payment_requests', JSON.stringify(requests));
 }
 
+// Check if already logged in
 if (localStorage.getItem('adminLoggedIn') === 'true') {
     document.getElementById('adminLogin').style.display = 'none';
     document.getElementById('adminDashboard').style.display = 'block';
     loadAdminDashboard();
 }
 
+// Login form
 const loginForm = document.getElementById('loginForm');
 if (loginForm) {
     loginForm.addEventListener('submit', function(e) {
@@ -30,11 +29,12 @@ if (loginForm) {
             document.getElementById('adminDashboard').style.display = 'block';
             loadAdminDashboard();
         } else {
-            alert('Invalid credentials! Use admin / admin123');
+            document.getElementById('loginError').style.display = 'block';
         }
     });
 }
 
+// Logout
 document.getElementById('logoutBtn')?.addEventListener('click', function() {
     localStorage.removeItem('adminLoggedIn');
     document.getElementById('adminLogin').style.display = 'block';
@@ -51,15 +51,10 @@ function loadAdminDashboard() {
 
 function loadStats() {
     const requests = getRequests();
-    const total = requests.length;
-    const pending = requests.filter(r => r.status === 'pending').length;
-    const approved = requests.filter(r => r.status === 'approved').length;
-    const completed = requests.filter(r => r.status === 'completed').length;
-    
-    document.getElementById('totalRequests').textContent = total;
-    document.getElementById('pendingApproval').textContent = pending;
-    document.getElementById('approvedCount').textContent = approved;
-    document.getElementById('completedCount').textContent = completed;
+    document.getElementById('totalRequests').textContent = requests.length;
+    document.getElementById('pendingApproval').textContent = requests.filter(r => r.status === 'pending').length;
+    document.getElementById('approvedCount').textContent = requests.filter(r => r.status === 'approved').length;
+    document.getElementById('completedCount').textContent = requests.filter(r => r.status === 'completed').length;
 }
 
 function loadRequestsTable() {
@@ -82,7 +77,7 @@ function loadRequestsTable() {
     const tbody = document.getElementById('requestsTableBody');
     
     if (requests.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No requests found</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">No requests found</td></tr>';
         return;
     }
     
@@ -94,8 +89,8 @@ function loadRequestsTable() {
             <td>${req.accountNumber}</td>
             <td>₦${req.amount.toLocaleString()}</td>
             <td>${req.serviceType}</td>
+            <td>${new Date(req.date).toLocaleDateString()}</td>
             <td><span class="status-badge status-${req.status}">${req.status.toUpperCase()}</span></td>
-            <td>${req.receipt ? '<button onclick="viewReceipt(' + req.id + ')" class="view-receipt">View</button>' : 'No receipt'}</td>
             <td>${getActionButtons(req)}</td>
         </tr>
     `).join('');
@@ -105,9 +100,11 @@ function getActionButtons(req) {
     if (req.status === 'pending') {
         return `<button onclick="approveRequest(${req.id})" class="btn-approve">Approve</button>`;
     } else if (req.status === 'approved') {
-        return `<button onclick="markAsPaid(${req.id})" class="btn-pay-action">Mark as Paid</button>`;
+        return `<button onclick="openReceiptModal(${req.id})" class="btn-pay-action">Upload Receipt</button>`;
     } else if (req.status === 'paid') {
         return `<button onclick="completePayment(${req.id})" class="btn-approve">Complete</button>`;
+    } else if (req.status === 'completed' && req.receipt) {
+        return `<button onclick="viewReceipt(${req.id})" class="view-receipt">View Receipt</button>`;
     }
     return 'Completed';
 }
@@ -126,7 +123,7 @@ function approveRequest(id) {
     }
 }
 
-function markAsPaid(id) {
+function openReceiptModal(id) {
     document.getElementById('receiptModal').style.display = 'block';
     document.getElementById('receiptRequestId').value = id;
 }
@@ -145,6 +142,7 @@ function completePayment(id) {
     }
 }
 
+// Receipt upload
 document.getElementById('receiptForm')?.addEventListener('submit', function(e) {
     e.preventDefault();
     const id = document.getElementById('receiptRequestId').value;
@@ -180,6 +178,7 @@ document.getElementById('receiptForm')?.addEventListener('submit', function(e) {
     reader.readAsDataURL(file);
 });
 
+// Close receipt modal
 document.querySelector('.close-receipt')?.addEventListener('click', () => {
     document.getElementById('receiptModal').style.display = 'none';
 });
@@ -194,23 +193,16 @@ function viewReceipt(id) {
             <span class="close-receipt">&times;</span>
             <h3>Payment Receipt</h3>
             <p><strong>Transaction Ref:</strong> ${req.receipt.transactionRef}</p>
-            <p><strong>Amount:</strong> ₦${req.receipt.amount.toLocaleString()}</p>
+            <p><strong>Amount Paid:</strong> ₦${req.receipt.amount.toLocaleString()}</p>
             <p><strong>Uploaded:</strong> ${new Date(req.receipt.uploadedAt).toLocaleString()}</p>
-            <img src="${req.receipt.image}" style="max-width:100%; margin-top:1rem; border:1px solid #ddd; border-radius:4px;">
-            <button onclick="closeReceiptModal()" class="btn-primary" style="margin-top:1rem">Close</button>
+            <img src="${req.receipt.image}" style="max-width: 100%; margin-top: 1rem; border-radius: 0.5rem;">
+            <button onclick="location.reload()" class="btn-primary" style="margin-top: 1rem; width: 100%;">Close</button>
         `;
         modal.style.display = 'block';
         
         const closeBtn = content.querySelector('.close-receipt');
-        if (closeBtn) closeBtn.onclick = () => closeReceiptModal();
+        if (closeBtn) closeBtn.onclick = () => location.reload();
     }
-}
-
-function closeReceiptModal() {
-    const modal = document.getElementById('receiptModal');
-    const content = modal.querySelector('.modal-content');
-    modal.style.display = 'none';
-    location.reload();
 }
 
 function escapeHtml(text) {
