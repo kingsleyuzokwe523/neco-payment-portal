@@ -3,75 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - NECO Payment</title>
+    <title>Admin Dashboard - NECO Portal</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="admin-container">
-        <div id="adminLogin" class="admin-login-box">
-            <h2>Admin Login</h2>
-            <form id="loginForm">
-                <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="username" required>
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="password" required>
-                </div>
-                <button type="submit" class="btn-primary">Login</button>
-            </form>
+    <div class="admin-wrapper">
+        <!-- Login Section -->
+        <div id="adminLogin" class="admin-login-container">
+            <div class="admin-login-box">
+                <h2>Admin Login</h2>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="password" required>
+                    </div>
+                    <div id="loginError" style="color: #dc2626; display: none; margin-bottom: 1rem;">Invalid credentials!</div>
+                    <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
+                </form>
+            </div>
         </div>
 
-        <div id="adminDashboard" style="display:none;">
-            <div class="admin-header">
-                <h2>Admin Dashboard</h2>
-                <button id="logoutBtn" class="btn-secondary">Logout</button>
-            </div>
+        <!-- Dashboard Section -->
+        <div id="adminDashboard" style="display: none;">
+            <nav class="navbar">
+                <div class="container">
+                    <div class="nav-content">
+                        <div class="logo">
+                            <span class="logo-text">Admin Dashboard</span>
+                        </div>
+                        <div class="nav-links">
+                            <button id="logoutBtn" class="btn-secondary">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
 
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Total Requests</h3>
-                    <div id="totalRequests">0</div>
+            <div class="container">
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3>Total Requests</h3>
+                        <div id="totalRequests">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Pending Approval</h3>
+                        <div id="pendingApproval">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Approved</h3>
+                        <div id="approvedCount">0</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Completed</h3>
+                        <div id="completedCount">0</div>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <h3>Pending Approval</h3>
-                    <div id="pendingApproval">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Approved</h3>
-                    <div id="approvedCount">0</div>
-                </div>
-                <div class="stat-card">
-                    <h3>Payment Completed</h3>
-                    <div id="completedCount">0</div>
-                </div>
-            </div>
 
-            <div class="table-controls">
-                <input type="text" id="searchInput" placeholder="Search by name, email, account..." class="search-input">
-                <select id="statusFilter" class="status-filter">
-                    <option value="all">All Requests</option>
-                    <option value="pending">Pending Approval</option>
-                    <option value="approved">Approved (Pending Payment)</option>
-                    <option value="paid">Paid (Awaiting Receipt)</option>
-                    <option value="completed">Completed</option>
-                </select>
-            </div>
+                <!-- Filters -->
+                <div class="table-controls">
+                    <input type="text" id="searchInput" placeholder="Search by name, email, or account..." class="search-input">
+                    <select id="statusFilter" class="status-filter">
+                        <option value="all">All Requests</option>
+                        <option value="pending">Pending Approval</option>
+                        <option value="approved">Approved</option>
+                        <option value="paid">Paid (Receipt Uploaded)</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
 
-            <div class="payments-table-container">
-                <table class="payments-table">
-                    <thead>
-                        <tr><th>ID</th><th>Name</th><th>Email</th><th>Account</th><th>Amount</th><th>Service</th><th>Status</th><th>Receipt</th><th>Action</th></tr>
-                    </thead>
-                    <tbody id="requestsTableBody"></tbody>
-                </table>
+                <!-- Requests Table -->
+                <div class="payments-table-container">
+                    <table class="payments-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Account No</th>
+                                <th>Amount</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody">
+                            <tr><td colspan="9" style="text-align: center;">Loading requests...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
+    <!-- Receipt Modal -->
     <div id="receiptModal" class="modal">
-        <div class="modal-content modal-large">
+        <div class="modal-content">
             <span class="close-receipt">&times;</span>
             <h3>Upload Payment Receipt</h3>
             <form id="receiptForm">
@@ -81,15 +112,15 @@
                     <input type="text" id="transactionRef" required>
                 </div>
                 <div class="form-group">
-                    <label>Amount Paid</label>
+                    <label>Amount Paid (₦)</label>
                     <input type="number" id="paidAmount" required>
                 </div>
                 <div class="form-group">
-                    <label>Upload Receipt (Image/PDF)</label>
-                    <input type="file" id="receiptFile" accept="image/*,.pdf" required>
-                    <small>Upload payment slip or screenshot</small>
+                    <label>Upload Receipt (Image)</label>
+                    <input type="file" id="receiptFile" accept="image/*" required>
+                    <small>Upload payment slip or bank transfer screenshot</small>
                 </div>
-                <button type="submit" class="btn-primary">Submit Receipt</button>
+                <button type="submit" class="btn-primary" style="width: 100%;">Submit Receipt</button>
             </form>
         </div>
     </div>
