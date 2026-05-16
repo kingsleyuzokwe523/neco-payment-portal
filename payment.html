@@ -1,12 +1,12 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Payment Portal - Make Payment</title>
     <style>
-        /* ===== COMPLETE CSS FROM NECO SITE ===== */
+        /* ===== EXACT CSS FROM ORIGINAL NECO SITE ===== */
         *, :before, :after {
             box-sizing: border-box;
             border-width: 0;
@@ -39,354 +39,207 @@
                 padding-right: 4rem;
             }
         }
-        .shadow-md {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .bg-white {
-            background-color: #fff;
-        }
-        .sticky {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-        .w-full {
-            width: 100%;
-        }
-        .z-10 {
-            z-index: 10;
-        }
-        .top-0 {
-            top: 0;
-        }
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .relative {
-            position: relative;
-        }
-        .flex {
-            display: flex;
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .items-center {
-            align-items: center;
-        }
-        .h-14 {
-            height: 3.5rem;
-        }
-        .w-14 {
-            width: 3.5rem;
-        }
-        .hidden {
-            display: none;
-        }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        .bg-white { background-color: #fff; }
+        .sticky { position: sticky; top: 0; z-index: 100; }
+        .w-full { width: 100%; }
+        .z-10 { z-index: 10; }
+        .top-0 { top: 0; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .relative { position: relative; }
+        .flex { display: flex; }
+        .justify-between { justify-content: space-between; }
+        .items-center { align-items: center; }
+        .h-14 { height: 3.5rem; }
+        .w-14 { width: 3.5rem; }
+        .hidden { display: none; }
         @media (min-width: 1024px) {
-            .lg\:flex {
-                display: flex;
-            }
-            .lg\:items-center {
-                align-items: center;
-            }
-            .lg\:gap-8 {
-                gap: 2rem;
-            }
-            .lg\:text-xs {
-                font-size: 0.75rem;
-                line-height: 1rem;
-            }
+            .lg\:flex { display: flex; }
+            .lg\:items-center { align-items: center; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:text-xs { font-size: 0.75rem; line-height: 1rem; }
         }
-        @media (min-width: 1280px) {
-            .xl\:text-sm {
-                font-size: 0.875rem;
-                line-height: 1.25rem;
-            }
-        }
-        .text-slate-600 {
-            color: #475569;
-        }
-        .text-gray-600 {
-            color: #4b5563;
-        }
-        .hover\:text-gray-900:hover {
-            color: #111827;
-        }
-        .text-sm {
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-        .font-medium {
-            font-weight: 500;
-        }
-        .lg\:hidden {
+        @media (min-width: 1280px) { .xl\:text-sm { font-size: 0.875rem; line-height: 1.25rem; } }
+        .text-slate-600 { color: #475569; }
+        .text-gray-600 { color: #4b5563; }
+        .hover\:text-gray-900:hover { color: #111827; }
+        .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .font-medium { font-weight: 500; }
+        .lg\:hidden { display: none; }
+        @media (max-width: 1023px) { .lg\:hidden { display: block; } }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border-width: 0; }
+        .h-8 { height: 2rem; }
+        .w-8 { width: 2rem; }
+        .mt-20 { margin-top: 5rem; }
+        .flex-col { flex-direction: column; }
+        @media (min-width: 768px) { .md\:flex-row { flex-direction: row; } }
+        .justify-between { justify-content: space-between; }
+        .w-full { width: 100%; }
+        @media (min-width: 768px) { .md\:w-3\/5 { width: 60%; } }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        @media (min-width: 768px) { .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; } }
+        .font-CircularStdBold { font-family: CircularStdBold, sans-serif; }
+        .md\:leading-tight { line-height: 1.25; }
+        .tracking-tight { letter-spacing: -0.025em; }
+        .mt-2 { margin-top: 0.5rem; }
+        @media (min-width: 768px) { .md\:w-1\/3 { width: 33.333333%; } }
+        .mt-5 { margin-top: 1.25rem; }
+        @media (min-width: 768px) { .md\:mt-0 { margin-top: 0; } }
+        .mt-1 { margin-top: 0.25rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        .border { border-width: 1px; }
+        .bg-\[\#F2F2F2\] { background-color: #f2f2f2; }
+        .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+        .sm\:text-sm { font-size: 0.875rem; line-height: 1.25rem; }
+        .focus\:border-primary-500:focus { border-color: #378b3d; }
+        .focus\:ring-1:focus { --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color); --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color); box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000); }
+        .focus\:ring-primary-500:focus { --tw-ring-color: #378b3d; }
+        .border-\[\#F2F2F2\] { border-color: #f2f2f2; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .pr-9 { padding-right: 2.25rem; }
+        .absolute { position: absolute; }
+        .inset-y-0 { top: 0; bottom: 0; }
+        .right-0 { right: 0; }
+        .inline-flex { display: inline-flex; }
+        .justify-center { justify-content: center; }
+        .pr-2 { padding-right: 0.5rem; }
+        .w-5 { width: 1.25rem; }
+        .h-5 { height: 1.25rem; }
+        .text-gray-400 { color: #9ca3af; }
+        .gap-3 { gap: 0.75rem; }
+        .mt-10 { margin-top: 2.5rem; }
+        .flex-wrap { flex-wrap: wrap; }
+        .bg-\[\#EBEBEB\] { background-color: #ebebeb; }
+        .rounded { border-radius: 0.25rem; }
+        .p-3 { padding: 0.75rem; }
+        .text-\[\#747474\] { color: #747474; }
+        .gap-2 { gap: 0.5rem; }
+        .cursor-pointer { cursor: pointer; }
+        .\!bg-white { background-color: #fff !important; }
+        .drop-shadow-md { filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06)); }
+        .w-2 { width: 0.5rem; }
+        .rounded-full { border-radius: 9999px; }
+        .h-2 { height: 0.5rem; }
+        .grid { display: grid; }
+        @media (min-width: 768px) { .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (min-width: 1280px) { .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+        @media (min-width: 1024px) { .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+        .bg-\[\#0CA60C\] { background-color: #0ca60c; }
+        .h-full { height: 100%; }
+        .flex-col { flex-direction: column; }
+        .justify-between { justify-content: space-between; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
+        .text-black { color: #000; }
+        .h-\[1px\] { height: 1px; }
+        .bg-gray-200 { background-color: #e5e7eb; }
+        .p-5 { padding: 1.25rem; }
+        .text-xs { font-size: 0.75rem; line-height: 1rem; }
+        .border-\[\#0CA60C\] { border-color: #0ca60c; }
+        .text-\[\#0CA60C\] { color: #0ca60c; }
+        .text-\[\#222222\] { color: #222222; }
+        .font-semibold { font-weight: 600; }
+        
+        /* Modal Styles - EXACT from original */
+        .modal-overlay {
             display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
         }
-        @media (max-width: 1023px) {
-            .lg\:hidden {
-                display: block;
-            }
+        .modal-container {
+            display: none;
+            position: fixed;
+            inset: 0;
+            overflow-y: auto;
+            z-index: 1001;
         }
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
+        .modal-content {
+            display: flex;
+            min-height: 100%;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
         }
-        .h-8 {
-            height: 2rem;
-        }
-        .w-8 {
-            width: 2rem;
-        }
-        .mt-20 {
-            margin-top: 5rem;
-        }
-        .flex-col {
-            flex-direction: column;
-        }
-        @media (min-width: 768px) {
-            .md\:flex-row {
-                flex-direction: row;
-            }
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .w-full {
+        .modal-box {
             width: 100%;
+            transform: translateY(0);
+            overflow-y: auto;
+            border-radius: 0.5rem;
+            background-color: white;
+            text-align: left;
+            vertical-align: middle;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            transition-property: all;
+            transition-duration: 0.3s;
+            max-width: 36rem;
+            padding: 2.5rem 0;
         }
-        @media (min-width: 768px) {
-            .md\:w-3\/5 {
-                width: 60%;
-            }
-        }
-        .text-3xl {
-            font-size: 1.875rem;
-            line-height: 2.25rem;
-        }
-        @media (min-width: 768px) {
-            .md\:text-4xl {
-                font-size: 2.25rem;
-                line-height: 2.5rem;
-            }
-        }
-        .font-CircularStdBold {
-            font-family: CircularStdBold, sans-serif;
-        }
-        .md\:leading-tight {
-            line-height: 1.25;
-        }
-        .tracking-tight {
-            letter-spacing: -0.025em;
-        }
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-        @media (min-width: 768px) {
-            .md\:w-1\/3 {
-                width: 33.333333%;
-            }
-        }
-        .mt-5 {
-            margin-top: 1.25rem;
-        }
-        @media (min-width: 768px) {
-            .md\:mt-0 {
-                margin-top: 0;
-            }
-        }
-        .mt-1 {
-            margin-top: 0.25rem;
-        }
-        .rounded-md {
-            border-radius: 0.375rem;
-        }
-        .border {
-            border-width: 1px;
-        }
-        .bg-\[\#F2F2F2\] {
-            background-color: #f2f2f2;
-        }
-        .shadow-sm {
-            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        }
-        .sm\:text-sm {
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-        .focus\:border-primary-500:focus {
-            border-color: #378b3d;
-        }
-        .focus\:ring-1:focus {
-            --tw-ring-offset-shadow: var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);
-            --tw-ring-shadow: var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);
-            box-shadow: var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow, 0 0 #0000);
-        }
-        .focus\:ring-primary-500:focus {
-            --tw-ring-color: #378b3d;
-        }
-        .border-\[\#F2F2F2\] {
-            border-color: #f2f2f2;
-        }
-        .px-6 {
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-        }
-        .py-3 {
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-        }
-        .text-base {
-            font-size: 1rem;
-            line-height: 1.5rem;
-        }
-        .pr-9 {
-            padding-right: 2.25rem;
-        }
-        .absolute {
-            position: absolute;
-        }
-        .inset-y-0 {
-            top: 0;
-            bottom: 0;
-        }
-        .right-0 {
-            right: 0;
-        }
-        .inline-flex {
-            display: inline-flex;
-        }
-        .justify-center {
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        @media (min-width: 768px) { .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; } }
+        .text-\[\#4E4E4E\] { color: #4e4e4e; }
+        .w-6 { width: 1.5rem; }
+        .text-text-subtitle { color: #8f8f8f; }
+        .block { display: block; }
+        .text-gray-700 { color: #374151; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .text-primary-600 { color: #009515; }
+        .border-b-2 { border-bottom-width: 2px; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .border-dashed { border-style: dashed; }
+        .mt-4 { margin-top: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+        .my-2 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .mt-8 { margin-top: 2rem; }
+        .bg-white { background-color: #fff; }
+        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+        .text-primary-700 { color: #054c0f; }
+        .border-primary-700 { border-color: #054c0f; }
+        .bg-primary-700 { background-color: #054c0f; }
+        .hover\:bg-primary-600:hover { background-color: #009515; }
+        .text-white { color: #fff; }
+        .border-transparent { border-color: transparent; }
+        .col-span-2 { grid-column: span 2 / span 2; }
+        .success-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1100;
+            display: none;
+            align-items: center;
             justify-content: center;
         }
-        .pr-2 {
-            padding-right: 0.5rem;
+        .success-box {
+            background: white;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
         }
-        .w-5 {
-            width: 1.25rem;
+        
+        /* NEW: Bank Details Box */
+        .bank-details-box {
+            background: #f0fdf4;
+            border: 1px solid #0ca60c;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin: 1rem 0;
         }
-        .h-5 {
-            height: 1.25rem;
-        }
-        .text-gray-400 {
-            color: #9ca3af;
-        }
-        .gap-3 {
-            gap: 0.75rem;
-        }
-        .mt-10 {
-            margin-top: 2.5rem;
-        }
-        .flex-wrap {
-            flex-wrap: wrap;
-        }
-        .bg-\[\#EBEBEB\] {
-            background-color: #ebebeb;
-        }
-        .rounded {
-            border-radius: 0.25rem;
-        }
-        .p-3 {
-            padding: 0.75rem;
-        }
-        .text-\[\#747474\] {
-            color: #747474;
-        }
-        .gap-2 {
-            gap: 0.5rem;
-        }
-        .cursor-pointer {
-            cursor: pointer;
-        }
-        .\!bg-white {
-            background-color: #fff !important;
-        }
-        .drop-shadow-md {
-            filter: drop-shadow(0 4px 3px rgba(0, 0, 0, 0.07)) drop-shadow(0 2px 2px rgba(0, 0, 0, 0.06));
-        }
-        .w-2 {
-            width: 0.5rem;
-        }
-        .rounded-full {
-            border-radius: 9999px;
-        }
-        .h-2 {
-            height: 0.5rem;
-        }
-        .grid {
-            display: grid;
-        }
-        @media (min-width: 768px) {
-            .md\:grid-cols-2 {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-        }
-        @media (min-width: 1280px) {
-            .xl\:grid-cols-4 {
-                grid-template-columns: repeat(4, minmax(0, 1fr));
-            }
-        }
-        @media (min-width: 1024px) {
-            .lg\:grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-        }
-        .bg-\[\#0CA60C\] {
-            background-color: #0ca60c;
-        }
-        .h-full {
-            height: 100%;
-        }
-        .flex-col {
-            flex-direction: column;
-        }
-        .justify-between {
-            justify-content: space-between;
-        }
-        .py-8 {
-            padding-top: 2rem;
-            padding-bottom: 2rem;
-        }
-        .px-5 {
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-        }
-        .text-black {
-            color: #000;
-        }
-        .h-\[1px\] {
-            height: 1px;
-        }
-        .bg-gray-200 {
-            background-color: #e5e7eb;
-        }
-        .p-5 {
-            padding: 1.25rem;
-        }
-        .text-xs {
+        .invalid-code-msg {
+            color: #dc2626;
             font-size: 0.75rem;
-            line-height: 1rem;
+            margin-top: 0.25rem;
+            display: none;
         }
-        .border-\[\#0CA60C\] {
-            border-color: #0ca60c;
-        }
-        .text-\[\#0CA60C\] {
-            color: #0ca60c;
-        }
-        .text-\[\#222222\] {
-            color: #222222;
-        }
-        .font-semibold {
-            font-weight: 600;
-        }
+        
         @font-face {
             font-family: CircularStd;
             src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.otf');
@@ -395,59 +248,12 @@
             font-family: CircularStdBold;
             src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.otf');
         }
-        
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-        }
-        .modal-content {
-            background-color: white;
-            margin: 10% auto;
-            padding: 2rem;
-            width: 90%;
-            max-width: 500px;
-            border-radius: 0.5rem;
-            text-align: center;
-            position: relative;
-        }
-        .close {
-            position: absolute;
-            right: 1rem;
-            top: 0.5rem;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-        }
-        .close:hover {
-            color: #000;
-        }
-        .btn-payment-modal {
-            background-color: #0ca60c;
-            color: white;
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 0.375rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 1rem;
-        }
-        .btn-payment-modal:hover {
-            background-color: #054c0f;
-        }
     </style>
 </head>
 <body>
     <div id="app">
         <div class="router">
-            <!-- Navigation Bar - Exact from NECO -->
+            <!-- Navigation Bar - EXACT from NECO -->
             <div class="shadow-md bg-white sticky w-full z-10 top-0">
                 <div class="container py-2 relative">
                     <nav class="flex justify-between items-center">
@@ -473,7 +279,7 @@
                 </div>
             </div>
 
-            <!-- Main Payment Content - Exact from NECO -->
+            <!-- Main Payment Content - EXACT from original -->
             <div class="container mt-20">
                 <div class="flex items-center flex-col md:flex-row justify-between">
                     <div class="w-full md:w-3/5">
@@ -494,13 +300,9 @@
                     </div>
                 </div>
 
-                <!-- Category Filters - Exact from NECO -->
+                <!-- Category Filters - EXACT from original -->
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
-                    <div class="bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md" data-category="all">
-                        <div class="w-2 rounded-full h-2" style="background-color: rgb(12, 166, 12);"></div>
-                        <div>All</div>
-                    </div>
-                    <div class="bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer" data-category="SSCE Internal">
+                    <div class="bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md" data-category="SSCE Internal">
                         <div class="w-2 rounded-full h-2" style="background-color: rgb(12, 166, 12);"></div>
                         <div>SSCE Internal</div>
                     </div>
@@ -526,7 +328,7 @@
                     </div>
                 </div>
 
-                <!-- Payment Items Grid - Exact from NECO -->
+                <!-- Payment Items Grid - populated by JS -->
                 <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentItemsGrid">
                     <!-- Items will be populated by JavaScript -->
                 </div>
@@ -534,64 +336,139 @@
         </div>
     </div>
 
-    <!-- Payment Request Modal -->
-    <div id="paymentModal" class="modal">
+    <!-- Payment Form Modal - EXACT from original with code validation added -->
+    <div id="paymentModal" class="modal-overlay"></div>
+    <div id="paymentModalContainer" class="modal-container">
         <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <div style="font-size: 2rem;">💰</div>
-            <h3>Complete Payment Request</h3>
-            <form id="paymentRequestForm" style="text-align: left; margin-top: 1rem;">
-                <input type="hidden" id="selectedItemName">
-                <input type="hidden" id="selectedAmount">
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Full Name *</label>
-                    <input type="text" id="fullName" required style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Email Address *</label>
-                    <input type="email" id="email" required style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Phone Number *</label>
-                    <input type="tel" id="phone" required style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">NECO Account Number *</label>
-                    <input type="text" id="accountNumber" placeholder="Enter your NECO account number" required style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Payment Item Code *</label>
-                    <input type="text" id="itemCode" placeholder="e.g., NECO-2024-001" required style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;">
-                    <small>Get from <a href="http://www.neco.gov.ng">www.neco.gov.ng</a></small>
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Amount (₦)</label>
-                    <input type="number" id="displayAmount" readonly style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem; background: #f3f4f6;">
-                </div>
-                <div class="form-group" style="margin-bottom: 1rem;">
-                    <label style="display: block; margin-bottom: 0.25rem; font-weight: 500;">Purpose / Description</label>
-                    <textarea id="purpose" rows="2" style="width: 100%; padding: 0.5rem; border: 1px solid #e5e7eb; border-radius: 0.375rem;"></textarea>
-                </div>
-                <button type="submit" class="btn-payment-modal" style="width: 100%;">Submit Payment Request →</button>
-            </form>
+            <div class="modal-box">
+                <form id="paymentRequestForm">
+                    <div class="px-3 md:px-10">
+                        <div class="flex justify-between">
+                            <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
+                            <svg id="closeModalBtn" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p id="modalItemName" class="mt-2 font-CircularStdBold">SYLLABUS</p>
+                        <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
+                        
+                        <div class="mt-5">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
+                                <div class="mt-1 relative">
+                                    <input id="paymentCode" placeholder="Enter payment code" name="paymentCode" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md" required>
+                                    <div id="codeInvalidMsg" class="invalid-code-msg">❌ Invalid code. Please request a valid code from admin.</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- CHANGED: Replaced PDF link with "Click to get payment code from admin" -->
+                        <div class="mt-3 flex justify-end">
+                            <button type="button" id="requestCodeFromAdminBtn" class="text-sm text-primary-600 font-medium hover:underline cursor-pointer bg-transparent border-0">📞 Click to get payment code from admin</button>
+                        </div>
+                    </div>
+                    
+                    <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                    
+                    <!-- NEW: Bank Details Section - Shows after valid code -->
+                    <div id="bankDetailsSection" style="display: none;" class="bank-details-box mx-3 md:mx-10">
+                        <p class="font-bold text-primary-600">🏦 Payment Bank Details</p>
+                        <p id="bankAccountName" class="text-sm mt-1">Account Name: </p>
+                        <p id="bankAccountNumber" class="text-sm">Account Number: </p>
+                        <p id="bankName" class="text-sm">Bank: </p>
+                        <p class="text-xs text-gray-500 mt-2">Make payment to the above account and submit this form.</p>
+                    </div>
+                    
+                    <div class="px-3 md:px-10">
+                        <p class="mt-4">Payer's information</p>
+                        
+                        <div class="mt-5">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Full name</label>
+                                <div class="mt-1 relative">
+                                    <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5 flex gap-5">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Phone number</label>
+                                <div class="mt-1 relative">
+                                    <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md" required>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <div class="mt-1 relative">
+                                    <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-5">
+                            <p class="block text-sm font-medium text-gray-700">Description</p>
+                            <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
+                            <div class="w-full">
+                                <div class="mt-1 relative">
+                                    <input id="description" placeholder="Enter description" name="paymentDescription" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                    
+                    <div class="px-3 md:px-10">
+                        <p class="mt-4">Payment information</p>
+                        
+                        <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Amount</label>
+                                <div class="mt-1 relative">
+                                    <input id="amount" name="amount" readonly class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Currency</label>
+                                <div class="mt-1 relative">
+                                    <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <option value="Naira">Naira</option>
+                                        <option value="Dollars">Dollars</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                                <div class="mt-1 relative">
+                                    <input id="quantity" type="number" name="quantity" placeholder="1" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-3 mt-8 gap-5">
+                            <button type="button" id="cancelModalBtn" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                            <button type="submit" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 
     <!-- Success Modal -->
-    <div id="successModal" class="modal">
-        <div class="modal-content">
-            <span class="close" id="closeSuccessModal">&times;</span>
-            <div style="font-size: 3rem;">✅</div>
-            <h3>Request Submitted!</h3>
-            <p>Your payment request has been submitted.</p>
-            <p>Request ID: <strong id="requestId"></strong></p>
-            <p>Admin will review and approve your request.</p>
-            <button onclick="window.location.href='index.html'" class="btn-payment-modal">Go Home</button>
+    <div id="successModal" class="success-modal">
+        <div class="success-box">
+            <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+            <h3 style="margin-bottom: 0.5rem;">Payment Request Submitted!</h3>
+            <p>Your request has been sent to admin for approval.</p>
+            <p style="margin-top: 0.5rem;"><strong>Request ID: <span id="requestIdDisplay"></span></strong></p>
+            <button onclick="location.reload()" style="margin-top: 1rem; background: #0ca60c; color: white; border: none; padding: 0.5rem 1.5rem; border-radius: 0.375rem; cursor: pointer;">Close</button>
         </div>
     </div>
 
     <script>
-        // Payment items data - Exact from NECO site
+        // Payment items data - EXACT from NECO site
         const paymentItems = [
             { name: "Four Figure Table", category: "SSCE Internal", amount: 500 },
             { name: "Non-Validation", category: "SSCE Internal", amount: 10000 },
@@ -610,8 +487,14 @@
             { name: "Chief Examiners Report Fee (per Copy)", category: "Others", amount: 2500 }
         ];
 
-        let currentCategory = "all";
+        // Admin created codes stored in localStorage
+        let paymentCodes = JSON.parse(localStorage.getItem('neco_payment_codes') || '[]');
+        let paymentRequests = JSON.parse(localStorage.getItem('neco_payment_requests') || '[]');
+
+        let currentCategory = "SSCE Internal";
         let currentSearch = "";
+        let selectedItem = null;
+        let validatedCodeData = null;
 
         // Render payment items
         function renderItems() {
@@ -634,7 +517,7 @@
                         <div>
                             <div class="h-[1px] bg-gray-200"></div>
                             <div class="p-5 flex justify-between items-center">
-                                <button class="text-xs border rounded-md py-3 px-2 border-[#0CA60C] text-[#0CA60C] make-payment-btn" data-name="${item.name}" data-amount="${item.amount}" style="border-color: rgb(12, 166, 12); color: rgb(12, 166, 12);">Make payment</button>
+                                <button class="text-xs border rounded-md py-3 px-2 border-[#0CA60C] text-[#0CA60C] make-payment-btn" data-name="${item.name.replace(/'/g, "\\'")}" data-amount="${item.amount}" style="border-color: rgb(12, 166, 12); color: rgb(12, 166, 12);">Make payment</button>
                                 <div>
                                     <p class="text-xs">Fixed Amount</p>
                                     <p class="text-[#222222] font-semibold text-sm">NGN ${item.amount.toLocaleString()}</p>
@@ -645,103 +528,148 @@
                 </div>
             `).join('');
 
-            // Add event listeners to all "Make payment" buttons
             document.querySelectorAll('.make-payment-btn').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const name = this.getAttribute('data-name');
-                    const amount = this.getAttribute('data-amount');
+                    const amount = parseInt(this.getAttribute('data-amount'));
                     openPaymentModal(name, amount);
                 });
             });
         }
 
-        // Open payment request modal
-        function openPaymentModal(itemName, amount) {
-            document.getElementById('selectedItemName').value = itemName;
-            document.getElementById('selectedAmount').value = amount;
-            document.getElementById('displayAmount').value = amount;
+        function openPaymentModal(itemName, itemAmount) {
+            selectedItem = { name: itemName, amount: itemAmount };
+            validatedCodeData = null;
+            document.getElementById('modalItemName').textContent = itemName;
+            document.getElementById('amount').value = itemAmount;
+            document.getElementById('paymentCode').value = '';
+            document.getElementById('fullName').value = '';
+            document.getElementById('phone').value = '';
+            document.getElementById('email').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('quantity').value = '1';
+            document.getElementById('codeInvalidMsg').style.display = 'none';
+            document.getElementById('bankDetailsSection').style.display = 'none';
             document.getElementById('paymentModal').style.display = 'block';
+            document.getElementById('paymentModalContainer').style.display = 'block';
         }
 
-        // Save payment request to localStorage
-        function savePaymentRequest(request) {
-            const requests = JSON.parse(localStorage.getItem('payment_requests') || '[]');
-            request.id = Date.now();
-            request.status = 'pending';
-            request.date = new Date().toISOString();
-            requests.push(request);
-            localStorage.setItem('payment_requests', JSON.stringify(requests));
-            return request;
+        function closeModal() {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.getElementById('paymentModalContainer').style.display = 'none';
         }
+
+        // Validate code when user types
+        document.getElementById('paymentCode').addEventListener('input', function() {
+            const enteredCode = this.value.trim();
+            const validCode = paymentCodes.find(c => c.code === enteredCode && !c.used && c.amount === selectedItem?.amount);
+            
+            if (validCode) {
+                document.getElementById('codeInvalidMsg').style.display = 'none';
+                validatedCodeData = validCode;
+                document.getElementById('bankDetailsSection').style.display = 'block';
+                document.getElementById('bankAccountName').innerHTML = `Account Name: ${validCode.accountName}`;
+                document.getElementById('bankAccountNumber').innerHTML = `Account Number: ${validCode.accountNumber}`;
+                document.getElementById('bankName').innerHTML = `Bank: ${validCode.bankName}`;
+            } else if (enteredCode.length > 0) {
+                document.getElementById('codeInvalidMsg').style.display = 'block';
+                document.getElementById('bankDetailsSection').style.display = 'none';
+                validatedCodeData = null;
+            } else {
+                document.getElementById('codeInvalidMsg').style.display = 'none';
+                document.getElementById('bankDetailsSection').style.display = 'none';
+                validatedCodeData = null;
+            }
+        });
+
+        // Request code from admin - opens WhatsApp
+        document.getElementById('requestCodeFromAdminBtn').addEventListener('click', function() {
+            const itemName = selectedItem?.name || 'payment';
+            window.open('https://wa.me/2348000000000?text=Hello%20Admin,%20I%20need%20a%20payment%20code%20for%20NECO%20payment.%20Item:%20' + encodeURIComponent(itemName), '_blank');
+        });
 
         // Handle form submission
         document.getElementById('paymentRequestForm').addEventListener('submit', function(e) {
             e.preventDefault();
             
+            if (!selectedItem) return;
+            if (!validatedCodeData) {
+                document.getElementById('codeInvalidMsg').style.display = 'block';
+                return;
+            }
+            
+            // Mark code as used
+            const codeIndex = paymentCodes.findIndex(c => c.code === validatedCodeData.code);
+            if (codeIndex !== -1) {
+                paymentCodes[codeIndex].used = true;
+                paymentCodes[codeIndex].usedBy = document.getElementById('fullName').value;
+                paymentCodes[codeIndex].usedPhone = document.getElementById('phone').value;
+                paymentCodes[codeIndex].usedDate = new Date().toISOString();
+                localStorage.setItem('neco_payment_codes', JSON.stringify(paymentCodes));
+            }
+            
             const requestData = {
-                itemName: document.getElementById('selectedItemName').value,
-                amount: parseInt(document.getElementById('selectedAmount').value),
+                id: Date.now(),
+                code: validatedCodeData.code,
+                itemName: selectedItem.name,
+                amount: selectedItem.amount,
+                bankAccountName: validatedCodeData.accountName,
+                bankAccountNumber: validatedCodeData.accountNumber,
+                bankName: validatedCodeData.bankName,
                 fullName: document.getElementById('fullName').value,
-                email: document.getElementById('email').value,
                 phone: document.getElementById('phone').value,
-                accountNumber: document.getElementById('accountNumber').value,
-                itemCode: document.getElementById('itemCode').value,
-                purpose: document.getElementById('purpose').value
+                email: document.getElementById('email').value,
+                description: document.getElementById('description').value,
+                quantity: parseInt(document.getElementById('quantity').value) || 1,
+                currency: document.getElementById('currency').value,
+                totalAmount: selectedItem.amount * (parseInt(document.getElementById('quantity').value) || 1),
+                status: 'pending',
+                date: new Date().toISOString()
             };
             
-            const saved = savePaymentRequest(requestData);
+            paymentRequests.push(requestData);
+            localStorage.setItem('neco_payment_requests', JSON.stringify(paymentRequests));
             
-            document.getElementById('paymentModal').style.display = 'none';
-            document.getElementById('requestId').textContent = saved.id;
-            document.getElementById('successModal').style.display = 'block';
-            
-            // Reset form
-            this.reset();
+            closeModal();
+            document.getElementById('requestIdDisplay').textContent = requestData.id;
+            document.getElementById('successModal').style.display = 'flex';
         });
 
-        // Category filter click handlers
+        // Modal close handlers
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+        document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+        document.getElementById('paymentModalContainer').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) this.style.display = 'none';
+        });
+
+        // Category filter
         document.querySelectorAll('[data-category]').forEach(cat => {
             cat.addEventListener('click', function() {
-                // Update active style
                 document.querySelectorAll('[data-category]').forEach(c => {
                     c.classList.remove('!bg-white', 'drop-shadow-md');
                 });
                 this.classList.add('!bg-white', 'drop-shadow-md');
-                
                 currentCategory = this.getAttribute('data-category');
                 renderItems();
             });
         });
 
-        // Search input handler
+        // Search input
         document.getElementById('searchInput').addEventListener('input', function(e) {
             currentSearch = e.target.value;
             renderItems();
         });
 
-        // Modal close handlers
-        document.getElementById('closeModal').onclick = () => document.getElementById('paymentModal').style.display = 'none';
-        document.getElementById('closeSuccessModal').onclick = () => {
-            document.getElementById('successModal').style.display = 'none';
-            window.location.href = 'index.html';
-        };
-        window.onclick = (event) => {
-            if (event.target === document.getElementById('paymentModal')) {
-                document.getElementById('paymentModal').style.display = 'none';
-            }
-            if (event.target === document.getElementById('successModal')) {
-                document.getElementById('successModal').style.display = 'none';
-                window.location.href = 'index.html';
-            }
-        };
+        // Mobile menu button
+        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
+            alert('Navigation menu');
+        });
 
         // Initialize
         renderItems();
-
-        // Mobile menu
-        document.getElementById('mobile-menu-btn')?.addEventListener('click', () => {
-            alert('Navigation menu - In production, this would open mobile menu');
-        });
     </script>
 </body>
 </html>
