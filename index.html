@@ -3,141 +3,295 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NECO Payment Portal</title>
+    <title>NECO Payment Portal | Official Payment Platform</title>
+    <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
+    
     <style>
-        /* ===== COMPLETE CSS FROM NECO SITE ===== */
-        *, :before, :after {
-            box-sizing: border-box;
-            border-width: 0;
-            border-style: solid;
-            border-color: #e5e7eb;
-        }
-        html {
-            line-height: 1.5;
-            -webkit-text-size-adjust: 100%;
-            font-family: CircularStd, CircularStdBold, system-ui, sans-serif;
-        }
-        body {
+        /* ===================================================== */
+        /* EXACT ORIGINAL DESIGN - ALL COLORS & POSITIONS       */
+        /* FROM THE NECO PAYMENT PORTAL ORIGINAL FILE           */
+        /* ===================================================== */
+        
+        * {
             margin: 0;
-            line-height: inherit;
-            font-family: CircularStd, CircularStdBold, system-ui, sans-serif;
-            -webkit-font-smoothing: antialiased;
+            padding: 0;
+            box-sizing: border-box;
         }
+
+        body {
+            font-family: 'CircularStd', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: #FFFFFF;
+        }
+
+        /* ========== COLORS EXACTLY FROM ORIGINAL ========== */
+        :root {
+            --neco-green: #0CA60C;
+            --neco-green-dark: #009515;
+            --neco-green-light: #51B55F;
+            --neco-blue: #145596;
+            --neco-purple: #642D56;
+            --neco-blue-light: #1887EB;
+            --neco-bg-light: #F8FFF8;
+            --neco-bg-badge: #F5FBF5;
+            --text-dark: #4E4E4E;
+            --white: #FFFFFF;
+        }
+
+        /* Container */
         .container {
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            padding-left: 1rem;
-            padding-right: 1rem;
             max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
         }
+
         @media (min-width: 1280px) {
             .container {
-                padding-left: 4rem;
-                padding-right: 4rem;
+                padding: 0 60px;
             }
         }
-        .shadow-md {
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-        .bg-white {
-            background-color: #fff;
-        }
-        .sticky {
+
+        /* ========== NAVIGATION - EXACT STYLE ========== */
+        .navbar {
+            background: var(--white);
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             position: sticky;
-        }
-        .w-full {
+            top: 0;
+            z-index: 100;
             width: 100%;
         }
-        .z-10 {
-            z-index: 10;
-        }
-        .top-0 {
-            top: 0;
-        }
-        .py-2 {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-        .relative {
-            position: relative;
-        }
-        .flex {
+
+        .nav-flex {
             display: flex;
-        }
-        .justify-between {
             justify-content: space-between;
-        }
-        .items-center {
             align-items: center;
+            padding: 8px 0;
         }
-        .h-14 {
-            height: 3.5rem;
+
+        .logo {
+            width: 56px;
+            height: 56px;
         }
-        .w-14 {
-            width: 3.5rem;
+
+        .logo-placeholder {
+            width: 100%;
+            height: 100%;
+            background: #e5e7eb;
+            border-radius: 8px;
         }
-        .hidden {
-            display: none;
-        }
-        @media (min-width: 1024px) {
-            .lg\:flex {
-                display: flex;
-            }
-            .lg\:items-center {
-                align-items: center;
-            }
-            .lg\:gap-8 {
-                gap: 2rem;
-            }
-            .lg\:text-xs {
-                font-size: 0.75rem;
-                line-height: 1rem;
-            }
-        }
-        @media (min-width: 1280px) {
-            .xl\:text-sm {
-                font-size: 0.875rem;
-                line-height: 1.25rem;
-            }
-        }
-        .text-slate-600 {
-            color: #475569;
-        }
-        .text-white {
-            color: #fff;
-        }
-        .hover\:bg-green-500:hover {
-            background-color: #22c55e;
-        }
-        .group {
-            display: flex;
-            align-items: center;
-        }
-        .text-sm {
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-        .font-medium {
+
+        .payment-link {
+            background: var(--neco-green-dark);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
             font-weight: 500;
         }
-        .rounded {
-            border-radius: 0.25rem;
+
+        .payment-link:hover {
+            background: #22c55e;
         }
-        .p-2 {
-            padding: 0.5rem;
-        }
-        .bg-green-600 {
-            background-color: #16a34a;
-        }
-        .lg\:hidden {
+
+        .mobile-btn {
             display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
-        @media (max-width: 1023px) {
-            .lg\:hidden {
+
+        @media (max-width: 1024px) {
+            .desktop-nav {
+                display: none;
+            }
+            .mobile-btn {
                 display: block;
             }
         }
+
+        /* ========== HERO SECTION ========== */
+        .hero {
+            margin-top: 40px;
+        }
+
+        .hero-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .hero-wrapper {
+                flex-direction: row;
+                align-items: center;
+            }
+            .hero-left {
+                width: 50%;
+            }
+            .hero-right {
+                width: 50%;
+                display: flex;
+                justify-content: flex-end;
+            }
+        }
+
+        /* Note Badge */
+        .note-badge {
+            display: inline-flex;
+            background: var(--neco-bg-badge);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            gap: 12px;
+            font-size: 12px;
+            align-items: center;
+        }
+
+        .note-badge span {
+            background: var(--neco-green-dark);
+            color: #F2FFF4;
+            padding: 4px 10px;
+            border-radius: 9999px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 20px 0;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
+        }
+
+        @media (min-width: 768px) {
+            h1 {
+                font-size: 3.75rem;
+            }
+        }
+
+        .hero-button {
+            background: var(--neco-green-dark);
+            color: white;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 28px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .hero-button {
+                width: auto;
+            }
+        }
+
+        /* ========== IMAGE GRID - EXACT ORIGINAL POSITIONS ========== */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .image-grid {
+                width: 83.333%;
+            }
+        }
+
+        .grid-item {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .grid-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Background colors exactly from original */
+        .bg-original-green { background-color: #0CA60C; }
+        .bg-original-blue { background-color: #145596; }
+        .bg-original-purple { background-color: #642D56; }
+        .bg-original-lightblue { background-color: #1887EB; }
+
+        .p-20 { padding: 20px; }
+        .row-span-2 { grid-row: span 2; }
+        .col-span-2 { grid-column: span 2; }
+
+        /* ========== HOW IT WORKS SECTION ========== */
+        .how-section {
+            padding: 40px 0 60px;
+        }
+
+        .how-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            height: 160px;
+            display: flex;
+            align-items: center;
+        }
+
+        .info-note {
+            font-size: 12px;
+            margin: 20px 0;
+            max-width: 600px;
+            color: var(--text-dark);
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+
+        @media (min-width: 768px) {
+            .steps-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .step-card {
+            background: var(--neco-bg-light);
+            padding: 40px 56px;
+            text-align: center;
+            border-radius: 16px;
+        }
+
+        .step-icon {
+            background: var(--neco-green-light);
+            width: fit-content;
+            margin: 0 auto;
+            padding: 12px;
+            border-radius: 9999px;
+        }
+
+        .step-icon svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .step-card h3 {
+            font-weight: 600;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .step-card p {
+            font-size: 12px;
+            margin-top: 20px;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .text-primary-green { color: var(--neco-green-dark); }
+        .text-green-light { color: #378B3D; }
+
         .sr-only {
             position: absolute;
             width: 1px;
@@ -145,363 +299,224 @@
             padding: 0;
             margin: -1px;
             overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
-        .h-8 {
-            height: 2rem;
-        }
-        .w-8 {
-            width: 2rem;
-        }
-        .mt-10 {
-            margin-top: 2.5rem;
-        }
-        .flex-col {
-            flex-direction: column;
-        }
-        .gap-10 {
-            gap: 2.5rem;
-        }
-        @media (min-width: 768px) {
-            .md\:flex-row {
-                flex-direction: row;
-            }
-            .md\:w-1\/2 {
-                width: 50%;
-            }
-        }
-        .bg-primary-400 {
-            background-color: #f5fbf5;
-        }
-        .text-xs {
-            font-size: 0.75rem;
-            line-height: 1rem;
-        }
-        .w-fit {
-            width: fit-content;
-        }
-        .gap-2 {
-            gap: 0.5rem;
-        }
-        .rounded-full {
-            border-radius: 9999px;
-        }
-        .text-primary-600 {
-            color: #009515;
-        }
-        .bg-primary-600 {
-            background-color: #009515;
-        }
-        .text-\[\#F2FFF4\] {
-            color: #f2fff4;
-        }
-        .p-1 {
-            padding: 0.25rem;
-        }
-        .text-3xl {
-            font-size: 1.875rem;
-            line-height: 2.25rem;
-        }
-        .font-CircularStdBold {
-            font-family: CircularStdBold, sans-serif;
-        }
-        .my-5 {
-            margin-top: 1.25rem;
-            margin-bottom: 1.25rem;
-        }
-        .tracking-tight {
-            letter-spacing: -0.025em;
-        }
-        @media (min-width: 768px) {
-            .md\:text-6xl {
-                font-size: 3.75rem;
-                line-height: 1;
-            }
-            .md\:my-10 {
-                margin-top: 2.5rem;
-                margin-bottom: 2.5rem;
-            }
-            .md\:leading-tight {
-                line-height: 1.25;
-            }
-        }
-        @media (min-width: 1536px) {
-            .\32xl\:w-3\/4 {
-                width: 75%;
-            }
-        }
-        @media (min-width: 1280px) {
-            .xl\:w-4\/5 {
-                width: 80%;
-            }
-        }
-        .mt-7 {
-            margin-top: 1.75rem;
-        }
-        .w-full {
-            width: 100%;
-        }
-        @media (min-width: 768px) {
-            .md\:w-fit {
-                width: fit-content;
-            }
-        }
-        .py-3 {
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-        }
-        .px-5 {
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-        }
-        .hover\:bg-green-500:hover {
-            background-color: #22c55e;
-        }
-        .hover\:cursor-pointer:hover {
-            cursor: pointer;
-        }
-        .md\:justify-end {
-            justify-content: flex-end;
-        }
-        .grid-cols-3 {
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-        .grid {
-            display: grid;
-        }
-        @media (min-width: 768px) {
-            .md\:w-5\/6 {
-                width: 83.333333%;
-            }
-        }
-        .bg-\[\#0CA60C\] {
-            background-color: #0ca60c;
-        }
-        .p-5 {
-            padding: 1.25rem;
-        }
-        .h-full {
-            height: 100%;
-        }
-        .bg-\[\#145596\] {
-            background-color: #145596;
-        }
-        .row-span-2 {
-            grid-row: span 2 / span 2;
-        }
-        .col-span-2 {
-            grid-column: span 2 / span 2;
-        }
-        .bg-\[\#642D56\] {
-            background-color: #642d56;
-        }
-        .bg-\[\#1887EB\] {
-            background-color: #1887eb;
-        }
-        .py-10 {
-            padding-top: 2.5rem;
-            padding-bottom: 2.5rem;
-        }
-        .bg-pattern {
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="%23e5e7eb"><circle cx="10" cy="10" r="2"/><circle cx="30" cy="20" r="1.5"/><circle cx="50" cy="10" r="2"/><circle cx="70" cy="25" r="1"/><circle cx="90" cy="15" r="2"/></svg>');
-            background-repeat: repeat;
-        }
-        .h-40 {
-            height: 10rem;
-        }
-        .bg-contain {
-            background-size: contain;
-        }
-        .bg-no-repeat {
-            background-repeat: no-repeat;
-        }
-        .text-\[\#4E4E4E\] {
-            color: #4e4e4e;
-        }
-        .text-primary-500 {
-            color: #378b3d;
-        }
-        .grid-cols-1 {
-            grid-template-columns: repeat(1, minmax(0, 1fr));
-        }
-        @media (min-width: 768px) {
-            .md\:grid-cols-3 {
-                grid-template-columns: repeat(3, minmax(0, 1fr));
-            }
-        }
-        .bg-primary-200 {
-            background-color: #f8fff8;
-        }
-        .text-center {
-            text-align: center;
-        }
-        .mx-auto {
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .bg-\[\#51B55F\] {
-            background-color: #51b55f;
-        }
-        .font-semibold {
-            font-weight: 600;
-        }
-        .mt-5 {
-            margin-top: 1.25rem;
-        }
-        .px-14 {
-            padding-left: 3.5rem;
-            padding-right: 3.5rem;
-        }
-        @font-face {
-            font-family: CircularStd;
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.otf');
-        }
-        @font-face {
-            font-family: CircularStdBold;
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.otf');
         }
     </style>
 </head>
 <body>
-    <div id="app">
-        <div class="router">
-            <!-- Navigation Bar -->
-            <div class="shadow-md bg-white sticky w-full z-10 top-0">
-                <div class="container py-2 relative">
-                    <nav class="flex justify-between items-center">
-                        <div class="h-14 w-14">
-                            <a href="https://neco.gov.ng/">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 50'%3E%3Crect width='100' height='50' fill='%230CA60C'/%3E%3Ctext x='10' y='30' fill='white' font-size='16' font-weight='bold'%3ENECO%3C/text%3E%3C/svg%3E" alt="NECO Logo" style="height: 100%; width: auto;">
-                            </a>
-                        </div>
-                        <div>
-                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                                <li>
-                                    <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="lg:hidden" id="mobile-menu-btn">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
-                    </nav>
+
+    <!-- ===================================================== -->
+    <!-- NAVIGATION BAR - EXACT ORIGINAL STYLE                 -->
+    <!-- LOGO PLACEHOLDER - ADD YOUR LOGO LINK LATER           -->
+    <!-- ===================================================== -->
+    <div class="navbar">
+        <div class="container">
+            <div class="nav-flex">
+                <div class="logo">
+                    <a href="https://neco.gov.ng/">
+                        <div class="logo-placeholder"></div>
+                    </a>
                 </div>
-            </div>
-
-            <!-- Main Content -->
-            <div class="container mt-10">
-                <!-- Hero Section -->
-                <div class="flex items-center flex-col md:flex-row gap-10">
-                    <div class="md:w-1/2">
-                        <div class="flex bg-primary-400 text-xs w-fit gap-2 rounded-full items-center p-2 text-primary-600">
-                            <p class="bg-primary-600 text-[#F2FFF4] rounded-full p-1">Note</p>
-                            <p>You do not need an account to make payment</p>
-                        </div>
-                        <h1 class="text-3xl md:text-6xl font-CircularStdBold my-5 md:my-10 md:leading-tight 2xl:w-3/4 xl:w-4/5 tracking-tight">
-                            NECO Payments Just Got Faster and Simpler.
-                        </h1>
-                        <div class="2xl:w-3/5 xl:w-3/4">
-                            <div class="mt-7 w-full">
-                                <a href="payment.html" class="w-full md:w-fit py-3 px-5 rounded text-white bg-green-600 hover:bg-green-500 hover:cursor-pointer inline-block text-center">Make payment</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="md:w-1/2 flex md:justify-end">
-                        <div class="grid-cols-3 grid md:w-5/6">
-                            <div class="bg-[#0CA60C] p-5 w-full h-full" style="background-color:#0CA60C; padding:20px; text-align:center;">📘</div>
-                            <div class="p-5 w-full h-full" style="background-color:#f5f5f5; padding:20px; text-align:center;">💳</div>
-                            <div class="bg-[#145596] p-5 w-full h-full" style="background-color:#145596; padding:20px; text-align:center;">⭐</div>
-                            <div class="w-full row-span-2" style="padding:20px; text-align:center;">👨‍🎓</div>
-                            <div class="w-full h-full col-span-2" style="padding:20px; text-align:center;">👧</div>
-                            <div class="w-full row-span-2" style="background-color:#145596; padding:20px; text-align:center;">👩‍🎓</div>
-                            <div class="bg-[#642D56] h-full w-full" style="background-color:#642D56; padding:20px; text-align:center;">🎒</div>
-                            <div class="w-full h-full bg-[#1887EB] p-5" style="background-color:#1887EB; padding:20px; text-align:center;">✧</div>
-                            <div class="w-full h-full bg-[#642D56] p-5" style="background-color:#642D56; padding:20px; text-align:center;">🦋</div>
-                        </div>
-                    </div>
+                <div class="desktop-nav">
+                    <a href="#" class="payment-link">Make payment</a>
                 </div>
-
-                <!-- How It Works Section -->
-                <section class="py-10">
-                    <div class="bg-pattern h-40 flex items-center bg-contain bg-no-repeat">
-                        <p class="text-3xl font-CircularStdBold">How it works</p>
-                    </div>
-                    <p class="md:w-1/2 text-xs mt-5 text-[#4E4E4E]">
-                        NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website 
-                        <span class="text-primary-500">(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.
-                    </p>
-
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
-                        <!-- Step 1 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">📄</span>
-                            </div>
-                            <p class="font-semibold mt-5">Select Payment Item</p>
-                            <p class="mt-5 text-xs">Select or search for a payment category or a payment item you want to make payment for i.e Correction of Name, Syllabus, Exam Bag e.t.c</p>
-                        </div>
-
-                        <!-- Step 2 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">🔍</span>
-                            </div>
-                            <p class="font-semibold mt-5">Get Payment Item Code</p>
-                            <p class="mt-5 text-xs">Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-600">www.neco.gov.ng.</span> Ensure to verify your payment before proceeding to Pay and note that Refund is not applicable once payment is completed.</p>
-                        </div>
-
-                        <!-- Step 3 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">✏️</span>
-                            </div>
-                            <p class="font-semibold mt-5">Fill the Payment Form</p>
-                            <p class="mt-5 text-xs">Fill the form in the box to the right and proceed to payment</p>
-                        </div>
-
-                        <!-- Step 4 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">💳</span>
-                            </div>
-                            <p class="font-semibold mt-5">Select Mode of Payment</p>
-                            <p class="mt-5 text-xs">Select mode of payment i.e Bank branch payment or Debit card payment.</p>
-                        </div>
-
-                        <!-- Step 5 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">✓</span>
-                            </div>
-                            <p class="font-semibold mt-5">Confirm Your Payment</p>
-                            <p class="mt-5 text-xs">Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed</p>
-                        </div>
-
-                        <!-- Step 6 -->
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <span style="font-size: 24px;">📋</span>
-                            </div>
-                            <p class="font-semibold mt-5">Evidence of Payment</p>
-                            <p class="mt-5 text-xs">Present Evidence of Payment to your nearest NECO office.</p>
-                        </div>
-                    </div>
-                </section>
+                <button class="mobile-btn">
+                    <span class="sr-only">Open menu</span>
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
+                    </svg>
+                </button>
             </div>
         </div>
     </div>
 
+    <!-- ===================================================== -->
+    <!-- MAIN CONTENT                                          -->
+    <!-- ===================================================== -->
+    <div class="container">
+        <!-- HERO SECTION -->
+        <div class="hero">
+            <div class="hero-wrapper">
+                
+                <!-- LEFT COLUMN - TEXT -->
+                <div class="hero-left">
+                    <div class="note-badge">
+                        <span>Note</span>
+                        <p>You must make payment to the accont provided by the admin</p>
+                    </div>
+                    <h1>NECO Payments Just Got Faster and Simpler.</h1>
+                    <button class="hero-button" onclick="window.location.href='https://payments.neco.gov.ng/payment'">Make payment</button>
+                </div>
+                
+                <!-- RIGHT COLUMN - IMAGE GRID WITH ALL 10 SVG FILES -->
+                <!-- EACH SVG IN EXACT ORIGINAL POSITION WITH CORRECT BACKGROUND COLORS -->
+                <div class="hero-right">
+                    <div class="image-grid">
+                        
+                        <!-- POSITION 1: Top Left - Green Background (#0CA60C) -->
+                        <div class="grid-item bg-original-green p-20">
+                            <img src="https://files.catbox.moe/4uno0m.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 2: Top Middle - No Background -->
+                        <div class="grid-item">
+                            <img src="https://files.catbox.moe/5ms8j8.svg" alt="" style="width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 3: Top Right - Blue Background (#145596) -->
+                        <div class="grid-item bg-original-blue p-20">
+                            <img src="https://files.catbox.moe/ra2hee.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 4: Middle Left - SPANS 2 ROWS - Boy Writing -->
+                        <div class="grid-item row-span-2">
+                            <img src="https://files.catbox.moe/uehwzx.svg" alt="" style="width:100%; height:100%; object-fit:cover;">
+                        </div>
+                        
+                        <!-- POSITION 5: Middle Center - SPANS 2 COLUMNS - Child -->
+                        <div class="grid-item col-span-2">
+                            <img src="https://files.catbox.moe/acijdz.svg" alt="" style="width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 6: Middle Right - SPANS 2 ROWS - Blue Background (#145596) -->
+                        <div class="grid-item row-span-2 bg-original-blue p-20">
+                            <img src="https://files.catbox.moe/hzx9mh.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 7: Bottom Left - Purple Background (#642D56) -->
+                        <div class="grid-item bg-original-purple p-20">
+                            <img src="https://files.catbox.moe/xt7six.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 8: Bottom Middle - Light Blue Background (#1887EB) -->
+                        <div class="grid-item bg-original-lightblue p-20">
+                            <img src="https://files.catbox.moe/1o9cnb.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 9: Bottom Right - Purple Background (#642D56) -->
+                        <div class="grid-item bg-original-purple p-20">
+                            <img src="https://files.catbox.moe/gqe68j.svg" alt="" style="max-width:100%; height:auto;">
+                        </div>
+                        
+                        <!-- POSITION 10: Extra - Decorative Element -->
+                        <div class="grid-item">
+                            <img src="https://files.catbox.moe/2edt5g.svg" alt="" style="width:100%; height:auto;">
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ===================================================== -->
+        <!-- HOW IT WORKS SECTION - EXACT ORIGINAL CONTENT         -->
+        <!-- ===================================================== -->
+        <section class="how-section">
+            <div class="how-title">
+                <span>How it works</span>
+            </div>
+            <p class="info-note">NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-green-light">(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.</p>
+            
+            <div class="steps-grid">
+                <!-- Step 1 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3>Select Payment Item</h3>
+                    <p>Select or search for a payment category or a payment item you want to make payment for i.e Correction of Name, Syllabus, Exam Bag e.t.c</p>
+                </div>
+                
+                <!-- Step 2 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </div>
+                    <h3>Get Payment Item Code</h3>
+                    <p>Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-green">www.neco.gov.ng.</span> Ensure to verify your payment before proceeding to Pay and note that Refund is not applicable once payment is completed.</p>
+                </div>
+                
+                <!-- Step 3 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+                        </svg>
+                    </div>
+                    <h3>Fill the Payment Form</h3>
+                    <p>Fill the form in the box to the right and proceed to payment</p>
+                </div>
+                
+                <!-- Step 4 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                            <line x1="1" y1="10" x2="23" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3>Select Mode of Payment</h3>
+                    <p>Select mode of payment i.e Bank branch payment or Debit card payment.</p>
+                </div>
+                
+                <!-- Step 5 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Confirm Your Payment</h3>
+                    <p>Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed</p>
+                </div>
+                
+                <!-- Step 6 -->
+                <div class="step-card">
+                    <div class="step-icon">
+                        <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Evidence of Payment</h3>
+                    <p>Present Evidence of Payment to your nearest NECO office.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Mobile Menu Script -->
     <script>
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        if (menuBtn) {
-            menuBtn.addEventListener('click', function() {
-                alert('Navigation menu - In production, this would open mobile menu');
+        const mobileBtn = document.querySelector('.mobile-btn');
+        const desktopNav = document.querySelector('.desktop-nav');
+        
+        if (mobileBtn && desktopNav) {
+            mobileBtn.addEventListener('click', function() {
+                if (desktopNav.style.display === 'flex') {
+                    desktopNav.style.display = 'none';
+                } else {
+                    desktopNav.style.display = 'flex';
+                    desktopNav.style.flexDirection = 'column';
+                    desktopNav.style.position = 'absolute';
+                    desktopNav.style.top = '70px';
+                    desktopNav.style.left = '0';
+                    desktopNav.style.right = '0';
+                    desktopNav.style.backgroundColor = 'white';
+                    desktopNav.style.padding = '20px';
+                    desktopNav.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.1)';
+                    desktopNav.style.zIndex = '100';
+                }
             });
         }
     </script>
