@@ -10,6 +10,13 @@
 
         /* Toastify Styles */
         :root{--toastify-color-light: #fff;--toastify-color-dark: #121212;--toastify-color-info: #3498db;--toastify-color-success: #07bc0c;--toastify-color-warning: #f1c40f;--toastify-color-error: #e74c3c;--toastify-color-transparent: rgba(255, 255, 255, .7);--toastify-toast-width: 320px;--toastify-toast-min-height: 64px;--toastify-toast-max-height: 800px;--toastify-font-family: sans-serif;--toastify-z-index: 9999}
+        
+        /* Disabled button style */
+        button.proceed-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background-color: #9ca3af !important;
+        }
     </style>
 </head>
 <body>
@@ -123,7 +130,7 @@
                                 </div>
                             </div>
                             
-                            <!-- Link on the RIGHT side (where the button was) -->
+                            <!-- Link on the RIGHT side -->
                             <div class="mt-5 flex justify-end">
                                 <a id="whatsappLink" class="text-sm text-primary-600 hover:text-primary-700" href="#" target="_blank">Click here to get payment code from admin</a>
                             </div>
@@ -200,7 +207,7 @@
                             
                             <div class="grid grid-cols-3 mt-8 gap-5">
                                 <button type="button" onclick="closeModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
+                                <button id="proceedBtn" type="submit" disabled class="proceed-btn items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -210,7 +217,7 @@
     </div>
 
     <script>
-        // Payment Data - ALL CATEGORIES with exact original colors
+        // Payment Data - ALL CATEGORIES
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 },{ name: "Non-Validation", amount: 10000 },{ name: "Syllabus", amount: 2000 },{ name: "Photo Album", amount: 2700 },
@@ -249,6 +256,38 @@
         let currentCategory = "SSCE Internal";
         let currentItem = null;
 
+        // Function to check if all form fields are filled (for Proceed button)
+        function checkFormComplete() {
+            const paymentCode = document.getElementById('paymentCode').value;
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const amount = document.getElementById('amount').value;
+            const proceedBtn = document.getElementById('proceedBtn');
+            
+            if (paymentCode && fullName && phone && email && amount) {
+                proceedBtn.disabled = false;
+                proceedBtn.style.opacity = "1";
+                proceedBtn.style.backgroundColor = "#0CA60C";
+            } else {
+                proceedBtn.disabled = true;
+                proceedBtn.style.opacity = "0.5";
+                proceedBtn.style.backgroundColor = "#9ca3af";
+            }
+        }
+
+        // Add event listeners to all form inputs
+        function setupFormValidation() {
+            const inputs = ['paymentCode', 'fullName', 'phone', 'email', 'amount'];
+            inputs.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', checkFormComplete);
+                    element.addEventListener('change', checkFormComplete);
+                }
+            });
+        }
+
         function renderGrid() {
             const grid = document.getElementById('paymentGrid');
             const cat = paymentData[currentCategory];
@@ -257,13 +296,18 @@
             cat.items.forEach(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 const amountText = item.amount ? 'Fixed Amount' : 'Variable Amount';
+                // Square border button with category color - exactly as original design
                 html += `<div class="bg-[${cat.color}] rounded-md text-[#747474] flex items-center gap-2" style="background: ${cat.bgColor};">
                             <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: rgb(236, 250, 243);">
                                 <div class="py-8 px-5 text-black font-semibold">${item.name}</div>
                                 <div>
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-2 border-[${cat.color}] text-[${cat.color}] hover:opacity-80">Make payment</button>
+                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                            class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
+                                            style="border-color: ${cat.color}; color: ${cat.color};">
+                                            Make payment
+                                        </button>
                                         <div>
                                             <p class="text-xs">${amountText}</p>
                                             <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
@@ -305,6 +349,12 @@
             document.getElementById('quantity').value = 1;
             document.getElementById('currency').value = 'Naira';
             
+            // Disable proceed button initially
+            const proceedBtn = document.getElementById('proceedBtn');
+            proceedBtn.disabled = true;
+            proceedBtn.style.opacity = "0.5";
+            proceedBtn.style.backgroundColor = "#9ca3af";
+            
             document.getElementById('paymentModal').classList.remove('hidden');
         }
 
@@ -323,7 +373,7 @@
             const quantity = document.getElementById('quantity').value;
             const currency = document.getElementById('currency').value;
             
-            if (!paymentCode) { alert('Please enter your payment code. Click "Click here to get payment code from admin" to get one.'); return; }
+            if (!paymentCode) { alert('Please enter your payment code.'); return; }
             if (!fullName) { alert('Please enter your full name'); return; }
             if (!phone) { alert('Please enter your phone number'); return; }
             if (!email) { alert('Please enter your email address'); return; }
@@ -364,7 +414,11 @@
                                 <div>
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-2 border-[${cat.color}] text-[${cat.color}] hover:opacity-80">Make payment</button>
+                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                            class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
+                                            style="border-color: ${cat.color}; color: ${cat.color};">
+                                            Make payment
+                                        </button>
                                         <div>
                                             <p class="text-xs">${amountText}</p>
                                             <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
@@ -378,6 +432,7 @@
         });
 
         renderGrid();
+        setupFormValidation();
     </script>
 </body>
 </html>
