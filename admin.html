@@ -774,15 +774,11 @@
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
-        // Create supabase client (only once)
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // DEFAULT CREDENTIALS (fallback if database is empty)
-        const DEFAULT_ADMIN = {
-            username: 'admin',
-            password: 'admin123',
-            whatsapp_number: '2348021234567'
-        };
+        // HARDCODED ADMIN CREDENTIALS (works immediately)
+        const ADMIN_USERNAME = 'admin';
+        const ADMIN_PASSWORD = 'admin123';
         
         let isLoggedIn = false;
         let currentCategoryId = null;
@@ -820,138 +816,14 @@
         }
         
         // ============================================
-        // INITIALIZE DATABASE WITH DEFAULT DATA
+        // AUTHENTICATION - SIMPLE HARDCODED
         // ============================================
-        async function initializeDatabase() {
-            try {
-                // Check if admin settings exist
-                const { data: adminExists, error: checkError } = await supabaseClient
-                    .from('admin_settings')
-                    .select('id')
-                    .eq('id', 1)
-                    .maybeSingle();
-                
-                if (!adminExists) {
-                    console.log('Initializing database with default data...');
-                    
-                    // Insert admin settings
-                    await supabaseClient.from('admin_settings').insert({
-                        id: 1,
-                        username: DEFAULT_ADMIN.username,
-                        password: DEFAULT_ADMIN.password,
-                        whatsapp_number: DEFAULT_ADMIN.whatsapp_number
-                    });
-                    
-                    // Insert home settings
-                    await supabaseClient.from('home_settings').insert({
-                        id: 1,
-                        hero_title: 'NECO Payments Just Got Faster and Simpler.',
-                        hero_note: 'You do not need an account to make payment',
-                        button_text: 'Make payment',
-                        logo_url: ''
-                    });
-                    
-                    // Insert how it works steps
-                    const steps = [
-                        { step_order: 1, title: 'Select Payment Item', description: 'Select or search for a payment category or a payment item you want to make payment for', icon: 'receipt' },
-                        { step_order: 2, title: 'Get Payment Item Code', description: 'Payment item code is required for any NECO payment, this item code can be gotten from the NECO website', icon: 'scan' },
-                        { step_order: 3, title: 'Fill the Payment Form', description: 'Fill the form in the box to the right and proceed to payment', icon: 'message-edit' },
-                        { step_order: 4, title: 'Select Mode of Payment', description: 'Select mode of payment i.e Bank branch payment or Debit card payment.', icon: 'wallet-add' },
-                        { step_order: 5, title: 'Confirm Your Payment', description: 'Go through the transaction breakdown, read and accept the disclaimer then click the confirm button', icon: 'card-tick' },
-                        { step_order: 6, title: 'Evidence of Payment', description: 'Present Evidence of Payment to your nearest NECO office.', icon: 'ticket-expired' }
-                    ];
-                    
-                    for (const step of steps) {
-                        await supabaseClient.from('how_it_works').insert(step);
-                    }
-                    
-                    // Insert categories
-                    const categories = [
-                        { name: 'SSCE Internal', color: '#0CA60C', display_order: 1 },
-                        { name: 'SSCE External', color: '#145596', display_order: 2 },
-                        { name: 'BECE', color: '#642D56', display_order: 3 },
-                        { name: 'NCEE', color: '#1887EB', display_order: 4 },
-                        { name: 'Gifted', color: '#24809C', display_order: 5 },
-                        { name: 'Others', color: '#36454F', display_order: 6 }
-                    ];
-                    
-                    for (const cat of categories) {
-                        await supabaseClient.from('categories').insert(cat);
-                    }
-                    
-                    // Get category IDs
-                    const { data: insertedCategories } = await supabaseClient.from('categories').select('id, name');
-                    const categoryMap = {};
-                    insertedCategories?.forEach(cat => { categoryMap[cat.name] = cat.id; });
-                    
-                    // Insert payment items
-                    const items = [
-                        { category_id: categoryMap['SSCE Internal'], name: 'Four Figure Table', amount: 500 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Non-Validation', amount: 10000 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Syllabus', amount: 2000 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Photo Album', amount: 2700 },
-                        { category_id: categoryMap['SSCE External'], name: 'Four Figure Table', amount: 500 },
-                        { category_id: categoryMap['SSCE External'], name: 'Walk-in', amount: 43000 },
-                        { category_id: categoryMap['SSCE External'], name: 'Syllabus', amount: 2000 },
-                        { category_id: categoryMap['BECE'], name: 'Remarking Bece', amount: 15000 },
-                        { category_id: categoryMap['BECE'], name: 'Non-Validation', amount: 10000 },
-                        { category_id: categoryMap['NCEE'], name: 'Non-Validation', amount: 4000 },
-                        { category_id: categoryMap['Gifted'], name: 'Non-Validation', amount: 4000 },
-                        { category_id: categoryMap['Others'], name: 'Reprint Of Certificate', amount: 50000 },
-                        { category_id: categoryMap['Others'], name: 'Change Of School Name', amount: 15000 }
-                    ];
-                    
-                    for (const item of items) {
-                        if (item.category_id) {
-                            await supabaseClient.from('payment_items').insert(item);
-                        }
-                    }
-                    
-                    // Insert default payment code
-                    await supabaseClient.from('payment_codes').insert({
-                        code: '1234',
-                        bank_name: 'First Bank of Nigeria',
-                        account_name: 'NECO Payment Services',
-                        account_number: '2024567890',
-                        bank_code: '011',
-                        is_active: true
-                    });
-                    
-                    console.log('Database initialized successfully!');
-                }
-            } catch (err) {
-                console.error('Database initialization error:', err);
-            }
-        }
-        
-        // ============================================
-        // AUTHENTICATION
-        // ============================================
-        async function checkSession() {
-            await initializeDatabase();
-            
+        function checkSession() {
             const savedSession = localStorage.getItem('neco_admin_session');
             if (savedSession) {
                 try {
                     const session = JSON.parse(savedSession);
-                    let isValid = false;
-                    
-                    try {
-                        const { data } = await supabaseClient
-                            .from('admin_settings')
-                            .select('username')
-                            .eq('id', 1)
-                            .maybeSingle();
-                        if (data && session.username === data.username) {
-                            isValid = true;
-                        }
-                    } catch(e) {
-                        if (session.username === DEFAULT_ADMIN.username) {
-                            isValid = true;
-                        }
-                    }
-                    
-                    if (isValid) {
+                    if (session.username === ADMIN_USERNAME) {
                         isLoggedIn = true;
                         document.getElementById('loginPage').style.display = 'none';
                         document.getElementById('dashboard').style.display = 'block';
@@ -981,44 +853,16 @@
                 return;
             }
             
-            try {
-                let isValid = false;
-                
-                try {
-                    const { data, error } = await supabaseClient
-                        .from('admin_settings')
-                        .select('username, password, whatsapp_number')
-                        .eq('id', 1)
-                        .maybeSingle();
-                    
-                    if (data && !error) {
-                        if (username === data.username && password === data.password) {
-                            isValid = true;
-                        }
-                    }
-                } catch(dbError) {
-                    console.log('Database check error, using default');
-                }
-                
-                // Fallback to default credentials
-                if (!isValid && username === DEFAULT_ADMIN.username && password === DEFAULT_ADMIN.password) {
-                    isValid = true;
-                }
-                
-                if (isValid) {
-                    isLoggedIn = true;
-                    localStorage.setItem('neco_admin_session', JSON.stringify({ username: username }));
-                    document.getElementById('loginPage').style.display = 'none';
-                    document.getElementById('dashboard').style.display = 'block';
-                    showAlert('Login successful! Welcome back, ' + username, 'success');
-                    loadPage('dashboard');
-                } else {
-                    errorDiv.querySelector('span').textContent = 'Invalid username or password. Use: admin / admin123';
-                    errorDiv.classList.add('show');
-                }
-            } catch(err) {
-                console.error('Login error:', err);
-                errorDiv.querySelector('span').textContent = 'Network error. Please check your connection.';
+            // Simple hardcoded check
+            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+                isLoggedIn = true;
+                localStorage.setItem('neco_admin_session', JSON.stringify({ username: username }));
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                showAlert('Login successful! Welcome back, ' + username, 'success');
+                loadPage('dashboard');
+            } else {
+                errorDiv.querySelector('span').textContent = 'Invalid username or password. Use: admin / admin123';
                 errorDiv.classList.add('show');
             }
         });
@@ -1499,7 +1343,8 @@
                                     <td>${escapeHtml(t.payer_name)}<br><small>${escapeHtml(t.email)}</small></td>
                                     <td>₦${(t.total_amount || 0).toLocaleString()}</td>
                                     <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status || 'pending'}</span></td>
-                                    <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '<span style="color:#0ca60c;"><i class="fas fa-check-circle"></i> Confirmed</span>'}</td>
+                                    <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '<span style="color:#0ca60c;"><i class="fas fa-check-circle"></i> Confirmed</span>'}
+                                    </td>
                                 </tr>
                             `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}</tbody>
                         </table>
@@ -1530,9 +1375,9 @@
                 
                 container.innerHTML = `
                     <form id="settingsForm" style="max-width: 500px;">
-                        <div class="form-group"><label><i class="fas fa-user-shield"></i> Admin Username</label><input type="text" id="adminUsername" value="${escapeHtml(admin?.username || DEFAULT_ADMIN.username)}"></div>
-                        <div class="form-group"><label><i class="fas fa-lock"></i> Admin Password</label><input type="password" id="adminPassword" value="${escapeHtml(admin?.password || DEFAULT_ADMIN.password)}"></div>
-                        <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="whatsappNumber" value="${escapeHtml(admin?.whatsapp_number || DEFAULT_ADMIN.whatsapp_number)}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
+                        <div class="form-group"><label><i class="fas fa-user-shield"></i> Admin Username</label><input type="text" id="adminUsername" value="${escapeHtml(admin?.username || 'admin')}"></div>
+                        <div class="form-group"><label><i class="fas fa-lock"></i> Admin Password</label><input type="password" id="adminPassword" value="${escapeHtml(admin?.password || 'admin123')}"></div>
+                        <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="whatsappNumber" value="${escapeHtml(admin?.whatsapp_number || '2348021234567')}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
                         <button type="submit"><i class="fas fa-save"></i> Save Settings</button>
                     </form>
                 `;
