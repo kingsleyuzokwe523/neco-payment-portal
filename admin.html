@@ -3,128 +3,982 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - NECO Portal</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NECO Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fb;
+            color: #1e293b;
+        }
+
+        /* Login Page */
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #0ca60c 0%, #064e3b 100%);
+        }
+
+        .login-card {
+            background: white;
+            border-radius: 2rem;
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ca60c, #064e3b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
+            z-index: 10;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .sidebar-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0ca60c, #064e3b);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sidebar-nav {
+            padding: 1.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.75rem;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-item:hover {
+            background: #f1f5f9;
+            color: #0ca60c;
+        }
+
+        .nav-item.active {
+            background: #e6f7e6;
+            color: #0ca60c;
+            font-weight: 500;
+        }
+
+        .nav-item i {
+            width: 24px;
+            font-size: 1.25rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+        }
+
+        .top-bar {
+            background: white;
+            border-radius: 1rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0ca60c;
+        }
+
+        /* Tables */
+        .data-table {
+            background: white;
+            border-radius: 1rem;
+            overflow-x: auto;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        /* Forms */
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #475569;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.2s;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #0ca60c;
+            box-shadow: 0 0 0 3px rgba(12, 166, 12, 0.1);
+        }
+
+        button {
+            background: #0ca60c;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #0a8a0a;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-outline:hover {
+            background: #f1f5f9;
+            color: #0ca60c;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-confirmed {
+            background: #d1fae5;
+            color: #0ca60c;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #0ca60c;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                transition: transform 0.3s;
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-content {
+                margin-left: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="admin-wrapper">
-        <!-- Login Section -->
-        <div id="adminLogin" class="admin-login-container">
-            <div class="admin-login-box">
-                <h2>Admin Login</h2>
-                <form id="loginForm">
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input type="text" id="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input type="password" id="password" required>
-                    </div>
-                    <div id="loginError" style="color: #dc2626; display: none; margin-bottom: 1rem;">Invalid credentials!</div>
-                    <button type="submit" class="btn-primary" style="width: 100%;">Login</button>
-                </form>
+    <!-- Login Page -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <i class="fas fa-shield-alt" style="font-size: 3rem; color: #0ca60c; margin-bottom: 1rem;"></i>
+                <h1>Admin Dashboard</h1>
+                <p style="color: #64748b; margin-top: 0.5rem;">NECO Payment Portal</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter username" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                </div>
+                <button type="submit" style="width: 100%;">Login</button>
+            </form>
+            <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #94a3b8;">
+                Default: admin / admin123
+            </p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard" class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2><i class="fas fa-graduation-cap"></i> NECO Admin</h2>
+            </div>
+            <div class="sidebar-nav">
+                <div class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="nav-item" data-page="home">
+                    <i class="fas fa-home"></i>
+                    <span>Home Page</span>
+                </div>
+                <div class="nav-item" data-page="payment">
+                    <i class="fas fa-credit-card"></i>
+                    <span>Payment Page</span>
+                </div>
+                <div class="nav-item" data-page="codes">
+                    <i class="fas fa-key"></i>
+                    <span>Payment Codes</span>
+                </div>
+                <div class="nav-item" data-page="transactions">
+                    <i class="fas fa-history"></i>
+                    <span>Transactions</span>
+                </div>
+                <div class="nav-item" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </div>
             </div>
         </div>
 
-        <!-- Dashboard Section -->
-        <div id="adminDashboard" style="display: none;">
-            <nav class="navbar">
-                <div class="container">
-                    <div class="nav-content">
-                        <div class="logo">
-                            <span class="logo-text">Admin Dashboard</span>
-                        </div>
-                        <div class="nav-links">
-                            <button id="logoutBtn" class="btn-secondary">Logout</button>
-                        </div>
-                    </div>
-                </div>
-            </nav>
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="top-bar">
+                <h1 class="page-title" id="currentPageTitle">Dashboard</h1>
+                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+            </div>
+            <div id="pageContent"></div>
+        </div>
+    </div>
 
-            <div class="container">
-                <!-- Stats Cards -->
+    <script>
+        // ============================================
+        // DEFAULT DATA
+        // ============================================
+        const defaultData = {
+            admin: {
+                username: "admin",
+                password: "admin123",
+                whatsappNumber: "2348021234567"
+            },
+            homePage: {
+                heroTitle: "NECO Payments Just Got Faster and Simpler.",
+                heroNote: "You do not need an account to make payment",
+                buttonText: "Make payment",
+                logo: "",
+                howItWorks: [
+                    { title: "Select Payment Item", description: "Select or search for a payment category or a payment item you want to make payment for i.e Correction of Name, Syllabus, Exam Bag e.t.c", icon: "receipt" },
+                    { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website", icon: "scan" },
+                    { title: "Fill the Payment Form", description: "Fill the form in the box to the right and proceed to payment", icon: "message-edit" },
+                    { title: "Select Mode of Payment", description: "Select mode of payment i.e Bank branch payment or Debit card payment.", icon: "wallet-add" },
+                    { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed", icon: "card-tick" },
+                    { title: "Evidence of Payment", description: "Present Evidence of Payment to your nearest NECO office.", icon: "ticket-expired" }
+                ]
+            },
+            paymentPage: {
+                title: "Make Payment",
+                subtitle: "You can search for a payment item or select from the list",
+                searchPlaceholder: "What do you want to pay for?",
+                categories: [
+                    { name: "SSCE Internal", color: "#0CA60C" },
+                    { name: "SSCE External", color: "#145596" },
+                    { name: "BECE", color: "#642D56" },
+                    { name: "NCEE", color: "#1887EB" },
+                    { name: "Gifted", color: "#24809C" },
+                    { name: "Others", color: "#36454F" }
+                ],
+                items: {
+                    "SSCE Internal": [
+                        { id: 1, name: "Four Figure Table", amount: 500 },
+                        { id: 2, name: "Non-Validation", amount: 10000 },
+                        { id: 3, name: "Syllabus", amount: 2000 },
+                        { id: 4, name: "Photo Album", amount: 2700 }
+                    ],
+                    "SSCE External": [
+                        { id: 5, name: "Four Figure Table", amount: 500 },
+                        { id: 6, name: "Walk-in", amount: 43000 },
+                        { id: 7, name: "Syllabus", amount: 2000 }
+                    ],
+                    "BECE": [
+                        { id: 8, name: "Remarking Bece", amount: 15000 },
+                        { id: 9, name: "Non-Validation", amount: 10000 }
+                    ],
+                    "NCEE": [
+                        { id: 10, name: "Non-Validation", amount: 4000 }
+                    ],
+                    "Gifted": [
+                        { id: 11, name: "Non-Validation", amount: 4000 }
+                    ],
+                    "Others": [
+                        { id: 12, name: "Reprint Of Certificate", amount: 50000 },
+                        { id: 13, name: "Change Of School Name", amount: 15000 }
+                    ]
+                }
+            },
+            paymentCodes: {
+                "1234": {
+                    bankName: "First Bank of Nigeria",
+                    accountName: "NECO Payment Services",
+                    accountNumber: "2024567890",
+                    bankCode: "011",
+                    createdAt: new Date().toISOString()
+                }
+            },
+            transactions: []
+        };
+
+        // Load or initialize data
+        function loadData() {
+            let data = localStorage.getItem('neco_admin_data');
+            if (!data) {
+                localStorage.setItem('neco_admin_data', JSON.stringify(defaultData));
+                return defaultData;
+            }
+            return JSON.parse(data);
+        }
+
+        function saveData(data) {
+            localStorage.setItem('neco_admin_data', JSON.stringify(data));
+        }
+
+        let adminData = loadData();
+        let isLoggedIn = false;
+
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (username === adminData.admin.username && password === adminData.admin.password) {
+                isLoggedIn = true;
+                document.getElementById('loginPage').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                loadPage('dashboard');
+            } else {
+                alert('Invalid username or password');
+            }
+        });
+
+        function logout() {
+            isLoggedIn = false;
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+
+        // ============================================
+        // NAVIGATION
+        // ============================================
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                item.classList.add('active');
+                const page = item.getAttribute('data-page');
+                loadPage(page);
+            });
+        });
+
+        function loadPage(page) {
+            const titles = {
+                dashboard: 'Dashboard',
+                home: 'Home Page Editor',
+                payment: 'Payment Page Editor',
+                codes: 'Payment Codes',
+                transactions: 'Transactions',
+                settings: 'Settings'
+            };
+            document.getElementById('currentPageTitle').innerText = titles[page] || 'Dashboard';
+            
+            const contentDiv = document.getElementById('pageContent');
+            
+            switch(page) {
+                case 'dashboard':
+                    renderDashboard(contentDiv);
+                    break;
+                case 'home':
+                    renderHomeEditor(contentDiv);
+                    break;
+                case 'payment':
+                    renderPaymentEditor(contentDiv);
+                    break;
+                case 'codes':
+                    renderCodesManager(contentDiv);
+                    break;
+                case 'transactions':
+                    renderTransactions(contentDiv);
+                    break;
+                case 'settings':
+                    renderSettings(contentDiv);
+                    break;
+                default:
+                    renderDashboard(contentDiv);
+            }
+        }
+
+        // ============================================
+        // DASHBOARD
+        // ============================================
+        function renderDashboard(container) {
+            const totalCodes = Object.keys(adminData.paymentCodes).length;
+            const totalItems = Object.values(adminData.paymentPage.items).flat().length;
+            const totalTransactions = adminData.transactions.length;
+            const totalAmount = adminData.transactions.reduce((sum, t) => sum + t.totalAmount, 0);
+            
+            container.innerHTML = `
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <h3>Total Requests</h3>
-                        <div id="totalRequests">0</div>
+                        <h3><i class="fas fa-key"></i> Payment Codes</h3>
+                        <div class="stat-number">${totalCodes}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>Pending Approval</h3>
-                        <div id="pendingApproval">0</div>
+                        <h3><i class="fas fa-list"></i> Payment Items</h3>
+                        <div class="stat-number">${totalItems}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>Approved</h3>
-                        <div id="approvedCount">0</div>
+                        <h3><i class="fas fa-credit-card"></i> Transactions</h3>
+                        <div class="stat-number">${totalTransactions}</div>
                     </div>
                     <div class="stat-card">
-                        <h3>Completed</h3>
-                        <div id="completedCount">0</div>
+                        <h3><i class="fas fa-money-bill"></i> Total Revenue</h3>
+                        <div class="stat-number">₦${totalAmount.toLocaleString()}</div>
                     </div>
                 </div>
-
-                <!-- Filters -->
-                <div class="table-controls">
-                    <input type="text" id="searchInput" placeholder="Search by name, email, or account..." class="search-input">
-                    <select id="statusFilter" class="status-filter">
-                        <option value="all">All Requests</option>
-                        <option value="pending">Pending Approval</option>
-                        <option value="approved">Approved</option>
-                        <option value="paid">Paid (Receipt Uploaded)</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-
-                <!-- Requests Table -->
-                <div class="payments-table-container">
-                    <table class="payments-table">
+                <div class="data-table">
+                    <table>
                         <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Account No</th>
-                                <th>Amount</th>
-                                <th>Service</th>
-                                <th>Date</th>
-                                <th>Status</th>
-                                <th>Action</th>
-                            </tr>
+                            <tr><th>Recent Transactions</th><th>Amount</th><th>Status</th><th>Date</th></tr>
                         </thead>
-                        <tbody id="requestsTableBody">
-                            <tr><td colspan="9" style="text-align: center;">Loading requests...</td></tr>
+                        <tbody>
+                            ${adminData.transactions.slice(-5).reverse().map(t => `
+                                <tr>
+                                    <td>${t.itemName}</td>
+                                    <td>₦${t.totalAmount.toLocaleString()}</td>
+                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
+                                    <td>${new Date(t.createdAt).toLocaleDateString()}</td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}
                         </tbody>
                     </table>
                 </div>
-            </div>
-        </div>
-    </div>
+            `;
+        }
 
-    <!-- Receipt Modal -->
-    <div id="receiptModal" class="modal">
-        <div class="modal-content">
-            <span class="close-receipt">&times;</span>
-            <h3>Upload Payment Receipt</h3>
-            <form id="receiptForm">
-                <input type="hidden" id="receiptRequestId">
-                <div class="form-group">
-                    <label>Transaction Reference</label>
-                    <input type="text" id="transactionRef" required>
-                </div>
-                <div class="form-group">
-                    <label>Amount Paid (₦)</label>
-                    <input type="number" id="paidAmount" required>
-                </div>
-                <div class="form-group">
-                    <label>Upload Receipt (Image)</label>
-                    <input type="file" id="receiptFile" accept="image/*" required>
-                    <small>Upload payment slip or bank transfer screenshot</small>
-                </div>
-                <button type="submit" class="btn-primary" style="width: 100%;">Submit Receipt</button>
-            </form>
-        </div>
-    </div>
+        // ============================================
+        // HOME PAGE EDITOR
+        // ============================================
+        function renderHomeEditor(container) {
+            const home = adminData.homePage;
+            container.innerHTML = `
+                <form id="homeEditorForm">
+                    <div class="form-group">
+                        <label>Hero Title</label>
+                        <input type="text" id="heroTitle" value="${home.heroTitle.replace(/"/g, '&quot;')}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Hero Note</label>
+                        <input type="text" id="heroNote" value="${home.heroNote.replace(/"/g, '&quot;')}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Button Text</label>
+                        <input type="text" id="buttonText" value="${home.buttonText}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Logo URL</label>
+                        <input type="text" id="logoUrl" value="${home.logo}" class="form-control" placeholder="https://...">
+                    </div>
+                    <h3 style="margin: 1.5rem 0 1rem 0;">How It Works Steps</h3>
+                    <div id="howItWorksList"></div>
+                    <button type="submit">Save Changes</button>
+                </form>
+            `;
+            
+            const stepsContainer = document.getElementById('howItWorksList');
+            home.howItWorks.forEach((step, index) => {
+                stepsContainer.innerHTML += `
+                    <div class="form-group" style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
+                        <label>Step ${index + 1} Title</label>
+                        <input type="text" id="stepTitle_${index}" value="${step.title.replace(/"/g, '&quot;')}" class="form-control">
+                        <label style="margin-top:0.5rem;">Step ${index + 1} Description</label>
+                        <textarea id="stepDesc_${index}" class="form-control" rows="2">${step.description.replace(/"/g, '&quot;')}</textarea>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('homeEditorForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                adminData.homePage.heroTitle = document.getElementById('heroTitle').value;
+                adminData.homePage.heroNote = document.getElementById('heroNote').value;
+                adminData.homePage.buttonText = document.getElementById('buttonText').value;
+                adminData.homePage.logo = document.getElementById('logoUrl').value;
+                
+                for (let i = 0; i < adminData.homePage.howItWorks.length; i++) {
+                    adminData.homePage.howItWorks[i].title = document.getElementById(`stepTitle_${i}`).value;
+                    adminData.homePage.howItWorks[i].description = document.getElementById(`stepDesc_${i}`).value;
+                }
+                
+                saveData(adminData);
+                showAlert('Home page updated successfully!', 'success');
+                renderHomeEditor(container);
+            });
+        }
 
-    <script src="admin.js"></script>
+        // ============================================
+        // PAYMENT PAGE EDITOR
+        // ============================================
+        function renderPaymentEditor(container) {
+            const payment = adminData.paymentPage;
+            container.innerHTML = `
+                <form id="paymentEditorForm">
+                    <div class="form-group">
+                        <label>Page Title</label>
+                        <input type="text" id="pageTitle" value="${payment.title}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <input type="text" id="subtitle" value="${payment.subtitle}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Search Placeholder</label>
+                        <input type="text" id="searchPlaceholder" value="${payment.searchPlaceholder}" class="form-control">
+                    </div>
+                    
+                    <h3 style="margin: 1.5rem 0 1rem 0;">Categories & Colors</h3>
+                    <div id="categoriesList"></div>
+                    
+                    <h3 style="margin: 1.5rem 0 1rem 0;">Payment Items</h3>
+                    <div id="itemsList"></div>
+                    
+                    <button type="submit">Save Changes</button>
+                </form>
+            `;
+            
+            // Categories
+            const categoriesContainer = document.getElementById('categoriesList');
+            payment.categories.forEach((cat, idx) => {
+                categoriesContainer.innerHTML += `
+                    <div class="form-group" style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
+                        <input type="text" id="catName_${idx}" value="${cat.name}" placeholder="Category Name" style="flex:2">
+                        <input type="color" id="catColor_${idx}" value="${cat.color}" style="width:60px; height:40px;">
+                        <button type="button" class="btn-outline" onclick="removeCategory(${idx})" style="background:#ef4444; color:white;">Remove</button>
+                    </div>
+                `;
+            });
+            categoriesContainer.innerHTML += `<button type="button" class="btn-outline" onclick="addCategory()" style="margin-top:0.5rem;">+ Add Category</button>`;
+            
+            // Items grouped by category
+            const itemsContainer = document.getElementById('itemsList');
+            payment.categories.forEach(cat => {
+                const items = payment.items[cat.name] || [];
+                itemsContainer.innerHTML += `
+                    <div style="border:1px solid #e2e8f0; border-radius:0.5rem; padding:1rem; margin-bottom:1rem;">
+                        <h4 style="margin-bottom:0.5rem;"><span class="color-preview" style="background:${cat.color};"></span> ${cat.name}</h4>
+                        <div id="items_${cat.name.replace(/\s/g, '_')}">
+                            ${items.map(item => `
+                                <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
+                                    <input type="text" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Item Name" style="flex:2" class="item-name-${item.id}">
+                                    <input type="number" value="${item.amount}" placeholder="Amount" style="width:120px" class="item-amount-${item.id}">
+                                    <button type="button" class="btn-outline" onclick="removeItem('${cat.name}', ${item.id})" style="background:#ef4444; color:white;">Remove</button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button type="button" class="btn-outline" onclick="addItem('${cat.name}')" style="margin-top:0.5rem;">+ Add Item</button>
+                    </div>
+                `;
+            });
+            
+            window.removeCategory = function(idx) {
+                const catName = payment.categories[idx].name;
+                delete payment.items[catName];
+                payment.categories.splice(idx, 1);
+                saveData(adminData);
+                renderPaymentEditor(container);
+            };
+            
+            window.addCategory = function() {
+                const newName = prompt('Enter category name:');
+                if (newName) {
+                    payment.categories.push({ name: newName, color: '#0CA60C' });
+                    payment.items[newName] = [];
+                    saveData(adminData);
+                    renderPaymentEditor(container);
+                }
+            };
+            
+            window.removeItem = function(categoryName, itemId) {
+                payment.items[categoryName] = payment.items[categoryName].filter(i => i.id !== itemId);
+                saveData(adminData);
+                renderPaymentEditor(container);
+            };
+            
+            window.addItem = function(categoryName) {
+                const newName = prompt('Enter item name:');
+                const newAmount = parseFloat(prompt('Enter amount (leave empty for variable):'));
+                if (newName) {
+                    const newId = Date.now();
+                    payment.items[categoryName].push({ id: newId, name: newName, amount: newAmount || null });
+                    saveData(adminData);
+                    renderPaymentEditor(container);
+                }
+            };
+            
+            document.getElementById('paymentEditorForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                adminData.paymentPage.title = document.getElementById('pageTitle').value;
+                adminData.paymentPage.subtitle = document.getElementById('subtitle').value;
+                adminData.paymentPage.searchPlaceholder = document.getElementById('searchPlaceholder').value;
+                
+                // Save categories
+                adminData.paymentPage.categories.forEach((cat, idx) => {
+                    cat.name = document.getElementById(`catName_${idx}`).value;
+                    cat.color = document.getElementById(`catColor_${idx}`).value;
+                });
+                
+                saveData(adminData);
+                showAlert('Payment page updated successfully!', 'success');
+                renderPaymentEditor(container);
+            });
+        }
+
+        // ============================================
+        // PAYMENT CODES MANAGER
+        // ============================================
+        function renderCodesManager(container) {
+            container.innerHTML = `
+                <button onclick="showAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr><th>Payment Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                            ${Object.entries(adminData.paymentCodes).map(([code, details]) => `
+                                <tr>
+                                    <td><code>${code}</code></td>
+                                    <td>${details.bankName}</td>
+                                    <td>${details.accountName}</td>
+                                    <td>${details.accountNumber}</td>
+                                    <td>
+                                        <button onclick="editCode('${code}')" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
+                                        <button onclick="deleteCode('${code}')" style="background:#ef4444; padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="5" style="text-align:center">No payment codes</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            window.showAddCodeModal = function() {
+                const code = prompt('Enter payment code (e.g., 1234):');
+                if (!code) return;
+                if (adminData.paymentCodes[code]) {
+                    alert('Code already exists!');
+                    return;
+                }
+                adminData.paymentCodes[code] = {
+                    bankName: prompt('Enter Bank Name:', 'First Bank of Nigeria'),
+                    accountName: prompt('Enter Account Name:', 'NECO Payment Services'),
+                    accountNumber: prompt('Enter Account Number:', '2024567890'),
+                    bankCode: prompt('Enter Bank Code:', '011'),
+                    createdAt: new Date().toISOString()
+                };
+                saveData(adminData);
+                renderCodesManager(container);
+            };
+            
+            window.editCode = function(code) {
+                const details = adminData.paymentCodes[code];
+                const newBankName = prompt('Edit Bank Name:', details.bankName);
+                const newAccountName = prompt('Edit Account Name:', details.accountName);
+                const newAccountNumber = prompt('Edit Account Number:', details.accountNumber);
+                const newBankCode = prompt('Edit Bank Code:', details.bankCode);
+                if (newBankName) details.bankName = newBankName;
+                if (newAccountName) details.accountName = newAccountName;
+                if (newAccountNumber) details.accountNumber = newAccountNumber;
+                if (newBankCode) details.bankCode = newBankCode;
+                saveData(adminData);
+                renderCodesManager(container);
+            };
+            
+            window.deleteCode = function(code) {
+                if (confirm(`Delete payment code "${code}"?`)) {
+                    delete adminData.paymentCodes[code];
+                    saveData(adminData);
+                    renderCodesManager(container);
+                }
+            };
+        }
+
+        // ============================================
+        // TRANSACTIONS
+        // ============================================
+        function renderTransactions(container) {
+            container.innerHTML = `
+                <div class="data-table">
+                    <table>
+                        <thead>
+                            <tr><th>Date</th><th>Item</th><th>Category</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                            ${adminData.transactions.slice().reverse().map(t => `
+                                <tr>
+                                    <td>${new Date(t.createdAt).toLocaleString()}</td>
+                                    <td>${t.itemName}</td>
+                                    <td>${t.category}</td>
+                                    <td>${t.payerName}<br><small>${t.email}</small></td>
+                                    <td>₦${t.totalAmount.toLocaleString()}</td>
+                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
+                                    <td>
+                                        ${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" style="padding:0.25rem 0.5rem;">Confirm</button>` : 'Confirmed'}
+                                    </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            window.confirmTransaction = function(id) {
+                const transaction = adminData.transactions.find(t => t.id === id);
+                if (transaction) {
+                    transaction.status = 'confirmed';
+                    saveData(adminData);
+                    renderTransactions(container);
+                    showAlert('Transaction confirmed!', 'success');
+                }
+            };
+        }
+
+        // ============================================
+        // SETTINGS
+        // ============================================
+        function renderSettings(container) {
+            container.innerHTML = `
+                <form id="settingsForm">
+                    <div class="form-group">
+                        <label>Admin Username</label>
+                        <input type="text" id="adminUsername" value="${adminData.admin.username}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Admin Password</label>
+                        <input type="password" id="adminPassword" value="${adminData.admin.password}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp Number (for code requests)</label>
+                        <input type="text" id="whatsappNumber" value="${adminData.admin.whatsappNumber}" class="form-control" placeholder="2348021234567">
+                        <small>Format: country code + number (no + sign)</small>
+                    </div>
+                    <button type="submit">Save Settings</button>
+                </form>
+            `;
+            
+            document.getElementById('settingsForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                adminData.admin.username = document.getElementById('adminUsername').value;
+                adminData.admin.password = document.getElementById('adminPassword').value;
+                adminData.admin.whatsappNumber = document.getElementById('whatsappNumber').value;
+                saveData(adminData);
+                showAlert('Settings saved!', 'success');
+            });
+        }
+
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = message;
+            alertDiv.style.position = 'fixed';
+            alertDiv.style.top = '20px';
+            alertDiv.style.right = '20px';
+            alertDiv.style.zIndex = '1000';
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 3000);
+        }
+
+        // Make functions global
+        window.removeCategory = null;
+        window.addCategory = null;
+        window.removeItem = null;
+        window.addItem = null;
+        window.showAddCodeModal = null;
+        window.editCode = null;
+        window.deleteCode = null;
+        window.confirmTransaction = null;
+    </script>
 </body>
 </html>
