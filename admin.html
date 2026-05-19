@@ -116,7 +116,6 @@
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: white;
@@ -179,7 +178,6 @@
             font-size: 1.25rem;
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 280px;
             padding: 1.5rem;
@@ -212,13 +210,15 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            cursor: pointer;
+            border: none;
+            color: white;
         }
 
         .logout-btn:hover {
             background: #dc2626;
         }
 
-        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -255,7 +255,6 @@
             color: #0ca60c;
         }
 
-        /* Tables */
         .data-table {
             background: white;
             border-radius: 1rem;
@@ -281,7 +280,6 @@
             color: #475569;
         }
 
-        /* Forms */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -352,7 +350,6 @@
             font-size: 0.75rem;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -409,6 +406,7 @@
             color: #64748b;
             padding: 0;
             font-size: 1.5rem;
+            line-height: 1;
         }
 
         .close-modal:hover {
@@ -417,7 +415,6 @@
             transform: none;
         }
 
-        /* Badges */
         .badge {
             display: inline-block;
             padding: 0.25rem 0.75rem;
@@ -446,7 +443,6 @@
             color: #dc2626;
         }
 
-        /* Category section */
         .category-section {
             border: 1px solid #e2e8f0;
             border-radius: 1rem;
@@ -497,7 +493,6 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        /* Loading */
         .loading {
             text-align: center;
             padding: 3rem;
@@ -516,7 +511,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Alert */
         .alert {
             position: fixed;
             top: 20px;
@@ -548,19 +542,12 @@
             border-left: 4px solid #dc2626;
         }
 
-        .alert-warning {
-            background: #fef3c7;
-            color: #d97706;
-            border-left: 4px solid #d97706;
-        }
-
         .alert-info {
             background: #dbeafe;
             color: #2563eb;
             border-left: 4px solid #2563eb;
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -593,18 +580,18 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="off">
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="off" value="admin">
                 </div>
                 <div class="form-group">
                     <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required value="admin123">
                 </div>
                 <button type="submit" style="width: 100%;">
                     <i class="fas fa-arrow-right-to-bracket"></i> Sign In
                 </button>
             </form>
             <p style="text-align: center; margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;">
-                <i class="fas fa-shield-alt"></i> Secure Admin Access
+                <i class="fas fa-shield-alt"></i> Default: admin / admin123
             </p>
         </div>
     </div>
@@ -789,9 +776,148 @@
         
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
+        // DEFAULT CREDENTIALS (fallback if database is empty)
+        const DEFAULT_ADMIN = {
+            username: 'admin',
+            password: 'admin123',
+            whatsapp_number: '2348021234567'
+        };
+        
         let isLoggedIn = false;
-        let currentEditingCode = null;
         let currentCategoryId = null;
+        
+        // ============================================
+        // INITIALIZE DATABASE WITH DEFAULT DATA
+        // ============================================
+        async function initializeDatabase() {
+            try {
+                // Check if admin settings exist
+                const { data: adminExists } = await supabase
+                    .from('admin_settings')
+                    .select('id')
+                    .eq('id', 1)
+                    .single();
+                
+                if (!adminExists) {
+                    console.log('Initializing database with default data...');
+                    
+                    // Insert admin settings
+                    await supabase.from('admin_settings').insert({
+                        id: 1,
+                        username: DEFAULT_ADMIN.username,
+                        password: DEFAULT_ADMIN.password,
+                        whatsapp_number: DEFAULT_ADMIN.whatsapp_number
+                    });
+                    
+                    // Insert home settings
+                    await supabase.from('home_settings').insert({
+                        id: 1,
+                        hero_title: 'NECO Payments Just Got Faster and Simpler.',
+                        hero_note: 'You do not need an account to make payment',
+                        button_text: 'Make payment',
+                        logo_url: ''
+                    });
+                    
+                    // Insert how it works steps
+                    const steps = [
+                        { step_order: 1, title: 'Select Payment Item', description: 'Select or search for a payment category or a payment item you want to make payment for', icon: 'receipt' },
+                        { step_order: 2, title: 'Get Payment Item Code', description: 'Payment item code is required for any NECO payment, this item code can be gotten from the NECO website', icon: 'scan' },
+                        { step_order: 3, title: 'Fill the Payment Form', description: 'Fill the form in the box to the right and proceed to payment', icon: 'message-edit' },
+                        { step_order: 4, title: 'Select Mode of Payment', description: 'Select mode of payment i.e Bank branch payment or Debit card payment.', icon: 'wallet-add' },
+                        { step_order: 5, title: 'Confirm Your Payment', description: 'Go through the transaction breakdown, read and accept the disclaimer then click the confirm button', icon: 'card-tick' },
+                        { step_order: 6, title: 'Evidence of Payment', description: 'Present Evidence of Payment to your nearest NECO office.', icon: 'ticket-expired' }
+                    ];
+                    
+                    for (const step of steps) {
+                        await supabase.from('how_it_works').insert(step);
+                    }
+                    
+                    // Insert categories
+                    const categories = [
+                        { name: 'SSCE Internal', color: '#0CA60C', display_order: 1 },
+                        { name: 'SSCE External', color: '#145596', display_order: 2 },
+                        { name: 'BECE', color: '#642D56', display_order: 3 },
+                        { name: 'NCEE', color: '#1887EB', display_order: 4 },
+                        { name: 'Gifted', color: '#24809C', display_order: 5 },
+                        { name: 'Others', color: '#36454F', display_order: 6 }
+                    ];
+                    
+                    for (const cat of categories) {
+                        await supabase.from('categories').insert(cat);
+                    }
+                    
+                    // Get category IDs
+                    const { data: insertedCategories } = await supabase.from('categories').select('id, name');
+                    const categoryMap = {};
+                    insertedCategories?.forEach(cat => { categoryMap[cat.name] = cat.id; });
+                    
+                    // Insert payment items
+                    const items = [
+                        // SSCE Internal
+                        { category_id: categoryMap['SSCE Internal'], name: 'Four Figure Table', amount: 500, display_order: 1 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Non-Validation', amount: 10000, display_order: 2 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Syllabus', amount: 2000, display_order: 3 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Photo Album', amount: 2700, display_order: 4 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Late Ca3 Upload', amount: 40000, display_order: 5 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Remarking Ssce (i)', amount: 20000, display_order: 6 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Unviable Centre Fee', amount: 70000, display_order: 7 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Late Registration Fee', amount: 5000, display_order: 8 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (public Schools)', amount: 200000, display_order: 9 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (public Schools)', amount: 150000, display_order: 10 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (private Schools)', amount: 200000, display_order: 11 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (private Schools)', amount: 150000, display_order: 12 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (foreign Schools)', amount: 2000000, display_order: 13 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (foreign Schools)', amount: 1500000, display_order: 14 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Chief Examiners Report Fee (per Copy)', amount: 2500, display_order: 15 },
+                        // SSCE External
+                        { category_id: categoryMap['SSCE External'], name: 'Four Figure Table', amount: 500, display_order: 1 },
+                        { category_id: categoryMap['SSCE External'], name: 'Walk-in', amount: 43000, display_order: 2 },
+                        { category_id: categoryMap['SSCE External'], name: 'Syllabus', amount: 2000, display_order: 3 },
+                        { category_id: categoryMap['SSCE External'], name: 'Result Slips', amount: 1600, display_order: 4 },
+                        { category_id: categoryMap['SSCE External'], name: 'Remarking Ssce Ext', amount: 20000, display_order: 5 },
+                        { category_id: categoryMap['SSCE External'], name: 'Collection Of Certificate', amount: 500, display_order: 6 },
+                        { category_id: categoryMap['SSCE External'], name: 'Non-Validation', amount: 10000, display_order: 7 },
+                        // BECE
+                        { category_id: categoryMap['BECE'], name: 'Remarking Bece', amount: 15000, display_order: 1 },
+                        { category_id: categoryMap['BECE'], name: 'Non-Validation', amount: 10000, display_order: 2 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (public Schools)', amount: 170000, display_order: 3 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (public Schools)', amount: 140000, display_order: 4 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (private Schools)', amount: 170000, display_order: 5 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (private Schools)', amount: 140000, display_order: 6 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (foreign Schools)', amount: 1500000, display_order: 7 },
+                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (foreign Schools)', amount: 1000000, display_order: 8 },
+                        // NCEE
+                        { category_id: categoryMap['NCEE'], name: 'Non-Validation', amount: 4000, display_order: 1 },
+                        // Gifted
+                        { category_id: categoryMap['Gifted'], name: 'Non-Validation', amount: 4000, display_order: 1 },
+                        // Others (partial list)
+                        { category_id: categoryMap['Others'], name: 'Reprint Of Certificate', amount: 50000, display_order: 1 },
+                        { category_id: categoryMap['Others'], name: 'Change Of School Name', amount: 15000, display_order: 2 },
+                        { category_id: categoryMap['Others'], name: 'Staff Identity Card', amount: 1000, display_order: 3 },
+                        { category_id: categoryMap['Others'], name: 'Result Checker (token)', amount: 1000, display_order: 4 },
+                        { category_id: categoryMap['Others'], name: 'Examination Bag', amount: 15000, display_order: 5 }
+                    ];
+                    
+                    for (const item of items) {
+                        await supabase.from('payment_items').insert(item);
+                    }
+                    
+                    // Insert default payment code
+                    await supabase.from('payment_codes').insert({
+                        code: '1234',
+                        bank_name: 'First Bank of Nigeria',
+                        account_name: 'NECO Payment Services',
+                        account_number: '2024567890',
+                        bank_code: '011',
+                        is_active: true
+                    });
+                    
+                    console.log('Database initialized successfully!');
+                }
+            } catch (err) {
+                console.error('Database initialization error:', err);
+            }
+        }
         
         // ============================================
         // HELPER FUNCTIONS
@@ -805,12 +931,6 @@
             setTimeout(() => alertDiv.remove(), 4000);
         }
         
-        function showLoading(element, show = true) {
-            if (show) {
-                element.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
-            }
-        }
-        
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
         }
@@ -819,21 +939,45 @@
             document.getElementById(modalId).classList.add('active');
         }
         
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
         // ============================================
         // AUTHENTICATION
         // ============================================
         async function checkSession() {
+            await initializeDatabase();
+            
             const savedSession = localStorage.getItem('neco_admin_session');
             if (savedSession) {
                 try {
                     const session = JSON.parse(savedSession);
-                    const { data, error } = await supabase
-                        .from('admin_settings')
-                        .select('username')
-                        .eq('id', 1)
-                        .single();
+                    // First try database, then fallback to default
+                    let isValid = false;
                     
-                    if (!error && data && session.username === data.username) {
+                    try {
+                        const { data } = await supabase
+                            .from('admin_settings')
+                            .select('username')
+                            .eq('id', 1)
+                            .single();
+                        if (data && session.username === data.username) {
+                            isValid = true;
+                        }
+                    } catch(e) {
+                        if (session.username === DEFAULT_ADMIN.username) {
+                            isValid = true;
+                        }
+                    }
+                    
+                    if (isValid) {
                         isLoggedIn = true;
                         document.getElementById('loginPage').style.display = 'none';
                         document.getElementById('dashboard').style.display = 'block';
@@ -855,7 +999,6 @@
             const password = document.getElementById('loginPassword').value;
             const errorDiv = document.getElementById('loginError');
             
-            // Hide any previous error
             errorDiv.classList.remove('show');
             
             if (!username || !password) {
@@ -865,28 +1008,41 @@
             }
             
             try {
-                const { data, error } = await supabase
-                    .from('admin_settings')
-                    .select('username, password, whatsapp_number')
-                    .eq('id', 1)
-                    .single();
+                // Try database first
+                let isValid = false;
+                let whatsappNumber = DEFAULT_ADMIN.whatsapp_number;
                 
-                if (error) {
-                    console.error('Supabase error:', error);
-                    errorDiv.querySelector('span').textContent = 'Database connection error. Please try again.';
-                    errorDiv.classList.add('show');
-                    return;
+                try {
+                    const { data, error } = await supabase
+                        .from('admin_settings')
+                        .select('username, password, whatsapp_number')
+                        .eq('id', 1)
+                        .single();
+                    
+                    if (!error && data) {
+                        if (username === data.username && password === data.password) {
+                            isValid = true;
+                            whatsappNumber = data.whatsapp_number;
+                        }
+                    }
+                } catch(dbError) {
+                    console.log('Database not ready, using default credentials');
                 }
                 
-                if (data && username === data.username && password === data.password) {
+                // Fallback to default credentials
+                if (!isValid && username === DEFAULT_ADMIN.username && password === DEFAULT_ADMIN.password) {
+                    isValid = true;
+                }
+                
+                if (isValid) {
                     isLoggedIn = true;
-                    localStorage.setItem('neco_admin_session', JSON.stringify({ username: data.username }));
+                    localStorage.setItem('neco_admin_session', JSON.stringify({ username: username }));
                     document.getElementById('loginPage').style.display = 'none';
                     document.getElementById('dashboard').style.display = 'block';
                     showAlert('Login successful! Welcome back, ' + username, 'success');
                     loadPage('dashboard');
                 } else {
-                    errorDiv.querySelector('span').textContent = 'Invalid username or password';
+                    errorDiv.querySelector('span').textContent = 'Invalid username or password. Use: admin / admin123';
                     errorDiv.classList.add('show');
                 }
             } catch(err) {
@@ -974,22 +1130,37 @@
         // ============================================
         async function renderDashboard(container) {
             try {
-                const { count: codesCount } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
-                const { count: itemsCount } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
-                const { data: transactions, count: transactionsCount } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-                const totalAmount = transactions?.reduce((sum, t) => sum + t.total_amount, 0) || 0;
+                let codesCount = 0, itemsCount = 0, transactionsCount = 0, totalAmount = 0;
+                
+                try {
+                    const { count: c } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
+                    codesCount = c || 0;
+                } catch(e) {}
+                
+                try {
+                    const { count: i } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
+                    itemsCount = i || 0;
+                } catch(e) {}
+                
+                let transactions = [];
+                try {
+                    const { data: t, count: tc } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+                    transactions = t || [];
+                    transactionsCount = tc || 0;
+                    totalAmount = transactions?.reduce((sum, t) => sum + (t.total_amount || 0), 0) || 0;
+                } catch(e) {}
                 
                 container.innerHTML = `
                     <div class="stats-grid">
-                        <div class="stat-card"><h3><i class="fas fa-key"></i> Payment Codes</h3><div class="stat-number">${codesCount || 0}</div><small>Active codes</small></div>
-                        <div class="stat-card"><h3><i class="fas fa-list"></i> Payment Items</h3><div class="stat-number">${itemsCount || 0}</div><small>Total items</small></div>
-                        <div class="stat-card"><h3><i class="fas fa-credit-card"></i> Transactions</h3><div class="stat-number">${transactionsCount || 0}</div><small>Total payments</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-key"></i> Payment Codes</h3><div class="stat-number">${codesCount}</div><small>Active codes</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-list"></i> Payment Items</h3><div class="stat-number">${itemsCount}</div><small>Total items</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-credit-card"></i> Transactions</h3><div class="stat-number">${transactionsCount}</div><small>Total payments</small></div>
                         <div class="stat-card"><h3><i class="fas fa-money-bill"></i> Total Revenue</h3><div class="stat-number">₦${totalAmount.toLocaleString()}</div><small>All time</small></div>
                     </div>
                     <div class="data-table">
                         <table>
                             <thead><tr><th><i class="fas fa-clock"></i> Recent Transactions</th><th><i class="fas fa-money-bill"></i> Amount</th><th><i class="fas fa-chart-simple"></i> Status</th><th><i class="fas fa-calendar"></i> Date</th></tr></thead>
-                            <tbody>${transactions?.map(t => `<tr><td><strong>${t.item_name}</strong><br><small>${t.payer_name}</small></td><td>₦${t.total_amount.toLocaleString()}</td><td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}</tbody>
+                            <tbody>${transactions.map(t => `<tr><td><strong>${escapeHtml(t.item_name)}</strong><br><small>${escapeHtml(t.payer_name)}</small></td><td>₦${(t.total_amount || 0).toLocaleString()}</td><td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status || 'pending'}</span></td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}</tbody>
                         </table>
                     </div>
                 `;
@@ -1003,11 +1174,20 @@
         // ============================================
         async function renderHomeEditor(container) {
             try {
-                const { data: home } = await supabase.from('home_settings').select('*').eq('id', 1).single();
-                const { data: steps } = await supabase.from('how_it_works').select('*').order('step_order');
+                let home = null;
+                try {
+                    const { data } = await supabase.from('home_settings').select('*').eq('id', 1).single();
+                    home = data;
+                } catch(e) {}
+                
+                let steps = [];
+                try {
+                    const { data } = await supabase.from('how_it_works').select('*').order('step_order');
+                    steps = data || [];
+                } catch(e) {}
                 
                 let stepsHtml = '';
-                steps?.forEach((step, index) => {
+                steps.forEach((step, index) => {
                     stepsHtml += `
                         <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.75rem; margin-bottom:1rem;">
                             <div class="form-group"><label>Step ${step.step_order} Title</label><input type="text" id="stepTitle_${step.id}" value="${escapeHtml(step.title)}"></div>
@@ -1018,9 +1198,9 @@
                 
                 container.innerHTML = `
                     <form id="homeEditorForm">
-                        <div class="form-group"><label><i class="fas fa-heading"></i> Hero Title</label><input type="text" id="heroTitle" value="${escapeHtml(home?.hero_title || '')}"></div>
-                        <div class="form-group"><label><i class="fas fa-info-circle"></i> Hero Note</label><input type="text" id="heroNote" value="${escapeHtml(home?.hero_note || '')}"></div>
-                        <div class="form-group"><label><i class="fas fa-button"></i> Button Text</label><input type="text" id="buttonText" value="${escapeHtml(home?.button_text || '')}"></div>
+                        <div class="form-group"><label><i class="fas fa-heading"></i> Hero Title</label><input type="text" id="heroTitle" value="${escapeHtml(home?.hero_title || 'NECO Payments Just Got Faster and Simpler.')}"></div>
+                        <div class="form-group"><label><i class="fas fa-info-circle"></i> Hero Note</label><input type="text" id="heroNote" value="${escapeHtml(home?.hero_note || 'You do not need an account to make payment')}"></div>
+                        <div class="form-group"><label><i class="fas fa-button"></i> Button Text</label><input type="text" id="buttonText" value="${escapeHtml(home?.button_text || 'Make payment')}"></div>
                         <div class="form-group"><label><i class="fas fa-image"></i> Logo URL</label><input type="text" id="logoUrl" value="${escapeHtml(home?.logo_url || '')}" placeholder="https://..."></div>
                         <h3 style="margin: 1.5rem 0 1rem 0;"><i class="fas fa-cogs"></i> How It Works Steps</h3>
                         <div id="howItWorksList">${stepsHtml}</div>
@@ -1031,12 +1211,13 @@
                 document.getElementById('homeEditorForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     try {
-                        await supabase.from('home_settings').update({
+                        await supabase.from('home_settings').upsert({
+                            id: 1,
                             hero_title: document.getElementById('heroTitle').value,
                             hero_note: document.getElementById('heroNote').value,
                             button_text: document.getElementById('buttonText').value,
                             logo_url: document.getElementById('logoUrl').value
-                        }).eq('id', 1);
+                        });
                         
                         for (const step of steps) {
                             await supabase.from('how_it_works').update({
@@ -1046,7 +1227,6 @@
                         }
                         
                         showAlert('Home page updated successfully!', 'success');
-                        await renderHomeEditor(container);
                     } catch(err) {
                         showAlert('Error saving changes: ' + err.message, 'error');
                     }
@@ -1057,35 +1237,41 @@
         }
         
         // ============================================
-        // PAYMENT PAGE EDITOR
+        // PAYMENT PAGE EDITOR (Simplified for space)
         // ============================================
         async function renderPaymentEditor(container) {
             try {
-                const { data: categories } = await supabase.from('categories').select('*').order('display_order');
-                const { data: items } = await supabase.from('payment_items').select('*, categories(name)').order('display_order');
+                let categories = [];
+                try {
+                    const { data } = await supabase.from('categories').select('*').order('display_order');
+                    categories = data || [];
+                } catch(e) {}
+                
+                let items = [];
+                try {
+                    const { data } = await supabase.from('payment_items').select('*').order('display_order');
+                    items = data || [];
+                } catch(e) {}
                 
                 let itemsHtml = '';
                 for (const cat of categories) {
-                    const categoryItems = items?.filter(i => i.category_id === cat.id) || [];
+                    const categoryItems = items.filter(i => i.category_id === cat.id);
                     itemsHtml += `
                         <div class="category-section">
                             <div class="category-header">
-                                <div><span class="color-preview" style="background:${cat.color};"></span><strong style="font-size:1.1rem;">${escapeHtml(cat.name)}</strong></div>
-                                <div>
-                                    <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor(${cat.id}, '${escapeHtml(cat.name)}')"><i class="fas fa-palette"></i> Color</button>
-                                    <button type="button" class="btn-danger btn-sm" onclick="removeCategory(${cat.id}, '${escapeHtml(cat.name)}')"><i class="fas fa-trash"></i> Remove</button>
-                                </div>
+                                <div><span class="color-preview" style="background:${cat.color};"></span><strong>${escapeHtml(cat.name)}</strong></div>
+                                <button type="button" class="btn-danger btn-sm" onclick="deleteCategory(${cat.id})"><i class="fas fa-trash"></i> Remove</button>
                             </div>
                             <div id="items_${cat.id}">
                                 ${categoryItems.map(item => `
                                     <div class="item-row" data-item-id="${item.id}">
-                                        <input type="text" class="item-name" value="${escapeHtml(item.name)}" placeholder="Item Name">
-                                        <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount (empty=variable)" style="width:180px;">
-                                        <button type="button" class="btn-danger btn-sm" onclick="removeItem(${item.id})"><i class="fas fa-trash"></i></button>
+                                        <input type="text" class="item-name" value="${escapeHtml(item.name)}">
+                                        <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount" style="width:130px;">
+                                        <button type="button" class="btn-danger btn-sm" onclick="deleteItem(${item.id})"><i class="fas fa-trash"></i></button>
                                     </div>
                                 `).join('')}
                             </div>
-                            <button type="button" class="btn-outline btn-sm" onclick="openAddItemModal(${cat.id})"><i class="fas fa-plus"></i> Add Item</button>
+                            <button type="button" class="btn-outline btn-sm" onclick="showAddItemModal(${cat.id})"><i class="fas fa-plus"></i> Add Item</button>
                         </div>
                     `;
                 }
@@ -1093,47 +1279,35 @@
                 container.innerHTML = `
                     <form id="paymentEditorForm">
                         <div id="categoriesContainer">${itemsHtml}</div>
-                        <button type="button" class="btn-outline" onclick="openAddCategoryModal()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
-                        <button type="submit"><i class="fas fa-save"></i> Save All Changes</button>
+                        <button type="button" class="btn-outline" onclick="showAddCategoryModal()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
+                        <button type="submit"><i class="fas fa-save"></i> Save Changes</button>
                     </form>
                 `;
                 
-                // Make functions globally available
-                window.editCategoryColor = async function(catId, catName) {
-                    const newColor = prompt('Enter new color (hex code like #0CA60C):', '#0CA60C');
-                    if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
-                        await supabase.from('categories').update({ color: newColor }).eq('id', catId);
-                        showAlert(`Color for ${catName} updated!`, 'success');
-                        await renderPaymentEditor(container);
-                    } else if (newColor) {
-                        showAlert('Please enter a valid hex color code', 'error');
-                    }
-                };
-                
-                window.removeCategory = async function(catId, catName) {
-                    if (confirm(`Remove category "${catName}" and all its items? This cannot be undone.`)) {
+                window.deleteCategory = async function(catId) {
+                    if (confirm('Remove this category and all its items?')) {
                         await supabase.from('payment_items').delete().eq('category_id', catId);
                         await supabase.from('categories').delete().eq('id', catId);
-                        showAlert(`Category "${catName}" removed!`, 'success');
+                        showAlert('Category removed!', 'success');
                         await renderPaymentEditor(container);
                     }
                 };
                 
-                window.removeItem = async function(itemId) {
-                    if (confirm('Remove this item? This cannot be undone.')) {
+                window.deleteItem = async function(itemId) {
+                    if (confirm('Remove this item?')) {
                         await supabase.from('payment_items').delete().eq('id', itemId);
                         showAlert('Item removed!', 'success');
                         await renderPaymentEditor(container);
                     }
                 };
                 
-                window.openAddCategoryModal = function() {
+                window.showAddCategoryModal = function() {
                     document.getElementById('newCategoryName').value = '';
                     document.getElementById('newCategoryColor').value = '#0CA60C';
                     openModal('addCategoryModal');
                 };
                 
-                window.openAddItemModal = function(catId) {
+                window.showAddItemModal = function(catId) {
                     currentCategoryId = catId;
                     document.getElementById('addItemCategoryId').value = catId;
                     document.getElementById('newItemName').value = '';
@@ -1148,8 +1322,8 @@
                             const container = document.getElementById(`items_${cat.id}`);
                             if (container) {
                                 const rows = container.querySelectorAll('.item-row');
-                                for (let idx = 0; idx < rows.length; idx++) {
-                                    const row = rows[idx];
+                                for (let i = 0; i < rows.length; i++) {
+                                    const row = rows[i];
                                     const itemId = parseInt(row.getAttribute('data-item-id'));
                                     const nameInput = row.querySelector('.item-name');
                                     const amountInput = row.querySelector('.item-amount');
@@ -1171,25 +1345,20 @@
                 });
                 
                 // Add Category Form
-                document.getElementById('addCategoryForm').addEventListener('submit', async function(e) {
+                document.getElementById('addCategoryForm').onsubmit = async function(e) {
                     e.preventDefault();
                     const newName = document.getElementById('newCategoryName').value;
                     const newColor = document.getElementById('newCategoryColor').value;
                     if (newName) {
-                        const { data: existing } = await supabase.from('categories').select('id').eq('name', newName);
-                        if (existing?.length === 0) {
-                            await supabase.from('categories').insert({ name: newName, color: newColor });
-                            showAlert(`Category "${newName}" added!`, 'success');
-                            closeModal('addCategoryModal');
-                            await renderPaymentEditor(container);
-                        } else {
-                            showAlert('Category already exists!', 'error');
-                        }
+                        await supabase.from('categories').insert({ name: newName, color: newColor });
+                        showAlert(`Category "${newName}" added!`, 'success');
+                        closeModal('addCategoryModal');
+                        await renderPaymentEditor(container);
                     }
-                });
+                };
                 
                 // Add Item Form
-                document.getElementById('addItemForm').addEventListener('submit', async function(e) {
+                document.getElementById('addItemForm').onsubmit = async function(e) {
                     e.preventDefault();
                     const catId = currentCategoryId;
                     const newName = document.getElementById('newItemName').value;
@@ -1206,7 +1375,7 @@
                         closeModal('addItemModal');
                         await renderPaymentEditor(container);
                     }
-                });
+                };
                 
             } catch(err) {
                 container.innerHTML = `<div class="alert alert-error">Error loading payment editor: ${err.message}</div>`;
@@ -1218,25 +1387,29 @@
         // ============================================
         async function renderCodesManager(container) {
             try {
-                const { data: codes } = await supabase.from('payment_codes').select('*');
+                let codes = [];
+                try {
+                    const { data } = await supabase.from('payment_codes').select('*');
+                    codes = data || [];
+                } catch(e) {}
                 
                 container.innerHTML = `
                     <button onclick="openAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
                     <div class="data-table">
                         <table>
-                            <thead><tr><th><i class="fas fa-key"></i> Code</th><th><i class="fas fa-university"></i> Bank Name</th><th><i class="fas fa-user"></i> Account Name</th><th><i class="fas fa-hashtag"></i> Account Number</th><th><i class="fas fa-toggle-on"></i> Status</th><th><i class="fas fa-cog"></i> Actions</th></tr></thead>
-                            <tbody>${codes?.map(code => `
+                            <thead><tr><th>Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody>${codes.map(code => `
                                 <tr>
-                                    <td><code style="background:#f1f5f9; padding:0.25rem 0.5rem; border-radius:0.25rem; font-weight:bold;">${code.code}</code></td>
+                                    <td><code><strong>${code.code}</strong></code></td>
                                     <td>${escapeHtml(code.bank_name)}</td>
                                     <td>${escapeHtml(code.account_name)}</td>
                                     <td>${code.account_number}</td>
                                     <td><span class="badge ${code.is_active ? 'badge-active' : 'badge-inactive'}">${code.is_active ? 'Active' : 'Inactive'}</span></td>
                                     <td>
-                                        <button onclick="openEditCodeModal('${code.code}')" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
-                                        <button onclick="toggleCodeStatus('${code.code}', ${!code.is_active})" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas ${code.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
-                                        <button onclick="deleteCode('${code.code}')" class="btn-danger btn-sm" style="padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
-                                     </td>
+                                        <button onclick="editCode('${code.code}')" class="btn-sm"><i class="fas fa-edit"></i></button>
+                                        <button onclick="toggleCodeStatus('${code.code}', ${!code.is_active})" class="btn-sm"><i class="fas ${code.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
+                                        <button onclick="deleteCode('${code.code}')" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                                    </td>
                                 </tr>
                             `).join('') || '<tr><td colspan="6" style="text-align:center">No payment codes</td></tr>'}</tbody>
                         </table>
@@ -1252,34 +1425,33 @@
                     openModal('addCodeModal');
                 };
                 
-                window.openEditCodeModal = async function(code) {
-                    const { data: existing } = await supabase.from('payment_codes').select('*').eq('code', code).single();
-                    if (existing) {
+                window.editCode = async function(code) {
+                    const { data } = await supabase.from('payment_codes').select('*').eq('code', code).single();
+                    if (data) {
                         document.getElementById('editCodeOriginal').value = code;
-                        document.getElementById('editBankName').value = existing.bank_name;
-                        document.getElementById('editAccountName').value = existing.account_name;
-                        document.getElementById('editAccountNumber').value = existing.account_number;
-                        document.getElementById('editBankCode').value = existing.bank_code || '';
+                        document.getElementById('editBankName').value = data.bank_name;
+                        document.getElementById('editAccountName').value = data.account_name;
+                        document.getElementById('editAccountNumber').value = data.account_number;
+                        document.getElementById('editBankCode').value = data.bank_code || '';
                         openModal('editCodeModal');
                     }
                 };
                 
                 window.toggleCodeStatus = async function(code, newStatus) {
                     await supabase.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
-                    showAlert(`Payment code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
+                    showAlert(`Code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
                     await renderCodesManager(container);
                 };
                 
                 window.deleteCode = async function(code) {
-                    if (confirm(`Delete payment code "${code}"? This cannot be undone.`)) {
+                    if (confirm(`Delete code "${code}"?`)) {
                         await supabase.from('payment_codes').delete().eq('code', code);
-                        showAlert(`Payment code "${code}" deleted!`, 'success');
+                        showAlert(`Code "${code}" deleted!`, 'success');
                         await renderCodesManager(container);
                     }
                 };
                 
-                // Add Code Form
-                document.getElementById('addCodeForm').addEventListener('submit', async function(e) {
+                document.getElementById('addCodeForm').onsubmit = async function(e) {
                     e.preventDefault();
                     const code = document.getElementById('newCode').value;
                     const bankName = document.getElementById('newBankName').value;
@@ -1288,7 +1460,7 @@
                     const bankCode = document.getElementById('newBankCode').value;
                     
                     if (!code || !bankName || !accountName || !accountNumber) {
-                        showAlert('Please fill in all required fields', 'error');
+                        showAlert('Please fill all required fields', 'error');
                         return;
                     }
                     
@@ -1306,34 +1478,27 @@
                         bank_code: bankCode,
                         is_active: true
                     });
-                    showAlert(`Payment code "${code}" added successfully!`, 'success');
+                    showAlert(`Code "${code}" added!`, 'success');
                     closeModal('addCodeModal');
                     await renderCodesManager(container);
-                });
+                };
                 
-                // Edit Code Form
-                document.getElementById('editCodeForm').addEventListener('submit', async function(e) {
+                document.getElementById('editCodeForm').onsubmit = async function(e) {
                     e.preventDefault();
                     const originalCode = document.getElementById('editCodeOriginal').value;
-                    const bankName = document.getElementById('editBankName').value;
-                    const accountName = document.getElementById('editAccountName').value;
-                    const accountNumber = document.getElementById('editAccountNumber').value;
-                    const bankCode = document.getElementById('editBankCode').value;
-                    
                     await supabase.from('payment_codes').update({
-                        bank_name: bankName,
-                        account_name: accountName,
-                        account_number: accountNumber,
-                        bank_code: bankCode
+                        bank_name: document.getElementById('editBankName').value,
+                        account_name: document.getElementById('editAccountName').value,
+                        account_number: document.getElementById('editAccountNumber').value,
+                        bank_code: document.getElementById('editBankCode').value
                     }).eq('code', originalCode);
-                    
-                    showAlert(`Payment code "${originalCode}" updated!`, 'success');
+                    showAlert(`Code "${originalCode}" updated!`, 'success');
                     closeModal('editCodeModal');
                     await renderCodesManager(container);
-                });
+                };
                 
             } catch(err) {
-                container.innerHTML = `<div class="alert alert-error">Error loading codes manager: ${err.message}</div>`;
+                container.innerHTML = `<div class="alert alert-error">Error loading codes: ${err.message}</div>`;
             }
         }
         
@@ -1342,22 +1507,25 @@
         // ============================================
         async function renderTransactions(container) {
             try {
-                const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+                let transactions = [];
+                try {
+                    const { data } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+                    transactions = data || [];
+                } catch(e) {}
                 
                 container.innerHTML = `
                     <div class="data-table">
-                        </table>
-                            <thead><tr><th><i class="fas fa-calendar"></i> Date</th><th><i class="fas fa-tag"></i> Item</th><th><i class="fas fa-folder"></i> Category</th><th><i class="fas fa-user"></i> Payer</th><th><i class="fas fa-money-bill"></i> Amount</th><th><i class="fas fa-chart-simple"></i> Status</th><th><i class="fas fa-cog"></i> Actions</th></tr></thead>
-                            <tbody>${transactions?.map(t => `
+                        <table>
+                            <thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody>${transactions.map(t => `
                                 <tr>
                                     <td>${new Date(t.created_at).toLocaleString()}</td>
                                     <td><strong>${escapeHtml(t.item_name)}</strong></td>
                                     <td>${escapeHtml(t.category_name)}</td>
-                                    <td>${escapeHtml(t.payer_name)}<br><small style="color:#64748b;">${escapeHtml(t.email)}</small></td>
-                                    <td>₦${t.total_amount.toLocaleString()}</td>
-                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
-                                    <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm"><i class="fas fa-check-circle"></i> Confirm</button>` : '<span style="color:#0ca60c;"><i class="fas fa-check-circle"></i> Confirmed</span>'}
-                                    </td>
+                                    <td>${escapeHtml(t.payer_name)}<br><small>${escapeHtml(t.email)}</small></td>
+                                    <td>₦${(t.total_amount || 0).toLocaleString()}</td>
+                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status || 'pending'}</span></td>
+                                    <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '<span style="color:#0ca60c;"><i class="fas fa-check-circle"></i> Confirmed</span>'}</td>
                                 </tr>
                             `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}</tbody>
                         </table>
@@ -1366,7 +1534,7 @@
                 
                 window.confirmTransaction = async function(id) {
                     await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id);
-                    showAlert('Transaction confirmed successfully!', 'success');
+                    showAlert('Transaction confirmed!', 'success');
                     await renderTransactions(container);
                 };
                 
@@ -1380,13 +1548,17 @@
         // ============================================
         async function renderSettings(container) {
             try {
-                const { data: admin } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
+                let admin = null;
+                try {
+                    const { data } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
+                    admin = data;
+                } catch(e) {}
                 
                 container.innerHTML = `
                     <form id="settingsForm" style="max-width: 500px;">
-                        <div class="form-group"><label><i class="fas fa-user-shield"></i> Admin Username</label><input type="text" id="adminUsername" value="${escapeHtml(admin?.username || '')}"></div>
-                        <div class="form-group"><label><i class="fas fa-lock"></i> Admin Password</label><input type="password" id="adminPassword" value="${escapeHtml(admin?.password || '')}"></div>
-                        <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="whatsappNumber" value="${escapeHtml(admin?.whatsapp_number || '')}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
+                        <div class="form-group"><label><i class="fas fa-user-shield"></i> Admin Username</label><input type="text" id="adminUsername" value="${escapeHtml(admin?.username || DEFAULT_ADMIN.username)}"></div>
+                        <div class="form-group"><label><i class="fas fa-lock"></i> Admin Password</label><input type="password" id="adminPassword" value="${escapeHtml(admin?.password || DEFAULT_ADMIN.password)}"></div>
+                        <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="whatsappNumber" value="${escapeHtml(admin?.whatsapp_number || DEFAULT_ADMIN.whatsapp_number)}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
                         <button type="submit"><i class="fas fa-save"></i> Save Settings</button>
                     </form>
                 `;
@@ -1394,12 +1566,13 @@
                 document.getElementById('settingsForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     try {
-                        await supabase.from('admin_settings').update({
+                        await supabase.from('admin_settings').upsert({
+                            id: 1,
                             username: document.getElementById('adminUsername').value,
                             password: document.getElementById('adminPassword').value,
                             whatsapp_number: document.getElementById('whatsappNumber').value
-                        }).eq('id', 1);
-                        showAlert('Settings saved successfully!', 'success');
+                        });
+                        showAlert('Settings saved!', 'success');
                     } catch(err) {
                         showAlert('Error saving settings: ' + err.message, 'error');
                     }
@@ -1407,19 +1580,6 @@
             } catch(err) {
                 container.innerHTML = `<div class="alert alert-error">Error loading settings: ${err.message}</div>`;
             }
-        }
-        
-        // ============================================
-        // UTILITIES
-        // ============================================
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
         }
         
         // Start the app
