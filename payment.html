@@ -66,7 +66,6 @@
         .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
         .mx-auto{margin-left:auto;margin-right:auto}
-        /* FIX: Remove default margin from p tags inside card amount section */
         .card-amount p {
             margin: 0;
             line-height: 1.3;
@@ -192,8 +191,8 @@
                                     <div class="mt-1 relative">
                                         <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
-                                    <div id="codeError" class="text-red-600 text-xs mt-1 hidden">❌ Invalid payment code</div>
-                                    <div id="codeSuccess" class="text-green-600 text-xs mt-1 hidden">✅ Valid payment code</div>
+                                    <!-- CHANGED: Only show "Invalid code" when code is wrong, no symbol, no success message -->
+                                    <div id="codeError" class="text-red-600 text-xs mt-1 hidden">Invalid code</div>
                                 </div>
                             </div>
                             <div class="mt-5 flex justify-end">
@@ -379,8 +378,12 @@
             const validation = validatePaymentCode(code);
             isCodeValid = validation.valid;
             currentValidatedAccount = validation.accountDetails;
-            document.getElementById('codeError').style.display = (code && !isCodeValid) ? 'block' : 'none';
-            document.getElementById('codeSuccess').style.display = isCodeValid ? 'block' : 'none';
+            // Only show error message when code is invalid and not empty
+            if (code && !isCodeValid) {
+                document.getElementById('codeError').style.display = 'block';
+            } else {
+                document.getElementById('codeError').style.display = 'none';
+            }
             const fullName = document.getElementById('fullName').value, phone = document.getElementById('phone').value, email = document.getElementById('email').value, amount = document.getElementById('amount').value;
             document.getElementById('proceedBtn').disabled = !(isCodeValid && fullName && phone && email && amount);
         }
@@ -418,7 +421,7 @@
             document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
             document.getElementById('paymentCode').value = ''; document.getElementById('fullName').value = ''; document.getElementById('phone').value = ''; document.getElementById('email').value = '';
             document.getElementById('paymentDescription').value = ''; document.getElementById('quantity').value = '1'; document.getElementById('currency').value = 'Naira';
-            document.getElementById('codeError').style.display = 'none'; document.getElementById('codeSuccess').style.display = 'none';
+            document.getElementById('codeError').style.display = 'none';
             document.getElementById('proceedBtn').disabled = true;
             document.getElementById('paymentModal').classList.remove('hidden');
             ['paymentCode','fullName','phone','email','amount'].forEach(id => document.getElementById(id).addEventListener('input', checkCodeValidation));
