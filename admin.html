@@ -251,9 +251,14 @@
     </div></div>
 
     <script>
+        // ============================================
+        // SUPABASE CONFIGURATION - USING DIFFERENT VARIABLE NAME
+        // ============================================
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
+        // Use a different variable name to avoid conflict with the CDN
+        const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         const ADMIN_USERNAME = 'admin';
         const ADMIN_PASSWORD = 'admin123';
@@ -345,10 +350,10 @@
         // Dashboard
         async function renderDashboard(container) {
             try {
-                const { count: categories } = await supabase.from('categories').select('*', { count: 'exact', head: true });
-                const { count: codes } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
-                const { count: items } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
-                const { data: transactions, count: txCount } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+                const { count: categories } = await sb.from('categories').select('*', { count: 'exact', head: true });
+                const { count: codes } = await sb.from('payment_codes').select('*', { count: 'exact', head: true });
+                const { count: items } = await sb.from('payment_items').select('*', { count: 'exact', head: true });
+                const { data: transactions, count: txCount } = await sb.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
                 const totalAmount = transactions?.reduce((s, t) => s + (t.total_amount || 0), 0) || 0;
                 
                 container.innerHTML = `
@@ -370,8 +375,8 @@
 
         // Home Editor
         async function renderHomeEditor(container) {
-            const { data: home } = await supabase.from('home_settings').select('*').eq('id', 1).maybeSingle();
-            const { data: steps } = await supabase.from('how_it_works').select('*').order('step_order');
+            const { data: home } = await sb.from('home_settings').select('*').eq('id', 1).maybeSingle();
+            const { data: steps } = await sb.from('how_it_works').select('*').order('step_order');
             let stepsHtml = '';
             steps?.forEach(step => {
                 stepsHtml += `<div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.75rem; margin-bottom:1rem;">
@@ -389,16 +394,16 @@
             </form>`;
             document.getElementById('homeEditorForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                await supabase.from('home_settings').upsert({ id: 1, hero_title: document.getElementById('heroTitle').value, hero_note: document.getElementById('heroNote').value, button_text: document.getElementById('buttonText').value, logo_url: document.getElementById('logoUrl').value });
-                for (const step of steps) await supabase.from('how_it_works').update({ title: document.getElementById(`stepTitle_${step.id}`).value, description: document.getElementById(`stepDesc_${step.id}`).value }).eq('id', step.id);
+                await sb.from('home_settings').upsert({ id: 1, hero_title: document.getElementById('heroTitle').value, hero_note: document.getElementById('heroNote').value, button_text: document.getElementById('buttonText').value, logo_url: document.getElementById('logoUrl').value });
+                for (const step of steps) await sb.from('how_it_works').update({ title: document.getElementById(`stepTitle_${step.id}`).value, description: document.getElementById(`stepDesc_${step.id}`).value }).eq('id', step.id);
                 showAlert('Home page updated!', 'success');
             });
         }
 
         // Payment Editor
         async function renderPaymentEditor(container) {
-            const { data: categories } = await supabase.from('categories').select('*').order('display_order');
-            const { data: items } = await supabase.from('payment_items').select('*');
+            const { data: categories } = await sb.from('categories').select('*').order('display_order');
+            const { data: items } = await sb.from('payment_items').select('*');
             let html = '<form id="paymentEditorForm">';
             for (const cat of categories) {
                 const catItems = items?.filter(i => i.category_id === cat.id) || [];
@@ -417,8 +422,8 @@
                 <button type="submit"><i class="fas fa-save"></i> Save Changes</button></form>`;
             container.innerHTML = html;
             
-            window.deleteCategory = async (id) => { if(confirm('Delete this category and all its items?')){ await supabase.from('payment_items').delete().eq('category_id', id); await supabase.from('categories').delete().eq('id', id); showAlert('Category deleted','success'); await renderPaymentEditor(container); }};
-            window.deleteItem = async (id) => { if(confirm('Delete this item?')){ await supabase.from('payment_items').delete().eq('id', id); showAlert('Item deleted','success'); await renderPaymentEditor(container); }};
+            window.deleteCategory = async (id) => { if(confirm('Delete this category and all its items?')){ await sb.from('payment_items').delete().eq('category_id', id); await sb.from('categories').delete().eq('id', id); showAlert('Category deleted','success'); await renderPaymentEditor(container); }};
+            window.deleteItem = async (id) => { if(confirm('Delete this item?')){ await sb.from('payment_items').delete().eq('id', id); showAlert('Item deleted','success'); await renderPaymentEditor(container); }};
             window.showAddCategoryModal = () => { document.getElementById('newCategoryName').value = ''; openModal('addCategoryModal'); };
             window.showAddItemModal = (id) => { currentCategoryId = id; document.getElementById('addItemCategoryId').value = id; document.getElementById('newItemName').value = ''; document.getElementById('newItemAmount').value = ''; openModal('addItemModal'); };
             
@@ -432,7 +437,7 @@
                             const itemId = parseInt(row.getAttribute('data-item-id'));
                             const name = row.querySelector('.item-name').value;
                             const amount = row.querySelector('.item-amount').value ? parseFloat(row.querySelector('.item-amount').value) : null;
-                            if (itemId) await supabase.from('payment_items').update({ name, amount }).eq('id', itemId);
+                            if (itemId) await sb.from('payment_items').update({ name, amount }).eq('id', itemId);
                         }
                     }
                 }
@@ -441,14 +446,14 @@
             
             document.getElementById('addCategoryForm').onsubmit = async (e) => {
                 e.preventDefault();
-                await supabase.from('categories').insert({ name: document.getElementById('newCategoryName').value, color: document.getElementById('newCategoryColor').value });
+                await sb.from('categories').insert({ name: document.getElementById('newCategoryName').value, color: document.getElementById('newCategoryColor').value });
                 closeModal('addCategoryModal');
                 await renderPaymentEditor(container);
             };
             document.getElementById('addItemForm').onsubmit = async (e) => {
                 e.preventDefault();
                 const amount = document.getElementById('newItemAmount').value ? parseFloat(document.getElementById('newItemAmount').value) : null;
-                await supabase.from('payment_items').insert({ category_id: currentCategoryId, name: document.getElementById('newItemName').value, amount });
+                await sb.from('payment_items').insert({ category_id: currentCategoryId, name: document.getElementById('newItemName').value, amount });
                 closeModal('addItemModal');
                 await renderPaymentEditor(container);
             };
@@ -456,33 +461,33 @@
 
         // Codes Manager
         async function renderCodesManager(container) {
-            const { data: codes } = await supabase.from('payment_codes').select('*');
+            const { data: codes } = await sb.from('payment_codes').select('*');
             container.innerHTML = `<button onclick="openAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
                 <div class="data-table">
                     <table>
                         <thead><tr><th>Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Actions</th></tr></thead>
-                        <tbody>${codes?.map(c => `<tr><td><strong>${c.code}</strong></td><td>${escapeHtml(c.bank_name)}</td><td>${escapeHtml(c.account_name)}</td><td>${c.account_number}</td>
+                        <tbody>${codes?.map(c => `<tr><td><strong>${c.code}</strong></td><td>${escapeHtml(c.bank_name)}</td><td>${escapeHtml(c.account_name)}</td><td style="font-family:monospace;">${c.account_number}</td>
                         <td><span class="badge ${c.is_active ? 'badge-active' : 'badge-inactive'}">${c.is_active ? 'Active' : 'Inactive'}</span></td>
                         <td><button onclick="editCode('${c.code}')" class="btn-sm"><i class="fas fa-edit"></i></button>
                         <button onclick="toggleCode('${c.code}', ${!c.is_active})" class="btn-sm"><i class="fas ${c.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
-                        <button onclick="deleteCode('${c.code}')" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>}</tr>`).join('') || '<tr><td colspan="6">No codes</td></tr>'}</tbody>
+                        <button onclick="deleteCode('${c.code}')" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button></td>}</td>`).join('') || '<tr><td colspan="6">No codes</td></tr>'}</tbody>
                     </table>
                 </div>`;
             
             window.openAddCodeModal = () => { document.getElementById('newCode').value = ''; document.getElementById('newBankName').value = ''; document.getElementById('newAccountName').value = ''; document.getElementById('newAccountNumber').value = ''; openModal('addCodeModal'); };
-            window.editCode = async (code) => { const { data } = await supabase.from('payment_codes').select('*').eq('code', code).single(); if(data){ document.getElementById('editCodeOriginal').value = code; document.getElementById('editBankName').value = data.bank_name; document.getElementById('editAccountName').value = data.account_name; document.getElementById('editAccountNumber').value = data.account_number; document.getElementById('editBankCode').value = data.bank_code || ''; openModal('editCodeModal'); }};
-            window.toggleCode = async (code, status) => { await supabase.from('payment_codes').update({ is_active: status }).eq('code', code); showAlert(`Code ${code} ${status ? 'activated' : 'deactivated'}`, 'success'); await renderCodesManager(container); };
-            window.deleteCode = async (code) => { if(confirm(`Delete code ${code}?`)){ await supabase.from('payment_codes').delete().eq('code', code); showAlert('Code deleted','success'); await renderCodesManager(container); }};
+            window.editCode = async (code) => { const { data } = await sb.from('payment_codes').select('*').eq('code', code).single(); if(data){ document.getElementById('editCodeOriginal').value = code; document.getElementById('editBankName').value = data.bank_name; document.getElementById('editAccountName').value = data.account_name; document.getElementById('editAccountNumber').value = data.account_number; document.getElementById('editBankCode').value = data.bank_code || ''; openModal('editCodeModal'); }};
+            window.toggleCode = async (code, status) => { await sb.from('payment_codes').update({ is_active: status }).eq('code', code); showAlert(`Code ${code} ${status ? 'activated' : 'deactivated'}`, 'success'); await renderCodesManager(container); };
+            window.deleteCode = async (code) => { if(confirm(`Delete code ${code}?`)){ await sb.from('payment_codes').delete().eq('code', code); showAlert('Code deleted','success'); await renderCodesManager(container); }};
             
             document.getElementById('addCodeForm').onsubmit = async (e) => {
                 e.preventDefault();
-                await supabase.from('payment_codes').insert({ code: document.getElementById('newCode').value, bank_name: document.getElementById('newBankName').value, account_name: document.getElementById('newAccountName').value, account_number: document.getElementById('newAccountNumber').value, bank_code: document.getElementById('newBankCode').value, is_active: true });
+                await sb.from('payment_codes').insert({ code: document.getElementById('newCode').value, bank_name: document.getElementById('newBankName').value, account_name: document.getElementById('newAccountName').value, account_number: document.getElementById('newAccountNumber').value, bank_code: document.getElementById('newBankCode').value, is_active: true });
                 closeModal('addCodeModal');
                 await renderCodesManager(container);
             };
             document.getElementById('editCodeForm').onsubmit = async (e) => {
                 e.preventDefault();
-                await supabase.from('payment_codes').update({ bank_name: document.getElementById('editBankName').value, account_name: document.getElementById('editAccountName').value, account_number: document.getElementById('editAccountNumber').value, bank_code: document.getElementById('editBankCode').value }).eq('code', document.getElementById('editCodeOriginal').value);
+                await sb.from('payment_codes').update({ bank_name: document.getElementById('editBankName').value, account_name: document.getElementById('editAccountName').value, account_number: document.getElementById('editAccountNumber').value, bank_code: document.getElementById('editBankCode').value }).eq('code', document.getElementById('editCodeOriginal').value);
                 closeModal('editCodeModal');
                 await renderCodesManager(container);
             };
@@ -490,7 +495,7 @@
 
         // Transactions
         async function renderTransactions(container) {
-            const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+            const { data: transactions } = await sb.from('transactions').select('*').order('created_at', { ascending: false });
             container.innerHTML = `<div class="data-table">
                 <table>
                     <thead><tr><th>Date</th><th>Item</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
@@ -504,12 +509,12 @@
                     </tr>`).join('') || '<tr><td colspan="6">No transactions</td></tr>'}</tbody>
                 </table>
             </div>`;
-            window.confirmTx = async (id) => { await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id); showAlert('Transaction confirmed!','success'); await renderTransactions(container); };
+            window.confirmTx = async (id) => { await sb.from('transactions').update({ status: 'confirmed' }).eq('id', id); showAlert('Transaction confirmed!','success'); await renderTransactions(container); };
         }
 
         // Settings
         async function renderSettings(container) {
-            const { data: admin } = await supabase.from('admin_settings').select('*').eq('id', 1).maybeSingle();
+            const { data: admin } = await sb.from('admin_settings').select('*').eq('id', 1).maybeSingle();
             container.innerHTML = `<form id="settingsForm">
                 <div class="form-group"><label>Admin Username</label><input type="text" id="adminUser" value="${escapeHtml(admin?.username || 'admin')}"></div>
                 <div class="form-group"><label>Admin Password</label><input type="password" id="adminPass" value="${escapeHtml(admin?.password || 'admin123')}"></div>
@@ -518,11 +523,12 @@
             </form>`;
             document.getElementById('settingsForm').addEventListener('submit', async (e) => {
                 e.preventDefault();
-                await supabase.from('admin_settings').upsert({ id: 1, username: document.getElementById('adminUser').value, password: document.getElementById('adminPass').value, whatsapp_number: document.getElementById('whatsappNum').value });
+                await sb.from('admin_settings').upsert({ id: 1, username: document.getElementById('adminUser').value, password: document.getElementById('adminPass').value, whatsapp_number: document.getElementById('whatsappNum').value });
                 showAlert('Settings saved!', 'success');
             });
         }
 
+        // Start the app
         checkSession();
     </script>
 </body>
