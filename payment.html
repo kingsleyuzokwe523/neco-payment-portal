@@ -6,7 +6,7 @@
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
     <style>
-        /* ===== ORIGINAL CSS WITH SCROLLING FIXES & RESET ===== */
+        /* ===== EXACT CSS FROM REFERENCE - PRESERVED WITH ALL SPACING ===== */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -15,7 +15,6 @@
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
         
-        /* Container & layout */
         .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}
         @media (min-width:640px){.container{max-width:640px}}
         @media (min-width:768px){.container{max-width:768px}}
@@ -27,6 +26,7 @@
         .inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}
         .z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}
         .mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mt-4{margin-top:1rem}
+        .mb-4{margin-bottom:1rem}.mb-2{margin-bottom:.5rem}
         .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}
         .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
         .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
@@ -44,12 +44,12 @@
         .bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}
         .bg-black{background-color:#000}.bg-black\/50{background-color:rgba(0,0,0,0.5)}.bg-green-600{background-color:#16a34a}
         .bg-primary-700{background-color:#054c0f}
-        .backdrop-blur-sm{backdrop-filter:blur(4px)}
+        .backdrop-blur-sm{backdrop-filter:blur(4px)}.bg-opacity-25{background-color:rgba(0,0,0,0.25)}
         .p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-4{padding:1rem}
         .px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}
         .px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
         .py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
-        .pr-9{padding-right:2.25rem}
+        .pr-9{padding-right:2.25rem}.pt-6{padding-top:1.5rem}.pb-6{padding-bottom:1.5rem}
         .text-left{text-align:left}.text-center{text-align:center}
         .font-CircularStdBold{font-family:'CircularStdBold',sans-serif}
         .text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}
@@ -66,28 +66,6 @@
         .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
         
-        /* SCROLLING FIX FOR MODAL — ensures smooth scrollable content */
-        .modal-scroll-content {
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        
-        /* Button row alignment - proceed button pushed to the right */
-        .button-row {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1.25rem;
-            margin-top: 2rem;
-        }
-        .button-row .cancel-btn {
-            width: auto;
-            min-width: 120px;
-        }
-        .button-row .proceed-btn {
-            width: auto;
-            min-width: 160px;
-        }
-        
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -101,12 +79,18 @@
         @font-face{font-family:'CircularStd';src:url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf')}
         @font-face{font-family:'CircularStdBold';src:url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf')}
         body{font-family:'CircularStd',system-ui,sans-serif}
+        
+        /* Modal scroll fix */
+        .modal-scroll-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
     <div id="app">
         <div class="router">
-            <!-- Header -->
+            <!-- Header - EXACT match to reference file -->
             <div class="shadow-md bg-white sticky w-full z-10 top-0">
                 <div class="container py-2 relative">
                     <nav class="flex justify-between items-center">
@@ -117,13 +101,13 @@
                         </div>
                         <div>
                             <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                                <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="#">Back to Home</a></li>
+                                <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="https://payments.neco.gov.ng/">Back to Home</a></li>
                             </ul>
                         </div>
                         <button class="lg:hidden" type="button">
-                            <span class="sr-only">Menu</span>
-                            <svg class="block h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                            <span class="sr-only">Open main menu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
                             </svg>
                         </button>
                     </nav>
@@ -135,7 +119,7 @@
                 <div class="flex items-center flex-col md:flex-row justify-between">
                     <div class="w-full md:w-3/5">
                         <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
-                        <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
+                        <p class="mt-2">You can search for a payment item or select from the list</p>
                     </div>
                     <div class="md:w-1/3 mt-5 md:mt-0 w-full">
                         <div class="w-full">
@@ -151,7 +135,7 @@
                     </div>
                 </div>
 
-                <!-- Category Filters with colored dots -->
+                <!-- Category Filters - EXACT styling as reference -->
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
                     <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
                         <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
@@ -185,74 +169,70 @@
         </div>
     </div>
 
-    <!-- PAYMENT MODAL (FIXED: SCROLLING & PROPER BACKDROP, PROCEED BUTTON RIGHT-ALIGNED) -->
+    <!-- PAYMENT MODAL - EXACT design from reference -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
-        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
+        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl modal-scroll-content">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
                     <form id="paymentFormModal">
-                        <div class="px-3 md:px-10 pt-6">
-                            <div class="flex justify-between items-start">
+                        <div class="px-3 md:px-10">
+                            <div class="flex justify-between">
                                 <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
-                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer text-gray-500 hover:text-gray-800">
+                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <p id="modalItemName" class="mt-2 font-CircularStdBold text-xl">FOUR FIGURE TABLE</p>
+                            <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
                             <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
                             
                             <div class="mt-5">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
                                     <div class="mt-1 relative">
-                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                     <div id="codeError" class="text-red-600 text-xs mt-1 hidden">❌ Invalid payment code</div>
                                     <div id="codeSuccess" class="text-green-600 text-xs mt-1 hidden">✅ Valid payment code</div>
                                 </div>
                             </div>
-                            
                             <div class="mt-5 flex justify-end">
-                                <a id="whatsappLink" class="text-sm text-primary-600 underline" href="#" target="_blank">Click here to get payment code from admin</a>
+                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
                             </div>
                         </div>
                         
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
-                            <p class="mt-4 font-medium">Payer's information</p>
-                            
+                            <p class="mt-4">Payer's information</p>
                             <div class="mt-5">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Full name</label>
                                     <div class="mt-1 relative">
-                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Phone number</label>
                                     <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Email</label>
                                     <div class="mt-1 relative">
-                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                             </div>
-                            
                             <div class="mt-5">
                                 <p class="block text-sm font-medium text-gray-700">Description</p>
                                 <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
                                 <div class="w-full">
                                     <div class="mt-1 relative">
-                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                             </div>
@@ -260,20 +240,19 @@
                         
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-3 md:px-10 pb-6">
-                            <p class="mt-4 font-medium">Payment information</p>
-                            
+                        <div class="px-3 md:px-10">
+                            <p class="mt-4">Payment information</p>
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Amount</label>
                                     <div class="mt-1 relative">
-                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Currency</label>
                                     <div class="mt-1 relative">
-                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                             <option selected>Naira</option>
                                             <option>Dollars</option>
                                         </select>
@@ -282,15 +261,13 @@
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
                                 </div>
                             </div>
-                            
-                            <!-- BUTTONS: Cancel on left, Proceed on the RIGHT (flex row with justify-end) -->
-                            <div class="button-row">
-                                <button type="button" onclick="closePaymentModal()" class="cancel-btn font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-5 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="proceed-btn font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-6 py-3 text-base rounded-md disabled:opacity-50 disabled:cursor-not-allowed">Proceed</button>
+                            <div class="grid grid-cols-3 mt-8 gap-5">
+                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -358,7 +335,7 @@
     </div>
 
     <script>
-        // Payment Data
+        // Payment Data - Complete database
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 },{ name: "Non-Validation", amount: 10000 },{ name: "Syllabus", amount: 2000 },{ name: "Photo Album", amount: 2700 },
@@ -394,10 +371,12 @@
         let isCodeValid = false;
 
         let paymentCodesDatabase = {
-            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Payment Services", accountNumber: "2024567890", bankCode: "011" }
+            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Payment Services", accountNumber: "2024567890", bankCode: "011" },
+            "5678": { bankName: "GTBank", accountName: "NECO Treasury", accountNumber: "0123456789", bankCode: "058" }
         };
 
         function validatePaymentCode(code) { return paymentCodesDatabase[code.trim()] ? { valid: true, accountDetails: paymentCodesDatabase[code.trim()] } : { valid: false, accountDetails: null }; }
+        
         function checkCodeValidation() {
             const code = document.getElementById('paymentCode').value;
             const validation = validatePaymentCode(code);
@@ -416,16 +395,7 @@
             grid.innerHTML = cat.items.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 const amountText = item.amount ? 'Fixed Amount' : 'Variable Amount';
-                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
-                            <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
-                                <div class="py-8 px-5 text-black font-medium">${item.name}</div>
-                                <div><div class="h-[1px] bg-gray-200"></div>
-                                <div class="p-5 flex justify-between items-center">
-                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
-                                    <div><p class="text-xs text-gray-500">${amountText}</p><p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p></div>
-                                </div></div>
-                            </div>
-                        </div>`;
+                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;"><div class="py-8 px-5 text-black font-medium">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button><div><p class="text-xs text-gray-500">${amountText}</p><p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p></div></div></div></div></div>`;
             }).join('');
         }
 
@@ -443,6 +413,7 @@
             document.getElementById('paymentModal').classList.remove('hidden');
             ['paymentCode','fullName','phone','email','amount'].forEach(id => document.getElementById(id).addEventListener('input', checkCodeValidation));
         }
+        
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
         function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('flex'); document.getElementById('invoiceModal').classList.add('hidden'); }
         function closeAccountModal() { document.getElementById('accountModal').classList.remove('flex'); document.getElementById('accountModal').classList.add('hidden'); }
@@ -486,15 +457,20 @@
         }
 
         document.getElementById('receiptInput').addEventListener('change', (e) => { document.getElementById('uploadedFileName').innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : ''; });
+        
         function confirmPayment() { 
             if(!document.getElementById('receiptInput').files[0]) { alert('Please upload your payment receipt'); return; } 
             alert(`✅ PAYMENT CONFIRMED!\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nReceipt uploaded. Thank you.`); 
             closeAccountModal(); 
         }
 
+        // Category filter click handlers
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('!bg-white', 'drop-shadow-md'));
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('!bg-white', 'drop-shadow-md');
+                    b.style.backgroundColor = '#EBEBEB';
+                });
                 btn.classList.add('!bg-white', 'drop-shadow-md');
                 currentCategory = btn.getAttribute('data-category');
                 renderGrid();
@@ -502,6 +478,7 @@
             });
         });
 
+        // Search functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const cat = paymentData[currentCategory];
@@ -513,6 +490,7 @@
                 return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-2 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div><p class="text-xs">Fixed Amount</p><p class="font-semibold">${amountDisplay}</p></div></div></div></div></div>`;
             }).join('');
         });
+        
         renderGrid();
         window.addPaymentCode = (code,bank,accName,accNum,bankCode) => { paymentCodesDatabase[code.trim()] = { bankName: bank, accountName: accName, accountNumber: accNum, bankCode }; };
     </script>
