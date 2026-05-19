@@ -6,7 +6,7 @@
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
     <style>
-        /* ===== EXACT CSS FROM REFERENCE - PRESERVED WITH ALL SPACING ===== */
+        /* ===== COMPLETE CSS - PRESERVED ===== */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -33,6 +33,7 @@
         .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
         .cursor-pointer{cursor:pointer}
         .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        .col-span-2{grid-column:span 2 / span 2}
         .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}
         .items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}
         .gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}
@@ -65,6 +66,7 @@
         .hover\:text-gray-900:hover{color:#111827}
         .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
+        .mx-auto{margin-left:auto;margin-right:auto}
         
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -80,7 +82,6 @@
         @font-face{font-family:'CircularStdBold';src:url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf')}
         body{font-family:'CircularStd',system-ui,sans-serif}
         
-        /* Modal scroll fix */
         .modal-scroll-content {
             max-height: 90vh;
             overflow-y: auto;
@@ -90,7 +91,7 @@
 <body>
     <div id="app">
         <div class="router">
-            <!-- Header - EXACT match to reference file -->
+            <!-- Header -->
             <div class="shadow-md bg-white sticky w-full z-10 top-0">
                 <div class="container py-2 relative">
                     <nav class="flex justify-between items-center">
@@ -101,6 +102,7 @@
                         </div>
                         <div>
                             <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+                                <!-- CHANGE: Added group flex items-center classes to Back to Home link -->
                                 <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="https://payments.neco.gov.ng/">Back to Home</a></li>
                             </ul>
                         </div>
@@ -124,6 +126,7 @@
                     <div class="md:w-1/3 mt-5 md:mt-0 w-full">
                         <div class="w-full">
                             <div class="mt-1 relative">
+                                <!-- CHANGE: Fixed duplicate rounded-md issue - removed extra rounded-md class -->
                                 <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
                                 <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
@@ -135,7 +138,7 @@
                     </div>
                 </div>
 
-                <!-- Category Filters - EXACT styling as reference -->
+                <!-- Category Filters -->
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
                     <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
                         <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
@@ -169,11 +172,12 @@
         </div>
     </div>
 
-    <!-- PAYMENT MODAL - EXACT design from reference -->
+    <!-- PAYMENT MODAL - CHANGES MADE: py-10 added, button layout grid-cols-3, buttons have items-center mx-auto w-full, text without font-medium -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <!-- CHANGE: Added py-10 to modal container -->
                 <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
                     <form id="paymentFormModal">
                         <div class="px-3 md:px-10">
@@ -197,13 +201,14 @@
                                 </div>
                             </div>
                             <div class="mt-5 flex justify-end">
-                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to view all payment codes</a>
                             </div>
                         </div>
                         
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
+                            <!-- CHANGE: Removed font-medium from Payer's information -->
                             <p class="mt-4">Payer's information</p>
                             <div class="mt-5">
                                 <div class="w-full">
@@ -241,6 +246,7 @@
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
+                            <!-- CHANGE: Removed font-medium from Payment information -->
                             <p class="mt-4">Payment information</p>
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
@@ -265,6 +271,8 @@
                                     </div>
                                 </div>
                             </div>
+                            <!-- CHANGE: Button layout changed to grid-cols-3 with Cancel col-span-1 and Proceed col-span-2 -->
+                            <!-- CHANGE: Buttons now have items-center mx-auto w-full classes -->
                             <div class="grid grid-cols-3 mt-8 gap-5">
                                 <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
                                 <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
@@ -464,7 +472,6 @@
             closeAccountModal(); 
         }
 
-        // Category filter click handlers
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => {
@@ -478,7 +485,6 @@
             });
         });
 
-        // Search functionality
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const cat = paymentData[currentCategory];
