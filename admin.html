@@ -6,6 +6,7 @@
     <title>NECO Admin Dashboard</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300..700;1,300..700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -19,7 +20,6 @@
             color: #1e293b;
         }
 
-        /* Login Page */
         .login-container {
             min-height: 100vh;
             display: flex;
@@ -51,7 +51,6 @@
             color: transparent;
         }
 
-        /* Dashboard Layout */
         .dashboard {
             display: none;
             min-height: 100vh;
@@ -66,6 +65,7 @@
             bottom: 0;
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
             z-index: 10;
+            overflow-y: auto;
         }
 
         .sidebar-header {
@@ -114,7 +114,6 @@
             font-size: 1.25rem;
         }
 
-        /* Main Content */
         .main-content {
             margin-left: 280px;
             padding: 2rem;
@@ -136,7 +135,6 @@
             font-weight: 600;
         }
 
-        /* Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -163,7 +161,6 @@
             color: #0ca60c;
         }
 
-        /* Tables */
         .data-table {
             background: white;
             border-radius: 1rem;
@@ -188,7 +185,6 @@
             color: #475569;
         }
 
-        /* Forms */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -255,67 +251,6 @@
             font-size: 0.75rem;
         }
 
-        /* Modal */
-        .modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .color-preview {
-            width: 30px;
-            height: 30px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-left: 10px;
-            vertical-align: middle;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .badge-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .badge-confirmed {
-            background: #d1fae5;
-            color: #0ca60c;
-        }
-
         .logout-btn {
             background: #ef4444;
             padding: 0.5rem 1rem;
@@ -329,7 +264,6 @@
         .alert {
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
-            margin-bottom: 1rem;
             position: fixed;
             top: 20px;
             right: 20px;
@@ -379,6 +313,39 @@
             width: 120px;
         }
 
+        .color-preview {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-confirmed {
+            background: #d1fae5;
+            color: #0ca60c;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #64748b;
+        }
+
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -413,15 +380,11 @@
                 </div>
                 <button type="submit" style="width: 100%;">Login</button>
             </form>
-            <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: #94a3b8;">
-                Default: admin / admin123
-            </p>
         </div>
     </div>
 
     <!-- Dashboard -->
     <div id="dashboard" class="dashboard">
-        <!-- Sidebar -->
         <div class="sidebar">
             <div class="sidebar-header">
                 <h2><i class="fas fa-graduation-cap"></i> NECO Admin</h2>
@@ -454,174 +417,69 @@
             </div>
         </div>
 
-        <!-- Main Content -->
         <div class="main-content">
             <div class="top-bar">
                 <h1 class="page-title" id="currentPageTitle">Dashboard</h1>
                 <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
             </div>
-            <div id="pageContent"></div>
+            <div id="pageContent">
+                <div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+            </div>
         </div>
     </div>
 
     <script>
         // ============================================
-        // COMPLETE DEFAULT DATA WITH ALL PAYMENT ITEMS
+        // YOUR SUPABASE CREDENTIALS
         // ============================================
-        const defaultData = {
-            admin: {
-                username: "admin",
-                password: "admin123",
-                whatsappNumber: "2348021234567"
-            },
-            homePage: {
-                heroTitle: "NECO Payments Just Got Faster and Simpler.",
-                heroNote: "You do not need an account to make payment",
-                buttonText: "Make payment",
-                logo: "",
-                howItWorks: [
-                    { title: "Select Payment Item", description: "Select or search for a payment category or a payment item you want to make payment for i.e Correction of Name, Syllabus, Exam Bag e.t.c", icon: "receipt" },
-                    { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website", icon: "scan" },
-                    { title: "Fill the Payment Form", description: "Fill the form in the box to the right and proceed to payment", icon: "message-edit" },
-                    { title: "Select Mode of Payment", description: "Select mode of payment i.e Bank branch payment or Debit card payment.", icon: "wallet-add" },
-                    { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed", icon: "card-tick" },
-                    { title: "Evidence of Payment", description: "Present Evidence of Payment to your nearest NECO office.", icon: "ticket-expired" }
-                ]
-            },
-            paymentPage: {
-                title: "Make Payment",
-                subtitle: "You can search for a payment item or select from the list",
-                searchPlaceholder: "What do you want to pay for?",
-                categories: [
-                    { name: "SSCE Internal", color: "#0CA60C" },
-                    { name: "SSCE External", color: "#145596" },
-                    { name: "BECE", color: "#642D56" },
-                    { name: "NCEE", color: "#1887EB" },
-                    { name: "Gifted", color: "#24809C" },
-                    { name: "Others", color: "#36454F" }
-                ],
-                items: {
-                    // ===== SSCE INTERNAL (15 items) =====
-                    "SSCE Internal": [
-                        { id: 1, name: "Four Figure Table", amount: 500 },
-                        { id: 2, name: "Non-Validation", amount: 10000 },
-                        { id: 3, name: "Syllabus", amount: 2000 },
-                        { id: 4, name: "Photo Album", amount: 2700 },
-                        { id: 5, name: "Late Ca3 Upload", amount: 40000 },
-                        { id: 6, name: "Remarking Ssce (i)", amount: 20000 },
-                        { id: 7, name: "Unviable Centre Fee", amount: 70000 },
-                        { id: 8, name: "Late Registration Fee", amount: 5000 },
-                        { id: 9, name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
-                        { id: 10, name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
-                        { id: 11, name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
-                        { id: 12, name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
-                        { id: 13, name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
-                        { id: 14, name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
-                        { id: 15, name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
-                    ],
-                    // ===== SSCE EXTERNAL (7 items) =====
-                    "SSCE External": [
-                        { id: 16, name: "Four Figure Table", amount: 500 },
-                        { id: 17, name: "Walk-in", amount: 43000 },
-                        { id: 18, name: "Syllabus", amount: 2000 },
-                        { id: 19, name: "Result Slips", amount: 1600 },
-                        { id: 20, name: "Remarking Ssce Ext", amount: 20000 },
-                        { id: 21, name: "Collection Of Certificate", amount: 500 },
-                        { id: 22, name: "Non-Validation", amount: 10000 }
-                    ],
-                    // ===== BECE (8 items) =====
-                    "BECE": [
-                        { id: 23, name: "Remarking Bece", amount: 15000 },
-                        { id: 24, name: "Non-Validation", amount: 10000 },
-                        { id: 25, name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
-                        { id: 26, name: "Bece Re-accreditation (public Schools)", amount: 140000 },
-                        { id: 27, name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
-                        { id: 28, name: "Bece Re-accreditation (private Schools)", amount: 140000 },
-                        { id: 29, name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
-                        { id: 30, name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
-                    ],
-                    // ===== NCEE (1 item) =====
-                    "NCEE": [
-                        { id: 31, name: "Non-Validation", amount: 4000 }
-                    ],
-                    // ===== GIFTED (1 item) =====
-                    "Gifted": [
-                        { id: 32, name: "Non-Validation", amount: 4000 }
-                    ],
-                    // ===== OTHERS (25 items) =====
-                    "Others": [
-                        { id: 33, name: "Reprint Of Certificate", amount: 50000 },
-                        { id: 34, name: "Sale Of Government Assets", amount: null },
-                        { id: 35, name: "Registration Of Contractors", amount: null },
-                        { id: 36, name: "Tender Fees", amount: null },
-                        { id: 37, name: "Refund", amount: null },
-                        { id: 38, name: "Change Of School Name", amount: 15000 },
-                        { id: 39, name: "Payment For Consultancy Services", amount: null },
-                        { id: 40, name: "Payment Of Dead Scripts", amount: null },
-                        { id: 41, name: "Reprint Of School Results Per Candidate", amount: 400 },
-                        { id: 42, name: "Return Of Dta", amount: null },
-                        { id: 43, name: "Staff Identity Card", amount: 1000 },
-                        { id: 44, name: "Result Checker (token)", amount: 1000 },
-                        { id: 45, name: "Examination Bag", amount: 15000 },
-                        { id: 46, name: "Confirmation Of Result By International Institutions Or Organizations Per Candidates", amount: 10000 },
-                        { id: 47, name: "Waterproof Certificate Jacket/folder", amount: 2500 },
-                        { id: 48, name: "Candidates Registration Number Request", amount: 3000 },
-                        { id: 49, name: "Photocard Reprint (ssce-external)", amount: 3000 },
-                        { id: 50, name: "Ssce External Certificate Safekeeping (renewable Every 5 Years)", amount: 7500 },
-                        { id: 51, name: "Statistical Request-organization/association (annual Awards)", amount: 100000 },
-                        { id: 52, name: "Statistical Request-individual (research) 1-5 Years", amount: 10000 },
-                        { id: 53, name: "Statistical Request-individual (research) 6-10 Years", amount: 20000 },
-                        { id: 54, name: "State Governments (registration Projection/candidates Performance Annually)", amount: 50000 },
-                        { id: 55, name: "Shortfalls On Accreditation", amount: null },
-                        { id: 56, name: "E-verification Of Result", amount: 5000 },
-                        { id: 57, name: "Candidate Attestation Of Result In Lieu Of Lost Certificate", amount: 50000 }
-                    ]
-                }
-            },
-            paymentCodes: {
-                "1234": {
-                    bankName: "First Bank of Nigeria",
-                    accountName: "NECO Payment Services",
-                    accountNumber: "2024567890",
-                    bankCode: "011",
-                    createdAt: new Date().toISOString()
-                }
-            },
-            transactions: []
-        };
-
-        // Load or initialize data
-        function loadData() {
-            let data = localStorage.getItem('neco_admin_data');
-            if (!data) {
-                localStorage.setItem('neco_admin_data', JSON.stringify(defaultData));
-                return defaultData;
-            }
-            return JSON.parse(data);
-        }
-
-        function saveData(data) {
-            localStorage.setItem('neco_admin_data', JSON.stringify(data));
-            // Also save to sessionStorage for the payment page to access
-            sessionStorage.setItem('neco_payment_config', JSON.stringify({
-                categories: data.paymentPage.categories,
-                items: data.paymentPage.items
-            }));
-        }
-
-        let adminData = loadData();
+        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+        
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        
         let isLoggedIn = false;
-
-        // ============================================
-        // AUTHENTICATION
-        // ============================================
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        
+        // Check session on page load
+        async function checkSession() {
+            const savedSession = localStorage.getItem('neco_admin_session');
+            if (savedSession) {
+                try {
+                    const session = JSON.parse(savedSession);
+                    const { data, error } = await supabase
+                        .from('admin_settings')
+                        .select('username')
+                        .eq('id', 1)
+                        .single();
+                    
+                    if (!error && data && session.username === data.username) {
+                        isLoggedIn = true;
+                        document.getElementById('loginPage').style.display = 'none';
+                        document.getElementById('dashboard').style.display = 'block';
+                        loadPage('dashboard');
+                        return;
+                    }
+                } catch(e) {}
+            }
+            localStorage.removeItem('neco_admin_session');
+            document.getElementById('loginPage').style.display = 'flex';
+            document.getElementById('dashboard').style.display = 'none';
+        }
+        
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
             
-            if (username === adminData.admin.username && password === adminData.admin.password) {
+            const { data, error } = await supabase
+                .from('admin_settings')
+                .select('username, password, whatsapp_number')
+                .eq('id', 1)
+                .single();
+            
+            if (!error && data && username === data.username && password === data.password) {
                 isLoggedIn = true;
+                localStorage.setItem('neco_admin_session', JSON.stringify({ username: data.username }));
                 document.getElementById('loginPage').style.display = 'none';
                 document.getElementById('dashboard').style.display = 'block';
                 loadPage('dashboard');
@@ -629,16 +487,15 @@
                 alert('Invalid username or password');
             }
         });
-
+        
         function logout() {
+            localStorage.removeItem('neco_admin_session');
             isLoggedIn = false;
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('dashboard').style.display = 'none';
         }
-
-        // ============================================
-        // NAVIGATION
-        // ============================================
+        
+        // Navigation
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -647,8 +504,8 @@
                 loadPage(page);
             });
         });
-
-        function loadPage(page) {
+        
+        async function loadPage(page) {
             const titles = {
                 dashboard: 'Dashboard',
                 home: 'Home Page Editor',
@@ -660,444 +517,342 @@
             document.getElementById('currentPageTitle').innerText = titles[page] || 'Dashboard';
             
             const contentDiv = document.getElementById('pageContent');
+            contentDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
             
             switch(page) {
                 case 'dashboard':
-                    renderDashboard(contentDiv);
+                    await renderDashboard(contentDiv);
                     break;
                 case 'home':
-                    renderHomeEditor(contentDiv);
+                    await renderHomeEditor(contentDiv);
                     break;
                 case 'payment':
-                    renderPaymentEditor(contentDiv);
+                    await renderPaymentEditor(contentDiv);
                     break;
                 case 'codes':
-                    renderCodesManager(contentDiv);
+                    await renderCodesManager(contentDiv);
                     break;
                 case 'transactions':
-                    renderTransactions(contentDiv);
+                    await renderTransactions(contentDiv);
                     break;
                 case 'settings':
-                    renderSettings(contentDiv);
+                    await renderSettings(contentDiv);
                     break;
                 default:
-                    renderDashboard(contentDiv);
+                    await renderDashboard(contentDiv);
             }
         }
-
-        // ============================================
-        // DASHBOARD
-        // ============================================
-        function renderDashboard(container) {
-            const totalCodes = Object.keys(adminData.paymentCodes).length;
-            const totalItems = Object.values(adminData.paymentPage.items).flat().length;
-            const totalTransactions = adminData.transactions.length;
-            const totalAmount = adminData.transactions.reduce((sum, t) => sum + t.totalAmount, 0);
+        
+        async function renderDashboard(container) {
+            const { count: codesCount } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
+            const { count: itemsCount } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
+            const { data: transactions, count: transactionsCount } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+            const totalAmount = transactions?.reduce((sum, t) => sum + t.total_amount, 0) || 0;
             
             container.innerHTML = `
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <h3><i class="fas fa-key"></i> Payment Codes</h3>
-                        <div class="stat-number">${totalCodes}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3><i class="fas fa-list"></i> Payment Items</h3>
-                        <div class="stat-number">${totalItems}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3><i class="fas fa-credit-card"></i> Transactions</h3>
-                        <div class="stat-number">${totalTransactions}</div>
-                    </div>
-                    <div class="stat-card">
-                        <h3><i class="fas fa-money-bill"></i> Total Revenue</h3>
-                        <div class="stat-number">₦${totalAmount.toLocaleString()}</div>
-                    </div>
+                    <div class="stat-card"><h3><i class="fas fa-key"></i> Payment Codes</h3><div class="stat-number">${codesCount || 0}</div></div>
+                    <div class="stat-card"><h3><i class="fas fa-list"></i> Payment Items</h3><div class="stat-number">${itemsCount || 0}</div></div>
+                    <div class="stat-card"><h3><i class="fas fa-credit-card"></i> Transactions</h3><div class="stat-number">${transactionsCount || 0}</div></div>
+                    <div class="stat-card"><h3><i class="fas fa-money-bill"></i> Total Revenue</h3><div class="stat-number">₦${totalAmount.toLocaleString()}</div></div>
                 </div>
                 <div class="data-table">
-                    <table>
-                        <thead>
-                            <tr><th>Recent Transactions</th><th>Amount</th><th>Status</th><th>Date</th></tr>
-                        </thead>
-                        <tbody>
-                            ${adminData.transactions.slice(-5).reverse().map(t => `
-                                <tr>
-                                    <td>${t.itemName}</td>
-                                    <td>₦${t.totalAmount.toLocaleString()}</td>
-                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
-                                    <td>${new Date(t.createdAt).toLocaleDateString()}</td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}
-                        </tbody>
+                    <table><thead><tr><th>Recent Transactions</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
+                    <tbody>${transactions?.map(t => `<tr><td>${t.item_name}</td><td>₦${t.total_amount.toLocaleString()}</td><td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}</tbody>
                     </table>
                 </div>
             `;
         }
-
-        // ============================================
-        // HOME PAGE EDITOR
-        // ============================================
-        function renderHomeEditor(container) {
-            const home = adminData.homePage;
+        
+        async function renderHomeEditor(container) {
+            const { data: home } = await supabase.from('home_settings').select('*').eq('id', 1).single();
+            const { data: steps } = await supabase.from('how_it_works').select('*').order('step_order');
+            
+            let stepsHtml = '';
+            steps?.forEach((step, index) => {
+                stepsHtml += `
+                    <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
+                        <div class="form-group"><label>Step ${step.step_order} Title</label><input type="text" id="stepTitle_${step.id}" value="${step.title.replace(/"/g, '&quot;')}"></div>
+                        <div class="form-group"><label>Step ${step.step_order} Description</label><textarea id="stepDesc_${step.id}" rows="2">${step.description?.replace(/"/g, '&quot;') || ''}</textarea></div>
+                    </div>
+                `;
+            });
+            
             container.innerHTML = `
                 <form id="homeEditorForm">
-                    <div class="form-group">
-                        <label>Hero Title</label>
-                        <input type="text" id="heroTitle" value="${home.heroTitle.replace(/"/g, '&quot;')}">
-                    </div>
-                    <div class="form-group">
-                        <label>Hero Note</label>
-                        <input type="text" id="heroNote" value="${home.heroNote.replace(/"/g, '&quot;')}">
-                    </div>
-                    <div class="form-group">
-                        <label>Button Text</label>
-                        <input type="text" id="buttonText" value="${home.buttonText}">
-                    </div>
-                    <div class="form-group">
-                        <label>Logo URL</label>
-                        <input type="text" id="logoUrl" value="${home.logo}" placeholder="https://...">
-                    </div>
+                    <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle" value="${home?.hero_title || ''}"></div>
+                    <div class="form-group"><label>Hero Note</label><input type="text" id="heroNote" value="${home?.hero_note || ''}"></div>
+                    <div class="form-group"><label>Button Text</label><input type="text" id="buttonText" value="${home?.button_text || ''}"></div>
+                    <div class="form-group"><label>Logo URL</label><input type="text" id="logoUrl" value="${home?.logo_url || ''}" placeholder="https://..."></div>
                     <h3 style="margin: 1.5rem 0 1rem 0;">How It Works Steps</h3>
-                    <div id="howItWorksList"></div>
+                    <div id="howItWorksList">${stepsHtml}</div>
                     <button type="submit">Save Changes</button>
                 </form>
             `;
             
-            const stepsContainer = document.getElementById('howItWorksList');
-            home.howItWorks.forEach((step, index) => {
-                stepsContainer.innerHTML += `
-                    <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
-                        <div class="form-group">
-                            <label>Step ${index + 1} Title</label>
-                            <input type="text" id="stepTitle_${index}" value="${step.title.replace(/"/g, '&quot;')}">
-                        </div>
-                        <div class="form-group">
-                            <label>Step ${index + 1} Description</label>
-                            <textarea id="stepDesc_${index}" rows="2">${step.description.replace(/"/g, '&quot;')}</textarea>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            document.getElementById('homeEditorForm').addEventListener('submit', function(e) {
+            document.getElementById('homeEditorForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                adminData.homePage.heroTitle = document.getElementById('heroTitle').value;
-                adminData.homePage.heroNote = document.getElementById('heroNote').value;
-                adminData.homePage.buttonText = document.getElementById('buttonText').value;
-                adminData.homePage.logo = document.getElementById('logoUrl').value;
+                await supabase.from('home_settings').update({
+                    hero_title: document.getElementById('heroTitle').value,
+                    hero_note: document.getElementById('heroNote').value,
+                    button_text: document.getElementById('buttonText').value,
+                    logo_url: document.getElementById('logoUrl').value
+                }).eq('id', 1);
                 
-                for (let i = 0; i < adminData.homePage.howItWorks.length; i++) {
-                    adminData.homePage.howItWorks[i].title = document.getElementById(`stepTitle_${i}`).value;
-                    adminData.homePage.howItWorks[i].description = document.getElementById(`stepDesc_${i}`).value;
+                for (const step of steps) {
+                    await supabase.from('how_it_works').update({
+                        title: document.getElementById(`stepTitle_${step.id}`).value,
+                        description: document.getElementById(`stepDesc_${step.id}`).value
+                    }).eq('id', step.id);
                 }
                 
-                saveData(adminData);
-                showAlert('Home page updated successfully! Changes will appear on the live site.', 'success');
-                renderHomeEditor(container);
+                showAlert('Home page updated successfully!', 'success');
+                await renderHomeEditor(container);
             });
         }
-
-        // ============================================
-        // PAYMENT PAGE EDITOR - COMPLETE WITH ALL ITEMS
-        // ============================================
-        function renderPaymentEditor(container) {
-            const payment = adminData.paymentPage;
+        
+        async function renderPaymentEditor(container) {
+            const { data: categories } = await supabase.from('categories').select('*').order('display_order');
+            const { data: items } = await supabase.from('payment_items').select('*, categories(name)').order('display_order');
             
             let itemsHtml = '';
-            payment.categories.forEach(cat => {
-                const categoryItems = payment.items[cat.name] || [];
+            for (const cat of categories) {
+                const categoryItems = items?.filter(i => i.category_id === cat.id) || [];
                 itemsHtml += `
                     <div class="category-section">
                         <div class="category-header">
+                            <div><span class="color-preview" style="background:${cat.color};"></span><strong style="font-size:1.1rem;">${cat.name}</strong></div>
                             <div>
-                                <span class="color-preview" style="background:${cat.color};"></span>
-                                <strong style="font-size:1.1rem;">${cat.name}</strong>
-                            </div>
-                            <div>
-                                <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor('${cat.name}')" style="margin-right:0.5rem;"><i class="fas fa-palette"></i> Color</button>
-                                <button type="button" class="btn-danger btn-sm" onclick="removeCategory('${cat.name}')"><i class="fas fa-trash"></i> Remove</button>
+                                <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor(${cat.id}, '${cat.name}')"><i class="fas fa-palette"></i> Color</button>
+                                <button type="button" class="btn-danger btn-sm" onclick="removeCategory(${cat.id}, '${cat.name}')"><i class="fas fa-trash"></i> Remove</button>
                             </div>
                         </div>
-                        <div id="items_${cat.name.replace(/\s/g, '_')}">
+                        <div id="items_${cat.id}">
                             ${categoryItems.map(item => `
                                 <div class="item-row" data-item-id="${item.id}">
                                     <input type="text" class="item-name" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Item Name">
-                                    <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount (leave empty for variable)" style="width:180px;">
-                                    <button type="button" class="btn-danger btn-sm" onclick="removeItem('${cat.name}', ${item.id})"><i class="fas fa-trash"></i></button>
+                                    <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount" style="width:180px;">
+                                    <button type="button" class="btn-danger btn-sm" onclick="removeItem(${item.id})"><i class="fas fa-trash"></i></button>
                                 </div>
                             `).join('')}
                         </div>
-                        <button type="button" class="btn-outline btn-sm" onclick="addItem('${cat.name}')" style="margin-top:0.75rem;"><i class="fas fa-plus"></i> Add Item</button>
+                        <button type="button" class="btn-outline btn-sm" onclick="addItem(${cat.id})"><i class="fas fa-plus"></i> Add Item</button>
                     </div>
                 `;
-            });
+            }
             
             container.innerHTML = `
                 <form id="paymentEditorForm">
-                    <div class="form-group">
-                        <label>Page Title</label>
-                        <input type="text" id="pageTitle" value="${payment.title}">
-                    </div>
-                    <div class="form-group">
-                        <label>Subtitle</label>
-                        <input type="text" id="subtitle" value="${payment.subtitle}">
-                    </div>
-                    <div class="form-group">
-                        <label>Search Placeholder</label>
-                        <input type="text" id="searchPlaceholder" value="${payment.searchPlaceholder}">
-                    </div>
-                    
-                    <h3 style="margin: 1.5rem 0 1rem 0;">Categories & Payment Items</h3>
-                    <div id="categoriesContainer">
-                        ${itemsHtml}
-                    </div>
-                    
+                    <div id="categoriesContainer">${itemsHtml}</div>
                     <button type="button" class="btn-outline" onclick="addCategory()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
-                    
-                    <div style="margin-top: 2rem;">
-                        <button type="submit">Save All Changes</button>
-                    </div>
+                    <button type="submit">Save All Changes</button>
                 </form>
             `;
             
-            // Make functions globally available
-            window.editCategoryColor = function(categoryName) {
-                const category = adminData.paymentPage.categories.find(c => c.name === categoryName);
-                if (category) {
-                    const newColor = prompt('Enter new color (hex code like #0CA60C):', category.color);
-                    if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
-                        category.color = newColor;
-                        saveData(adminData);
-                        showAlert(`Color for ${categoryName} updated!`, 'success');
-                        renderPaymentEditor(container);
-                    } else if (newColor) {
-                        alert('Please enter a valid hex color code (e.g., #0CA60C)');
+            window.editCategoryColor = async function(catId, catName) {
+                const newColor = prompt('Enter new color (hex code like #0CA60C):', '#0CA60C');
+                if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
+                    await supabase.from('categories').update({ color: newColor }).eq('id', catId);
+                    showAlert(`Color for ${catName} updated!`, 'success');
+                    await renderPaymentEditor(container);
+                }
+            };
+            
+            window.removeCategory = async function(catId, catName) {
+                if (confirm(`Remove category "${catName}" and all its items?`)) {
+                    await supabase.from('payment_items').delete().eq('category_id', catId);
+                    await supabase.from('categories').delete().eq('id', catId);
+                    showAlert(`Category "${catName}" removed!`, 'success');
+                    await renderPaymentEditor(container);
+                }
+            };
+            
+            window.addCategory = async function() {
+                const newName = prompt('Enter new category name:');
+                if (newName) {
+                    const { data: existing } = await supabase.from('categories').select('id').eq('name', newName);
+                    if (existing?.length === 0) {
+                        await supabase.from('categories').insert({ name: newName, color: '#0CA60C' });
+                        showAlert(`Category "${newName}" added!`, 'success');
+                        await renderPaymentEditor(container);
+                    } else {
+                        alert('Category already exists!');
                     }
                 }
             };
             
-            window.removeCategory = function(categoryName) {
-                if (confirm(`Remove category "${categoryName}" and all its items?`)) {
-                    adminData.paymentPage.categories = adminData.paymentPage.categories.filter(c => c.name !== categoryName);
-                    delete adminData.paymentPage.items[categoryName];
-                    saveData(adminData);
-                    showAlert(`Category "${categoryName}" removed!`, 'success');
-                    renderPaymentEditor(container);
-                }
-            };
-            
-            window.addCategory = function() {
-                const newName = prompt('Enter new category name:');
-                if (newName && !adminData.paymentPage.categories.find(c => c.name === newName)) {
-                    adminData.paymentPage.categories.push({ name: newName, color: '#0CA60C' });
-                    adminData.paymentPage.items[newName] = [];
-                    saveData(adminData);
-                    showAlert(`Category "${newName}" added!`, 'success');
-                    renderPaymentEditor(container);
-                } else if (newName) {
-                    alert('Category already exists!');
-                }
-            };
-            
-            window.removeItem = function(categoryName, itemId) {
+            window.removeItem = async function(itemId) {
                 if (confirm('Remove this item?')) {
-                    adminData.paymentPage.items[categoryName] = adminData.paymentPage.items[categoryName].filter(i => i.id !== itemId);
-                    saveData(adminData);
+                    await supabase.from('payment_items').delete().eq('id', itemId);
                     showAlert('Item removed!', 'success');
-                    renderPaymentEditor(container);
+                    await renderPaymentEditor(container);
                 }
             };
             
-            window.addItem = function(categoryName) {
+            window.addItem = async function(catId) {
                 const newName = prompt('Enter item name:');
                 if (newName) {
                     const newAmount = prompt('Enter amount (leave empty for variable amount):');
                     const amount = newAmount ? parseFloat(newAmount) : null;
-                    const newId = Date.now();
-                    adminData.paymentPage.items[categoryName].push({ id: newId, name: newName, amount: amount });
-                    saveData(adminData);
+                    await supabase.from('payment_items').insert({
+                        category_id: catId,
+                        name: newName,
+                        amount: amount,
+                        is_variable: amount === null
+                    });
                     showAlert(`Item "${newName}" added!`, 'success');
-                    renderPaymentEditor(container);
+                    await renderPaymentEditor(container);
                 }
             };
             
-            document.getElementById('paymentEditorForm').addEventListener('submit', function(e) {
+            document.getElementById('paymentEditorForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                
-                adminData.paymentPage.title = document.getElementById('pageTitle').value;
-                adminData.paymentPage.subtitle = document.getElementById('subtitle').value;
-                adminData.paymentPage.searchPlaceholder = document.getElementById('searchPlaceholder').value;
-                
-                // Save all items from the form
-                adminData.paymentPage.categories.forEach(cat => {
-                    const categoryItems = adminData.paymentPage.items[cat.name] || [];
-                    const container = document.getElementById(`items_${cat.name.replace(/\s/g, '_')}`);
+                for (const cat of categories) {
+                    const container = document.getElementById(`items_${cat.id}`);
                     if (container) {
                         const rows = container.querySelectorAll('.item-row');
-                        rows.forEach((row, idx) => {
-                            if (idx < categoryItems.length) {
-                                const nameInput = row.querySelector('.item-name');
-                                const amountInput = row.querySelector('.item-amount');
-                                if (nameInput) categoryItems[idx].name = nameInput.value;
-                                if (amountInput) categoryItems[idx].amount = amountInput.value ? parseFloat(amountInput.value) : null;
+                        for (let idx = 0; idx < rows.length; idx++) {
+                            const row = rows[idx];
+                            const itemId = parseInt(row.getAttribute('data-item-id'));
+                            const nameInput = row.querySelector('.item-name');
+                            const amountInput = row.querySelector('.item-amount');
+                            if (itemId && nameInput) {
+                                const amount = amountInput.value ? parseFloat(amountInput.value) : null;
+                                await supabase.from('payment_items').update({
+                                    name: nameInput.value,
+                                    amount: amount,
+                                    is_variable: amount === null
+                                }).eq('id', itemId);
                             }
-                        });
+                        }
                     }
-                });
-                
-                saveData(adminData);
-                showAlert('Payment page updated successfully! Changes will appear on the live site.', 'success');
+                }
+                showAlert('Payment page updated successfully!', 'success');
             });
         }
-
-        // ============================================
-        // PAYMENT CODES MANAGER
-        // ============================================
-        function renderCodesManager(container) {
+        
+        async function renderCodesManager(container) {
+            const { data: codes } = await supabase.from('payment_codes').select('*');
+            
             container.innerHTML = `
                 <button onclick="showAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
                 <div class="data-table">
-                    <table>
-                        <thead>
-                            <tr><th>Payment Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody>
-                            ${Object.entries(adminData.paymentCodes).map(([code, details]) => `
-                                <tr>
-                                    <td><code style="background:#f1f5f9; padding:0.25rem 0.5rem; border-radius:0.25rem;">${code}</code></td>
-                                    <td>${details.bankName}</td>
-                                    <td>${details.accountName}</td>
-                                    <td>${details.accountNumber}</td>
-                                    <td>
-                                        <button onclick="editCode('${code}')" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
-                                        <button onclick="deleteCode('${code}')" class="btn-danger btn-sm" style="padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="5" style="text-align:center">No payment codes</td></tr>'}
-                        </tbody>
+                    <table><thead><tr><th>Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>${codes?.map(code => `
+                        <tr>
+                            <td><code>${code.code}</code></td>
+                            <td>${code.bank_name}</td>
+                            <td>${code.account_name}</td>
+                            <td>${code.account_number}</td>
+                            <td><span class="badge ${code.is_active ? 'badge-confirmed' : 'badge-pending'}">${code.is_active ? 'Active' : 'Inactive'}</span></td>
+                            <td>
+                                <button onclick="editCode('${code.code}')" class="btn-sm"><i class="fas fa-edit"></i></button>
+                                <button onclick="toggleCodeStatus('${code.code}', ${!code.is_active})" class="btn-sm"><i class="fas ${code.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
+                                <button onclick="deleteCode('${code.code}')" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="6" style="text-align:center">No payment codes</td></tr>'}</tbody>
                     </table>
                 </div>
             `;
             
-            window.showAddCodeModal = function() {
+            window.showAddCodeModal = async function() {
                 const code = prompt('Enter payment code (e.g., 1234):');
                 if (!code) return;
-                if (adminData.paymentCodes[code]) {
-                    alert('Code already exists!');
-                    return;
-                }
-                adminData.paymentCodes[code] = {
-                    bankName: prompt('Enter Bank Name:', 'First Bank of Nigeria'),
-                    accountName: prompt('Enter Account Name:', 'NECO Payment Services'),
-                    accountNumber: prompt('Enter Account Number:', '2024567890'),
-                    bankCode: prompt('Enter Bank Code:', '011'),
-                    createdAt: new Date().toISOString()
-                };
-                saveData(adminData);
+                const { data: existing } = await supabase.from('payment_codes').select('code').eq('code', code);
+                if (existing?.length > 0) { alert('Code already exists!'); return; }
+                await supabase.from('payment_codes').insert({
+                    code: code,
+                    bank_name: prompt('Enter Bank Name:', 'First Bank of Nigeria'),
+                    account_name: prompt('Enter Account Name:', 'NECO Payment Services'),
+                    account_number: prompt('Enter Account Number:', '2024567890'),
+                    bank_code: prompt('Enter Bank Code:', '011'),
+                    is_active: true
+                });
                 showAlert(`Payment code "${code}" added!`, 'success');
-                renderCodesManager(container);
+                await renderCodesManager(container);
             };
             
-            window.editCode = function(code) {
-                const details = adminData.paymentCodes[code];
-                const newBankName = prompt('Edit Bank Name:', details.bankName);
-                const newAccountName = prompt('Edit Account Name:', details.accountName);
-                const newAccountNumber = prompt('Edit Account Number:', details.accountNumber);
-                const newBankCode = prompt('Edit Bank Code:', details.bankCode);
-                if (newBankName) details.bankName = newBankName;
-                if (newAccountName) details.accountName = newAccountName;
-                if (newAccountNumber) details.accountNumber = newAccountNumber;
-                if (newBankCode) details.bankCode = newBankCode;
-                saveData(adminData);
-                showAlert(`Payment code "${code}" updated!`, 'success');
-                renderCodesManager(container);
+            window.editCode = async function(code) {
+                const { data: existing } = await supabase.from('payment_codes').select('*').eq('code', code).single();
+                if (existing) {
+                    await supabase.from('payment_codes').update({
+                        bank_name: prompt('Edit Bank Name:', existing.bank_name) || existing.bank_name,
+                        account_name: prompt('Edit Account Name:', existing.account_name) || existing.account_name,
+                        account_number: prompt('Edit Account Number:', existing.account_number) || existing.account_number,
+                        bank_code: prompt('Edit Bank Code:', existing.bank_code) || existing.bank_code
+                    }).eq('code', code);
+                    showAlert(`Payment code "${code}" updated!`, 'success');
+                    await renderCodesManager(container);
+                }
             };
             
-            window.deleteCode = function(code) {
+            window.toggleCodeStatus = async function(code, newStatus) {
+                await supabase.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
+                showAlert(`Payment code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
+                await renderCodesManager(container);
+            };
+            
+            window.deleteCode = async function(code) {
                 if (confirm(`Delete payment code "${code}"?`)) {
-                    delete adminData.paymentCodes[code];
-                    saveData(adminData);
+                    await supabase.from('payment_codes').delete().eq('code', code);
                     showAlert(`Payment code "${code}" deleted!`, 'success');
-                    renderCodesManager(container);
+                    await renderCodesManager(container);
                 }
             };
         }
-
-        // ============================================
-        // TRANSACTIONS
-        // ============================================
-        function renderTransactions(container) {
+        
+        async function renderTransactions(container) {
+            const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+            
             container.innerHTML = `
                 <div class="data-table">
-                    <table>
-                        <thead>
-                            <tr><th>Date</th><th>Item</th><th>Category</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr>
-                        </thead>
-                        <tbody>
-                            ${adminData.transactions.slice().reverse().map(t => `
-                                <tr>
-                                    <td>${new Date(t.createdAt).toLocaleString()}</td>
-                                    <td>${t.itemName}</td>
-                                    <td>${t.category}</td>
-                                    <td>${t.payerName}<br><small style="color:#64748b;">${t.email}</small></td>
-                                    <td>₦${t.totalAmount.toLocaleString()}</td>
-                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
-                                    <td>
-                                        ${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '<span style="color:#0ca60c;">✓ Confirmed</span>'}
-                                    </td>
-                                </tr>
-                            `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}
-                        </tbody>
+                    <table><thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
+                    <tbody>${transactions?.map(t => `
+                        <tr>
+                            <td>${new Date(t.created_at).toLocaleString()}</td>
+                            <td>${t.item_name}</td>
+                            <td>${t.category_name}</td>
+                            <td>${t.payer_name}<br><small>${t.email}</small></td>
+                            <td>₦${t.total_amount.toLocaleString()}</td>
+                            <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
+                            <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '✓ Confirmed'}</td>
+                        </tr>
+                    `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}</tbody>
                     </table>
                 </div>
             `;
             
-            window.confirmTransaction = function(id) {
-                const transaction = adminData.transactions.find(t => t.id === id);
-                if (transaction) {
-                    transaction.status = 'confirmed';
-                    saveData(adminData);
-                    showAlert('Transaction confirmed!', 'success');
-                    renderTransactions(container);
-                }
+            window.confirmTransaction = async function(id) {
+                await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id);
+                showAlert('Transaction confirmed!', 'success');
+                await renderTransactions(container);
             };
         }
-
-        // ============================================
-        // SETTINGS
-        // ============================================
-        function renderSettings(container) {
+        
+        async function renderSettings(container) {
+            const { data: admin } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
+            
             container.innerHTML = `
                 <form id="settingsForm">
-                    <div class="form-group">
-                        <label>Admin Username</label>
-                        <input type="text" id="adminUsername" value="${adminData.admin.username}">
-                    </div>
-                    <div class="form-group">
-                        <label>Admin Password</label>
-                        <input type="password" id="adminPassword" value="${adminData.admin.password}">
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp Number (for code requests)</label>
-                        <input type="text" id="whatsappNumber" value="${adminData.admin.whatsappNumber}" placeholder="2348021234567">
-                        <small>Format: country code + number (no + sign)</small>
-                    </div>
+                    <div class="form-group"><label>Admin Username</label><input type="text" id="adminUsername" value="${admin?.username || ''}"></div>
+                    <div class="form-group"><label>Admin Password</label><input type="password" id="adminPassword" value="${admin?.password || ''}"></div>
+                    <div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber" value="${admin?.whatsapp_number || ''}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
                     <button type="submit">Save Settings</button>
                 </form>
             `;
             
-            document.getElementById('settingsForm').addEventListener('submit', function(e) {
+            document.getElementById('settingsForm').addEventListener('submit', async function(e) {
                 e.preventDefault();
-                adminData.admin.username = document.getElementById('adminUsername').value;
-                adminData.admin.password = document.getElementById('adminPassword').value;
-                adminData.admin.whatsappNumber = document.getElementById('whatsappNumber').value;
-                saveData(adminData);
+                await supabase.from('admin_settings').update({
+                    username: document.getElementById('adminUsername').value,
+                    password: document.getElementById('adminPassword').value,
+                    whatsapp_number: document.getElementById('whatsappNumber').value
+                }).eq('id', 1);
                 showAlert('Settings saved!', 'success');
             });
         }
-
-        // ============================================
-        // UTILITIES
-        // ============================================
+        
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
@@ -1105,12 +860,8 @@
             document.body.appendChild(alertDiv);
             setTimeout(() => alertDiv.remove(), 3000);
         }
-
-        // Save initial config to sessionStorage for payment page
-        sessionStorage.setItem('neco_payment_config', JSON.stringify({
-            categories: adminData.paymentPage.categories,
-            items: adminData.paymentPage.items
-        }));
+        
+        checkSession();
     </script>
 </body>
 </html>
