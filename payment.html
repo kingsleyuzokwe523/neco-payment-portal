@@ -1,97 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Payment Portal - Make Payment</title>
+    <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
     <style>
-        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}body{margin:0;line-height:inherit}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}button{background-color:transparent;cursor:pointer}img,svg{display:block;vertical-align:middle}.container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mb-4{margin-bottom:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}.w-full{width:100%}.w-fit{width:fit-content}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-2xl{border-radius:1rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}.bg-white{background-color:#fff}.bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}.bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}.bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}.bg-black{background-color:#000}.bg-opacity-25{opacity:0.25}.backdrop-blur-sm{backdrop-filter:blur(4px)}.p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.pr-9{padding-right:2.25rem}.text-left{text-align:left}.text-center{text-align:center}.font-CircularStdBold{font-family:CircularStdBold,sans-serif}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.tracking-tight{letter-spacing:-.025em}.text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}.text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}.text-text-subtitle{color:#8f8f8f}.text-red-500{color:#ef4444}.text-green-600{color:#16a34a}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}.transition-all{transition-property:all;transition-duration:.15s}.hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:bg-green-500:hover{background-color:#22c55e}.hover\:text-gray-900:hover{color:#111827}.focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}.focus\:ring-primary-500:focus{--tw-ring-color:#378b3d}@media (min-width: 768px){.md\:mt-0{margin-top:0}.md\:w-1\/2{width:50%}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-end{justify-content:flex-end}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}}@media (min-width: 1024px){.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width: 1280px){.xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@font-face{font-family:CircularStd;src:url(https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf)}@font-face{font-family:CircularStdBold;src:url(https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf)}body{margin:0;font-family:CircularStd,CircularStdBold,system-ui,sans-serif}
-
-        /* Custom Styles */
-        .payment-details-box {
-            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
-            border: 2px solid #0ca60c;
-            border-radius: 1rem;
-            padding: 1.5rem;
-            margin-top: 1rem;
-        }
-        .timer-text {
-            color: #dc2626;
-            font-weight: 700;
-            background: #fee2e2;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            display: inline-block;
-        }
-        .file-upload-label {
-            background-color: #f3f4f6;
-            border: 2px dashed #d1d5db;
-            border-radius: 0.75rem;
-            padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .file-upload-label:hover {
-            border-color: #0ca60c;
-            background-color: #f0fdf4;
-        }
-        .uploaded-file-name {
-            font-size: 0.75rem;
-            color: #0ca60c;
-            margin-top: 0.5rem;
-        }
-        .code-input-error {
-            border-color: #ef4444 !important;
-            background-color: #fef2f2 !important;
-        }
-        .code-input-success {
-            border-color: #0ca60c !important;
-            background-color: #f0fdf4 !important;
-        }
-        .error-message {
-            color: #ef4444;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-        .success-message {
-            color: #0ca60c;
-            font-size: 0.75rem;
-            margin-top: 0.25rem;
-            display: none;
-        }
-        .bank-detail-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.75rem 0;
-            border-bottom: 1px solid #e5e7eb;
-        }
-        .bank-detail-row:last-child {
-            border-bottom: none;
-        }
-        .bank-label {
-            font-weight: 600;
-            color: #065f46;
-        }
-        .bank-value {
-            color: #1f2937;
-            font-weight: 500;
-        }
-        .amount-highlight {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #0ca60c;
-        }
-        .required-star {
-            color: #ef4444;
-            margin-left: 2px;
-        }
-        .modal-scroll {
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+        /* ===== EXACT CSS FROM YOUR ORIGINAL FILE ===== */
+        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}body{margin:0;line-height:inherit}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}button{background-color:transparent;cursor:pointer}img,svg{display:block;vertical-align:middle}.container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.z-10{z-index:10}.z-30{z-index:30}.mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mb-4{margin-bottom:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}.w-full{width:100%}.w-fit{width:fit-content}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}.bg-white{background-color:#fff}.bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}.bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}.bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}.bg-black{background-color:#000}.bg-opacity-25{opacity:0.25}.backdrop-blur-sm{backdrop-filter:blur(4px)}.p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.pr-9{padding-right:2.25rem}.text-left{text-align:left}.text-center{text-align:center}.font-CircularStdBold{font-family:CircularStdBold,sans-serif}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.tracking-tight{letter-spacing:-.025em}.text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}.text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}.text-text-subtitle{color:#8f8f8f}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}.transition-all{transition-property:all;transition-duration:.15s}.hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:text-gray-900:hover{color:#111827}.focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}.focus\:ring-primary-500:focus{--tw-ring-color:#378b3d}@media (min-width: 768px){.md\:mt-0{margin-top:0}.md\:w-1\/2{width:50%}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-end{justify-content:flex-end}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}}@media (min-width: 1024px){.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width: 1280px){.xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@font-face{font-family:CircularStd;src:url(https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf)}@font-face{font-family:CircularStdBold;src:url(https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf)}body{margin:0;font-family:CircularStd,CircularStdBold,system-ui,sans-serif}
     </style>
 </head>
 <body>
@@ -170,23 +86,23 @@
                     </div>
                 </div>
 
-                <!-- Payment Items Grid -->
+                <!-- Payment Items Grid - Only SSCE Internal items shown initially -->
                 <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- Step 1: EXACT PAYMENT FORM MODAL (from your original file) -->
-    <div id="paymentFormModal" class="relative z-30 hidden">
+    <!-- EXACT PAYMENT FORM MODAL - COPIED DIRECTLY FROM YOUR FILE (NO CHANGES) -->
+    <div id="paymentModal" class="relative z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 opacity-100 scale-100 modal-scroll">
-                    <form id="paymentForm">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 opacity-100 scale-100">
+                    <form id="paymentFormModal">
                         <div class="px-3 md:px-10">
                             <div class="flex justify-between">
                                 <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
-                                <svg onclick="closePaymentFormModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
+                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
@@ -195,12 +111,12 @@
                             
                             <div class="mt-5">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Confirm payment code <span class="required-star">*</span></label>
+                                    <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
                                     <div class="mt-1 relative">
                                         <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
-                                    <div id="codeError" class="error-message">❌ Invalid payment code</div>
-                                    <div id="codeSuccess" class="success-message">✅ Valid payment code</div>
+                                    <div id="codeError" style="color:#ef4444; font-size:0.75rem; margin-top:0.25rem; display:none;">❌ Invalid payment code</div>
+                                    <div id="codeSuccess" style="color:#0ca60c; font-size:0.75rem; margin-top:0.25rem; display:none;">✅ Valid payment code</div>
                                 </div>
                             </div>
                             
@@ -216,22 +132,22 @@
                             
                             <div class="mt-5">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Full name <span class="required-star">*</span></label>
+                                    <label class="block text-sm font-medium text-gray-700">Full name</label>
                                     <div class="mt-1 relative">
                                         <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                            <div class="mt-5 flex gap-5">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Phone number <span class="required-star">*</span></label>
+                                    <label class="block text-sm font-medium text-gray-700">Phone number</label>
                                     <div class="mt-1 relative">
                                         <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
                                 </div>
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Email <span class="required-star">*</span></label>
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
                                     <div class="mt-1 relative">
                                         <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
@@ -256,7 +172,7 @@
                             
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Amount <span class="required-star">*</span></label>
+                                    <label class="block text-sm font-medium text-gray-700">Amount</label>
                                     <div class="mt-1 relative">
                                         <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
@@ -265,22 +181,23 @@
                                     <label class="block text-sm font-medium text-gray-700">Currency</label>
                                     <div class="mt-1 relative">
                                         <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
-                                            <option selected value="Naira">Naira</option>
-                                            <option value="Dollars">Dollars</option>
+                                            <option disabled hidden value="">Naira</option>
+                                            <option value="Yes">Naira</option>
+                                            <option value="No">Dollars</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
                                 </div>
                             </div>
                             
                             <div class="grid grid-cols-3 mt-8 gap-5">
-                                <button type="button" onclick="closePaymentFormModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-gray-400 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 cursor-not-allowed">Proceed</button>
+                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md w-full">Cancel</button>
+                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:opacity-50">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -289,90 +206,77 @@
         </div>
     </div>
 
-    <!-- Step 2: EXACT INVOICE SUMMARY MODAL (from your original file) -->
-    <div id="invoiceModal" class="relative z-40 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-CircularStdBold">Invoice Summary</p>
-                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex justify-between items-center mt-5">
-                                <p class="text-sm text-text-subtitle">Item</p>
-                                <p class="text-sm text-text-subtitle">Amount</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p id="invoiceItemName" class="text-sm w-2/3">FOUR FIGURE TABLE</p>
-                                <p id="invoiceItemAmount" class="text-sm">NGN 3000</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">SERVICE CHARGE</p>
-                                <p id="serviceCharge" class="text-sm">NGN 50</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">STAMP DUTY</p>
-                                <p id="stampDuty" class="text-sm">NGN 50</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm">Quantity</p>
-                                <p id="invoiceQuantity" class="text-sm">6</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5">
-                            <p class="text-sm">Total</p>
-                            <p id="invoiceTotal" class="text-sm">NGN 3100</p>
-                        </div>
-                        <form id="invoiceForm" method="POST">
-                            <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                                <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
-                            </div>
-                        </form>
+    <!-- INVOICE SUMMARY MODAL -->
+    <div id="invoiceModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/50">
+        <div class="bg-white rounded-lg max-w-md w-full mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <p class="text-xl font-CircularStdBold">Invoice Summary</p>
+                    <button onclick="closeInvoiceModal()" class="text-gray-400 hover:text-gray-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div>
+                    <div class="flex justify-between text-text-subtitle text-sm mb-3">
+                        <p>Item</p>
+                        <p>Amount</p>
+                    </div>
+                    <div class="flex justify-between text-black text-sm mb-3">
+                        <p id="invoiceItemName" class="w-2/3">FOUR FIGURE TABLE</p>
+                        <p id="invoiceItemAmount">NGN 500</p>
+                    </div>
+                    <div class="flex justify-between text-black text-sm mb-3">
+                        <p>Service Charge</p>
+                        <p id="serviceCharge">NGN 5</p>
+                    </div>
+                    <div class="flex justify-between text-black text-sm mb-3">
+                        <p>Stamp Duty</p>
+                        <p id="stampDuty">NGN 50</p>
+                    </div>
+                    <div class="flex justify-between text-black text-sm mb-3">
+                        <p>Quantity</p>
+                        <p id="invoiceQuantity">1</p>
+                    </div>
+                    <div class="flex justify-between bg-gray-100 p-3 rounded text-gray-600 font-semibold mt-4">
+                        <p>Total</p>
+                        <p id="invoiceTotal">NGN 555</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3 mt-6">
+                        <button onclick="closeInvoiceModal()" class="col-span-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                        <button onclick="showAccountModal()" class="col-span-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Step 3: Account Details Modal -->
+    <!-- ACCOUNT DETAILS MODAL -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
-        <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl">
+        <div class="bg-white rounded-lg max-w-md w-full mx-4">
             <div class="p-6">
-                <div class="flex justify-end">
-                    <button onclick="closeAccountModal()" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
                 <div class="flex justify-center mb-4">
-                    <img src="" alt="NECO Logo" id="modalLogo" style="height: 70px;">
+                    <img src="" alt="NECO Logo" style="height: 60px;">
                 </div>
-                <div class="text-center mb-6">
-                    <div class="timer-text inline-block">⚠️ Pay to this account within the next 30 minutes to avoid cancellation</div>
+                <div class="text-center mb-4">
+                    <p class="text-red-600 font-semibold">⚠️ Pay to this account within the next 30 minutes to avoid cancellation</p>
                 </div>
-                <div id="accountDetailsBox" class="payment-details-box mb-6"></div>
-                <div class="mb-6">
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Payment Receipt <span class="required-star">*</span></label>
-                    <div class="file-upload-label" onclick="document.getElementById('receiptInput').click()">
-                        <svg class="w-10 h-10 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div id="accountDetailsBox" style="background-color:#ecfdf5; border:1px solid #0ca60c; border-radius:0.5rem; padding:1rem; margin-bottom:1rem;"></div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Upload Payment Receipt</label>
+                    <div onclick="document.getElementById('receiptInput').click()" style="background-color:#f3f4f6; border:2px dashed #d1d5db; border-radius:0.5rem; padding:1rem; text-align:center; cursor:pointer;">
+                        <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                         </svg>
-                        <p class="text-sm text-gray-500">Click or drag to upload receipt</p>
-                        <p class="text-xs text-gray-400 mt-1">PDF, JPG, PNG (Max 5MB)</p>
+                        <p class="text-sm text-gray-500">Click to upload receipt</p>
                     </div>
                     <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                    <p id="uploadedFileName" class="uploaded-file-name text-center"></p>
+                    <p id="uploadedFileName" style="font-size:0.75rem; color:#0ca60c; margin-top:0.5rem;"></p>
                 </div>
                 <div class="flex gap-3">
-                    <button onclick="closeAccountModal()" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 font-medium transition-all">Cancel</button>
-                    <button onclick="confirmPayment()" class="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl hover:bg-green-500 font-medium transition-all shadow-md">Confirm Payment</button>
+                    <button onclick="closeAccountModal()" class="flex-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button onclick="confirmPayment()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Confirm Payment</button>
                 </div>
             </div>
         </div>
@@ -436,53 +340,40 @@
             return { valid: false, accountDetails: null };
         }
 
-        function setupCodeValidation() {
+        function checkCodeValidation() {
             const codeInput = document.getElementById('paymentCode');
             const codeError = document.getElementById('codeError');
             const codeSuccess = document.getElementById('codeSuccess');
-            codeInput.addEventListener('input', function() {
-                const code = this.value;
-                if (code.length > 0) {
-                    const validation = validatePaymentCode(code);
-                    if (validation.valid) {
-                        isCodeValid = true;
-                        currentValidatedAccount = validation.accountDetails;
-                        codeError.style.display = 'none';
-                        codeSuccess.style.display = 'block';
-                        this.classList.remove('code-input-error');
-                        this.classList.add('code-input-success');
-                    } else {
-                        isCodeValid = false;
-                        currentValidatedAccount = null;
-                        codeError.style.display = 'block';
-                        codeSuccess.style.display = 'none';
-                        this.classList.remove('code-input-success');
-                        this.classList.add('code-input-error');
-                    }
-                } else {
-                    isCodeValid = false;
-                    codeError.style.display = 'none';
-                    codeSuccess.style.display = 'none';
-                    this.classList.remove('code-input-error', 'code-input-success');
-                }
-                checkAllFields();
-            });
-        }
-        
-        function checkAllFields() {
+            const proceedBtn = document.getElementById('proceedBtn');
             const fullName = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
             const amount = document.getElementById('amount').value;
-            const proceedBtn = document.getElementById('proceedBtn');
+            
+            const code = codeInput.value;
+            if (code.length > 0) {
+                const validation = validatePaymentCode(code);
+                if (validation.valid) {
+                    isCodeValid = true;
+                    currentValidatedAccount = validation.accountDetails;
+                    codeError.style.display = 'none';
+                    codeSuccess.style.display = 'block';
+                } else {
+                    isCodeValid = false;
+                    currentValidatedAccount = null;
+                    codeError.style.display = 'block';
+                    codeSuccess.style.display = 'none';
+                }
+            } else {
+                isCodeValid = false;
+                codeError.style.display = 'none';
+                codeSuccess.style.display = 'none';
+            }
+            
             if (isCodeValid && fullName && phone && email && amount) {
                 proceedBtn.disabled = false;
-                proceedBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
-                proceedBtn.classList.add('bg-primary-700', 'hover:bg-primary-600');
             } else {
                 proceedBtn.disabled = true;
-                proceedBtn.classList.remove('bg-primary-700', 'hover:bg-primary-600');
-                proceedBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
             }
         }
 
@@ -500,7 +391,7 @@
                                 <div>
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentFormModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
                                             class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
                                             style="border-color: ${cat.color}; color: ${cat.color};">
                                             Make payment
@@ -517,9 +408,9 @@
             grid.innerHTML = html;
         }
 
-        function openPaymentFormModal(item) {
+        function openPaymentModal(item) {
             currentItem = item;
-            isCodeValid = false;
+            document.getElementById('modalItemName').innerHTML = item.name;
             const amountInput = document.getElementById('amount');
             if (item.amount) {
                 amountInput.value = item.amount;
@@ -531,34 +422,28 @@
             const whatsappNumber = "2348021234567";
             const message = `Hello, I need a payment code for: ${item.name} (${currentCategory})`;
             document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            document.getElementById('modalItemName').innerHTML = item.name.toUpperCase();
             document.getElementById('paymentCode').value = '';
             document.getElementById('fullName').value = '';
             document.getElementById('phone').value = '';
             document.getElementById('email').value = '';
             document.getElementById('paymentDescription').value = '';
-            document.getElementById('quantity').value = 1;
+            document.getElementById('quantity').value = '';
             document.getElementById('currency').value = 'Naira';
-            document.getElementById('paymentCode').classList.remove('code-input-error', 'code-input-success');
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('codeSuccess').style.display = 'none';
-            const proceedBtn = document.getElementById('proceedBtn');
-            proceedBtn.disabled = true;
-            proceedBtn.classList.remove('bg-primary-700', 'hover:bg-primary-600');
-            proceedBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-            ['fullName', 'phone', 'email', 'amount'].forEach(id => {
-                const el = document.getElementById(id);
-                el.removeEventListener('input', checkAllFields);
-                el.addEventListener('input', checkAllFields);
+            document.getElementById('proceedBtn').disabled = true;
+            document.getElementById('paymentModal').classList.remove('hidden');
+            
+            ['paymentCode', 'fullName', 'phone', 'email', 'amount'].forEach(id => {
+                document.getElementById(id).addEventListener('input', checkCodeValidation);
             });
-            document.getElementById('paymentFormModal').classList.remove('hidden');
         }
 
-        function closePaymentFormModal() {
-            document.getElementById('paymentFormModal').classList.add('hidden');
+        function closePaymentModal() {
+            document.getElementById('paymentModal').classList.add('hidden');
         }
 
-        document.getElementById('paymentForm').addEventListener('submit', function(e) {
+        document.getElementById('paymentFormModal').addEventListener('submit', function(e) {
             e.preventDefault();
             if (!isCodeValid) { alert('Please enter a valid payment code'); return; }
             const fullName = document.getElementById('fullName').value;
@@ -577,34 +462,35 @@
             const stampDuty = 50;
             const totalAmount = (itemAmount + serviceCharge + stampDuty) * quantity;
             currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, itemAmount, serviceCharge, stampDuty, totalAmount };
-            document.getElementById('invoiceItemName').innerHTML = currentItem.name.toUpperCase();
+            document.getElementById('invoiceItemName').innerHTML = currentItem.name;
             document.getElementById('invoiceItemAmount').innerHTML = `${currency} ${itemAmount.toLocaleString()}`;
             document.getElementById('serviceCharge').innerHTML = `${currency} ${serviceCharge.toLocaleString()}`;
             document.getElementById('stampDuty').innerHTML = `${currency} ${stampDuty.toLocaleString()}`;
             document.getElementById('invoiceQuantity').innerHTML = quantity;
             document.getElementById('invoiceTotal').innerHTML = `${currency} ${totalAmount.toLocaleString()}`;
-            closePaymentFormModal();
+            closePaymentModal();
             document.getElementById('invoiceModal').classList.remove('hidden');
+            document.getElementById('invoiceModal').classList.add('flex');
         });
 
-        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.add('hidden'); }
+        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.add('hidden'); document.getElementById('invoiceModal').classList.remove('flex'); }
 
-        document.getElementById('invoiceForm').addEventListener('submit', function(e) {
-            e.preventDefault();
+        function showAccountModal() {
             closeInvoiceModal();
             const account = currentValidatedAccount;
-            const accountHtml = `<div class="text-center mb-4"><div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold mb-3">Bank Transfer Details</div></div>
-                <div class="bank-detail-row"><span class="bank-label">🏦 Bank Name</span><span class="bank-value">${account.bankName}</span></div>
-                <div class="bank-detail-row"><span class="bank-label">👤 Account Name</span><span class="bank-value">${account.accountName}</span></div>
-                <div class="bank-detail-row"><span class="bank-label">🔢 Account Number</span><span class="bank-value font-mono text-lg">${account.accountNumber}</span></div>
-                <div class="bank-detail-row"><span class="bank-label">💰 Amount to Pay</span><span class="bank-value amount-highlight">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
-                <div class="bank-detail-row"><span class="bank-label">📋 Payment Code</span><span class="bank-value font-mono">${currentFormData.paymentCode}</span></div>`;
-            document.getElementById('accountDetailsBox').innerHTML = accountHtml;
+            document.getElementById('accountDetailsBox').innerHTML = `
+                <div style="text-align:center; margin-bottom:0.5rem;"><strong style="color:#0ca60c;">Bank Transfer Details</strong></div>
+                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Bank Name:</strong> <span>${account.bankName}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Account Name:</strong> <span>${account.accountName}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Account Number:</strong> <span style="font-family:monospace; font-size:1.1rem;">${account.accountNumber}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Amount to Pay:</strong> <span style="color:#0ca60c; font-weight:bold;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
+                <div style="display:flex; justify-content:space-between; padding:0.5rem 0;"><strong>Payment Code:</strong> <span style="font-family:monospace;">${currentFormData.paymentCode}</span></div>
+            `;
             document.getElementById('receiptInput').value = '';
             document.getElementById('uploadedFileName').innerHTML = '';
             document.getElementById('accountModal').classList.remove('hidden');
             document.getElementById('accountModal').classList.add('flex');
-        });
+        }
 
         function closeAccountModal() { document.getElementById('accountModal').classList.add('hidden'); document.getElementById('accountModal').classList.remove('flex'); }
 
@@ -616,7 +502,7 @@
         function confirmPayment() {
             const fileInput = document.getElementById('receiptInput');
             if (!fileInput.files[0]) { alert('Please upload your payment receipt before confirming.'); return; }
-            alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nCategory: ${currentCategory}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nQuantity: ${currentFormData.quantity}\n\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nPhone: ${currentFormData.phone}\nEmail: ${currentFormData.email}\n\nBank: ${currentValidatedAccount.bankName}\nAccount: ${currentValidatedAccount.accountNumber}\n\nReceipt uploaded: ${fileInput.files[0].name}\n\nYour payment is being processed.`);
+            alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nCategory: ${currentCategory}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nQuantity: ${currentFormData.quantity}\n\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nPhone: ${currentFormData.phone}\nEmail: ${currentFormData.email}\n\nBank: ${currentValidatedAccount.bankName}\nAccount: ${currentValidatedAccount.accountNumber}\n\nReceipt uploaded: ${fileInput.files[0].name}`);
             closeAccountModal();
         }
 
@@ -646,7 +532,7 @@
                                 <div>
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentFormModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
                                             class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
                                             style="border-color: ${cat.color}; color: ${cat.color};">
                                             Make payment
@@ -664,12 +550,9 @@
         });
 
         renderGrid();
-        setupCodeValidation();
-        ['fullName', 'phone', 'email', 'amount'].forEach(id => document.getElementById(id).addEventListener('input', checkAllFields));
         
         window.addPaymentCode = function(code, bankName, accountName, accountNumber, bankCode) {
             paymentCodesDatabase[code.toString().trim()] = { bankName, accountName, accountNumber, bankCode };
-            console.log(`✅ Payment code ${code} added successfully!`);
         };
     </script>
 </body>
