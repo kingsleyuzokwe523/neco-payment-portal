@@ -86,13 +86,13 @@
                     </div>
                 </div>
 
-                <!-- Payment Items Grid - Only SSCE Internal items shown initially -->
+                <!-- Payment Items Grid -->
                 <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
             </div>
         </div>
     </div>
 
-    <!-- EXACT PAYMENT FORM MODAL - COPIED DIRECTLY FROM YOUR FILE (NO CHANGES) -->
+    <!-- EXACT PAYMENT FORM MODAL - COPIED DIRECTLY FROM YOUR FILE (WITH SCROLLING) -->
     <div id="paymentModal" class="relative z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -283,7 +283,7 @@
     </div>
 
     <script>
-        // Payment Data - ALL CATEGORIES with all items
+        // Payment Data - ALL CATEGORIES
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 },{ name: "Non-Validation", amount: 10000 },{ name: "Syllabus", amount: 2000 },{ name: "Photo Album", amount: 2700 },
@@ -385,6 +385,7 @@
             cat.items.forEach(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 const amountText = item.amount ? 'Fixed Amount' : 'Variable Amount';
+                // EXACT "Make payment" button as in your original - square border with category color
                 html += `<div class="bg-[${cat.color}] rounded-md text-[#747474] flex items-center gap-2" style="background: ${cat.bgColor};">
                             <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: rgb(236, 250, 243);">
                                 <div class="py-8 px-5 text-black">${item.name}</div>
@@ -392,7 +393,7 @@
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
                                         <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                            class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
+                                            class="text-xs border rounded-md py-3 px-2"
                                             style="border-color: ${cat.color}; color: ${cat.color};">
                                             Make payment
                                         </button>
@@ -533,7 +534,7 @@
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
                                         <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                            class="text-xs border rounded-md py-3 px-2 hover:opacity-80"
+                                            class="text-xs border rounded-md py-3 px-2"
                                             style="border-color: ${cat.color}; color: ${cat.color};">
                                             Make payment
                                         </button>
