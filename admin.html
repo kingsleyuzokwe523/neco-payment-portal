@@ -250,6 +250,11 @@
             background: #dc2626;
         }
 
+        .btn-sm {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
         /* Modal */
         .modal {
             display: none;
@@ -325,6 +330,10 @@
             padding: 0.75rem 1rem;
             border-radius: 0.5rem;
             margin-bottom: 1rem;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
         }
 
         .alert-success {
@@ -335,6 +344,39 @@
         .alert-error {
             background: #fee2e2;
             color: #ef4444;
+        }
+
+        .category-section {
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: #fafbfc;
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .item-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            align-items: center;
+        }
+
+        .item-row input {
+            flex: 2;
+        }
+
+        .item-row input.amount-input {
+            flex: 1;
+            width: 120px;
         }
 
         @media (max-width: 768px) {
@@ -424,7 +466,7 @@
 
     <script>
         // ============================================
-        // DEFAULT DATA
+        // COMPLETE DEFAULT DATA WITH ALL PAYMENT ITEMS
         // ============================================
         const defaultData = {
             admin: {
@@ -459,30 +501,80 @@
                     { name: "Others", color: "#36454F" }
                 ],
                 items: {
+                    // ===== SSCE INTERNAL (15 items) =====
                     "SSCE Internal": [
                         { id: 1, name: "Four Figure Table", amount: 500 },
                         { id: 2, name: "Non-Validation", amount: 10000 },
                         { id: 3, name: "Syllabus", amount: 2000 },
-                        { id: 4, name: "Photo Album", amount: 2700 }
+                        { id: 4, name: "Photo Album", amount: 2700 },
+                        { id: 5, name: "Late Ca3 Upload", amount: 40000 },
+                        { id: 6, name: "Remarking Ssce (i)", amount: 20000 },
+                        { id: 7, name: "Unviable Centre Fee", amount: 70000 },
+                        { id: 8, name: "Late Registration Fee", amount: 5000 },
+                        { id: 9, name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
+                        { id: 10, name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
+                        { id: 11, name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
+                        { id: 12, name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
+                        { id: 13, name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
+                        { id: 14, name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
+                        { id: 15, name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
                     ],
+                    // ===== SSCE EXTERNAL (7 items) =====
                     "SSCE External": [
-                        { id: 5, name: "Four Figure Table", amount: 500 },
-                        { id: 6, name: "Walk-in", amount: 43000 },
-                        { id: 7, name: "Syllabus", amount: 2000 }
+                        { id: 16, name: "Four Figure Table", amount: 500 },
+                        { id: 17, name: "Walk-in", amount: 43000 },
+                        { id: 18, name: "Syllabus", amount: 2000 },
+                        { id: 19, name: "Result Slips", amount: 1600 },
+                        { id: 20, name: "Remarking Ssce Ext", amount: 20000 },
+                        { id: 21, name: "Collection Of Certificate", amount: 500 },
+                        { id: 22, name: "Non-Validation", amount: 10000 }
                     ],
+                    // ===== BECE (8 items) =====
                     "BECE": [
-                        { id: 8, name: "Remarking Bece", amount: 15000 },
-                        { id: 9, name: "Non-Validation", amount: 10000 }
+                        { id: 23, name: "Remarking Bece", amount: 15000 },
+                        { id: 24, name: "Non-Validation", amount: 10000 },
+                        { id: 25, name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
+                        { id: 26, name: "Bece Re-accreditation (public Schools)", amount: 140000 },
+                        { id: 27, name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
+                        { id: 28, name: "Bece Re-accreditation (private Schools)", amount: 140000 },
+                        { id: 29, name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
+                        { id: 30, name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
                     ],
+                    // ===== NCEE (1 item) =====
                     "NCEE": [
-                        { id: 10, name: "Non-Validation", amount: 4000 }
+                        { id: 31, name: "Non-Validation", amount: 4000 }
                     ],
+                    // ===== GIFTED (1 item) =====
                     "Gifted": [
-                        { id: 11, name: "Non-Validation", amount: 4000 }
+                        { id: 32, name: "Non-Validation", amount: 4000 }
                     ],
+                    // ===== OTHERS (25 items) =====
                     "Others": [
-                        { id: 12, name: "Reprint Of Certificate", amount: 50000 },
-                        { id: 13, name: "Change Of School Name", amount: 15000 }
+                        { id: 33, name: "Reprint Of Certificate", amount: 50000 },
+                        { id: 34, name: "Sale Of Government Assets", amount: null },
+                        { id: 35, name: "Registration Of Contractors", amount: null },
+                        { id: 36, name: "Tender Fees", amount: null },
+                        { id: 37, name: "Refund", amount: null },
+                        { id: 38, name: "Change Of School Name", amount: 15000 },
+                        { id: 39, name: "Payment For Consultancy Services", amount: null },
+                        { id: 40, name: "Payment Of Dead Scripts", amount: null },
+                        { id: 41, name: "Reprint Of School Results Per Candidate", amount: 400 },
+                        { id: 42, name: "Return Of Dta", amount: null },
+                        { id: 43, name: "Staff Identity Card", amount: 1000 },
+                        { id: 44, name: "Result Checker (token)", amount: 1000 },
+                        { id: 45, name: "Examination Bag", amount: 15000 },
+                        { id: 46, name: "Confirmation Of Result By International Institutions Or Organizations Per Candidates", amount: 10000 },
+                        { id: 47, name: "Waterproof Certificate Jacket/folder", amount: 2500 },
+                        { id: 48, name: "Candidates Registration Number Request", amount: 3000 },
+                        { id: 49, name: "Photocard Reprint (ssce-external)", amount: 3000 },
+                        { id: 50, name: "Ssce External Certificate Safekeeping (renewable Every 5 Years)", amount: 7500 },
+                        { id: 51, name: "Statistical Request-organization/association (annual Awards)", amount: 100000 },
+                        { id: 52, name: "Statistical Request-individual (research) 1-5 Years", amount: 10000 },
+                        { id: 53, name: "Statistical Request-individual (research) 6-10 Years", amount: 20000 },
+                        { id: 54, name: "State Governments (registration Projection/candidates Performance Annually)", amount: 50000 },
+                        { id: 55, name: "Shortfalls On Accreditation", amount: null },
+                        { id: 56, name: "E-verification Of Result", amount: 5000 },
+                        { id: 57, name: "Candidate Attestation Of Result In Lieu Of Lost Certificate", amount: 50000 }
                     ]
                 }
             },
@@ -510,6 +602,11 @@
 
         function saveData(data) {
             localStorage.setItem('neco_admin_data', JSON.stringify(data));
+            // Also save to sessionStorage for the payment page to access
+            sessionStorage.setItem('neco_payment_config', JSON.stringify({
+                categories: data.paymentPage.categories,
+                items: data.paymentPage.items
+            }));
         }
 
         let adminData = loadData();
@@ -645,19 +742,19 @@
                 <form id="homeEditorForm">
                     <div class="form-group">
                         <label>Hero Title</label>
-                        <input type="text" id="heroTitle" value="${home.heroTitle.replace(/"/g, '&quot;')}" class="form-control">
+                        <input type="text" id="heroTitle" value="${home.heroTitle.replace(/"/g, '&quot;')}">
                     </div>
                     <div class="form-group">
                         <label>Hero Note</label>
-                        <input type="text" id="heroNote" value="${home.heroNote.replace(/"/g, '&quot;')}" class="form-control">
+                        <input type="text" id="heroNote" value="${home.heroNote.replace(/"/g, '&quot;')}">
                     </div>
                     <div class="form-group">
                         <label>Button Text</label>
-                        <input type="text" id="buttonText" value="${home.buttonText}" class="form-control">
+                        <input type="text" id="buttonText" value="${home.buttonText}">
                     </div>
                     <div class="form-group">
                         <label>Logo URL</label>
-                        <input type="text" id="logoUrl" value="${home.logo}" class="form-control" placeholder="https://...">
+                        <input type="text" id="logoUrl" value="${home.logo}" placeholder="https://...">
                     </div>
                     <h3 style="margin: 1.5rem 0 1rem 0;">How It Works Steps</h3>
                     <div id="howItWorksList"></div>
@@ -668,11 +765,15 @@
             const stepsContainer = document.getElementById('howItWorksList');
             home.howItWorks.forEach((step, index) => {
                 stepsContainer.innerHTML += `
-                    <div class="form-group" style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
-                        <label>Step ${index + 1} Title</label>
-                        <input type="text" id="stepTitle_${index}" value="${step.title.replace(/"/g, '&quot;')}" class="form-control">
-                        <label style="margin-top:0.5rem;">Step ${index + 1} Description</label>
-                        <textarea id="stepDesc_${index}" class="form-control" rows="2">${step.description.replace(/"/g, '&quot;')}</textarea>
+                    <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
+                        <div class="form-group">
+                            <label>Step ${index + 1} Title</label>
+                            <input type="text" id="stepTitle_${index}" value="${step.title.replace(/"/g, '&quot;')}">
+                        </div>
+                        <div class="form-group">
+                            <label>Step ${index + 1} Description</label>
+                            <textarea id="stepDesc_${index}" rows="2">${step.description.replace(/"/g, '&quot;')}</textarea>
+                        </div>
                     </div>
                 `;
             });
@@ -690,125 +791,161 @@
                 }
                 
                 saveData(adminData);
-                showAlert('Home page updated successfully!', 'success');
+                showAlert('Home page updated successfully! Changes will appear on the live site.', 'success');
                 renderHomeEditor(container);
             });
         }
 
         // ============================================
-        // PAYMENT PAGE EDITOR
+        // PAYMENT PAGE EDITOR - COMPLETE WITH ALL ITEMS
         // ============================================
         function renderPaymentEditor(container) {
             const payment = adminData.paymentPage;
+            
+            let itemsHtml = '';
+            payment.categories.forEach(cat => {
+                const categoryItems = payment.items[cat.name] || [];
+                itemsHtml += `
+                    <div class="category-section">
+                        <div class="category-header">
+                            <div>
+                                <span class="color-preview" style="background:${cat.color};"></span>
+                                <strong style="font-size:1.1rem;">${cat.name}</strong>
+                            </div>
+                            <div>
+                                <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor('${cat.name}')" style="margin-right:0.5rem;"><i class="fas fa-palette"></i> Color</button>
+                                <button type="button" class="btn-danger btn-sm" onclick="removeCategory('${cat.name}')"><i class="fas fa-trash"></i> Remove</button>
+                            </div>
+                        </div>
+                        <div id="items_${cat.name.replace(/\s/g, '_')}">
+                            ${categoryItems.map(item => `
+                                <div class="item-row" data-item-id="${item.id}">
+                                    <input type="text" class="item-name" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Item Name">
+                                    <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount (leave empty for variable)" style="width:180px;">
+                                    <button type="button" class="btn-danger btn-sm" onclick="removeItem('${cat.name}', ${item.id})"><i class="fas fa-trash"></i></button>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <button type="button" class="btn-outline btn-sm" onclick="addItem('${cat.name}')" style="margin-top:0.75rem;"><i class="fas fa-plus"></i> Add Item</button>
+                    </div>
+                `;
+            });
+            
             container.innerHTML = `
                 <form id="paymentEditorForm">
                     <div class="form-group">
                         <label>Page Title</label>
-                        <input type="text" id="pageTitle" value="${payment.title}" class="form-control">
+                        <input type="text" id="pageTitle" value="${payment.title}">
                     </div>
                     <div class="form-group">
                         <label>Subtitle</label>
-                        <input type="text" id="subtitle" value="${payment.subtitle}" class="form-control">
+                        <input type="text" id="subtitle" value="${payment.subtitle}">
                     </div>
                     <div class="form-group">
                         <label>Search Placeholder</label>
-                        <input type="text" id="searchPlaceholder" value="${payment.searchPlaceholder}" class="form-control">
+                        <input type="text" id="searchPlaceholder" value="${payment.searchPlaceholder}">
                     </div>
                     
-                    <h3 style="margin: 1.5rem 0 1rem 0;">Categories & Colors</h3>
-                    <div id="categoriesList"></div>
+                    <h3 style="margin: 1.5rem 0 1rem 0;">Categories & Payment Items</h3>
+                    <div id="categoriesContainer">
+                        ${itemsHtml}
+                    </div>
                     
-                    <h3 style="margin: 1.5rem 0 1rem 0;">Payment Items</h3>
-                    <div id="itemsList"></div>
+                    <button type="button" class="btn-outline" onclick="addCategory()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
                     
-                    <button type="submit">Save Changes</button>
+                    <div style="margin-top: 2rem;">
+                        <button type="submit">Save All Changes</button>
+                    </div>
                 </form>
             `;
             
-            // Categories
-            const categoriesContainer = document.getElementById('categoriesList');
-            payment.categories.forEach((cat, idx) => {
-                categoriesContainer.innerHTML += `
-                    <div class="form-group" style="display:flex; gap:1rem; align-items:center; margin-bottom:1rem;">
-                        <input type="text" id="catName_${idx}" value="${cat.name}" placeholder="Category Name" style="flex:2">
-                        <input type="color" id="catColor_${idx}" value="${cat.color}" style="width:60px; height:40px;">
-                        <button type="button" class="btn-outline" onclick="removeCategory(${idx})" style="background:#ef4444; color:white;">Remove</button>
-                    </div>
-                `;
-            });
-            categoriesContainer.innerHTML += `<button type="button" class="btn-outline" onclick="addCategory()" style="margin-top:0.5rem;">+ Add Category</button>`;
-            
-            // Items grouped by category
-            const itemsContainer = document.getElementById('itemsList');
-            payment.categories.forEach(cat => {
-                const items = payment.items[cat.name] || [];
-                itemsContainer.innerHTML += `
-                    <div style="border:1px solid #e2e8f0; border-radius:0.5rem; padding:1rem; margin-bottom:1rem;">
-                        <h4 style="margin-bottom:0.5rem;"><span class="color-preview" style="background:${cat.color};"></span> ${cat.name}</h4>
-                        <div id="items_${cat.name.replace(/\s/g, '_')}">
-                            ${items.map(item => `
-                                <div style="display:flex; gap:0.5rem; margin-bottom:0.5rem;">
-                                    <input type="text" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Item Name" style="flex:2" class="item-name-${item.id}">
-                                    <input type="number" value="${item.amount}" placeholder="Amount" style="width:120px" class="item-amount-${item.id}">
-                                    <button type="button" class="btn-outline" onclick="removeItem('${cat.name}', ${item.id})" style="background:#ef4444; color:white;">Remove</button>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <button type="button" class="btn-outline" onclick="addItem('${cat.name}')" style="margin-top:0.5rem;">+ Add Item</button>
-                    </div>
-                `;
-            });
-            
-            window.removeCategory = function(idx) {
-                const catName = payment.categories[idx].name;
-                delete payment.items[catName];
-                payment.categories.splice(idx, 1);
-                saveData(adminData);
-                renderPaymentEditor(container);
+            // Make functions globally available
+            window.editCategoryColor = function(categoryName) {
+                const category = adminData.paymentPage.categories.find(c => c.name === categoryName);
+                if (category) {
+                    const newColor = prompt('Enter new color (hex code like #0CA60C):', category.color);
+                    if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
+                        category.color = newColor;
+                        saveData(adminData);
+                        showAlert(`Color for ${categoryName} updated!`, 'success');
+                        renderPaymentEditor(container);
+                    } else if (newColor) {
+                        alert('Please enter a valid hex color code (e.g., #0CA60C)');
+                    }
+                }
             };
             
-            window.addCategory = function() {
-                const newName = prompt('Enter category name:');
-                if (newName) {
-                    payment.categories.push({ name: newName, color: '#0CA60C' });
-                    payment.items[newName] = [];
+            window.removeCategory = function(categoryName) {
+                if (confirm(`Remove category "${categoryName}" and all its items?`)) {
+                    adminData.paymentPage.categories = adminData.paymentPage.categories.filter(c => c.name !== categoryName);
+                    delete adminData.paymentPage.items[categoryName];
                     saveData(adminData);
+                    showAlert(`Category "${categoryName}" removed!`, 'success');
                     renderPaymentEditor(container);
                 }
             };
             
+            window.addCategory = function() {
+                const newName = prompt('Enter new category name:');
+                if (newName && !adminData.paymentPage.categories.find(c => c.name === newName)) {
+                    adminData.paymentPage.categories.push({ name: newName, color: '#0CA60C' });
+                    adminData.paymentPage.items[newName] = [];
+                    saveData(adminData);
+                    showAlert(`Category "${newName}" added!`, 'success');
+                    renderPaymentEditor(container);
+                } else if (newName) {
+                    alert('Category already exists!');
+                }
+            };
+            
             window.removeItem = function(categoryName, itemId) {
-                payment.items[categoryName] = payment.items[categoryName].filter(i => i.id !== itemId);
-                saveData(adminData);
-                renderPaymentEditor(container);
+                if (confirm('Remove this item?')) {
+                    adminData.paymentPage.items[categoryName] = adminData.paymentPage.items[categoryName].filter(i => i.id !== itemId);
+                    saveData(adminData);
+                    showAlert('Item removed!', 'success');
+                    renderPaymentEditor(container);
+                }
             };
             
             window.addItem = function(categoryName) {
                 const newName = prompt('Enter item name:');
-                const newAmount = parseFloat(prompt('Enter amount (leave empty for variable):'));
                 if (newName) {
+                    const newAmount = prompt('Enter amount (leave empty for variable amount):');
+                    const amount = newAmount ? parseFloat(newAmount) : null;
                     const newId = Date.now();
-                    payment.items[categoryName].push({ id: newId, name: newName, amount: newAmount || null });
+                    adminData.paymentPage.items[categoryName].push({ id: newId, name: newName, amount: amount });
                     saveData(adminData);
+                    showAlert(`Item "${newName}" added!`, 'success');
                     renderPaymentEditor(container);
                 }
             };
             
             document.getElementById('paymentEditorForm').addEventListener('submit', function(e) {
                 e.preventDefault();
+                
                 adminData.paymentPage.title = document.getElementById('pageTitle').value;
                 adminData.paymentPage.subtitle = document.getElementById('subtitle').value;
                 adminData.paymentPage.searchPlaceholder = document.getElementById('searchPlaceholder').value;
                 
-                // Save categories
-                adminData.paymentPage.categories.forEach((cat, idx) => {
-                    cat.name = document.getElementById(`catName_${idx}`).value;
-                    cat.color = document.getElementById(`catColor_${idx}`).value;
+                // Save all items from the form
+                adminData.paymentPage.categories.forEach(cat => {
+                    const categoryItems = adminData.paymentPage.items[cat.name] || [];
+                    const container = document.getElementById(`items_${cat.name.replace(/\s/g, '_')}`);
+                    if (container) {
+                        const rows = container.querySelectorAll('.item-row');
+                        rows.forEach((row, idx) => {
+                            if (idx < categoryItems.length) {
+                                const nameInput = row.querySelector('.item-name');
+                                const amountInput = row.querySelector('.item-amount');
+                                if (nameInput) categoryItems[idx].name = nameInput.value;
+                                if (amountInput) categoryItems[idx].amount = amountInput.value ? parseFloat(amountInput.value) : null;
+                            }
+                        });
+                    }
                 });
                 
                 saveData(adminData);
-                showAlert('Payment page updated successfully!', 'success');
-                renderPaymentEditor(container);
+                showAlert('Payment page updated successfully! Changes will appear on the live site.', 'success');
             });
         }
 
@@ -826,13 +963,13 @@
                         <tbody>
                             ${Object.entries(adminData.paymentCodes).map(([code, details]) => `
                                 <tr>
-                                    <td><code>${code}</code></td>
+                                    <td><code style="background:#f1f5f9; padding:0.25rem 0.5rem; border-radius:0.25rem;">${code}</code></td>
                                     <td>${details.bankName}</td>
                                     <td>${details.accountName}</td>
                                     <td>${details.accountNumber}</td>
                                     <td>
-                                        <button onclick="editCode('${code}')" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
-                                        <button onclick="deleteCode('${code}')" style="background:#ef4444; padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
+                                        <button onclick="editCode('${code}')" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
+                                        <button onclick="deleteCode('${code}')" class="btn-danger btn-sm" style="padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
                                     </td>
                                 </tr>
                             `).join('') || '<tr><td colspan="5" style="text-align:center">No payment codes</td></tr>'}
@@ -856,6 +993,7 @@
                     createdAt: new Date().toISOString()
                 };
                 saveData(adminData);
+                showAlert(`Payment code "${code}" added!`, 'success');
                 renderCodesManager(container);
             };
             
@@ -870,6 +1008,7 @@
                 if (newAccountNumber) details.accountNumber = newAccountNumber;
                 if (newBankCode) details.bankCode = newBankCode;
                 saveData(adminData);
+                showAlert(`Payment code "${code}" updated!`, 'success');
                 renderCodesManager(container);
             };
             
@@ -877,6 +1016,7 @@
                 if (confirm(`Delete payment code "${code}"?`)) {
                     delete adminData.paymentCodes[code];
                     saveData(adminData);
+                    showAlert(`Payment code "${code}" deleted!`, 'success');
                     renderCodesManager(container);
                 }
             };
@@ -898,11 +1038,11 @@
                                     <td>${new Date(t.createdAt).toLocaleString()}</td>
                                     <td>${t.itemName}</td>
                                     <td>${t.category}</td>
-                                    <td>${t.payerName}<br><small>${t.email}</small></td>
+                                    <td>${t.payerName}<br><small style="color:#64748b;">${t.email}</small></td>
                                     <td>₦${t.totalAmount.toLocaleString()}</td>
                                     <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
                                     <td>
-                                        ${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" style="padding:0.25rem 0.5rem;">Confirm</button>` : 'Confirmed'}
+                                        ${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '<span style="color:#0ca60c;">✓ Confirmed</span>'}
                                     </td>
                                 </tr>
                             `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}
@@ -916,8 +1056,8 @@
                 if (transaction) {
                     transaction.status = 'confirmed';
                     saveData(adminData);
-                    renderTransactions(container);
                     showAlert('Transaction confirmed!', 'success');
+                    renderTransactions(container);
                 }
             };
         }
@@ -930,15 +1070,15 @@
                 <form id="settingsForm">
                     <div class="form-group">
                         <label>Admin Username</label>
-                        <input type="text" id="adminUsername" value="${adminData.admin.username}" class="form-control">
+                        <input type="text" id="adminUsername" value="${adminData.admin.username}">
                     </div>
                     <div class="form-group">
                         <label>Admin Password</label>
-                        <input type="password" id="adminPassword" value="${adminData.admin.password}" class="form-control">
+                        <input type="password" id="adminPassword" value="${adminData.admin.password}">
                     </div>
                     <div class="form-group">
                         <label>WhatsApp Number (for code requests)</label>
-                        <input type="text" id="whatsappNumber" value="${adminData.admin.whatsappNumber}" class="form-control" placeholder="2348021234567">
+                        <input type="text" id="whatsappNumber" value="${adminData.admin.whatsappNumber}" placeholder="2348021234567">
                         <small>Format: country code + number (no + sign)</small>
                     </div>
                     <button type="submit">Save Settings</button>
@@ -961,24 +1101,16 @@
         function showAlert(message, type) {
             const alertDiv = document.createElement('div');
             alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerHTML = message;
-            alertDiv.style.position = 'fixed';
-            alertDiv.style.top = '20px';
-            alertDiv.style.right = '20px';
-            alertDiv.style.zIndex = '1000';
+            alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
             document.body.appendChild(alertDiv);
             setTimeout(() => alertDiv.remove(), 3000);
         }
 
-        // Make functions global
-        window.removeCategory = null;
-        window.addCategory = null;
-        window.removeItem = null;
-        window.addItem = null;
-        window.showAddCodeModal = null;
-        window.editCode = null;
-        window.deleteCode = null;
-        window.confirmTransaction = null;
+        // Save initial config to sessionStorage for payment page
+        sessionStorage.setItem('neco_payment_config', JSON.stringify({
+            categories: adminData.paymentPage.categories,
+            items: adminData.paymentPage.items
+        }));
     </script>
 </body>
 </html>
