@@ -580,11 +580,11 @@
             <form id="loginForm">
                 <div class="form-group">
                     <label><i class="fas fa-user"></i> Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="off" value="admin">
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="off">
                 </div>
                 <div class="form-group">
                     <label><i class="fas fa-lock"></i> Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter your password" required value="admin123">
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 </div>
                 <button type="submit" style="width: 100%;">
                     <i class="fas fa-arrow-right-to-bracket"></i> Sign In
@@ -774,7 +774,8 @@
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        // Create supabase client (only once)
+        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         // DEFAULT CREDENTIALS (fallback if database is empty)
         const DEFAULT_ADMIN = {
@@ -787,22 +788,54 @@
         let currentCategoryId = null;
         
         // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+            alertDiv.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 4000);
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.remove('active');
+        }
+        
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) modal.classList.add('active');
+        }
+        
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // ============================================
         // INITIALIZE DATABASE WITH DEFAULT DATA
         // ============================================
         async function initializeDatabase() {
             try {
                 // Check if admin settings exist
-                const { data: adminExists } = await supabase
+                const { data: adminExists, error: checkError } = await supabaseClient
                     .from('admin_settings')
                     .select('id')
                     .eq('id', 1)
-                    .single();
+                    .maybeSingle();
                 
                 if (!adminExists) {
                     console.log('Initializing database with default data...');
                     
                     // Insert admin settings
-                    await supabase.from('admin_settings').insert({
+                    await supabaseClient.from('admin_settings').insert({
                         id: 1,
                         username: DEFAULT_ADMIN.username,
                         password: DEFAULT_ADMIN.password,
@@ -810,7 +843,7 @@
                     });
                     
                     // Insert home settings
-                    await supabase.from('home_settings').insert({
+                    await supabaseClient.from('home_settings').insert({
                         id: 1,
                         hero_title: 'NECO Payments Just Got Faster and Simpler.',
                         hero_note: 'You do not need an account to make payment',
@@ -829,7 +862,7 @@
                     ];
                     
                     for (const step of steps) {
-                        await supabase.from('how_it_works').insert(step);
+                        await supabaseClient.from('how_it_works').insert(step);
                     }
                     
                     // Insert categories
@@ -843,67 +876,39 @@
                     ];
                     
                     for (const cat of categories) {
-                        await supabase.from('categories').insert(cat);
+                        await supabaseClient.from('categories').insert(cat);
                     }
                     
                     // Get category IDs
-                    const { data: insertedCategories } = await supabase.from('categories').select('id, name');
+                    const { data: insertedCategories } = await supabaseClient.from('categories').select('id, name');
                     const categoryMap = {};
                     insertedCategories?.forEach(cat => { categoryMap[cat.name] = cat.id; });
                     
                     // Insert payment items
                     const items = [
-                        // SSCE Internal
-                        { category_id: categoryMap['SSCE Internal'], name: 'Four Figure Table', amount: 500, display_order: 1 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Non-Validation', amount: 10000, display_order: 2 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Syllabus', amount: 2000, display_order: 3 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Photo Album', amount: 2700, display_order: 4 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Late Ca3 Upload', amount: 40000, display_order: 5 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Remarking Ssce (i)', amount: 20000, display_order: 6 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Unviable Centre Fee', amount: 70000, display_order: 7 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Late Registration Fee', amount: 5000, display_order: 8 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (public Schools)', amount: 200000, display_order: 9 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (public Schools)', amount: 150000, display_order: 10 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (private Schools)', amount: 200000, display_order: 11 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (private Schools)', amount: 150000, display_order: 12 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Fresh Accreditation (foreign Schools)', amount: 2000000, display_order: 13 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Ssce Re-accreditation (foreign Schools)', amount: 1500000, display_order: 14 },
-                        { category_id: categoryMap['SSCE Internal'], name: 'Chief Examiners Report Fee (per Copy)', amount: 2500, display_order: 15 },
-                        // SSCE External
-                        { category_id: categoryMap['SSCE External'], name: 'Four Figure Table', amount: 500, display_order: 1 },
-                        { category_id: categoryMap['SSCE External'], name: 'Walk-in', amount: 43000, display_order: 2 },
-                        { category_id: categoryMap['SSCE External'], name: 'Syllabus', amount: 2000, display_order: 3 },
-                        { category_id: categoryMap['SSCE External'], name: 'Result Slips', amount: 1600, display_order: 4 },
-                        { category_id: categoryMap['SSCE External'], name: 'Remarking Ssce Ext', amount: 20000, display_order: 5 },
-                        { category_id: categoryMap['SSCE External'], name: 'Collection Of Certificate', amount: 500, display_order: 6 },
-                        { category_id: categoryMap['SSCE External'], name: 'Non-Validation', amount: 10000, display_order: 7 },
-                        // BECE
-                        { category_id: categoryMap['BECE'], name: 'Remarking Bece', amount: 15000, display_order: 1 },
-                        { category_id: categoryMap['BECE'], name: 'Non-Validation', amount: 10000, display_order: 2 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (public Schools)', amount: 170000, display_order: 3 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (public Schools)', amount: 140000, display_order: 4 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (private Schools)', amount: 170000, display_order: 5 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (private Schools)', amount: 140000, display_order: 6 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Fresh Accreditation (foreign Schools)', amount: 1500000, display_order: 7 },
-                        { category_id: categoryMap['BECE'], name: 'Bece Re-accreditation (foreign Schools)', amount: 1000000, display_order: 8 },
-                        // NCEE
-                        { category_id: categoryMap['NCEE'], name: 'Non-Validation', amount: 4000, display_order: 1 },
-                        // Gifted
-                        { category_id: categoryMap['Gifted'], name: 'Non-Validation', amount: 4000, display_order: 1 },
-                        // Others (partial list)
-                        { category_id: categoryMap['Others'], name: 'Reprint Of Certificate', amount: 50000, display_order: 1 },
-                        { category_id: categoryMap['Others'], name: 'Change Of School Name', amount: 15000, display_order: 2 },
-                        { category_id: categoryMap['Others'], name: 'Staff Identity Card', amount: 1000, display_order: 3 },
-                        { category_id: categoryMap['Others'], name: 'Result Checker (token)', amount: 1000, display_order: 4 },
-                        { category_id: categoryMap['Others'], name: 'Examination Bag', amount: 15000, display_order: 5 }
+                        { category_id: categoryMap['SSCE Internal'], name: 'Four Figure Table', amount: 500 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Non-Validation', amount: 10000 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Syllabus', amount: 2000 },
+                        { category_id: categoryMap['SSCE Internal'], name: 'Photo Album', amount: 2700 },
+                        { category_id: categoryMap['SSCE External'], name: 'Four Figure Table', amount: 500 },
+                        { category_id: categoryMap['SSCE External'], name: 'Walk-in', amount: 43000 },
+                        { category_id: categoryMap['SSCE External'], name: 'Syllabus', amount: 2000 },
+                        { category_id: categoryMap['BECE'], name: 'Remarking Bece', amount: 15000 },
+                        { category_id: categoryMap['BECE'], name: 'Non-Validation', amount: 10000 },
+                        { category_id: categoryMap['NCEE'], name: 'Non-Validation', amount: 4000 },
+                        { category_id: categoryMap['Gifted'], name: 'Non-Validation', amount: 4000 },
+                        { category_id: categoryMap['Others'], name: 'Reprint Of Certificate', amount: 50000 },
+                        { category_id: categoryMap['Others'], name: 'Change Of School Name', amount: 15000 }
                     ];
                     
                     for (const item of items) {
-                        await supabase.from('payment_items').insert(item);
+                        if (item.category_id) {
+                            await supabaseClient.from('payment_items').insert(item);
+                        }
                     }
                     
                     // Insert default payment code
-                    await supabase.from('payment_codes').insert({
+                    await supabaseClient.from('payment_codes').insert({
                         code: '1234',
                         bank_name: 'First Bank of Nigeria',
                         account_name: 'NECO Payment Services',
@@ -920,36 +925,6 @@
         }
         
         // ============================================
-        // HELPER FUNCTIONS
-        // ============================================
-        function showAlert(message, type = 'success') {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
-            alertDiv.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
-            document.body.appendChild(alertDiv);
-            setTimeout(() => alertDiv.remove(), 4000);
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-        
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return str.replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-        
-        // ============================================
         // AUTHENTICATION
         // ============================================
         async function checkSession() {
@@ -959,15 +934,14 @@
             if (savedSession) {
                 try {
                     const session = JSON.parse(savedSession);
-                    // First try database, then fallback to default
                     let isValid = false;
                     
                     try {
-                        const { data } = await supabase
+                        const { data } = await supabaseClient
                             .from('admin_settings')
                             .select('username')
                             .eq('id', 1)
-                            .single();
+                            .maybeSingle();
                         if (data && session.username === data.username) {
                             isValid = true;
                         }
@@ -1008,25 +982,22 @@
             }
             
             try {
-                // Try database first
                 let isValid = false;
-                let whatsappNumber = DEFAULT_ADMIN.whatsapp_number;
                 
                 try {
-                    const { data, error } = await supabase
+                    const { data, error } = await supabaseClient
                         .from('admin_settings')
                         .select('username, password, whatsapp_number')
                         .eq('id', 1)
-                        .single();
+                        .maybeSingle();
                     
-                    if (!error && data) {
+                    if (data && !error) {
                         if (username === data.username && password === data.password) {
                             isValid = true;
-                            whatsappNumber = data.whatsapp_number;
                         }
                     }
                 } catch(dbError) {
-                    console.log('Database not ready, using default credentials');
+                    console.log('Database check error, using default');
                 }
                 
                 // Fallback to default credentials
@@ -1091,9 +1062,14 @@
                 settings: 'fa-cog'
             };
             
-            document.getElementById('currentPageTitle').innerHTML = `<i class="fas ${icons[page]}"></i> ${titles[page] || 'Dashboard'}`;
+            const titleElement = document.getElementById('currentPageTitle');
+            if (titleElement) {
+                titleElement.innerHTML = `<i class="fas ${icons[page]}"></i> ${titles[page] || 'Dashboard'}`;
+            }
             
             const contentDiv = document.getElementById('pageContent');
+            if (!contentDiv) return;
+            
             contentDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
             
             try {
@@ -1131,23 +1107,23 @@
         async function renderDashboard(container) {
             try {
                 let codesCount = 0, itemsCount = 0, transactionsCount = 0, totalAmount = 0;
+                let transactions = [];
                 
                 try {
-                    const { count: c } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
+                    const { count: c } = await supabaseClient.from('payment_codes').select('*', { count: 'exact', head: true });
                     codesCount = c || 0;
                 } catch(e) {}
                 
                 try {
-                    const { count: i } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
+                    const { count: i } = await supabaseClient.from('payment_items').select('*', { count: 'exact', head: true });
                     itemsCount = i || 0;
                 } catch(e) {}
                 
-                let transactions = [];
                 try {
-                    const { data: t, count: tc } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+                    const { data: t, count: tc } = await supabaseClient.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
                     transactions = t || [];
                     transactionsCount = tc || 0;
-                    totalAmount = transactions?.reduce((sum, t) => sum + (t.total_amount || 0), 0) || 0;
+                    totalAmount = transactions.reduce((sum, t) => sum + (t.total_amount || 0), 0);
                 } catch(e) {}
                 
                 container.innerHTML = `
@@ -1176,18 +1152,18 @@
             try {
                 let home = null;
                 try {
-                    const { data } = await supabase.from('home_settings').select('*').eq('id', 1).single();
+                    const { data } = await supabaseClient.from('home_settings').select('*').eq('id', 1).maybeSingle();
                     home = data;
                 } catch(e) {}
                 
                 let steps = [];
                 try {
-                    const { data } = await supabase.from('how_it_works').select('*').order('step_order');
+                    const { data } = await supabaseClient.from('how_it_works').select('*').order('step_order');
                     steps = data || [];
                 } catch(e) {}
                 
                 let stepsHtml = '';
-                steps.forEach((step, index) => {
+                steps.forEach((step) => {
                     stepsHtml += `
                         <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.75rem; margin-bottom:1rem;">
                             <div class="form-group"><label>Step ${step.step_order} Title</label><input type="text" id="stepTitle_${step.id}" value="${escapeHtml(step.title)}"></div>
@@ -1211,7 +1187,7 @@
                 document.getElementById('homeEditorForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     try {
-                        await supabase.from('home_settings').upsert({
+                        await supabaseClient.from('home_settings').upsert({
                             id: 1,
                             hero_title: document.getElementById('heroTitle').value,
                             hero_note: document.getElementById('heroNote').value,
@@ -1220,7 +1196,7 @@
                         });
                         
                         for (const step of steps) {
-                            await supabase.from('how_it_works').update({
+                            await supabaseClient.from('how_it_works').update({
                                 title: document.getElementById(`stepTitle_${step.id}`).value,
                                 description: document.getElementById(`stepDesc_${step.id}`).value
                             }).eq('id', step.id);
@@ -1237,19 +1213,19 @@
         }
         
         // ============================================
-        // PAYMENT PAGE EDITOR (Simplified for space)
+        // PAYMENT PAGE EDITOR
         // ============================================
         async function renderPaymentEditor(container) {
             try {
                 let categories = [];
                 try {
-                    const { data } = await supabase.from('categories').select('*').order('display_order');
+                    const { data } = await supabaseClient.from('categories').select('*').order('display_order');
                     categories = data || [];
                 } catch(e) {}
                 
                 let items = [];
                 try {
-                    const { data } = await supabase.from('payment_items').select('*').order('display_order');
+                    const { data } = await supabaseClient.from('payment_items').select('*').order('display_order');
                     items = data || [];
                 } catch(e) {}
                 
@@ -1286,8 +1262,8 @@
                 
                 window.deleteCategory = async function(catId) {
                     if (confirm('Remove this category and all its items?')) {
-                        await supabase.from('payment_items').delete().eq('category_id', catId);
-                        await supabase.from('categories').delete().eq('id', catId);
+                        await supabaseClient.from('payment_items').delete().eq('category_id', catId);
+                        await supabaseClient.from('categories').delete().eq('id', catId);
                         showAlert('Category removed!', 'success');
                         await renderPaymentEditor(container);
                     }
@@ -1295,7 +1271,7 @@
                 
                 window.deleteItem = async function(itemId) {
                     if (confirm('Remove this item?')) {
-                        await supabase.from('payment_items').delete().eq('id', itemId);
+                        await supabaseClient.from('payment_items').delete().eq('id', itemId);
                         showAlert('Item removed!', 'success');
                         await renderPaymentEditor(container);
                     }
@@ -1319,9 +1295,9 @@
                     e.preventDefault();
                     try {
                         for (const cat of categories) {
-                            const container = document.getElementById(`items_${cat.id}`);
-                            if (container) {
-                                const rows = container.querySelectorAll('.item-row');
+                            const containerDiv = document.getElementById(`items_${cat.id}`);
+                            if (containerDiv) {
+                                const rows = containerDiv.querySelectorAll('.item-row');
                                 for (let i = 0; i < rows.length; i++) {
                                     const row = rows[i];
                                     const itemId = parseInt(row.getAttribute('data-item-id'));
@@ -1329,7 +1305,7 @@
                                     const amountInput = row.querySelector('.item-amount');
                                     if (itemId && nameInput) {
                                         const amount = amountInput.value ? parseFloat(amountInput.value) : null;
-                                        await supabase.from('payment_items').update({
+                                        await supabaseClient.from('payment_items').update({
                                             name: nameInput.value,
                                             amount: amount,
                                             is_variable: amount === null
@@ -1350,7 +1326,7 @@
                     const newName = document.getElementById('newCategoryName').value;
                     const newColor = document.getElementById('newCategoryColor').value;
                     if (newName) {
-                        await supabase.from('categories').insert({ name: newName, color: newColor });
+                        await supabaseClient.from('categories').insert({ name: newName, color: newColor });
                         showAlert(`Category "${newName}" added!`, 'success');
                         closeModal('addCategoryModal');
                         await renderPaymentEditor(container);
@@ -1365,7 +1341,7 @@
                     const newAmount = document.getElementById('newItemAmount').value;
                     const amount = newAmount ? parseFloat(newAmount) : null;
                     if (newName) {
-                        await supabase.from('payment_items').insert({
+                        await supabaseClient.from('payment_items').insert({
                             category_id: catId,
                             name: newName,
                             amount: amount,
@@ -1389,7 +1365,7 @@
             try {
                 let codes = [];
                 try {
-                    const { data } = await supabase.from('payment_codes').select('*');
+                    const { data } = await supabaseClient.from('payment_codes').select('*');
                     codes = data || [];
                 } catch(e) {}
                 
@@ -1401,9 +1377,7 @@
                             <tbody>${codes.map(code => `
                                 <tr>
                                     <td><code><strong>${code.code}</strong></code></td>
-                                    <td>${escapeHtml(code.bank_name)}</td>
-                                    <td>${escapeHtml(code.account_name)}</td>
-                                    <td>${code.account_number}</td>
+                                    <td>${escapeHtml(code.bank_name)}</td><td>${escapeHtml(code.account_name)}</td><td>${code.account_number}</td>
                                     <td><span class="badge ${code.is_active ? 'badge-active' : 'badge-inactive'}">${code.is_active ? 'Active' : 'Inactive'}</span></td>
                                     <td>
                                         <button onclick="editCode('${code.code}')" class="btn-sm"><i class="fas fa-edit"></i></button>
@@ -1426,7 +1400,7 @@
                 };
                 
                 window.editCode = async function(code) {
-                    const { data } = await supabase.from('payment_codes').select('*').eq('code', code).single();
+                    const { data } = await supabaseClient.from('payment_codes').select('*').eq('code', code).maybeSingle();
                     if (data) {
                         document.getElementById('editCodeOriginal').value = code;
                         document.getElementById('editBankName').value = data.bank_name;
@@ -1438,14 +1412,14 @@
                 };
                 
                 window.toggleCodeStatus = async function(code, newStatus) {
-                    await supabase.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
+                    await supabaseClient.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
                     showAlert(`Code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
                     await renderCodesManager(container);
                 };
                 
                 window.deleteCode = async function(code) {
                     if (confirm(`Delete code "${code}"?`)) {
-                        await supabase.from('payment_codes').delete().eq('code', code);
+                        await supabaseClient.from('payment_codes').delete().eq('code', code);
                         showAlert(`Code "${code}" deleted!`, 'success');
                         await renderCodesManager(container);
                     }
@@ -1464,13 +1438,13 @@
                         return;
                     }
                     
-                    const { data: existing } = await supabase.from('payment_codes').select('code').eq('code', code);
-                    if (existing?.length > 0) {
+                    const { data: existing } = await supabaseClient.from('payment_codes').select('code').eq('code', code);
+                    if (existing && existing.length > 0) {
                         showAlert('Code already exists!', 'error');
                         return;
                     }
                     
-                    await supabase.from('payment_codes').insert({
+                    await supabaseClient.from('payment_codes').insert({
                         code: code,
                         bank_name: bankName,
                         account_name: accountName,
@@ -1486,7 +1460,7 @@
                 document.getElementById('editCodeForm').onsubmit = async function(e) {
                     e.preventDefault();
                     const originalCode = document.getElementById('editCodeOriginal').value;
-                    await supabase.from('payment_codes').update({
+                    await supabaseClient.from('payment_codes').update({
                         bank_name: document.getElementById('editBankName').value,
                         account_name: document.getElementById('editAccountName').value,
                         account_number: document.getElementById('editAccountNumber').value,
@@ -1509,7 +1483,7 @@
             try {
                 let transactions = [];
                 try {
-                    const { data } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+                    const { data } = await supabaseClient.from('transactions').select('*').order('created_at', { ascending: false });
                     transactions = data || [];
                 } catch(e) {}
                 
@@ -1533,7 +1507,7 @@
                 `;
                 
                 window.confirmTransaction = async function(id) {
-                    await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id);
+                    await supabaseClient.from('transactions').update({ status: 'confirmed' }).eq('id', id);
                     showAlert('Transaction confirmed!', 'success');
                     await renderTransactions(container);
                 };
@@ -1550,7 +1524,7 @@
             try {
                 let admin = null;
                 try {
-                    const { data } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
+                    const { data } = await supabaseClient.from('admin_settings').select('*').eq('id', 1).maybeSingle();
                     admin = data;
                 } catch(e) {}
                 
@@ -1566,7 +1540,7 @@
                 document.getElementById('settingsForm').addEventListener('submit', async function(e) {
                     e.preventDefault();
                     try {
-                        await supabase.from('admin_settings').upsert({
+                        await supabaseClient.from('admin_settings').upsert({
                             id: 1,
                             username: document.getElementById('adminUsername').value,
                             password: document.getElementById('adminPassword').value,
