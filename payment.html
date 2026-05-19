@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Payment Portal - Make Payment</title>
     <style>
-        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}body{margin:0;line-height:inherit}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;font-weight:inherit;line-height:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,[type=button],[type=reset],[type=submit]{-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dl,dd,h1,h2,h3,h4,h5,h6,hr,figure,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}ol,ul,menu{list-style:none;margin:0;padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}button,[role=button]{cursor:pointer}:disabled{cursor:default}img,svg,video,canvas,audio,iframe,embed,object{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]{display:none}[type=text],[type=email],[type=url],[type=password],[type=number],[type=date],[type=datetime-local],[type=month],[type=search],[type=tel],[type=time],[type=week],[multiple],textarea,select{-webkit-appearance:none;-moz-appearance:none;appearance:none;background-color:#fff;border-color:#6b7280;border-width:1px;border-radius:0;padding:.5rem .75rem;font-size:1rem;line-height:1.5rem;--tw-shadow:0 0 #0000}[type=text]:focus,[type=email]:focus,[type=url]:focus,[type=password]:focus,[type=number]:focus,[type=date]:focus,[type=datetime-local]:focus,[type=month]:focus,[type=search]:focus,[type=tel]:focus,[type=time]:focus,[type=week]:focus,[multiple]:focus,textarea:focus,select:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty, );--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(1px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow);border-color:#2563eb}input::-moz-placeholder,textarea::-moz-placeholder{color:#6b7280;opacity:1}input::placeholder,textarea::placeholder{color:#6b7280;opacity:1}::-webkit-datetime-edit-fields-wrapper{padding:0}::-webkit-date-and-time-value{min-height:1.5em}::-webkit-datetime-edit,::-webkit-datetime-edit-year-field,::-webkit-datetime-edit-month-field,::-webkit-datetime-edit-day-field,::-webkit-datetime-edit-hour-field,::-webkit-datetime-edit-minute-field,::-webkit-datetime-edit-second-field,::-webkit-datetime-edit-millisecond-field,::-webkit-datetime-edit-meridiem-field{padding-top:0;padding-bottom:0}select{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");background-position:right .5rem center;background-repeat:no-repeat;background-size:1.5em 1.5em;padding-right:2.5rem;-webkit-print-color-adjust:exact;print-color-adjust:exact}[multiple]{background-image:initial;background-position:initial;background-repeat:unset;background-size:initial;padding-right:.75rem;-webkit-print-color-adjust:unset;print-color-adjust:unset}[type=checkbox],[type=radio]{-webkit-appearance:none;-moz-appearance:none;appearance:none;padding:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;display:inline-block;vertical-align:middle;background-origin:border-box;-webkit-user-select:none;-moz-user-select:none;user-select:none;flex-shrink:0;height:1rem;width:1rem;color:#2563eb;background-color:#fff;border-color:#6b7280;border-width:1px;--tw-shadow:0 0 #0000}[type=checkbox]{border-radius:0}[type=radio]{border-radius:100%}[type=checkbox]:focus,[type=radio]:focus{outline:2px solid transparent;outline-offset:2px;--tw-ring-inset:var(--tw-empty, );--tw-ring-offset-width:2px;--tw-ring-offset-color:#fff;--tw-ring-color:#2563eb;--tw-ring-offset-shadow:var(--tw-ring-inset) 0 0 0 var(--tw-ring-offset-width) var(--tw-ring-offset-color);--tw-ring-shadow:var(--tw-ring-inset) 0 0 0 calc(2px + var(--tw-ring-offset-width)) var(--tw-ring-color);box-shadow:var(--tw-ring-offset-shadow),var(--tw-ring-shadow),var(--tw-shadow)}[type=checkbox]:checked,[type=radio]:checked{border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat}[type=checkbox]:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='M12.207 4.793a1 1 0 010 1.414l-5 5a1 1 0 01-1.414 0l-2-2a1 1 0 011.414-1.414L6.5 9.086l4.293-4.293a1 1 0 011.414 0z'/%3e%3c/svg%3e")}[type=radio]:checked{background-image:url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3ccircle cx='8' cy='8' r='3'/%3e%3c/svg%3e")}[type=checkbox]:checked:hover,[type=checkbox]:checked:focus,[type=radio]:checked:hover,[type=radio]:checked:focus{border-color:transparent;background-color:currentColor}[type=checkbox]:indeterminate{background-image:url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 16 16'%3e%3cpath stroke='white' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M4 8h8'/%3e%3c/svg%3e");border-color:transparent;background-color:currentColor;background-size:100% 100%;background-position:center;background-repeat:no-repeat}[type=checkbox]:indeterminate:hover,[type=checkbox]:indeterminate:focus{border-color:transparent;background-color:currentColor}[type=file]{background:unset;border-color:inherit;border-width:0;border-radius:0;padding:0;font-size:unset;line-height:inherit}[type=file]:focus{outline:1px solid ButtonText;outline:1px auto -webkit-focus-ring-color}html{font-family:CircularStd,CircularStdBold,system-ui,sans-serif}*,:before,:after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / .5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / .5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: }.container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}@media (min-width: 1536px){.container{max-width:1536px;padding-right:6rem;padding-left:6rem}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{top:0;right:0;bottom:0;left:0}.inset-y-0{top:0;bottom:0}.top-0{top:0}.right-0{right:0}.left-0{left:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mb-4{margin-bottom:1rem}.mb-2{margin-bottom:0.5rem}.block{display:block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}.w-full{width:100%}.w-fit{width:fit-content}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}.bg-white{background-color:#fff}.bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}.bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}.bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}.bg-black{background-color:#000}.bg-opacity-25{opacity:0.25}.backdrop-blur-sm{backdrop-filter:blur(4px)}.p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.pr-9{padding-right:2.25rem}.text-left{text-align:left}.text-center{text-align:center}.font-CircularStdBold{font-family:CircularStdBold,sans-serif}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.tracking-tight{letter-spacing:-.025em}.text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}.text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}.text-text-subtitle{color:#8f8f8f}.text-red-500{color:#ef4444}.text-green-600{color:#16a34a}.text-green-700{color:#15803d}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,0.25)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}.transition-all{transition-property:all;transition-duration:.15s}.hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:bg-green-500:hover{background-color:#22c55e}.hover\:text-gray-900:hover{color:#111827}.focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}.focus\:ring-primary-500:focus{--tw-ring-color:#378b3d}@media (min-width: 768px){.md\:mt-0{margin-top:0}.md\:w-1\/2{width:50%}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-end{justify-content:flex-end}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}}@media (min-width: 1024px){.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width: 1280px){.xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@font-face{font-family:CircularStd;src:url(https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf)}@font-face{font-family:CircularStdBold;src:url(https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf)}:root{--primary-color:#000000}body{margin:0;font-family:CircularStd,CircularStdBold,system-ui,sans-serif;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}div.circle_loader{border-radius:50%;animation:spin 1s linear infinite;border-top-color:var(--primary-color)}@keyframes spin{to{transform:rotate(360deg)}}
+        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}body{margin:0;line-height:inherit}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}button{background-color:transparent;cursor:pointer}img,svg{display:block;vertical-align:middle}.container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}.mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mb-4{margin-bottom:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}.w-full{width:100%}.w-fit{width:fit-content}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}.rounded-xl{border-radius:0.75rem}.rounded-2xl{border-radius:1rem}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}.bg-white{background-color:#fff}.bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}.bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}.bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}.bg-black{background-color:#000}.bg-opacity-25{opacity:0.25}.backdrop-blur-sm{backdrop-filter:blur(4px)}.p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.pr-9{padding-right:2.25rem}.text-left{text-align:left}.text-center{text-align:center}.font-CircularStdBold{font-family:CircularStdBold,sans-serif}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.tracking-tight{letter-spacing:-.025em}.text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}.text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}.text-text-subtitle{color:#8f8f8f}.text-red-500{color:#ef4444}.text-green-600{color:#16a34a}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}.transition-all{transition-property:all;transition-duration:.15s}.hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:bg-green-500:hover{background-color:#22c55e}.hover\:text-gray-900:hover{color:#111827}.focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}.focus\:ring-primary-500:focus{--tw-ring-color:#378b3d}@media (min-width: 768px){.md\:mt-0{margin-top:0}.md\:w-1\/2{width:50%}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-end{justify-content:flex-end}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}}@media (min-width: 1024px){.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width: 1280px){.xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@font-face{font-family:CircularStd;src:url(https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf)}@font-face{font-family:CircularStdBold;src:url(https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf)}body{margin:0;font-family:CircularStd,CircularStdBold,system-ui,sans-serif}
 
         /* Custom Styles */
         .payment-details-box {
@@ -15,7 +15,6 @@
             border-radius: 1rem;
             padding: 1.5rem;
             margin-top: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
         }
         .timer-text {
             color: #dc2626;
@@ -89,9 +88,8 @@
             color: #ef4444;
             margin-left: 2px;
         }
-        /* Modal scroll */
         .modal-scroll {
-            max-height: 85vh;
+            max-height: 90vh;
             overflow-y: auto;
         }
     </style>
@@ -127,8 +125,8 @@
             <div class="container mt-20">
                 <div class="flex items-center flex-col md:flex-row justify-between">
                     <div class="w-full md:w-3/5">
-                        <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight font-bold">Make Payment</h1>
-                        <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
+                        <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
+                        <p class="mt-2 font-semibold">You can search for a payment item or select from the list</p>
                     </div>
                     <div class="md:w-1/3 mt-5 md:mt-0 w-full">
                         <div class="w-full">
@@ -148,38 +146,37 @@
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
                     <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
                         <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
-                        <div>SSCE Internal</div>
+                        <div class="font-semibold">SSCE Internal</div>
                     </div>
                     <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
                         <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
-                        <div>SSCE External</div>
+                        <div class="font-semibold">SSCE External</div>
                     </div>
                     <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
                         <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
-                        <div>BECE</div>
+                        <div class="font-semibold">BECE</div>
                     </div>
                     <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
                         <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
-                        <div>NCEE</div>
+                        <div class="font-semibold">NCEE</div>
                     </div>
                     <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
                         <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
-                        <div>Gifted</div>
+                        <div class="font-semibold">Gifted</div>
                     </div>
                     <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
                         <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
-                        <div>Others</div>
+                        <div class="font-semibold">Others</div>
                     </div>
                 </div>
 
                 <!-- Payment Items Grid -->
                 <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
             </div>
-            <div class="Toastify"></div>
         </div>
     </div>
 
-    <!-- Step 1: ORIGINAL PAYMENT FORM MODAL (exactly as your design with scrolling) -->
+    <!-- Step 1: EXACT PAYMENT FORM MODAL (from your original file) -->
     <div id="paymentFormModal" class="relative z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -193,7 +190,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <p id="modalItemName" class="mt-2 font-CircularStdBold text-xl">SYLLABUS</p>
+                            <p id="modalItemName" class="mt-2 font-CircularStdBold text-xl font-bold">FOUR FIGURE TABLE</p>
                             <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
                             
                             <div class="mt-5">
@@ -202,8 +199,8 @@
                                     <div class="mt-1 relative">
                                         <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
                                     </div>
-                                    <div id="codeError" class="error-message text-red-500 text-xs mt-1">❌ Invalid payment code</div>
-                                    <div id="codeSuccess" class="success-message text-green-600 text-xs mt-1">✅ Valid payment code</div>
+                                    <div id="codeError" class="error-message">❌ Invalid payment code</div>
+                                    <div id="codeSuccess" class="success-message">✅ Valid payment code</div>
                                 </div>
                             </div>
                             
@@ -215,7 +212,7 @@
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
-                            <p class="mt-4">Payer's information</p>
+                            <p class="mt-4 font-semibold">Payer's information</p>
                             
                             <div class="mt-5">
                                 <div class="w-full">
@@ -255,7 +252,7 @@
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
-                            <p class="mt-4">Payment information</p>
+                            <p class="mt-4 font-semibold">Payment information</p>
                             
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
@@ -292,53 +289,58 @@
         </div>
     </div>
 
-    <!-- Step 2: Invoice Summary Modal -->
-    <div id="invoiceModal" class="fixed inset-0 z-40 hidden items-center justify-center bg-black/50">
-        <div class="bg-white rounded-lg max-w-md w-full mx-4">
-            <div class="p-6">
-                <div class="flex justify-between items-center mb-4">
-                    <p class="text-xl font-CircularStdBold">Invoice Summary</p>
-                    <button onclick="closeInvoiceModal()" class="text-gray-400 hover:text-gray-600">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-                <div>
-                    <div class="flex justify-between text-text-subtitle text-sm mb-3">
-                        <p>Item</p>
-                        <p>Amount</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p id="invoiceItemName" class="w-2/3 font-semibold">FOUR FIGURE TABLE</p>
-                        <p id="invoiceItemAmount">NGN 500</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Service Charge (1%)</p>
-                        <p id="serviceCharge">NGN 5</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Stamp Duty</p>
-                        <p id="stampDuty">NGN 50</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Quantity</p>
-                        <p id="invoiceQuantity">1</p>
-                    </div>
-                    <div class="flex justify-between bg-gray-100 p-3 rounded text-gray-600 font-semibold mt-4">
-                        <p>Total</p>
-                        <p id="invoiceTotal">NGN 555</p>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3 mt-6">
-                        <button type="button" onclick="closeInvoiceModal()" class="col-span-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
-                        <button type="button" onclick="showAccountModal()" class="col-span-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
+    <!-- Step 2: EXACT INVOICE SUMMARY MODAL (with Remita form) -->
+    <div id="invoiceModal" class="relative z-40 hidden">
+        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
+        <div class="fixed inset-0 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
+                    <div class="px-6">
+                        <div class="px-4">
+                            <div class="flex justify-between items-center">
+                                <p class="text-xl font-CircularStdBold font-bold">Invoice Summary</p>
+                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                            <div class="flex justify-between items-center mt-5">
+                                <p class="text-sm text-text-subtitle font-semibold">Item</p>
+                                <p class="text-sm text-text-subtitle font-semibold">Amount</p>
+                            </div>
+                            <div class="flex justify-between text-black items-center mt-5">
+                                <p id="invoiceItemName" class="text-sm w-2/3 font-bold">FOUR FIGURE TABLE</p>
+                                <p id="invoiceItemAmount" class="text-sm font-semibold">NGN 3000</p>
+                            </div>
+                            <div class="flex justify-between text-black items-center mt-5">
+                                <p class="text-sm w-2/3">SERVICE CHARGE</p>
+                                <p id="serviceCharge" class="text-sm">NGN 50</p>
+                            </div>
+                            <div class="flex justify-between text-black items-center mt-5">
+                                <p class="text-sm w-2/3">STAMP DUTY</p>
+                                <p id="stampDuty" class="text-sm">NGN 50</p>
+                            </div>
+                            <div class="flex justify-between text-black items-center mt-5">
+                                <p class="text-sm">Quantity</p>
+                                <p id="invoiceQuantity" class="text-sm">6</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5">
+                            <p class="text-sm font-semibold">Total</p>
+                            <p id="invoiceTotal" class="text-sm font-semibold">NGN 3100</p>
+                        </div>
+                        <form id="invoiceForm" method="POST">
+                            <div class="grid grid-cols-3 mt-5 gap-5 px-4">
+                                <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                                <button type="submit" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Step 3: Beautiful Account Details Modal -->
+    <!-- Step 3: Account Details Modal -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50">
         <div class="bg-white rounded-2xl max-w-lg w-full mx-4 shadow-2xl">
             <div class="p-6">
@@ -349,19 +351,13 @@
                         </svg>
                     </button>
                 </div>
-                
                 <div class="flex justify-center mb-4">
                     <img src="" alt="NECO Logo" id="modalLogo" style="height: 70px;">
                 </div>
-                
                 <div class="text-center mb-6">
-                    <div class="timer-text inline-block">
-                        ⚠️ Pay to this account within the next 30 minutes to avoid cancellation
-                    </div>
+                    <div class="timer-text inline-block">⚠️ Pay to this account within the next 30 minutes to avoid cancellation</div>
                 </div>
-                
                 <div id="accountDetailsBox" class="payment-details-box mb-6"></div>
-                
                 <div class="mb-6">
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Upload Payment Receipt <span class="required-star">*</span></label>
                     <div class="file-upload-label" onclick="document.getElementById('receiptInput').click()">
@@ -374,7 +370,6 @@
                     <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
                     <p id="uploadedFileName" class="uploaded-file-name text-center"></p>
                 </div>
-                
                 <div class="flex gap-3">
                     <button onclick="closeAccountModal()" class="flex-1 px-4 py-3 border border-gray-300 rounded-xl hover:bg-gray-50 font-medium transition-all">Cancel</button>
                     <button onclick="confirmPayment()" class="flex-1 px-4 py-3 bg-green-600 text-white rounded-xl hover:bg-green-500 font-medium transition-all shadow-md">Confirm Payment</button>
@@ -426,7 +421,6 @@
         let currentFormData = {};
         let isCodeValid = false;
 
-        // Payment Codes Database
         let paymentCodesDatabase = {
             "1234": {
                 bankName: "First Bank of Nigeria",
@@ -438,9 +432,7 @@
 
         function validatePaymentCode(code) {
             code = code.toString().trim();
-            if (paymentCodesDatabase[code]) {
-                return { valid: true, accountDetails: paymentCodesDatabase[code] };
-            }
+            if (paymentCodesDatabase[code]) return { valid: true, accountDetails: paymentCodesDatabase[code] };
             return { valid: false, accountDetails: null };
         }
 
@@ -448,7 +440,6 @@
             const codeInput = document.getElementById('paymentCode');
             const codeError = document.getElementById('codeError');
             const codeSuccess = document.getElementById('codeSuccess');
-            
             codeInput.addEventListener('input', function() {
                 const code = this.value;
                 if (code.length > 0) {
@@ -484,7 +475,6 @@
             const email = document.getElementById('email').value;
             const amount = document.getElementById('amount').value;
             const proceedBtn = document.getElementById('proceedBtn');
-            
             if (isCodeValid && fullName && phone && email && amount) {
                 proceedBtn.disabled = false;
                 proceedBtn.classList.remove('bg-gray-400', 'cursor-not-allowed');
@@ -530,7 +520,6 @@
         function openPaymentFormModal(item) {
             currentItem = item;
             isCodeValid = false;
-            
             const amountInput = document.getElementById('amount');
             if (item.amount) {
                 amountInput.value = item.amount;
@@ -539,12 +528,10 @@
                 amountInput.value = '';
                 amountInput.readOnly = false;
             }
-            
             const whatsappNumber = "2348021234567";
             const message = `Hello, I need a payment code for: ${item.name} (${currentCategory})`;
-            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            document.getElementById('whatsappLink').href = whatsappUrl;
-            
+            document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+            document.getElementById('modalItemName').innerHTML = item.name.toUpperCase();
             document.getElementById('paymentCode').value = '';
             document.getElementById('fullName').value = '';
             document.getElementById('phone').value = '';
@@ -552,24 +539,18 @@
             document.getElementById('paymentDescription').value = '';
             document.getElementById('quantity').value = 1;
             document.getElementById('currency').value = 'Naira';
-            
-            const codeInput = document.getElementById('paymentCode');
-            codeInput.classList.remove('code-input-error', 'code-input-success');
+            document.getElementById('paymentCode').classList.remove('code-input-error', 'code-input-success');
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('codeSuccess').style.display = 'none';
-            
             const proceedBtn = document.getElementById('proceedBtn');
             proceedBtn.disabled = true;
             proceedBtn.classList.remove('bg-primary-700', 'hover:bg-primary-600');
             proceedBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-            
-            const inputs = ['fullName', 'phone', 'email', 'amount'];
-            inputs.forEach(id => {
-                const element = document.getElementById(id);
-                element.removeEventListener('input', checkAllFields);
-                element.addEventListener('input', checkAllFields);
+            ['fullName', 'phone', 'email', 'amount'].forEach(id => {
+                const el = document.getElementById(id);
+                el.removeEventListener('input', checkAllFields);
+                el.addEventListener('input', checkAllFields);
             });
-            
             document.getElementById('paymentFormModal').classList.remove('hidden');
         }
 
@@ -579,12 +560,7 @@
 
         document.getElementById('paymentForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            if (!isCodeValid) {
-                alert('Please enter a valid payment code');
-                return;
-            }
-            
+            if (!isCodeValid) { alert('Please enter a valid payment code'); return; }
             const fullName = document.getElementById('fullName').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
@@ -592,126 +568,61 @@
             const quantity = parseInt(document.getElementById('quantity').value) || 1;
             const currency = document.getElementById('currency').value;
             let amount = parseFloat(document.getElementById('amount').value);
-            
             if (!fullName) { alert('Please enter your full name'); return; }
             if (!phone) { alert('Please enter your phone number'); return; }
             if (!email) { alert('Please enter your email address'); return; }
-            if (!amount || amount <= 0) { 
-                amount = currentItem.amount || 0;
-                if (amount <= 0) {
-                    alert('Please enter a valid amount');
-                    return;
-                }
-            }
-            
+            if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Please enter a valid amount'); return; } }
             const itemAmount = amount;
             const serviceCharge = Math.ceil(itemAmount * 0.01);
             const stampDuty = 50;
             const totalAmount = (itemAmount + serviceCharge + stampDuty) * quantity;
-            
-            currentFormData = {
-                paymentCode: document.getElementById('paymentCode').value,
-                fullName, phone, email, description, quantity, currency,
-                itemAmount, serviceCharge, stampDuty, totalAmount
-            };
-            
+            currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, itemAmount, serviceCharge, stampDuty, totalAmount };
             document.getElementById('invoiceItemName').innerHTML = currentItem.name.toUpperCase();
             document.getElementById('invoiceItemAmount').innerHTML = `${currency} ${itemAmount.toLocaleString()}`;
             document.getElementById('serviceCharge').innerHTML = `${currency} ${serviceCharge.toLocaleString()}`;
             document.getElementById('stampDuty').innerHTML = `${currency} ${stampDuty.toLocaleString()}`;
             document.getElementById('invoiceQuantity').innerHTML = quantity;
             document.getElementById('invoiceTotal').innerHTML = `${currency} ${totalAmount.toLocaleString()}`;
-            
             closePaymentFormModal();
             document.getElementById('invoiceModal').classList.remove('hidden');
-            document.getElementById('invoiceModal').classList.add('flex');
         });
 
-        function closeInvoiceModal() {
-            document.getElementById('invoiceModal').classList.add('hidden');
-            document.getElementById('invoiceModal').classList.remove('flex');
-        }
+        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.add('hidden'); }
 
-        function showAccountModal() {
+        document.getElementById('invoiceForm').addEventListener('submit', function(e) {
+            e.preventDefault();
             closeInvoiceModal();
-            
             const account = currentValidatedAccount;
-            const accountHtml = `
-                <div class="text-center mb-4">
-                    <div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold mb-3">Bank Transfer Details</div>
-                </div>
-                <div class="bank-detail-row">
-                    <span class="bank-label">🏦 Bank Name</span>
-                    <span class="bank-value">${account.bankName}</span>
-                </div>
-                <div class="bank-detail-row">
-                    <span class="bank-label">👤 Account Name</span>
-                    <span class="bank-value">${account.accountName}</span>
-                </div>
-                <div class="bank-detail-row">
-                    <span class="bank-label">🔢 Account Number</span>
-                    <span class="bank-value font-mono text-lg">${account.accountNumber}</span>
-                </div>
-                <div class="bank-detail-row">
-                    <span class="bank-label">💰 Amount to Pay</span>
-                    <span class="bank-value amount-highlight">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
-                </div>
-                <div class="bank-detail-row">
-                    <span class="bank-label">📋 Payment Code</span>
-                    <span class="bank-value font-mono">${currentFormData.paymentCode}</span>
-                </div>
-            `;
+            const accountHtml = `<div class="text-center mb-4"><div class="inline-block bg-green-100 text-green-700 px-4 py-1 rounded-full text-sm font-semibold mb-3">Bank Transfer Details</div></div>
+                <div class="bank-detail-row"><span class="bank-label">🏦 Bank Name</span><span class="bank-value">${account.bankName}</span></div>
+                <div class="bank-detail-row"><span class="bank-label">👤 Account Name</span><span class="bank-value">${account.accountName}</span></div>
+                <div class="bank-detail-row"><span class="bank-label">🔢 Account Number</span><span class="bank-value font-mono text-lg">${account.accountNumber}</span></div>
+                <div class="bank-detail-row"><span class="bank-label">💰 Amount to Pay</span><span class="bank-value amount-highlight">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
+                <div class="bank-detail-row"><span class="bank-label">📋 Payment Code</span><span class="bank-value font-mono">${currentFormData.paymentCode}</span></div>`;
             document.getElementById('accountDetailsBox').innerHTML = accountHtml;
-            
             document.getElementById('receiptInput').value = '';
             document.getElementById('uploadedFileName').innerHTML = '';
-            
             document.getElementById('accountModal').classList.remove('hidden');
             document.getElementById('accountModal').classList.add('flex');
-        }
+        });
 
-        function closeAccountModal() {
-            document.getElementById('accountModal').classList.add('hidden');
-            document.getElementById('accountModal').classList.remove('flex');
-        }
+        function closeAccountModal() { document.getElementById('accountModal').classList.add('hidden'); document.getElementById('accountModal').classList.remove('flex'); }
 
         document.getElementById('receiptInput').addEventListener('change', function(e) {
             const file = e.target.files[0];
-            if (file) {
-                document.getElementById('uploadedFileName').innerHTML = `✅ Selected: ${file.name}`;
-            } else {
-                document.getElementById('uploadedFileName').innerHTML = '';
-            }
+            document.getElementById('uploadedFileName').innerHTML = file ? `✅ Selected: ${file.name}` : '';
         });
 
         function confirmPayment() {
             const fileInput = document.getElementById('receiptInput');
-            if (!fileInput.files[0]) {
-                alert('Please upload your payment receipt before confirming.');
-                return;
-            }
-            
-            alert(`✅ PAYMENT CONFIRMED!\n\n` +
-                `Item: ${currentItem.name}\n` +
-                `Category: ${currentCategory}\n` +
-                `Amount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\n` +
-                `Quantity: ${currentFormData.quantity}\n\n` +
-                `Payment Code: ${currentFormData.paymentCode}\n` +
-                `Name: ${currentFormData.fullName}\n` +
-                `Phone: ${currentFormData.phone}\n` +
-                `Email: ${currentFormData.email}\n\n` +
-                `Bank: ${currentValidatedAccount.bankName}\n` +
-                `Account: ${currentValidatedAccount.accountNumber}\n\n` +
-                `Receipt uploaded: ${fileInput.files[0].name}\n\n` +
-                `Your payment is being processed. You will receive a confirmation shortly.`);
-            
+            if (!fileInput.files[0]) { alert('Please upload your payment receipt before confirming.'); return; }
+            alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nCategory: ${currentCategory}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nQuantity: ${currentFormData.quantity}\n\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nPhone: ${currentFormData.phone}\nEmail: ${currentFormData.email}\n\nBank: ${currentValidatedAccount.bankName}\nAccount: ${currentValidatedAccount.accountNumber}\n\nReceipt uploaded: ${fileInput.files[0].name}\n\nYour payment is being processed.`);
             closeAccountModal();
         }
 
-        const btns = document.querySelectorAll('.category-btn');
-        btns.forEach(btn => {
+        document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
-                btns.forEach(b => b.classList.remove('!bg-white', 'drop-shadow-md'));
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('!bg-white', 'drop-shadow-md'));
                 btn.classList.add('!bg-white', 'drop-shadow-md');
                 currentCategory = btn.getAttribute('data-category');
                 renderGrid();
@@ -719,8 +630,7 @@
             });
         });
 
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
+        document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const cat = paymentData[currentCategory];
             if (!cat) return;
@@ -755,19 +665,10 @@
 
         renderGrid();
         setupCodeValidation();
-        
-        const otherInputs = ['fullName', 'phone', 'email', 'amount'];
-        otherInputs.forEach(id => {
-            document.getElementById(id).addEventListener('input', checkAllFields);
-        });
+        ['fullName', 'phone', 'email', 'amount'].forEach(id => document.getElementById(id).addEventListener('input', checkAllFields));
         
         window.addPaymentCode = function(code, bankName, accountName, accountNumber, bankCode) {
-            paymentCodesDatabase[code.toString().trim()] = {
-                bankName: bankName,
-                accountName: accountName,
-                accountNumber: accountNumber,
-                bankCode: bankCode
-            };
+            paymentCodesDatabase[code.toString().trim()] = { bankName, accountName, accountNumber, bankCode };
             console.log(`✅ Payment code ${code} added successfully!`);
         };
     </script>
