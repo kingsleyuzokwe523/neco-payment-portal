@@ -72,6 +72,22 @@
             overflow-y: auto;
         }
         
+        /* Button row alignment - proceed button pushed to the right */
+        .button-row {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.25rem;
+            margin-top: 2rem;
+        }
+        .button-row .cancel-btn {
+            width: auto;
+            min-width: 120px;
+        }
+        .button-row .proceed-btn {
+            width: auto;
+            min-width: 160px;
+        }
+        
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -85,12 +101,6 @@
         @font-face{font-family:'CircularStd';src:url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf')}
         @font-face{font-family:'CircularStdBold';src:url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf')}
         body{font-family:'CircularStd',system-ui,sans-serif}
-        
-        /* custom modal backdrop fix */
-        .modal-backdrop {
-            background-color: rgba(0,0,0,0.5);
-            backdrop-filter: blur(4px);
-        }
     </style>
 </head>
 <body>
@@ -175,12 +185,11 @@
         </div>
     </div>
 
-    <!-- PAYMENT MODAL (FIXED: SCROLLING & PROPER BACKDROP) -->
+    <!-- PAYMENT MODAL (FIXED: SCROLLING & PROPER BACKDROP, PROCEED BUTTON RIGHT-ALIGNED) -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <!-- Modal panel with scrollable content -->
                 <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl modal-scroll-content">
                     <form id="paymentFormModal">
                         <div class="px-3 md:px-10 pt-6">
@@ -278,10 +287,10 @@
                                 </div>
                             </div>
                             
-                            <!-- BUTTONS: white outline (Cancel) + green solid (Proceed) -->
-                            <div class="grid grid-cols-3 mt-8 gap-5">
-                                <button type="button" onclick="closePaymentModal()" class="w-full font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="col-span-2 w-full font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md disabled:opacity-50 disabled:cursor-not-allowed">Proceed</button>
+                            <!-- BUTTONS: Cancel on left, Proceed on the RIGHT (flex row with justify-end) -->
+                            <div class="button-row">
+                                <button type="button" onclick="closePaymentModal()" class="cancel-btn font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-5 py-3 text-base rounded-md">Cancel</button>
+                                <button type="submit" id="proceedBtn" disabled class="proceed-btn font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-6 py-3 text-base rounded-md disabled:opacity-50 disabled:cursor-not-allowed">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -310,9 +319,9 @@
                     <div class="flex justify-between text-black text-sm"><span>Quantity</span><span id="invoiceQuantity">1</span></div>
                     <div class="flex justify-between bg-gray-100 p-3 rounded font-semibold mt-2"><span>Total</span><span id="invoiceTotal">NGN 555</span></div>
                 </div>
-                <div class="grid grid-cols-3 gap-3 mt-6">
-                    <button onclick="closeInvoiceModal()" class="col-span-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
-                    <button onclick="showAccountModal()" class="col-span-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button onclick="closeInvoiceModal()" class="px-5 py-2 border rounded-md hover:bg-gray-50 text-primary-700 border-primary-700">Cancel</button>
+                    <button onclick="showAccountModal()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
                 </div>
             </div>
         </div>
@@ -340,9 +349,9 @@
                     <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
                     <p id="uploadedFileName" class="text-xs text-green-600 mt-1"></p>
                 </div>
-                <div class="flex gap-3">
-                    <button onclick="closeAccountModal()" class="flex-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
-                    <button onclick="confirmPayment()" class="flex-1 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Confirm Payment</button>
+                <div class="flex justify-end gap-3">
+                    <button onclick="closeAccountModal()" class="px-5 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button onclick="confirmPayment()" class="px-6 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Confirm Payment</button>
                 </div>
             </div>
         </div>
