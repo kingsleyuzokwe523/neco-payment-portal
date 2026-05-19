@@ -66,6 +66,11 @@
         .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
         .mx-auto{margin-left:auto;margin-right:auto}
+        /* FIX: Remove default margin from p tags inside card amount section */
+        .card-amount p {
+            margin: 0;
+            line-height: 1.3;
+        }
         
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -393,9 +398,9 @@
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
                                         <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
-                                        <div>
-                                            <p class="text-xs">Fixed Amount</p>
-                                            <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
+                                        <div class="card-amount">
+                                            <p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p>
+                                            <p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -490,7 +495,7 @@
             if(filtered.length === 0) { document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; return; }
             document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div><p class="text-xs">Fixed Amount</p><p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p></div></div></div></div></div>`;
+                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div class="card-amount"><p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p><p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p></div></div></div></div></div>`;
             }).join('');
         });
         
