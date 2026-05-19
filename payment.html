@@ -2,12 +2,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://payments.neco.gov.ng/logo.png">
     <style>
-        /* ===== EXACT CSS FROM YOUR ORIGINAL FILE ===== */
-        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,"Apple Color Emoji","Segoe UI Emoji",Segoe UI Symbol,"Noto Color Emoji"}body{margin:0;line-height:inherit}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}button{background-color:transparent;cursor:pointer}img,svg{display:block;vertical-align:middle}.container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}@media (min-width: 640px){.container{max-width:640px}}@media (min-width: 768px){.container{max-width:768px}}@media (min-width: 1024px){.container{max-width:1024px}}@media (min-width: 1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}.inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.z-10{z-index:10}.z-30{z-index:30}.mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mb-4{margin-bottom:1rem}.block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}.w-full{width:100%}.w-fit{width:fit-content}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}.max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.cursor-pointer{cursor:pointer}.grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}.gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}.rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}.bg-white{background-color:#fff}.bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}.bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}.bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}.bg-black{background-color:#000}.bg-opacity-25{opacity:0.25}.backdrop-blur-sm{backdrop-filter:blur(4px)}.p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-2{padding:.5rem}.p-4{padding:1rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}.py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}.pr-9{padding-right:2.25rem}.text-left{text-align:left}.text-center{text-align:center}.font-CircularStdBold{font-family:CircularStdBold,sans-serif}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}.font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}.tracking-tight{letter-spacing:-.025em}.text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}.text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}.text-text-subtitle{color:#8f8f8f}.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}.transition-all{transition-property:all;transition-duration:.15s}.hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:text-gray-900:hover{color:#111827}.focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}.focus\:ring-primary-500:focus{--tw-ring-color:#378b3d}@media (min-width: 768px){.md\:mt-0{margin-top:0}.md\:w-1\/2{width:50%}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.md\:flex-row{flex-direction:row}.md\:justify-end{justify-content:flex-end}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}}@media (min-width: 1024px){.lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}@media (min-width: 1280px){.xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}@font-face{font-family:CircularStd;src:url(https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf)}@font-face{font-family:CircularStdBold;src:url(https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf)}body{margin:0;font-family:CircularStd,CircularStdBold,system-ui,sans-serif}
+        /* ===== ORIGINAL CSS WITH SCROLLING FIXES & RESET ===== */
+        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
+        html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
+        body{margin:0;line-height:inherit;background:#fff}
+        a{color:inherit;text-decoration:inherit}
+        button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
+        button{background-color:transparent;cursor:pointer}
+        img,svg{display:block;vertical-align:middle}
+        
+        /* Container & layout */
+        .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}
+        @media (min-width:640px){.container{max-width:640px}}
+        @media (min-width:768px){.container{max-width:768px}}
+        @media (min-width:1024px){.container{max-width:1024px}}
+        @media (min-width:1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}
+        
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+        .fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}
+        .inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}
+        .z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}
+        .mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mt-4{margin-top:1rem}
+        .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}
+        .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
+        .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
+        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
+        .cursor-pointer{cursor:pointer}
+        .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}
+        .items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}
+        .gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}
+        .rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}
+        .border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}
+        .bg-white{background-color:#fff}
+        .bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}
+        .bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}
+        .bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}
+        .bg-black{background-color:#000}.bg-black\/50{background-color:rgba(0,0,0,0.5)}.bg-green-600{background-color:#16a34a}
+        .bg-primary-700{background-color:#054c0f}
+        .backdrop-blur-sm{backdrop-filter:blur(4px)}
+        .p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-4{padding:1rem}
+        .px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}
+        .px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
+        .py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
+        .pr-9{padding-right:2.25rem}
+        .text-left{text-align:left}.text-center{text-align:center}
+        .font-CircularStdBold{font-family:'CircularStdBold',sans-serif}
+        .text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}
+        .text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}
+        .font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}
+        .tracking-tight{letter-spacing:-.025em}
+        .text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}
+        .text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}
+        .text-text-subtitle{color:#8f8f8f}.text-red-600{color:#dc2626}.text-green-600{color:#16a34a}
+        .shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}
+        .transition-all{transition-property:all;transition-duration:.15s}
+        .hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:bg-green-500:hover{background-color:#22c55e}
+        .hover\:text-gray-900:hover{color:#111827}
+        .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
+        .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
+        
+        /* SCROLLING FIX FOR MODAL — ensures smooth scrollable content */
+        .modal-scroll-content {
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        @media (min-width:768px){
+            .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+            .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
+        }
+        @media (min-width:1024px){
+            .lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        }
+        @media (min-width:1280px){
+            .xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+        }
+        @font-face{font-family:'CircularStd';src:url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf')}
+        @font-face{font-family:'CircularStdBold';src:url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf')}
+        body{font-family:'CircularStd',system-ui,sans-serif}
+        
+        /* custom modal backdrop fix */
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
     </style>
 </head>
 <body>
@@ -19,12 +102,12 @@
                     <nav class="flex justify-between items-center">
                         <div class="h-14 w-14">
                             <a href="https://neco.gov.ng/">
-                                <img src="" alt="NECO Logo" style="height: 56px; width: auto;">
+                                <img src="https://payments.neco.gov.ng/logo.png" alt="NECO Logo" style="height: 56px; width: auto;">
                             </a>
                         </div>
                         <div>
                             <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                                <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
+                                <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="#">Back to Home</a></li>
                             </ul>
                         </div>
                         <button class="lg:hidden" type="button">
@@ -42,14 +125,14 @@
                 <div class="flex items-center flex-col md:flex-row justify-between">
                     <div class="w-full md:w-3/5">
                         <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
-                        <p class="mt-2">You can search for a payment item or select from the list</p>
+                        <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
                     </div>
                     <div class="md:w-1/3 mt-5 md:mt-0 w-full">
                         <div class="w-full">
                             <div class="mt-1 relative">
-                                <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base rounded-md pr-9">
+                                <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
                                 <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-5 h-5 text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
                                     </svg>
                                 </div>
@@ -58,7 +141,7 @@
                     </div>
                 </div>
 
-                <!-- Category Filters -->
+                <!-- Category Filters with colored dots -->
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
                     <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
                         <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
@@ -92,64 +175,65 @@
         </div>
     </div>
 
-    <!-- EXACT PAYMENT FORM MODAL - COPIED DIRECTLY FROM YOUR FILE (WITH SCROLLING) -->
-    <div id="paymentModal" class="relative z-30 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
+    <!-- PAYMENT MODAL (FIXED: SCROLLING & PROPER BACKDROP) -->
+    <div id="paymentModal" class="fixed inset-0 z-30 hidden">
+        <div class="fixed inset-0 bg-black/50 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 opacity-100 scale-100">
+                <!-- Modal panel with scrollable content -->
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl modal-scroll-content">
                     <form id="paymentFormModal">
-                        <div class="px-3 md:px-10">
-                            <div class="flex justify-between">
+                        <div class="px-3 md:px-10 pt-6">
+                            <div class="flex justify-between items-start">
                                 <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
-                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
+                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer text-gray-500 hover:text-gray-800">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
+                            <p id="modalItemName" class="mt-2 font-CircularStdBold text-xl">FOUR FIGURE TABLE</p>
                             <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
                             
                             <div class="mt-5">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
                                     <div class="mt-1 relative">
-                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
-                                    <div id="codeError" style="color:#ef4444; font-size:0.75rem; margin-top:0.25rem; display:none;">❌ Invalid payment code</div>
-                                    <div id="codeSuccess" style="color:#0ca60c; font-size:0.75rem; margin-top:0.25rem; display:none;">✅ Valid payment code</div>
+                                    <div id="codeError" class="text-red-600 text-xs mt-1 hidden">❌ Invalid payment code</div>
+                                    <div id="codeSuccess" class="text-green-600 text-xs mt-1 hidden">✅ Valid payment code</div>
                                 </div>
                             </div>
                             
                             <div class="mt-5 flex justify-end">
-                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                                <a id="whatsappLink" class="text-sm text-primary-600 underline" href="#" target="_blank">Click here to get payment code from admin</a>
                             </div>
                         </div>
                         
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
                         <div class="px-3 md:px-10">
-                            <p class="mt-4">Payer's information</p>
+                            <p class="mt-4 font-medium">Payer's information</p>
                             
                             <div class="mt-5">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Full name</label>
                                     <div class="mt-1 relative">
-                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="mt-5 flex gap-5">
+                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Phone number</label>
                                     <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Email</label>
                                     <div class="mt-1 relative">
-                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +243,7 @@
                                 <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
                                 <div class="w-full">
                                     <div class="mt-1 relative">
-                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                             </div>
@@ -167,37 +251,37 @@
                         
                         <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-3 md:px-10">
-                            <p class="mt-4">Payment information</p>
+                        <div class="px-3 md:px-10 pb-6">
+                            <p class="mt-4 font-medium">Payment information</p>
                             
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Amount</label>
                                     <div class="mt-1 relative">
-                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Currency</label>
                                     <div class="mt-1 relative">
-                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
-                                            <option disabled hidden value="">Naira</option>
-                                            <option value="Yes">Naira</option>
-                                            <option value="No">Dollars</option>
+                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
+                                            <option selected>Naira</option>
+                                            <option>Dollars</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base rounded-md">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5">
                                     </div>
                                 </div>
                             </div>
                             
+                            <!-- BUTTONS: white outline (Cancel) + green solid (Proceed) -->
                             <div class="grid grid-cols-3 mt-8 gap-5">
-                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md w-full">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:opacity-50">Proceed</button>
+                                <button type="button" onclick="closePaymentModal()" class="w-full font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                                <button type="submit" id="proceedBtn" disabled class="col-span-2 w-full font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md disabled:opacity-50 disabled:cursor-not-allowed">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -218,35 +302,17 @@
                         </svg>
                     </button>
                 </div>
-                <div>
-                    <div class="flex justify-between text-text-subtitle text-sm mb-3">
-                        <p>Item</p>
-                        <p>Amount</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p id="invoiceItemName" class="w-2/3">FOUR FIGURE TABLE</p>
-                        <p id="invoiceItemAmount">NGN 500</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Service Charge</p>
-                        <p id="serviceCharge">NGN 5</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Stamp Duty</p>
-                        <p id="stampDuty">NGN 50</p>
-                    </div>
-                    <div class="flex justify-between text-black text-sm mb-3">
-                        <p>Quantity</p>
-                        <p id="invoiceQuantity">1</p>
-                    </div>
-                    <div class="flex justify-between bg-gray-100 p-3 rounded text-gray-600 font-semibold mt-4">
-                        <p>Total</p>
-                        <p id="invoiceTotal">NGN 555</p>
-                    </div>
-                    <div class="grid grid-cols-3 gap-3 mt-6">
-                        <button onclick="closeInvoiceModal()" class="col-span-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
-                        <button onclick="showAccountModal()" class="col-span-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
-                    </div>
+                <div class="space-y-3">
+                    <div class="flex justify-between text-text-subtitle text-sm"><span>Item</span><span>Amount</span></div>
+                    <div class="flex justify-between text-black text-sm"><span id="invoiceItemName">FOUR FIGURE TABLE</span><span id="invoiceItemAmount">NGN 500</span></div>
+                    <div class="flex justify-between text-black text-sm"><span>Service Charge</span><span id="serviceCharge">NGN 5</span></div>
+                    <div class="flex justify-between text-black text-sm"><span>Stamp Duty</span><span id="stampDuty">NGN 50</span></div>
+                    <div class="flex justify-between text-black text-sm"><span>Quantity</span><span id="invoiceQuantity">1</span></div>
+                    <div class="flex justify-between bg-gray-100 p-3 rounded font-semibold mt-2"><span>Total</span><span id="invoiceTotal">NGN 555</span></div>
+                </div>
+                <div class="grid grid-cols-3 gap-3 mt-6">
+                    <button onclick="closeInvoiceModal()" class="col-span-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
+                    <button onclick="showAccountModal()" class="col-span-2 px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-500">Proceed</button>
                 </div>
             </div>
         </div>
@@ -257,22 +323,22 @@
         <div class="bg-white rounded-lg max-w-md w-full mx-4">
             <div class="p-6">
                 <div class="flex justify-center mb-4">
-                    <img src="" alt="NECO Logo" style="height: 60px;">
+                    <img src="https://payments.neco.gov.ng/logo.png" alt="NECO Logo" style="height: 60px;">
                 </div>
                 <div class="text-center mb-4">
                     <p class="text-red-600 font-semibold">⚠️ Pay to this account within the next 30 minutes to avoid cancellation</p>
                 </div>
-                <div id="accountDetailsBox" style="background-color:#ecfdf5; border:1px solid #0ca60c; border-radius:0.5rem; padding:1rem; margin-bottom:1rem;"></div>
-                <div class="mb-4">
+                <div id="accountDetailsBox" class="bg-green-50 border border-green-600 rounded-md p-3 text-sm space-y-2"></div>
+                <div class="mb-4 mt-4">
                     <label class="block text-sm font-medium text-gray-700 mb-2">Upload Payment Receipt</label>
-                    <div onclick="document.getElementById('receiptInput').click()" style="background-color:#f3f4f6; border:2px dashed #d1d5db; border-radius:0.5rem; padding:1rem; text-align:center; cursor:pointer;">
+                    <div onclick="document.getElementById('receiptInput').click()" class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-md p-3 text-center cursor-pointer hover:bg-gray-50 transition">
                         <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                         </svg>
                         <p class="text-sm text-gray-500">Click to upload receipt</p>
                     </div>
                     <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                    <p id="uploadedFileName" style="font-size:0.75rem; color:#0ca60c; margin-top:0.5rem;"></p>
+                    <p id="uploadedFileName" class="text-xs text-green-600 mt-1"></p>
                 </div>
                 <div class="flex gap-3">
                     <button onclick="closeAccountModal()" class="flex-1 px-4 py-2 border rounded-md hover:bg-gray-50">Cancel</button>
@@ -283,7 +349,7 @@
     </div>
 
     <script>
-        // Payment Data - ALL CATEGORIES
+        // Payment Data
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 },{ name: "Non-Validation", amount: 10000 },{ name: "Syllabus", amount: 2000 },{ name: "Photo Album", amount: 2700 },
@@ -306,16 +372,9 @@
             "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [{ name: "Non-Validation", amount: 4000 }]},
             "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [{ name: "Non-Validation", amount: 4000 }]},
             "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
-                { name: "Reprint Of Certificate", amount: 50000 },{ name: "Sale Of Government Assets", amount: null },{ name: "Registration Of Contractors", amount: null },
-                { name: "Tender Fees", amount: null },{ name: "Refund", amount: null },{ name: "Change Of School Name", amount: 15000 },
-                { name: "Payment For Consultancy Services", amount: null },{ name: "Payment Of Dead Scripts", amount: null },{ name: "Reprint Of School Results Per Candidate", amount: 400 },
-                { name: "Return Of Dta", amount: null },{ name: "Staff Identity Card", amount: 1000 },{ name: "Result Checker (token)", amount: 1000 },{ name: "Examination Bag", amount: 15000 },
-                { name: "Confirmation Of Result By International Institutions Or Organizations Per Candidates", amount: 10000 },{ name: "Waterproof Certificate Jacket/folder", amount: 2500 },
-                { name: "Candidates Registration Number Request", amount: 3000 },{ name: "Photocard Reprint (ssce-external)", amount: 3000 },
-                { name: "Ssce External Certificate Safekeeping (renewable Every 5 Years)", amount: 7500 },{ name: "Statistical Request-organization/association (annual Awards)", amount: 100000 },
-                { name: "Statistical Request-individual (research) 1-5 Years", amount: 10000 },{ name: "Statistical Request-individual (research) 6-10 Years", amount: 20000 },
-                { name: "State Governments (registration Projection/candidates Performance Annually)", amount: 50000 },{ name: "Shortfalls On Accreditation", amount: null },
-                { name: "E-verification Of Result", amount: 5000 },{ name: "Candidate Attestation Of Result In Lieu Of Lost Certificate", amount: 50000 }
+                { name: "Reprint Of Certificate", amount: 50000 },{ name: "Change Of School Name", amount: 15000 },{ name: "Reprint Of School Results Per Candidate", amount: 400 },
+                { name: "Staff Identity Card", amount: 1000 },{ name: "Result Checker (token)", amount: 1000 },{ name: "Examination Bag", amount: 15000 },
+                { name: "Confirmation Of Result", amount: 10000 },{ name: "E-verification Of Result", amount: 5000 }
             ]}
         };
 
@@ -326,185 +385,102 @@
         let isCodeValid = false;
 
         let paymentCodesDatabase = {
-            "1234": {
-                bankName: "First Bank of Nigeria",
-                accountName: "NECO Payment Services",
-                accountNumber: "2024567890",
-                bankCode: "011"
-            }
+            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Payment Services", accountNumber: "2024567890", bankCode: "011" }
         };
 
-        function validatePaymentCode(code) {
-            code = code.toString().trim();
-            if (paymentCodesDatabase[code]) return { valid: true, accountDetails: paymentCodesDatabase[code] };
-            return { valid: false, accountDetails: null };
-        }
-
+        function validatePaymentCode(code) { return paymentCodesDatabase[code.trim()] ? { valid: true, accountDetails: paymentCodesDatabase[code.trim()] } : { valid: false, accountDetails: null }; }
         function checkCodeValidation() {
-            const codeInput = document.getElementById('paymentCode');
-            const codeError = document.getElementById('codeError');
-            const codeSuccess = document.getElementById('codeSuccess');
-            const proceedBtn = document.getElementById('proceedBtn');
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const amount = document.getElementById('amount').value;
-            
-            const code = codeInput.value;
-            if (code.length > 0) {
-                const validation = validatePaymentCode(code);
-                if (validation.valid) {
-                    isCodeValid = true;
-                    currentValidatedAccount = validation.accountDetails;
-                    codeError.style.display = 'none';
-                    codeSuccess.style.display = 'block';
-                } else {
-                    isCodeValid = false;
-                    currentValidatedAccount = null;
-                    codeError.style.display = 'block';
-                    codeSuccess.style.display = 'none';
-                }
-            } else {
-                isCodeValid = false;
-                codeError.style.display = 'none';
-                codeSuccess.style.display = 'none';
-            }
-            
-            if (isCodeValid && fullName && phone && email && amount) {
-                proceedBtn.disabled = false;
-            } else {
-                proceedBtn.disabled = true;
-            }
+            const code = document.getElementById('paymentCode').value;
+            const validation = validatePaymentCode(code);
+            isCodeValid = validation.valid;
+            currentValidatedAccount = validation.accountDetails;
+            document.getElementById('codeError').style.display = (code && !isCodeValid) ? 'block' : 'none';
+            document.getElementById('codeSuccess').style.display = isCodeValid ? 'block' : 'none';
+            const fullName = document.getElementById('fullName').value, phone = document.getElementById('phone').value, email = document.getElementById('email').value, amount = document.getElementById('amount').value;
+            document.getElementById('proceedBtn').disabled = !(isCodeValid && fullName && phone && email && amount);
         }
 
         function renderGrid() {
             const grid = document.getElementById('paymentGrid');
             const cat = paymentData[currentCategory];
             if (!cat) return;
-            let html = '';
-            cat.items.forEach(item => {
+            grid.innerHTML = cat.items.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 const amountText = item.amount ? 'Fixed Amount' : 'Variable Amount';
-                // EXACT "Make payment" button as in your original - square border with category color
-                html += `<div class="bg-[${cat.color}] rounded-md text-[#747474] flex items-center gap-2" style="background: ${cat.bgColor};">
-                            <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: rgb(236, 250, 243);">
-                                <div class="py-8 px-5 text-black">${item.name}</div>
-                                <div>
-                                    <div class="h-[1px] bg-gray-200"></div>
-                                    <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                            class="text-xs border rounded-md py-3 px-2"
-                                            style="border-color: ${cat.color}; color: ${cat.color};">
-                                            Make payment
-                                        </button>
-                                        <div>
-                                            <p class="text-xs">${amountText}</p>
-                                            <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
-                                        </div>
-                                    </div>
-                                </div>
+                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
+                            <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
+                                <div class="py-8 px-5 text-black font-medium">${item.name}</div>
+                                <div><div class="h-[1px] bg-gray-200"></div>
+                                <div class="p-5 flex justify-between items-center">
+                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
+                                    <div><p class="text-xs text-gray-500">${amountText}</p><p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p></div>
+                                </div></div>
                             </div>
                         </div>`;
-            });
-            grid.innerHTML = html;
+            }).join('');
         }
 
         function openPaymentModal(item) {
             currentItem = item;
-            document.getElementById('modalItemName').innerHTML = item.name;
+            document.getElementById('modalItemName').innerText = item.name;
             const amountInput = document.getElementById('amount');
-            if (item.amount) {
-                amountInput.value = item.amount;
-                amountInput.readOnly = true;
-            } else {
-                amountInput.value = '';
-                amountInput.readOnly = false;
-            }
-            const whatsappNumber = "2348021234567";
-            const message = `Hello, I need a payment code for: ${item.name} (${currentCategory})`;
-            document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
-            document.getElementById('paymentCode').value = '';
-            document.getElementById('fullName').value = '';
-            document.getElementById('phone').value = '';
-            document.getElementById('email').value = '';
-            document.getElementById('paymentDescription').value = '';
-            document.getElementById('quantity').value = '';
-            document.getElementById('currency').value = 'Naira';
-            document.getElementById('codeError').style.display = 'none';
-            document.getElementById('codeSuccess').style.display = 'none';
+            if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
+            else { amountInput.value = ''; amountInput.readOnly = false; }
+            document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+            document.getElementById('paymentCode').value = ''; document.getElementById('fullName').value = ''; document.getElementById('phone').value = ''; document.getElementById('email').value = '';
+            document.getElementById('paymentDescription').value = ''; document.getElementById('quantity').value = '1'; document.getElementById('currency').value = 'Naira';
+            document.getElementById('codeError').style.display = 'none'; document.getElementById('codeSuccess').style.display = 'none';
             document.getElementById('proceedBtn').disabled = true;
             document.getElementById('paymentModal').classList.remove('hidden');
-            
-            ['paymentCode', 'fullName', 'phone', 'email', 'amount'].forEach(id => {
-                document.getElementById(id).addEventListener('input', checkCodeValidation);
-            });
+            ['paymentCode','fullName','phone','email','amount'].forEach(id => document.getElementById(id).addEventListener('input', checkCodeValidation));
         }
+        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.remove('flex'); document.getElementById('invoiceModal').classList.add('hidden'); }
+        function closeAccountModal() { document.getElementById('accountModal').classList.remove('flex'); document.getElementById('accountModal').classList.add('hidden'); }
 
-        function closePaymentModal() {
-            document.getElementById('paymentModal').classList.add('hidden');
-        }
-
-        document.getElementById('paymentFormModal').addEventListener('submit', function(e) {
+        document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
             e.preventDefault();
             if (!isCodeValid) { alert('Please enter a valid payment code'); return; }
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const description = document.getElementById('paymentDescription').value;
-            const quantity = parseInt(document.getElementById('quantity').value) || 1;
+            const fullName = document.getElementById('fullName').value, phone = document.getElementById('phone').value, email = document.getElementById('email').value;
+            const description = document.getElementById('paymentDescription').value, quantity = parseInt(document.getElementById('quantity').value) || 1;
             const currency = document.getElementById('currency').value;
             let amount = parseFloat(document.getElementById('amount').value);
-            if (!fullName) { alert('Please enter your full name'); return; }
-            if (!phone) { alert('Please enter your phone number'); return; }
-            if (!email) { alert('Please enter your email address'); return; }
-            if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Please enter a valid amount'); return; } }
-            const itemAmount = amount;
-            const serviceCharge = Math.ceil(itemAmount * 0.01);
-            const stampDuty = 50;
-            const totalAmount = (itemAmount + serviceCharge + stampDuty) * quantity;
-            currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, itemAmount, serviceCharge, stampDuty, totalAmount };
-            document.getElementById('invoiceItemName').innerHTML = currentItem.name;
-            document.getElementById('invoiceItemAmount').innerHTML = `${currency} ${itemAmount.toLocaleString()}`;
-            document.getElementById('serviceCharge').innerHTML = `${currency} ${serviceCharge.toLocaleString()}`;
-            document.getElementById('stampDuty').innerHTML = `${currency} ${stampDuty.toLocaleString()}`;
-            document.getElementById('invoiceQuantity').innerHTML = quantity;
-            document.getElementById('invoiceTotal').innerHTML = `${currency} ${totalAmount.toLocaleString()}`;
+            if (!fullName || !phone || !email) { alert('Please fill all payer details'); return; }
+            if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
+            const serviceCharge = Math.ceil(amount * 0.01), stampDuty = 50, totalAmount = (amount + serviceCharge + stampDuty) * quantity;
+            currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, amount, serviceCharge, stampDuty, totalAmount };
+            document.getElementById('invoiceItemName').innerText = currentItem.name;
+            document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
+            document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
+            document.getElementById('stampDuty').innerText = `${currency} ${stampDuty.toLocaleString()}`;
+            document.getElementById('invoiceQuantity').innerText = quantity;
+            document.getElementById('invoiceTotal').innerText = `${currency} ${totalAmount.toLocaleString()}`;
             closePaymentModal();
             document.getElementById('invoiceModal').classList.remove('hidden');
             document.getElementById('invoiceModal').classList.add('flex');
         });
 
-        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.add('hidden'); document.getElementById('invoiceModal').classList.remove('flex'); }
-
         function showAccountModal() {
             closeInvoiceModal();
             const account = currentValidatedAccount;
             document.getElementById('accountDetailsBox').innerHTML = `
-                <div style="text-align:center; margin-bottom:0.5rem;"><strong style="color:#0ca60c;">Bank Transfer Details</strong></div>
-                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Bank Name:</strong> <span>${account.bankName}</span></div>
-                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Account Name:</strong> <span>${account.accountName}</span></div>
-                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Account Number:</strong> <span style="font-family:monospace; font-size:1.1rem;">${account.accountNumber}</span></div>
-                <div style="display:flex; justify-content:space-between; padding:0.5rem 0; border-bottom:1px solid #e5e7eb;"><strong>Amount to Pay:</strong> <span style="color:#0ca60c; font-weight:bold;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
-                <div style="display:flex; justify-content:space-between; padding:0.5rem 0;"><strong>Payment Code:</strong> <span style="font-family:monospace;">${currentFormData.paymentCode}</span></div>
+                <div class="text-center font-bold text-green-700 mb-2">Bank Transfer Details</div>
+                <div class="flex justify-between py-1 border-b"><span>Bank:</span><strong>${account.bankName}</strong></div>
+                <div class="flex justify-between py-1 border-b"><span>Account Name:</span><span>${account.accountName}</span></div>
+                <div class="flex justify-between py-1 border-b"><span>Account Number:</span><span class="font-mono text-lg">${account.accountNumber}</span></div>
+                <div class="flex justify-between py-1 border-b"><span>Amount:</span><span class="text-green-700 font-bold">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
+                <div class="flex justify-between py-1"><span>Payment Code:</span><span class="font-mono">${currentFormData.paymentCode}</span></div>
             `;
-            document.getElementById('receiptInput').value = '';
-            document.getElementById('uploadedFileName').innerHTML = '';
+            document.getElementById('receiptInput').value = ''; document.getElementById('uploadedFileName').innerHTML = '';
             document.getElementById('accountModal').classList.remove('hidden');
             document.getElementById('accountModal').classList.add('flex');
         }
 
-        function closeAccountModal() { document.getElementById('accountModal').classList.add('hidden'); document.getElementById('accountModal').classList.remove('flex'); }
-
-        document.getElementById('receiptInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            document.getElementById('uploadedFileName').innerHTML = file ? `✅ Selected: ${file.name}` : '';
-        });
-
-        function confirmPayment() {
-            const fileInput = document.getElementById('receiptInput');
-            if (!fileInput.files[0]) { alert('Please upload your payment receipt before confirming.'); return; }
-            alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nCategory: ${currentCategory}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nQuantity: ${currentFormData.quantity}\n\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nPhone: ${currentFormData.phone}\nEmail: ${currentFormData.email}\n\nBank: ${currentValidatedAccount.bankName}\nAccount: ${currentValidatedAccount.accountNumber}\n\nReceipt uploaded: ${fileInput.files[0].name}`);
-            closeAccountModal();
+        document.getElementById('receiptInput').addEventListener('change', (e) => { document.getElementById('uploadedFileName').innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : ''; });
+        function confirmPayment() { 
+            if(!document.getElementById('receiptInput').files[0]) { alert('Please upload your payment receipt'); return; } 
+            alert(`✅ PAYMENT CONFIRMED!\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\nReceipt uploaded. Thank you.`); 
+            closeAccountModal(); 
         }
 
         document.querySelectorAll('.category-btn').forEach(btn => {
@@ -520,41 +496,16 @@
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const term = e.target.value.toLowerCase();
             const cat = paymentData[currentCategory];
-            if (!cat) return;
-            const filtered = cat.items.filter(item => item.name.toLowerCase().includes(term));
-            const grid = document.getElementById('paymentGrid');
-            let html = '';
-            filtered.forEach(item => {
+            if(!cat) return;
+            const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
+            if(filtered.length === 0) { document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; return; }
+            document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                const amountText = item.amount ? 'Fixed Amount' : 'Variable Amount';
-                html += `<div class="bg-[${cat.color}] rounded-md text-[#747474] flex items-center gap-2" style="background: ${cat.bgColor};">
-                            <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: rgb(236, 250, 243);">
-                                <div class="py-8 px-5 text-black">${item.name}</div>
-                                <div>
-                                    <div class="h-[1px] bg-gray-200"></div>
-                                    <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                            class="text-xs border rounded-md py-3 px-2"
-                                            style="border-color: ${cat.color}; color: ${cat.color};">
-                                            Make payment
-                                        </button>
-                                        <div>
-                                            <p class="text-xs">${amountText}</p>
-                                            <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>`;
-            });
-            grid.innerHTML = html || '<div class="col-span-full text-center py-10">No payment items found</div>';
+                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-2 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div><p class="text-xs">Fixed Amount</p><p class="font-semibold">${amountDisplay}</p></div></div></div></div></div>`;
+            }).join('');
         });
-
         renderGrid();
-        
-        window.addPaymentCode = function(code, bankName, accountName, accountNumber, bankCode) {
-            paymentCodesDatabase[code.toString().trim()] = { bankName, accountName, accountNumber, bankCode };
-        };
+        window.addPaymentCode = (code,bank,accName,accNum,bankCode) => { paymentCodesDatabase[code.trim()] = { bankName: bank, accountName: accName, accountNumber: accNum, bankCode }; };
     </script>
 </body>
 </html>
