@@ -16,16 +16,33 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background: #f5f7fb;
+            background: #f0f2f5;
             color: #1e293b;
         }
 
+        /* ========== LOGIN PAGE ========== */
         .login-container {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             background: linear-gradient(135deg, #0ca60c 0%, #064e3b 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-container::before {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-25%, -25%) scale(1); opacity: 0.3; }
+            50% { transform: translate(-25%, -25%) scale(1.1); opacity: 0.5; }
         }
 
         .login-card {
@@ -33,8 +50,16 @@
             border-radius: 2rem;
             padding: 2.5rem;
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-header {
@@ -42,20 +67,56 @@
             margin-bottom: 2rem;
         }
 
-        .login-header h1 {
-            font-size: 1.875rem;
-            font-weight: 700;
+        .login-header .logo-icon {
+            width: 70px;
+            height: 70px;
             background: linear-gradient(135deg, #0ca60c, #064e3b);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
         }
 
+        .login-header .logo-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .login-header h1 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+
+        .login-header p {
+            color: #64748b;
+            margin-top: 0.5rem;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            display: none;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-message.show {
+            display: flex;
+        }
+
+        /* ========== DASHBOARD LAYOUT ========== */
         .dashboard {
             display: none;
             min-height: 100vh;
         }
 
+        /* Sidebar */
         .sidebar {
             width: 280px;
             background: white;
@@ -66,6 +127,7 @@
             box-shadow: 4px 0 20px rgba(0, 0, 0, 0.05);
             z-index: 10;
             overflow-y: auto;
+            transition: all 0.3s;
         }
 
         .sidebar-header {
@@ -80,10 +142,13 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .sidebar-nav {
-            padding: 1.5rem;
+            padding: 1rem;
         }
 
         .nav-item {
@@ -91,7 +156,7 @@
             align-items: center;
             gap: 0.75rem;
             padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.25rem;
             border-radius: 0.75rem;
             color: #64748b;
             cursor: pointer;
@@ -114,16 +179,17 @@
             font-size: 1.25rem;
         }
 
+        /* Main Content */
         .main-content {
             margin-left: 280px;
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .top-bar {
             background: white;
             border-radius: 1rem;
             padding: 1rem 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -133,26 +199,54 @@
         .page-title {
             font-size: 1.5rem;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
         }
 
+        .logout-btn {
+            background: #ef4444;
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .stat-card {
             background: white;
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 1.25rem;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
 
         .stat-card h3 {
             font-size: 0.875rem;
             color: #64748b;
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         .stat-number {
@@ -161,11 +255,13 @@
             color: #0ca60c;
         }
 
+        /* Tables */
         .data-table {
             background: white;
             border-radius: 1rem;
             overflow-x: auto;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
         }
 
         table {
@@ -185,6 +281,7 @@
             color: #475569;
         }
 
+        /* Forms */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -199,11 +296,12 @@
 
         input, select, textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.75rem 1rem;
             border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             font-family: 'Inter', sans-serif;
             transition: all 0.2s;
+            font-size: 0.875rem;
         }
 
         input:focus, select:focus, textarea:focus {
@@ -217,14 +315,16 @@
             color: white;
             border: none;
             padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s;
+            font-size: 0.875rem;
         }
 
         button:hover {
             background: #0a8a0a;
+            transform: translateY(-1px);
         }
 
         .btn-outline {
@@ -236,6 +336,7 @@
         .btn-outline:hover {
             background: #f1f5f9;
             color: #0ca60c;
+            transform: translateY(-1px);
         }
 
         .btn-danger {
@@ -247,45 +348,117 @@
         }
 
         .btn-sm {
-            padding: 0.25rem 0.5rem;
+            padding: 0.4rem 0.75rem;
             font-size: 0.75rem;
         }
 
-        .logout-btn {
-            background: #ef4444;
-            padding: 0.5rem 1rem;
-            font-size: 0.875rem;
-        }
-
-        .logout-btn:hover {
-            background: #dc2626;
-        }
-
-        .alert {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
+        /* Modal */
+        .modal {
+            display: none;
             position: fixed;
-            top: 20px;
-            right: 20px;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
             z-index: 1000;
+            animation: fadeIn 0.2s ease;
         }
 
-        .alert-success {
+        .modal.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modal-header h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-modal {
+            background: none;
+            color: #64748b;
+            padding: 0;
+            font-size: 1.5rem;
+        }
+
+        .close-modal:hover {
+            background: none;
+            color: #1e293b;
+            transform: none;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-confirmed {
             background: #d1fae5;
             color: #0ca60c;
         }
 
-        .alert-error {
-            background: #fee2e2;
-            color: #ef4444;
+        .badge-active {
+            background: #d1fae5;
+            color: #0ca60c;
         }
 
+        .badge-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* Category section */
         .category-section {
             border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
+            border-radius: 1rem;
             padding: 1rem;
             margin-bottom: 1rem;
             background: #fafbfc;
+            transition: all 0.2s;
+        }
+
+        .category-section:hover {
+            border-color: #0ca60c;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
 
         .category-header {
@@ -310,42 +483,84 @@
 
         .item-row input.amount-input {
             flex: 1;
-            width: 120px;
+            width: 130px;
         }
 
         .color-preview {
-            width: 30px;
-            height: 30px;
+            width: 32px;
+            height: 32px;
             border-radius: 8px;
             display: inline-block;
             margin-left: 10px;
             vertical-align: middle;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            font-weight: 500;
-        }
-
-        .badge-pending {
-            background: #fef3c7;
-            color: #d97706;
-        }
-
-        .badge-confirmed {
-            background: #d1fae5;
-            color: #0ca60c;
-        }
-
+        /* Loading */
         .loading {
             text-align: center;
-            padding: 2rem;
+            padding: 3rem;
             color: #64748b;
         }
 
+        .loading i {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Alert */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.25rem;
+            border-radius: 0.75rem;
+            z-index: 1100;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            animation: slideInRight 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(100px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .alert-success {
+            background: #d1fae5;
+            color: #0ca60c;
+            border-left: 4px solid #0ca60c;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #dc2626;
+            border-left: 4px solid #dc2626;
+        }
+
+        .alert-warning {
+            background: #fef3c7;
+            color: #d97706;
+            border-left: 4px solid #d97706;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #2563eb;
+            border-left: 4px solid #2563eb;
+        }
+
+        /* Responsive */
         @media (max-width: 768px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -365,21 +580,32 @@
     <div id="loginPage" class="login-container">
         <div class="login-card">
             <div class="login-header">
-                <i class="fas fa-shield-alt" style="font-size: 3rem; color: #0ca60c; margin-bottom: 1rem;"></i>
-                <h1>Admin Dashboard</h1>
-                <p style="color: #64748b; margin-top: 0.5rem;">NECO Payment Portal</p>
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <h1>Welcome Back</h1>
+                <p>Sign in to your admin dashboard</p>
+            </div>
+            <div id="loginError" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>
+                <span>Invalid username or password. Please try again.</span>
             </div>
             <form id="loginForm">
                 <div class="form-group">
-                    <label>Username</label>
-                    <input type="text" id="loginUsername" placeholder="Enter username" required>
+                    <label><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username" required autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="loginPassword" placeholder="Enter password" required>
+                    <label><i class="fas fa-lock"></i> Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
                 </div>
-                <button type="submit" style="width: 100%;">Login</button>
+                <button type="submit" style="width: 100%;">
+                    <i class="fas fa-arrow-right-to-bracket"></i> Sign In
+                </button>
             </form>
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.75rem; color: #94a3b8;">
+                <i class="fas fa-shield-alt"></i> Secure Admin Access
+            </p>
         </div>
     </div>
 
@@ -419,18 +645,144 @@
 
         <div class="main-content">
             <div class="top-bar">
-                <h1 class="page-title" id="currentPageTitle">Dashboard</h1>
-                <button class="logout-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+                <h1 class="page-title" id="currentPageTitle">
+                    <i class="fas fa-chart-line"></i>
+                    Dashboard
+                </h1>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
             <div id="pageContent">
-                <div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>
+                <div class="loading">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Loading dashboard...</p>
+                </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Add Payment Code Modal -->
+    <div id="addCodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Add Payment Code</h3>
+                <button class="close-modal" onclick="closeModal('addCodeModal')">&times;</button>
+            </div>
+            <form id="addCodeForm">
+                <div class="form-group">
+                    <label>Payment Code *</label>
+                    <input type="text" id="newCode" placeholder="e.g., 1234" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Name *</label>
+                    <input type="text" id="newBankName" placeholder="First Bank of Nigeria" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Name *</label>
+                    <input type="text" id="newAccountName" placeholder="NECO Payment Services" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Number *</label>
+                    <input type="text" id="newAccountNumber" placeholder="2024567890" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Code</label>
+                    <input type="text" id="newBankCode" placeholder="011">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" onclick="closeModal('addCodeModal')" class="btn-outline" style="flex:1;">Cancel</button>
+                    <button type="submit" style="flex:2;">Add Payment Code</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Edit Payment Code Modal -->
+    <div id="editCodeModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-edit"></i> Edit Payment Code</h3>
+                <button class="close-modal" onclick="closeModal('editCodeModal')">&times;</button>
+            </div>
+            <form id="editCodeForm">
+                <input type="hidden" id="editCodeOriginal">
+                <div class="form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="editBankName" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Name</label>
+                    <input type="text" id="editAccountName" required>
+                </div>
+                <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="editAccountNumber" required>
+                </div>
+                <div class="form-group">
+                    <label>Bank Code</label>
+                    <input type="text" id="editBankCode">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" onclick="closeModal('editCodeModal')" class="btn-outline" style="flex:1;">Cancel</button>
+                    <button type="submit" style="flex:2;">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Category Modal -->
+    <div id="addCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-folder-plus"></i> Add Category</h3>
+                <button class="close-modal" onclick="closeModal('addCategoryModal')">&times;</button>
+            </div>
+            <form id="addCategoryForm">
+                <div class="form-group">
+                    <label>Category Name</label>
+                    <input type="text" id="newCategoryName" placeholder="e.g., NEW CATEGORY" required>
+                </div>
+                <div class="form-group">
+                    <label>Category Color</label>
+                    <input type="color" id="newCategoryColor" value="#0CA60C">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" onclick="closeModal('addCategoryModal')" class="btn-outline" style="flex:1;">Cancel</button>
+                    <button type="submit" style="flex:2;">Add Category</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Item Modal -->
+    <div id="addItemModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-plus-circle"></i> Add Payment Item</h3>
+                <button class="close-modal" onclick="closeModal('addItemModal')">&times;</button>
+            </div>
+            <form id="addItemForm">
+                <input type="hidden" id="addItemCategoryId">
+                <div class="form-group">
+                    <label>Item Name</label>
+                    <input type="text" id="newItemName" placeholder="e.g., Registration Fee" required>
+                </div>
+                <div class="form-group">
+                    <label>Amount (leave empty for variable)</label>
+                    <input type="number" id="newItemAmount" placeholder="e.g., 5000">
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 1rem;">
+                    <button type="button" onclick="closeModal('addItemModal')" class="btn-outline" style="flex:1;">Cancel</button>
+                    <button type="submit" style="flex:2;">Add Item</button>
+                </div>
+            </form>
         </div>
     </div>
 
     <script>
         // ============================================
-        // YOUR SUPABASE CREDENTIALS
+        // SUPABASE CONFIGURATION
         // ============================================
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
@@ -438,8 +790,38 @@
         const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         let isLoggedIn = false;
+        let currentEditingCode = null;
+        let currentCategoryId = null;
         
-        // Check session on page load
+        // ============================================
+        // HELPER FUNCTIONS
+        // ============================================
+        function showAlert(message, type = 'success') {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            const icon = type === 'success' ? 'fa-check-circle' : (type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle');
+            alertDiv.innerHTML = `<i class="fas ${icon}"></i> ${message}`;
+            document.body.appendChild(alertDiv);
+            setTimeout(() => alertDiv.remove(), 4000);
+        }
+        
+        function showLoading(element, show = true) {
+            if (show) {
+                element.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
+            }
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+        
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        // ============================================
+        // AUTHENTICATION
+        // ============================================
         async function checkSession() {
             const savedSession = localStorage.getItem('neco_admin_session');
             if (savedSession) {
@@ -458,33 +840,59 @@
                         loadPage('dashboard');
                         return;
                     }
-                } catch(e) {}
+                } catch(e) {
+                    console.error('Session check error:', e);
+                }
             }
             localStorage.removeItem('neco_admin_session');
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('dashboard').style.display = 'none';
         }
         
-        // Login
         document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const username = document.getElementById('loginUsername').value;
             const password = document.getElementById('loginPassword').value;
+            const errorDiv = document.getElementById('loginError');
             
-            const { data, error } = await supabase
-                .from('admin_settings')
-                .select('username, password, whatsapp_number')
-                .eq('id', 1)
-                .single();
+            // Hide any previous error
+            errorDiv.classList.remove('show');
             
-            if (!error && data && username === data.username && password === data.password) {
-                isLoggedIn = true;
-                localStorage.setItem('neco_admin_session', JSON.stringify({ username: data.username }));
-                document.getElementById('loginPage').style.display = 'none';
-                document.getElementById('dashboard').style.display = 'block';
-                loadPage('dashboard');
-            } else {
-                alert('Invalid username or password');
+            if (!username || !password) {
+                errorDiv.querySelector('span').textContent = 'Please enter both username and password';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            try {
+                const { data, error } = await supabase
+                    .from('admin_settings')
+                    .select('username, password, whatsapp_number')
+                    .eq('id', 1)
+                    .single();
+                
+                if (error) {
+                    console.error('Supabase error:', error);
+                    errorDiv.querySelector('span').textContent = 'Database connection error. Please try again.';
+                    errorDiv.classList.add('show');
+                    return;
+                }
+                
+                if (data && username === data.username && password === data.password) {
+                    isLoggedIn = true;
+                    localStorage.setItem('neco_admin_session', JSON.stringify({ username: data.username }));
+                    document.getElementById('loginPage').style.display = 'none';
+                    document.getElementById('dashboard').style.display = 'block';
+                    showAlert('Login successful! Welcome back, ' + username, 'success');
+                    loadPage('dashboard');
+                } else {
+                    errorDiv.querySelector('span').textContent = 'Invalid username or password';
+                    errorDiv.classList.add('show');
+                }
+            } catch(err) {
+                console.error('Login error:', err);
+                errorDiv.querySelector('span').textContent = 'Network error. Please check your connection.';
+                errorDiv.classList.add('show');
             }
         });
         
@@ -493,9 +901,12 @@
             isLoggedIn = false;
             document.getElementById('loginPage').style.display = 'flex';
             document.getElementById('dashboard').style.display = 'none';
+            showAlert('You have been logged out successfully', 'info');
         }
         
-        // Navigation
+        // ============================================
+        // NAVIGATION
+        // ============================================
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
@@ -510,357 +921,508 @@
                 dashboard: 'Dashboard',
                 home: 'Home Page Editor',
                 payment: 'Payment Page Editor',
-                codes: 'Payment Codes',
-                transactions: 'Transactions',
-                settings: 'Settings'
+                codes: 'Payment Codes Management',
+                transactions: 'Transactions History',
+                settings: 'System Settings'
             };
-            document.getElementById('currentPageTitle').innerText = titles[page] || 'Dashboard';
+            
+            const icons = {
+                dashboard: 'fa-chart-line',
+                home: 'fa-home',
+                payment: 'fa-credit-card',
+                codes: 'fa-key',
+                transactions: 'fa-history',
+                settings: 'fa-cog'
+            };
+            
+            document.getElementById('currentPageTitle').innerHTML = `<i class="fas ${icons[page]}"></i> ${titles[page] || 'Dashboard'}`;
             
             const contentDiv = document.getElementById('pageContent');
-            contentDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Loading...</div>';
+            contentDiv.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i><p>Loading...</p></div>';
             
-            switch(page) {
-                case 'dashboard':
-                    await renderDashboard(contentDiv);
-                    break;
-                case 'home':
-                    await renderHomeEditor(contentDiv);
-                    break;
-                case 'payment':
-                    await renderPaymentEditor(contentDiv);
-                    break;
-                case 'codes':
-                    await renderCodesManager(contentDiv);
-                    break;
-                case 'transactions':
-                    await renderTransactions(contentDiv);
-                    break;
-                case 'settings':
-                    await renderSettings(contentDiv);
-                    break;
-                default:
-                    await renderDashboard(contentDiv);
+            try {
+                switch(page) {
+                    case 'dashboard':
+                        await renderDashboard(contentDiv);
+                        break;
+                    case 'home':
+                        await renderHomeEditor(contentDiv);
+                        break;
+                    case 'payment':
+                        await renderPaymentEditor(contentDiv);
+                        break;
+                    case 'codes':
+                        await renderCodesManager(contentDiv);
+                        break;
+                    case 'transactions':
+                        await renderTransactions(contentDiv);
+                        break;
+                    case 'settings':
+                        await renderSettings(contentDiv);
+                        break;
+                    default:
+                        await renderDashboard(contentDiv);
+                }
+            } catch(err) {
+                console.error('Error loading page:', err);
+                contentDiv.innerHTML = `<div class="alert alert-error" style="position:static; margin:1rem;"><i class="fas fa-exclamation-triangle"></i> Error loading page: ${err.message}</div>`;
             }
         }
         
+        // ============================================
+        // DASHBOARD
+        // ============================================
         async function renderDashboard(container) {
-            const { count: codesCount } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
-            const { count: itemsCount } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
-            const { data: transactions, count: transactionsCount } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
-            const totalAmount = transactions?.reduce((sum, t) => sum + t.total_amount, 0) || 0;
-            
-            container.innerHTML = `
-                <div class="stats-grid">
-                    <div class="stat-card"><h3><i class="fas fa-key"></i> Payment Codes</h3><div class="stat-number">${codesCount || 0}</div></div>
-                    <div class="stat-card"><h3><i class="fas fa-list"></i> Payment Items</h3><div class="stat-number">${itemsCount || 0}</div></div>
-                    <div class="stat-card"><h3><i class="fas fa-credit-card"></i> Transactions</h3><div class="stat-number">${transactionsCount || 0}</div></div>
-                    <div class="stat-card"><h3><i class="fas fa-money-bill"></i> Total Revenue</h3><div class="stat-number">₦${totalAmount.toLocaleString()}</div></div>
-                </div>
-                <div class="data-table">
-                    <table><thead><tr><th>Recent Transactions</th><th>Amount</th><th>Status</th><th>Date</th></tr></thead>
-                    <tbody>${transactions?.map(t => `<tr><td>${t.item_name}</td><td>₦${t.total_amount.toLocaleString()}</td><td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}</tbody>
-                    </table>
-                </div>
-            `;
-        }
-        
-        async function renderHomeEditor(container) {
-            const { data: home } = await supabase.from('home_settings').select('*').eq('id', 1).single();
-            const { data: steps } = await supabase.from('how_it_works').select('*').order('step_order');
-            
-            let stepsHtml = '';
-            steps?.forEach((step, index) => {
-                stepsHtml += `
-                    <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.5rem; margin-bottom:1rem;">
-                        <div class="form-group"><label>Step ${step.step_order} Title</label><input type="text" id="stepTitle_${step.id}" value="${step.title.replace(/"/g, '&quot;')}"></div>
-                        <div class="form-group"><label>Step ${step.step_order} Description</label><textarea id="stepDesc_${step.id}" rows="2">${step.description?.replace(/"/g, '&quot;') || ''}</textarea></div>
+            try {
+                const { count: codesCount } = await supabase.from('payment_codes').select('*', { count: 'exact', head: true });
+                const { count: itemsCount } = await supabase.from('payment_items').select('*', { count: 'exact', head: true });
+                const { data: transactions, count: transactionsCount } = await supabase.from('transactions').select('*', { count: 'exact' }).order('created_at', { ascending: false }).limit(5);
+                const totalAmount = transactions?.reduce((sum, t) => sum + t.total_amount, 0) || 0;
+                
+                container.innerHTML = `
+                    <div class="stats-grid">
+                        <div class="stat-card"><h3><i class="fas fa-key"></i> Payment Codes</h3><div class="stat-number">${codesCount || 0}</div><small>Active codes</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-list"></i> Payment Items</h3><div class="stat-number">${itemsCount || 0}</div><small>Total items</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-credit-card"></i> Transactions</h3><div class="stat-number">${transactionsCount || 0}</div><small>Total payments</small></div>
+                        <div class="stat-card"><h3><i class="fas fa-money-bill"></i> Total Revenue</h3><div class="stat-number">₦${totalAmount.toLocaleString()}</div><small>All time</small></div>
+                    </div>
+                    <div class="data-table">
+                        <table>
+                            <thead><tr><th><i class="fas fa-clock"></i> Recent Transactions</th><th><i class="fas fa-money-bill"></i> Amount</th><th><i class="fas fa-chart-simple"></i> Status</th><th><i class="fas fa-calendar"></i> Date</th></tr></thead>
+                            <tbody>${transactions?.map(t => `<tr><td><strong>${t.item_name}</strong><br><small>${t.payer_name}</small></td><td>₦${t.total_amount.toLocaleString()}</td><td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td><td>${new Date(t.created_at).toLocaleDateString()}</td></tr>`).join('') || '<tr><td colspan="4" style="text-align:center">No transactions yet</td></tr>'}</tbody>
+                        </table>
                     </div>
                 `;
-            });
-            
-            container.innerHTML = `
-                <form id="homeEditorForm">
-                    <div class="form-group"><label>Hero Title</label><input type="text" id="heroTitle" value="${home?.hero_title || ''}"></div>
-                    <div class="form-group"><label>Hero Note</label><input type="text" id="heroNote" value="${home?.hero_note || ''}"></div>
-                    <div class="form-group"><label>Button Text</label><input type="text" id="buttonText" value="${home?.button_text || ''}"></div>
-                    <div class="form-group"><label>Logo URL</label><input type="text" id="logoUrl" value="${home?.logo_url || ''}" placeholder="https://..."></div>
-                    <h3 style="margin: 1.5rem 0 1rem 0;">How It Works Steps</h3>
-                    <div id="howItWorksList">${stepsHtml}</div>
-                    <button type="submit">Save Changes</button>
-                </form>
-            `;
-            
-            document.getElementById('homeEditorForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                await supabase.from('home_settings').update({
-                    hero_title: document.getElementById('heroTitle').value,
-                    hero_note: document.getElementById('heroNote').value,
-                    button_text: document.getElementById('buttonText').value,
-                    logo_url: document.getElementById('logoUrl').value
-                }).eq('id', 1);
-                
-                for (const step of steps) {
-                    await supabase.from('how_it_works').update({
-                        title: document.getElementById(`stepTitle_${step.id}`).value,
-                        description: document.getElementById(`stepDesc_${step.id}`).value
-                    }).eq('id', step.id);
-                }
-                
-                showAlert('Home page updated successfully!', 'success');
-                await renderHomeEditor(container);
-            });
-        }
-        
-        async function renderPaymentEditor(container) {
-            const { data: categories } = await supabase.from('categories').select('*').order('display_order');
-            const { data: items } = await supabase.from('payment_items').select('*, categories(name)').order('display_order');
-            
-            let itemsHtml = '';
-            for (const cat of categories) {
-                const categoryItems = items?.filter(i => i.category_id === cat.id) || [];
-                itemsHtml += `
-                    <div class="category-section">
-                        <div class="category-header">
-                            <div><span class="color-preview" style="background:${cat.color};"></span><strong style="font-size:1.1rem;">${cat.name}</strong></div>
-                            <div>
-                                <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor(${cat.id}, '${cat.name}')"><i class="fas fa-palette"></i> Color</button>
-                                <button type="button" class="btn-danger btn-sm" onclick="removeCategory(${cat.id}, '${cat.name}')"><i class="fas fa-trash"></i> Remove</button>
-                            </div>
-                        </div>
-                        <div id="items_${cat.id}">
-                            ${categoryItems.map(item => `
-                                <div class="item-row" data-item-id="${item.id}">
-                                    <input type="text" class="item-name" value="${item.name.replace(/"/g, '&quot;')}" placeholder="Item Name">
-                                    <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount" style="width:180px;">
-                                    <button type="button" class="btn-danger btn-sm" onclick="removeItem(${item.id})"><i class="fas fa-trash"></i></button>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <button type="button" class="btn-outline btn-sm" onclick="addItem(${cat.id})"><i class="fas fa-plus"></i> Add Item</button>
-                    </div>
-                `;
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading dashboard: ${err.message}</div>`;
             }
-            
-            container.innerHTML = `
-                <form id="paymentEditorForm">
-                    <div id="categoriesContainer">${itemsHtml}</div>
-                    <button type="button" class="btn-outline" onclick="addCategory()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
-                    <button type="submit">Save All Changes</button>
-                </form>
-            `;
-            
-            window.editCategoryColor = async function(catId, catName) {
-                const newColor = prompt('Enter new color (hex code like #0CA60C):', '#0CA60C');
-                if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
-                    await supabase.from('categories').update({ color: newColor }).eq('id', catId);
-                    showAlert(`Color for ${catName} updated!`, 'success');
-                    await renderPaymentEditor(container);
-                }
-            };
-            
-            window.removeCategory = async function(catId, catName) {
-                if (confirm(`Remove category "${catName}" and all its items?`)) {
-                    await supabase.from('payment_items').delete().eq('category_id', catId);
-                    await supabase.from('categories').delete().eq('id', catId);
-                    showAlert(`Category "${catName}" removed!`, 'success');
-                    await renderPaymentEditor(container);
-                }
-            };
-            
-            window.addCategory = async function() {
-                const newName = prompt('Enter new category name:');
-                if (newName) {
-                    const { data: existing } = await supabase.from('categories').select('id').eq('name', newName);
-                    if (existing?.length === 0) {
-                        await supabase.from('categories').insert({ name: newName, color: '#0CA60C' });
-                        showAlert(`Category "${newName}" added!`, 'success');
-                        await renderPaymentEditor(container);
-                    } else {
-                        alert('Category already exists!');
+        }
+        
+        // ============================================
+        // HOME PAGE EDITOR
+        // ============================================
+        async function renderHomeEditor(container) {
+            try {
+                const { data: home } = await supabase.from('home_settings').select('*').eq('id', 1).single();
+                const { data: steps } = await supabase.from('how_it_works').select('*').order('step_order');
+                
+                let stepsHtml = '';
+                steps?.forEach((step, index) => {
+                    stepsHtml += `
+                        <div style="border:1px solid #e2e8f0; padding:1rem; border-radius:0.75rem; margin-bottom:1rem;">
+                            <div class="form-group"><label>Step ${step.step_order} Title</label><input type="text" id="stepTitle_${step.id}" value="${escapeHtml(step.title)}"></div>
+                            <div class="form-group"><label>Step ${step.step_order} Description</label><textarea id="stepDesc_${step.id}" rows="2">${escapeHtml(step.description || '')}</textarea></div>
+                        </div>
+                    `;
+                });
+                
+                container.innerHTML = `
+                    <form id="homeEditorForm">
+                        <div class="form-group"><label><i class="fas fa-heading"></i> Hero Title</label><input type="text" id="heroTitle" value="${escapeHtml(home?.hero_title || '')}"></div>
+                        <div class="form-group"><label><i class="fas fa-info-circle"></i> Hero Note</label><input type="text" id="heroNote" value="${escapeHtml(home?.hero_note || '')}"></div>
+                        <div class="form-group"><label><i class="fas fa-button"></i> Button Text</label><input type="text" id="buttonText" value="${escapeHtml(home?.button_text || '')}"></div>
+                        <div class="form-group"><label><i class="fas fa-image"></i> Logo URL</label><input type="text" id="logoUrl" value="${escapeHtml(home?.logo_url || '')}" placeholder="https://..."></div>
+                        <h3 style="margin: 1.5rem 0 1rem 0;"><i class="fas fa-cogs"></i> How It Works Steps</h3>
+                        <div id="howItWorksList">${stepsHtml}</div>
+                        <button type="submit"><i class="fas fa-save"></i> Save Changes</button>
+                    </form>
+                `;
+                
+                document.getElementById('homeEditorForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    try {
+                        await supabase.from('home_settings').update({
+                            hero_title: document.getElementById('heroTitle').value,
+                            hero_note: document.getElementById('heroNote').value,
+                            button_text: document.getElementById('buttonText').value,
+                            logo_url: document.getElementById('logoUrl').value
+                        }).eq('id', 1);
+                        
+                        for (const step of steps) {
+                            await supabase.from('how_it_works').update({
+                                title: document.getElementById(`stepTitle_${step.id}`).value,
+                                description: document.getElementById(`stepDesc_${step.id}`).value
+                            }).eq('id', step.id);
+                        }
+                        
+                        showAlert('Home page updated successfully!', 'success');
+                        await renderHomeEditor(container);
+                    } catch(err) {
+                        showAlert('Error saving changes: ' + err.message, 'error');
                     }
-                }
-            };
-            
-            window.removeItem = async function(itemId) {
-                if (confirm('Remove this item?')) {
-                    await supabase.from('payment_items').delete().eq('id', itemId);
-                    showAlert('Item removed!', 'success');
-                    await renderPaymentEditor(container);
-                }
-            };
-            
-            window.addItem = async function(catId) {
-                const newName = prompt('Enter item name:');
-                if (newName) {
-                    const newAmount = prompt('Enter amount (leave empty for variable amount):');
-                    const amount = newAmount ? parseFloat(newAmount) : null;
-                    await supabase.from('payment_items').insert({
-                        category_id: catId,
-                        name: newName,
-                        amount: amount,
-                        is_variable: amount === null
-                    });
-                    showAlert(`Item "${newName}" added!`, 'success');
-                    await renderPaymentEditor(container);
-                }
-            };
-            
-            document.getElementById('paymentEditorForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
+                });
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading home editor: ${err.message}</div>`;
+            }
+        }
+        
+        // ============================================
+        // PAYMENT PAGE EDITOR
+        // ============================================
+        async function renderPaymentEditor(container) {
+            try {
+                const { data: categories } = await supabase.from('categories').select('*').order('display_order');
+                const { data: items } = await supabase.from('payment_items').select('*, categories(name)').order('display_order');
+                
+                let itemsHtml = '';
                 for (const cat of categories) {
-                    const container = document.getElementById(`items_${cat.id}`);
-                    if (container) {
-                        const rows = container.querySelectorAll('.item-row');
-                        for (let idx = 0; idx < rows.length; idx++) {
-                            const row = rows[idx];
-                            const itemId = parseInt(row.getAttribute('data-item-id'));
-                            const nameInput = row.querySelector('.item-name');
-                            const amountInput = row.querySelector('.item-amount');
-                            if (itemId && nameInput) {
-                                const amount = amountInput.value ? parseFloat(amountInput.value) : null;
-                                await supabase.from('payment_items').update({
-                                    name: nameInput.value,
-                                    amount: amount,
-                                    is_variable: amount === null
-                                }).eq('id', itemId);
+                    const categoryItems = items?.filter(i => i.category_id === cat.id) || [];
+                    itemsHtml += `
+                        <div class="category-section">
+                            <div class="category-header">
+                                <div><span class="color-preview" style="background:${cat.color};"></span><strong style="font-size:1.1rem;">${escapeHtml(cat.name)}</strong></div>
+                                <div>
+                                    <button type="button" class="btn-outline btn-sm" onclick="editCategoryColor(${cat.id}, '${escapeHtml(cat.name)}')"><i class="fas fa-palette"></i> Color</button>
+                                    <button type="button" class="btn-danger btn-sm" onclick="removeCategory(${cat.id}, '${escapeHtml(cat.name)}')"><i class="fas fa-trash"></i> Remove</button>
+                                </div>
+                            </div>
+                            <div id="items_${cat.id}">
+                                ${categoryItems.map(item => `
+                                    <div class="item-row" data-item-id="${item.id}">
+                                        <input type="text" class="item-name" value="${escapeHtml(item.name)}" placeholder="Item Name">
+                                        <input type="number" class="item-amount" value="${item.amount !== null ? item.amount : ''}" placeholder="Amount (empty=variable)" style="width:180px;">
+                                        <button type="button" class="btn-danger btn-sm" onclick="removeItem(${item.id})"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            <button type="button" class="btn-outline btn-sm" onclick="openAddItemModal(${cat.id})"><i class="fas fa-plus"></i> Add Item</button>
+                        </div>
+                    `;
+                }
+                
+                container.innerHTML = `
+                    <form id="paymentEditorForm">
+                        <div id="categoriesContainer">${itemsHtml}</div>
+                        <button type="button" class="btn-outline" onclick="openAddCategoryModal()" style="margin:1rem 0;"><i class="fas fa-plus"></i> Add New Category</button>
+                        <button type="submit"><i class="fas fa-save"></i> Save All Changes</button>
+                    </form>
+                `;
+                
+                // Make functions globally available
+                window.editCategoryColor = async function(catId, catName) {
+                    const newColor = prompt('Enter new color (hex code like #0CA60C):', '#0CA60C');
+                    if (newColor && /^#[0-9A-F]{6}$/i.test(newColor)) {
+                        await supabase.from('categories').update({ color: newColor }).eq('id', catId);
+                        showAlert(`Color for ${catName} updated!`, 'success');
+                        await renderPaymentEditor(container);
+                    } else if (newColor) {
+                        showAlert('Please enter a valid hex color code', 'error');
+                    }
+                };
+                
+                window.removeCategory = async function(catId, catName) {
+                    if (confirm(`Remove category "${catName}" and all its items? This cannot be undone.`)) {
+                        await supabase.from('payment_items').delete().eq('category_id', catId);
+                        await supabase.from('categories').delete().eq('id', catId);
+                        showAlert(`Category "${catName}" removed!`, 'success');
+                        await renderPaymentEditor(container);
+                    }
+                };
+                
+                window.removeItem = async function(itemId) {
+                    if (confirm('Remove this item? This cannot be undone.')) {
+                        await supabase.from('payment_items').delete().eq('id', itemId);
+                        showAlert('Item removed!', 'success');
+                        await renderPaymentEditor(container);
+                    }
+                };
+                
+                window.openAddCategoryModal = function() {
+                    document.getElementById('newCategoryName').value = '';
+                    document.getElementById('newCategoryColor').value = '#0CA60C';
+                    openModal('addCategoryModal');
+                };
+                
+                window.openAddItemModal = function(catId) {
+                    currentCategoryId = catId;
+                    document.getElementById('addItemCategoryId').value = catId;
+                    document.getElementById('newItemName').value = '';
+                    document.getElementById('newItemAmount').value = '';
+                    openModal('addItemModal');
+                };
+                
+                document.getElementById('paymentEditorForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    try {
+                        for (const cat of categories) {
+                            const container = document.getElementById(`items_${cat.id}`);
+                            if (container) {
+                                const rows = container.querySelectorAll('.item-row');
+                                for (let idx = 0; idx < rows.length; idx++) {
+                                    const row = rows[idx];
+                                    const itemId = parseInt(row.getAttribute('data-item-id'));
+                                    const nameInput = row.querySelector('.item-name');
+                                    const amountInput = row.querySelector('.item-amount');
+                                    if (itemId && nameInput) {
+                                        const amount = amountInput.value ? parseFloat(amountInput.value) : null;
+                                        await supabase.from('payment_items').update({
+                                            name: nameInput.value,
+                                            amount: amount,
+                                            is_variable: amount === null
+                                        }).eq('id', itemId);
+                                    }
+                                }
                             }
                         }
+                        showAlert('Payment page updated successfully!', 'success');
+                    } catch(err) {
+                        showAlert('Error saving changes: ' + err.message, 'error');
                     }
-                }
-                showAlert('Payment page updated successfully!', 'success');
-            });
-        }
-        
-        async function renderCodesManager(container) {
-            const { data: codes } = await supabase.from('payment_codes').select('*');
-            
-            container.innerHTML = `
-                <button onclick="showAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
-                <div class="data-table">
-                    <table><thead><tr><th>Code</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody>${codes?.map(code => `
-                        <tr>
-                            <td><code>${code.code}</code></td>
-                            <td>${code.bank_name}</td>
-                            <td>${code.account_name}</td>
-                            <td>${code.account_number}</td>
-                            <td><span class="badge ${code.is_active ? 'badge-confirmed' : 'badge-pending'}">${code.is_active ? 'Active' : 'Inactive'}</span></td>
-                            <td>
-                                <button onclick="editCode('${code.code}')" class="btn-sm"><i class="fas fa-edit"></i></button>
-                                <button onclick="toggleCodeStatus('${code.code}', ${!code.is_active})" class="btn-sm"><i class="fas ${code.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
-                                <button onclick="deleteCode('${code.code}')" class="btn-danger btn-sm"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="6" style="text-align:center">No payment codes</td></tr>'}</tbody>
-                    </table>
-                </div>
-            `;
-            
-            window.showAddCodeModal = async function() {
-                const code = prompt('Enter payment code (e.g., 1234):');
-                if (!code) return;
-                const { data: existing } = await supabase.from('payment_codes').select('code').eq('code', code);
-                if (existing?.length > 0) { alert('Code already exists!'); return; }
-                await supabase.from('payment_codes').insert({
-                    code: code,
-                    bank_name: prompt('Enter Bank Name:', 'First Bank of Nigeria'),
-                    account_name: prompt('Enter Account Name:', 'NECO Payment Services'),
-                    account_number: prompt('Enter Account Number:', '2024567890'),
-                    bank_code: prompt('Enter Bank Code:', '011'),
-                    is_active: true
                 });
-                showAlert(`Payment code "${code}" added!`, 'success');
-                await renderCodesManager(container);
-            };
-            
-            window.editCode = async function(code) {
-                const { data: existing } = await supabase.from('payment_codes').select('*').eq('code', code).single();
-                if (existing) {
+                
+                // Add Category Form
+                document.getElementById('addCategoryForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const newName = document.getElementById('newCategoryName').value;
+                    const newColor = document.getElementById('newCategoryColor').value;
+                    if (newName) {
+                        const { data: existing } = await supabase.from('categories').select('id').eq('name', newName);
+                        if (existing?.length === 0) {
+                            await supabase.from('categories').insert({ name: newName, color: newColor });
+                            showAlert(`Category "${newName}" added!`, 'success');
+                            closeModal('addCategoryModal');
+                            await renderPaymentEditor(container);
+                        } else {
+                            showAlert('Category already exists!', 'error');
+                        }
+                    }
+                });
+                
+                // Add Item Form
+                document.getElementById('addItemForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const catId = currentCategoryId;
+                    const newName = document.getElementById('newItemName').value;
+                    const newAmount = document.getElementById('newItemAmount').value;
+                    const amount = newAmount ? parseFloat(newAmount) : null;
+                    if (newName) {
+                        await supabase.from('payment_items').insert({
+                            category_id: catId,
+                            name: newName,
+                            amount: amount,
+                            is_variable: amount === null
+                        });
+                        showAlert(`Item "${newName}" added!`, 'success');
+                        closeModal('addItemModal');
+                        await renderPaymentEditor(container);
+                    }
+                });
+                
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading payment editor: ${err.message}</div>`;
+            }
+        }
+        
+        // ============================================
+        // PAYMENT CODES MANAGER
+        // ============================================
+        async function renderCodesManager(container) {
+            try {
+                const { data: codes } = await supabase.from('payment_codes').select('*');
+                
+                container.innerHTML = `
+                    <button onclick="openAddCodeModal()" style="margin-bottom:1rem;"><i class="fas fa-plus"></i> Add Payment Code</button>
+                    <div class="data-table">
+                        <table>
+                            <thead><tr><th><i class="fas fa-key"></i> Code</th><th><i class="fas fa-university"></i> Bank Name</th><th><i class="fas fa-user"></i> Account Name</th><th><i class="fas fa-hashtag"></i> Account Number</th><th><i class="fas fa-toggle-on"></i> Status</th><th><i class="fas fa-cog"></i> Actions</th></tr></thead>
+                            <tbody>${codes?.map(code => `
+                                <tr>
+                                    <td><code style="background:#f1f5f9; padding:0.25rem 0.5rem; border-radius:0.25rem; font-weight:bold;">${code.code}</code></td>
+                                    <td>${escapeHtml(code.bank_name)}</td>
+                                    <td>${escapeHtml(code.account_name)}</td>
+                                    <td>${code.account_number}</td>
+                                    <td><span class="badge ${code.is_active ? 'badge-active' : 'badge-inactive'}">${code.is_active ? 'Active' : 'Inactive'}</span></td>
+                                    <td>
+                                        <button onclick="openEditCodeModal('${code.code}')" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas fa-edit"></i></button>
+                                        <button onclick="toggleCodeStatus('${code.code}', ${!code.is_active})" class="btn-sm" style="padding:0.25rem 0.5rem; margin-right:0.25rem;"><i class="fas ${code.is_active ? 'fa-ban' : 'fa-check'}"></i></button>
+                                        <button onclick="deleteCode('${code.code}')" class="btn-danger btn-sm" style="padding:0.25rem 0.5rem;"><i class="fas fa-trash"></i></button>
+                                     </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="6" style="text-align:center">No payment codes</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                `;
+                
+                window.openAddCodeModal = function() {
+                    document.getElementById('newCode').value = '';
+                    document.getElementById('newBankName').value = '';
+                    document.getElementById('newAccountName').value = '';
+                    document.getElementById('newAccountNumber').value = '';
+                    document.getElementById('newBankCode').value = '';
+                    openModal('addCodeModal');
+                };
+                
+                window.openEditCodeModal = async function(code) {
+                    const { data: existing } = await supabase.from('payment_codes').select('*').eq('code', code).single();
+                    if (existing) {
+                        document.getElementById('editCodeOriginal').value = code;
+                        document.getElementById('editBankName').value = existing.bank_name;
+                        document.getElementById('editAccountName').value = existing.account_name;
+                        document.getElementById('editAccountNumber').value = existing.account_number;
+                        document.getElementById('editBankCode').value = existing.bank_code || '';
+                        openModal('editCodeModal');
+                    }
+                };
+                
+                window.toggleCodeStatus = async function(code, newStatus) {
+                    await supabase.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
+                    showAlert(`Payment code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
+                    await renderCodesManager(container);
+                };
+                
+                window.deleteCode = async function(code) {
+                    if (confirm(`Delete payment code "${code}"? This cannot be undone.`)) {
+                        await supabase.from('payment_codes').delete().eq('code', code);
+                        showAlert(`Payment code "${code}" deleted!`, 'success');
+                        await renderCodesManager(container);
+                    }
+                };
+                
+                // Add Code Form
+                document.getElementById('addCodeForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const code = document.getElementById('newCode').value;
+                    const bankName = document.getElementById('newBankName').value;
+                    const accountName = document.getElementById('newAccountName').value;
+                    const accountNumber = document.getElementById('newAccountNumber').value;
+                    const bankCode = document.getElementById('newBankCode').value;
+                    
+                    if (!code || !bankName || !accountName || !accountNumber) {
+                        showAlert('Please fill in all required fields', 'error');
+                        return;
+                    }
+                    
+                    const { data: existing } = await supabase.from('payment_codes').select('code').eq('code', code);
+                    if (existing?.length > 0) {
+                        showAlert('Code already exists!', 'error');
+                        return;
+                    }
+                    
+                    await supabase.from('payment_codes').insert({
+                        code: code,
+                        bank_name: bankName,
+                        account_name: accountName,
+                        account_number: accountNumber,
+                        bank_code: bankCode,
+                        is_active: true
+                    });
+                    showAlert(`Payment code "${code}" added successfully!`, 'success');
+                    closeModal('addCodeModal');
+                    await renderCodesManager(container);
+                });
+                
+                // Edit Code Form
+                document.getElementById('editCodeForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const originalCode = document.getElementById('editCodeOriginal').value;
+                    const bankName = document.getElementById('editBankName').value;
+                    const accountName = document.getElementById('editAccountName').value;
+                    const accountNumber = document.getElementById('editAccountNumber').value;
+                    const bankCode = document.getElementById('editBankCode').value;
+                    
                     await supabase.from('payment_codes').update({
-                        bank_name: prompt('Edit Bank Name:', existing.bank_name) || existing.bank_name,
-                        account_name: prompt('Edit Account Name:', existing.account_name) || existing.account_name,
-                        account_number: prompt('Edit Account Number:', existing.account_number) || existing.account_number,
-                        bank_code: prompt('Edit Bank Code:', existing.bank_code) || existing.bank_code
-                    }).eq('code', code);
-                    showAlert(`Payment code "${code}" updated!`, 'success');
+                        bank_name: bankName,
+                        account_name: accountName,
+                        account_number: accountNumber,
+                        bank_code: bankCode
+                    }).eq('code', originalCode);
+                    
+                    showAlert(`Payment code "${originalCode}" updated!`, 'success');
+                    closeModal('editCodeModal');
                     await renderCodesManager(container);
-                }
-            };
-            
-            window.toggleCodeStatus = async function(code, newStatus) {
-                await supabase.from('payment_codes').update({ is_active: newStatus }).eq('code', code);
-                showAlert(`Payment code "${code}" ${newStatus ? 'activated' : 'deactivated'}!`, 'success');
-                await renderCodesManager(container);
-            };
-            
-            window.deleteCode = async function(code) {
-                if (confirm(`Delete payment code "${code}"?`)) {
-                    await supabase.from('payment_codes').delete().eq('code', code);
-                    showAlert(`Payment code "${code}" deleted!`, 'success');
-                    await renderCodesManager(container);
-                }
-            };
+                });
+                
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading codes manager: ${err.message}</div>`;
+            }
         }
         
+        // ============================================
+        // TRANSACTIONS
+        // ============================================
         async function renderTransactions(container) {
-            const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
-            
-            container.innerHTML = `
-                <div class="data-table">
-                    <table><thead><tr><th>Date</th><th>Item</th><th>Category</th><th>Payer</th><th>Amount</th><th>Status</th><th>Actions</th></tr></thead>
-                    <tbody>${transactions?.map(t => `
-                        <tr>
-                            <td>${new Date(t.created_at).toLocaleString()}</td>
-                            <td>${t.item_name}</td>
-                            <td>${t.category_name}</td>
-                            <td>${t.payer_name}<br><small>${t.email}</small></td>
-                            <td>₦${t.total_amount.toLocaleString()}</td>
-                            <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
-                            <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm">Confirm</button>` : '✓ Confirmed'}</td>
-                        </tr>
-                    `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}</tbody>
-                    </table>
-                </div>
-            `;
-            
-            window.confirmTransaction = async function(id) {
-                await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id);
-                showAlert('Transaction confirmed!', 'success');
-                await renderTransactions(container);
-            };
+            try {
+                const { data: transactions } = await supabase.from('transactions').select('*').order('created_at', { ascending: false });
+                
+                container.innerHTML = `
+                    <div class="data-table">
+                        </table>
+                            <thead><tr><th><i class="fas fa-calendar"></i> Date</th><th><i class="fas fa-tag"></i> Item</th><th><i class="fas fa-folder"></i> Category</th><th><i class="fas fa-user"></i> Payer</th><th><i class="fas fa-money-bill"></i> Amount</th><th><i class="fas fa-chart-simple"></i> Status</th><th><i class="fas fa-cog"></i> Actions</th></tr></thead>
+                            <tbody>${transactions?.map(t => `
+                                <tr>
+                                    <td>${new Date(t.created_at).toLocaleString()}</td>
+                                    <td><strong>${escapeHtml(t.item_name)}</strong></td>
+                                    <td>${escapeHtml(t.category_name)}</td>
+                                    <td>${escapeHtml(t.payer_name)}<br><small style="color:#64748b;">${escapeHtml(t.email)}</small></td>
+                                    <td>₦${t.total_amount.toLocaleString()}</td>
+                                    <td><span class="badge ${t.status === 'confirmed' ? 'badge-confirmed' : 'badge-pending'}">${t.status}</span></td>
+                                    <td>${t.status !== 'confirmed' ? `<button onclick="confirmTransaction('${t.id}')" class="btn-sm"><i class="fas fa-check-circle"></i> Confirm</button>` : '<span style="color:#0ca60c;"><i class="fas fa-check-circle"></i> Confirmed</span>'}
+                                    </td>
+                                </tr>
+                            `).join('') || '<tr><td colspan="7" style="text-align:center">No transactions yet</td></tr>'}</tbody>
+                        </table>
+                    </div>
+                `;
+                
+                window.confirmTransaction = async function(id) {
+                    await supabase.from('transactions').update({ status: 'confirmed' }).eq('id', id);
+                    showAlert('Transaction confirmed successfully!', 'success');
+                    await renderTransactions(container);
+                };
+                
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading transactions: ${err.message}</div>`;
+            }
         }
         
+        // ============================================
+        // SETTINGS
+        // ============================================
         async function renderSettings(container) {
-            const { data: admin } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
-            
-            container.innerHTML = `
-                <form id="settingsForm">
-                    <div class="form-group"><label>Admin Username</label><input type="text" id="adminUsername" value="${admin?.username || ''}"></div>
-                    <div class="form-group"><label>Admin Password</label><input type="password" id="adminPassword" value="${admin?.password || ''}"></div>
-                    <div class="form-group"><label>WhatsApp Number</label><input type="text" id="whatsappNumber" value="${admin?.whatsapp_number || ''}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
-                    <button type="submit">Save Settings</button>
-                </form>
-            `;
-            
-            document.getElementById('settingsForm').addEventListener('submit', async function(e) {
-                e.preventDefault();
-                await supabase.from('admin_settings').update({
-                    username: document.getElementById('adminUsername').value,
-                    password: document.getElementById('adminPassword').value,
-                    whatsapp_number: document.getElementById('whatsappNumber').value
-                }).eq('id', 1);
-                showAlert('Settings saved!', 'success');
+            try {
+                const { data: admin } = await supabase.from('admin_settings').select('*').eq('id', 1).single();
+                
+                container.innerHTML = `
+                    <form id="settingsForm" style="max-width: 500px;">
+                        <div class="form-group"><label><i class="fas fa-user-shield"></i> Admin Username</label><input type="text" id="adminUsername" value="${escapeHtml(admin?.username || '')}"></div>
+                        <div class="form-group"><label><i class="fas fa-lock"></i> Admin Password</label><input type="password" id="adminPassword" value="${escapeHtml(admin?.password || '')}"></div>
+                        <div class="form-group"><label><i class="fab fa-whatsapp"></i> WhatsApp Number</label><input type="text" id="whatsappNumber" value="${escapeHtml(admin?.whatsapp_number || '')}" placeholder="2348021234567"><small>Format: country code + number (no + sign)</small></div>
+                        <button type="submit"><i class="fas fa-save"></i> Save Settings</button>
+                    </form>
+                `;
+                
+                document.getElementById('settingsForm').addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    try {
+                        await supabase.from('admin_settings').update({
+                            username: document.getElementById('adminUsername').value,
+                            password: document.getElementById('adminPassword').value,
+                            whatsapp_number: document.getElementById('whatsappNumber').value
+                        }).eq('id', 1);
+                        showAlert('Settings saved successfully!', 'success');
+                    } catch(err) {
+                        showAlert('Error saving settings: ' + err.message, 'error');
+                    }
+                });
+            } catch(err) {
+                container.innerHTML = `<div class="alert alert-error">Error loading settings: ${err.message}</div>`;
+            }
+        }
+        
+        // ============================================
+        // UTILITIES
+        // ============================================
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
             });
         }
         
-        function showAlert(message, type) {
-            const alertDiv = document.createElement('div');
-            alertDiv.className = `alert alert-${type}`;
-            alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i> ${message}`;
-            document.body.appendChild(alertDiv);
-            setTimeout(() => alertDiv.remove(), 3000);
-        }
-        
+        // Start the app
         checkSession();
     </script>
 </body>
