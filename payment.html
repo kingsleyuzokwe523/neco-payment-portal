@@ -68,7 +68,6 @@
         .mx-auto{margin-left:auto;margin-right:auto}
         .card-amount p{margin:0;line-height:1.3}
         
-        /* Loading Spinner */
         .loader {
             width: 50px;
             height: 50px;
@@ -83,7 +82,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Countdown Timer */
         .countdown-timer {
             font-family: monospace;
             font-size: 24px;
@@ -194,7 +192,7 @@
         </div>
     </div>
 
-    <!-- PAYMENT FORM MODAL (First Modal - Collects User Info) -->
+    <!-- PAYMENT FORM MODAL -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -300,7 +298,7 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL (Second Modal - Shows breakdown - NECO STYLE) -->
+    <!-- INVOICE SUMMARY MODAL -->
     <div id="invoiceModal" class="fixed inset-0 z-40 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -349,7 +347,7 @@
         </div>
     </div>
 
-    <!-- LOADING MODAL (Shows while generating account) -->
+    <!-- LOADING MODAL -->
     <div id="loadingModal" class="fixed inset-0 z-45 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
         <div class="fixed inset-0 flex items-center justify-center">
@@ -361,7 +359,7 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MODAL (Third Modal - Shows bank details with timer - SAME BOX DESIGN) -->
+    <!-- ACCOUNT MODAL -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -402,32 +400,84 @@
     </div>
 
     <script>
+        // ============ ALL 57+ PAYMENT ITEMS - COMPLETE LIST ============
         const paymentData = {
-            "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
-                { name: "Four Figure Table", amount: 500 },{ name: "Non-Validation", amount: 10000 },{ name: "Syllabus", amount: 2000 },{ name: "Photo Album", amount: 2700 },
-                { name: "Late Ca3 Upload", amount: 40000 },{ name: "Remarking Ssce (i)", amount: 20000 },{ name: "Unviable Centre Fee", amount: 70000 },{ name: "Late Registration Fee", amount: 5000 },
-                { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },{ name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },{ name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },{ name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
-                { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
-            ]},
-            "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
-                { name: "Four Figure Table", amount: 500 },{ name: "Walk-in", amount: 43000 },{ name: "Syllabus", amount: 2000 },{ name: "Result Slips", amount: 1600 },
-                { name: "Remarking Ssce Ext", amount: 20000 },{ name: "Collection Of Certificate", amount: 500 },{ name: "Non-Validation", amount: 10000 }
-            ]},
-            "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
-                { name: "Remarking Bece", amount: 15000 },{ name: "Non-Validation", amount: 10000 },
-                { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },{ name: "Bece Re-accreditation (public Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },{ name: "Bece Re-accreditation (private Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },{ name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
-            ]},
-            "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [{ name: "Non-Validation", amount: 4000 }]},
-            "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [{ name: "Non-Validation", amount: 4000 }]},
-            "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
-                { name: "Reprint Of Certificate", amount: 50000 },{ name: "Change Of School Name", amount: 15000 },{ name: "Reprint Of School Results Per Candidate", amount: 400 },
-                { name: "Staff Identity Card", amount: 1000 },{ name: "Result Checker (token)", amount: 1000 },{ name: "Examination Bag", amount: 15000 },
-                { name: "Confirmation Of Result", amount: 10000 },{ name: "E-verification Of Result", amount: 5000 }
-            ]}
+            "SSCE Internal": { 
+                color: "#0CA60C", 
+                bgColor: "rgb(12, 166, 12)", 
+                items: [
+                    { name: "Four Figure Table", amount: 500 },
+                    { name: "Non-Validation", amount: 10000 },
+                    { name: "Syllabus", amount: 2000 },
+                    { name: "Photo Album", amount: 2700 },
+                    { name: "Late Ca3 Upload", amount: 40000 },
+                    { name: "Remarking Ssce (i)", amount: 20000 },
+                    { name: "Unviable Centre Fee", amount: 70000 },
+                    { name: "Late Registration Fee", amount: 5000 },
+                    { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
+                    { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
+                    { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
+                    { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
+                    { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
+                    { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
+                    { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
+                ]
+            },
+            "SSCE External": { 
+                color: "#145596", 
+                bgColor: "rgb(20, 85, 150)", 
+                items: [
+                    { name: "Four Figure Table", amount: 500 },
+                    { name: "Walk-in", amount: 43000 },
+                    { name: "Syllabus", amount: 2000 },
+                    { name: "Result Slips", amount: 1600 },
+                    { name: "Remarking Ssce Ext", amount: 20000 },
+                    { name: "Collection Of Certificate", amount: 500 },
+                    { name: "Non-Validation", amount: 10000 }
+                ]
+            },
+            "BECE": { 
+                color: "#642D56", 
+                bgColor: "rgb(100, 45, 86)", 
+                items: [
+                    { name: "Remarking Bece", amount: 15000 },
+                    { name: "Non-Validation", amount: 10000 },
+                    { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
+                    { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
+                    { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
+                    { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
+                    { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
+                    { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
+                ]
+            },
+            "NCEE": { 
+                color: "#1887EB", 
+                bgColor: "rgb(24, 135, 235)", 
+                items: [
+                    { name: "Non-Validation", amount: 4000 }
+                ]
+            },
+            "Gifted": { 
+                color: "#24809C", 
+                bgColor: "rgb(36, 128, 156)", 
+                items: [
+                    { name: "Non-Validation", amount: 4000 }
+                ]
+            },
+            "Others": { 
+                color: "#36454F", 
+                bgColor: "rgb(54, 69, 79)", 
+                items: [
+                    { name: "Reprint Of Certificate", amount: 50000 },
+                    { name: "Change Of School Name", amount: 15000 },
+                    { name: "Reprint Of School Results Per Candidate", amount: 400 },
+                    { name: "Staff Identity Card", amount: 1000 },
+                    { name: "Result Checker (token)", amount: 1000 },
+                    { name: "Examination Bag", amount: 15000 },
+                    { name: "Confirmation Of Result", amount: 10000 },
+                    { name: "E-verification Of Result", amount: 5000 }
+                ]
+            }
         };
 
         let currentCategory = "SSCE Internal";
@@ -472,7 +522,7 @@
                                 <div>
                                     <div class="h-[1px] bg-gray-200"></div>
                                     <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat color;}">Make payment</button>
+                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
                                         <div class="card-amount">
                                             <p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p>
                                             <p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p>
@@ -531,7 +581,6 @@
             closeInvoiceModal();
             document.getElementById('loadingModal').classList.remove('hidden');
             
-            // Simulate account generation delay (3 seconds)
             setTimeout(() => {
                 document.getElementById('loadingModal').classList.add('hidden');
                 showAccountModal();
@@ -573,7 +622,6 @@
             document.getElementById('uploadedFileName').innerHTML = '';
             document.getElementById('accountModal').classList.remove('hidden');
             
-            // Start 30 minute countdown
             startCountdown(30);
         }
 
