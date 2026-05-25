@@ -68,7 +68,14 @@
         .mx-auto{margin-left:auto;margin-right:auto}
         .card-amount p{margin:0;line-height:1.3}
         
-        /* Loading overlay */
+        /* Error message styling */
+        .error-text {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+        
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -98,7 +105,6 @@
             100% { transform: rotate(360deg); }
         }
         
-        /* Smaller countdown timer - side positioned */
         .countdown-wrapper {
             display: flex;
             justify-content: flex-end;
@@ -116,21 +122,11 @@
             border-radius: 20px;
         }
         
-        /* Error message styling */
-        .error-text {
-            color: #dc2626;
-            font-size: 11px;
-            margin-top: 4px;
-            display: none;
-        }
-        
-        /* Smaller buttons */
         .btn-small {
             padding: 8px 16px !important;
             font-size: 14px !important;
         }
         
-        /* Account details - straight line layout, smaller */
         .account-details-line {
             display: flex;
             justify-content: space-between;
@@ -165,7 +161,7 @@
     </style>
 </head>
 <body>
-    <!-- Full Page White Loading Overlay -->
+    <!-- Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <p style="font-size: 16px; color: #054c0f; font-weight: 600;">Please wait...</p>
@@ -249,7 +245,7 @@
         </div>
     </div>
 
-    <!-- PAYMENT FORM MODAL - Smaller size like original NECO -->
+    <!-- PAYMENT FORM MODAL -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -272,7 +268,7 @@
                                     <div class="mt-1 relative">
                                         <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
-                                    <div id="codeError" class="text-red-600 text-xs mt-1 hidden">Invalid code</div>
+                                    <div id="codeError" class="error-text">Invalid payment code</div>
                                 </div>
                             </div>
                             <div class="mt-3 flex justify-end">
@@ -294,18 +290,18 @@
                             </div>
                             <div class="mt-3 flex gap-3 flex-col md:flex-row">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Phone number (11 digits)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Phone number (max 11 digits)</label>
                                     <div class="mt-1 relative">
                                         <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
-                                    <div id="phoneError" class="error-text">Phone number must be exactly 11 digits</div>
+                                    <div id="phoneError" class="error-text">❌ Invalid phone number - must be numbers only, max 11 digits</div>
                                 </div>
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Email (must end with @gmail.com)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Email (must be @gmail.com)</label>
                                     <div class="mt-1 relative">
                                         <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
-                                    <div id="emailError" class="error-text">Email must be a valid Gmail address (@gmail.com)</div>
+                                    <div id="emailError" class="error-text">❌ Invalid email - must be a valid @gmail.com address</div>
                                 </div>
                             </div>
                             <div class="mt-3">
@@ -333,9 +329,9 @@
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" value="" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity (e.g., 1, 2, 3)" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
-                                    <div id="quantityError" class="error-text">Please enter quantity</div>
+                                    <div id="quantityError" class="error-text">❌ Please enter a valid quantity (must be at least 1)</div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Currency</label>
@@ -358,7 +354,7 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - Original NECO design with proper spacing -->
+    <!-- INVOICE SUMMARY MODAL -->
     <div id="invoiceModal" class="fixed inset-0 z-40 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -407,7 +403,7 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MODAL - Smaller, straight line layout -->
+    <!-- ACCOUNT MODAL -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
@@ -448,7 +444,7 @@
     </div>
 
     <script>
-        // ============ ALL PAYMENT ITEMS ============
+        // PAYMENT ITEMS DATA
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 }, { name: "Non-Validation", amount: 10000 }, { name: "Syllabus", amount: 2000 },
@@ -486,13 +482,25 @@
         let currentFormData = {};
         let isCodeValid = false;
         let countdownInterval = null;
-        let currentPinData = null;
 
-        // PIN codes with expiry tracking
+        // PIN Database
         let paymentPinsDatabase = {
             "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011", status: "active", expiresAt: null }
         };
 
+        // Validation Functions
+        function validatePhone(phone) {
+            return phone && /^[0-9]+$/.test(phone) && phone.length <= 11;
+        }
+        
+        function validateEmail(email) {
+            return email && email.toLowerCase().includes('@gmail.com');
+        }
+        
+        function validateQuantity(quantity) {
+            return quantity && !isNaN(quantity) && parseInt(quantity) > 0;
+        }
+        
         function validatePaymentCode(code) { 
             const pin = paymentPinsDatabase[code.trim()];
             if (pin && pin.status === "active") {
@@ -501,19 +509,7 @@
             return { valid: false, accountDetails: null }; 
         }
         
-        // Validation functions
-        function validatePhone(phone) {
-            return phone && phone.length === 11 && /^[0-9]+$/.test(phone);
-        }
-        
-        function validateEmail(email) {
-            return email && email.toLowerCase().endsWith('@gmail.com');
-        }
-        
-        function validateQuantity(quantity) {
-            return quantity && quantity > 0;
-        }
-        
+        // Real-time validation checker
         function checkFormValidation() {
             const code = document.getElementById('paymentCode').value;
             const validation = validatePaymentCode(code);
@@ -528,14 +524,15 @@
             
             let isPhoneValid = validatePhone(phone);
             let isEmailValid = validateEmail(email);
-            let isQuantityValid = validateQuantity(parseInt(quantity));
+            let isQuantityValid = validateQuantity(quantity);
             
-            document.getElementById('phoneError').style.display = !isPhoneValid && phone ? 'block' : 'none';
-            document.getElementById('emailError').style.display = !isEmailValid && email ? 'block' : 'none';
-            document.getElementById('quantityError').style.display = !isQuantityValid && quantity ? 'block' : 'none';
-            
+            // Show/hide error messages
+            document.getElementById('phoneError').style.display = (!isPhoneValid && phone) ? 'block' : 'none';
+            document.getElementById('emailError').style.display = (!isEmailValid && email) ? 'block' : 'none';
+            document.getElementById('quantityError').style.display = (!isQuantityValid && quantity) ? 'block' : 'none';
             document.getElementById('codeError').style.display = (code && !isCodeValid) ? 'block' : 'none';
             
+            // Enable proceed button only if all valid
             const allValid = isCodeValid && fullName && isPhoneValid && isEmailValid && amount && isQuantityValid;
             document.getElementById('proceedBtn').disabled = !allValid;
         }
@@ -571,21 +568,32 @@
             if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
             else { amountInput.value = ''; amountInput.readOnly = false; }
             document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+            
+            // Clear all fields
             document.getElementById('paymentCode').value = ''; 
             document.getElementById('fullName').value = ''; 
             document.getElementById('phone').value = ''; 
             document.getElementById('email').value = '';
             document.getElementById('paymentDescription').value = ''; 
-            document.getElementById('quantity').value = ''; 
+            document.getElementById('quantity').value = '';  // NO DEFAULT VALUE - user must input
             document.getElementById('currency').value = 'Naira';
+            
+            // Hide all error messages
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('phoneError').style.display = 'none';
             document.getElementById('emailError').style.display = 'none';
             document.getElementById('quantityError').style.display = 'none';
+            
             document.getElementById('proceedBtn').disabled = true;
             document.getElementById('paymentModal').classList.remove('hidden');
+            
+            // Add event listeners for real-time validation
             ['paymentCode','fullName','phone','email','amount','quantity'].forEach(id => {
-                document.getElementById(id).addEventListener('input', checkFormValidation);
+                const element = document.getElementById(id);
+                if (element) {
+                    element.removeEventListener('input', checkFormValidation);
+                    element.addEventListener('input', checkFormValidation);
+                }
             });
         }
         
@@ -608,10 +616,11 @@
             const currency = document.getElementById('currency').value;
             let amount = parseFloat(document.getElementById('amount').value);
             
-            if (!fullName || !phone || !email) { alert('Please fill all payer details'); return; }
-            if (!validatePhone(phone)) { alert('Phone number must be exactly 11 digits'); return; }
-            if (!validateEmail(email)) { alert('Email must be a valid Gmail address (@gmail.com)'); return; }
-            if (!quantity || quantity <= 0) { alert('Please enter a valid quantity'); return; }
+            // Final validation before proceeding
+            if (!fullName) { alert('Please enter your full name'); return; }
+            if (!validatePhone(phone)) { alert('Phone number must be numbers only, max 11 digits'); return; }
+            if (!validateEmail(email)) { alert('Email must be a valid @gmail.com address'); return; }
+            if (!validateQuantity(quantity)) { alert('Please enter a valid quantity (at least 1)'); return; }
             if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
             
             const serviceCharge = Math.ceil(amount * 0.01), stampDuty = 50, totalAmount = (amount + serviceCharge + stampDuty) * quantity;
@@ -630,7 +639,6 @@
         function showLoadingAndGenerateAccount() {
             closeInvoiceModal();
             document.getElementById('loadingOverlay').style.display = 'flex';
-            
             setTimeout(() => {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 showAccountModal();
@@ -640,10 +648,8 @@
         function startCountdown(minutes, pinCode) {
             let time = minutes * 60;
             const timerElement = document.getElementById('countdownTimer');
-            
             if (countdownInterval) clearInterval(countdownInterval);
             
-            // Set expiry time
             const expiryTime = new Date().getTime() + (minutes * 60 * 1000);
             if (paymentPinsDatabase[pinCode]) {
                 paymentPinsDatabase[pinCode].expiresAt = expiryTime;
@@ -655,13 +661,11 @@
                 const mins = Math.floor(remaining / 60);
                 const secs = remaining % 60;
                 timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                
                 if (remaining <= 0) {
                     clearInterval(countdownInterval);
                     timerElement.textContent = "Expired";
                     timerElement.style.color = "#9ca3af";
                     timerElement.style.background = "#f3f4f6";
-                    // Mark PIN as expired
                     if (paymentPinsDatabase[pinCode]) {
                         paymentPinsDatabase[pinCode].status = "expired";
                     }
@@ -671,14 +675,13 @@
 
         function showAccountModal() {
             const pinCode = currentFormData.paymentCode;
-            currentPinData = paymentPinsDatabase[pinCode];
+            const account = paymentPinsDatabase[pinCode];
             
-            if (!currentPinData || currentPinData.status !== "active") {
+            if (!account || account.status !== "active") {
                 alert("This payment code has expired or is invalid. Please contact admin.");
                 return;
             }
             
-            const account = currentPinData;
             document.getElementById('accountDetailsBox').innerHTML = `
                 <div class="account-details-line"><span>Bank:</span><strong>${account.bankName}</strong></div>
                 <div class="account-details-line"><span>Account Name:</span><span>${account.accountName}</span></div>
@@ -689,7 +692,6 @@
             document.getElementById('receiptInput').value = ''; 
             document.getElementById('uploadedFileName').innerHTML = '';
             document.getElementById('accountModal').classList.remove('hidden');
-            
             startCountdown(30, pinCode);
         }
 
@@ -700,17 +702,15 @@
         function confirmPayment() { 
             if(!document.getElementById('receiptInput').files[0]) { alert('Please upload your payment receipt'); return; } 
             if (countdownInterval) clearInterval(countdownInterval);
-            
-            // Mark PIN as used
             const pinCode = currentFormData.paymentCode;
             if (paymentPinsDatabase[pinCode]) {
                 paymentPinsDatabase[pinCode].status = "used";
             }
-            
             alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
             closeAccountModal(); 
         }
 
+        // Category filter event listeners
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => {
@@ -737,9 +737,6 @@
         });
         
         renderGrid();
-        window.addPaymentCode = (code,bank,accName,accNum,bankCode) => { 
-            paymentPinsDatabase[code.trim()] = { bankName: bank, accountName: accName, accountNumber: accNum, bankCode, status: "active", expiresAt: null };
-        };
     </script>
 </body>
 </html>
