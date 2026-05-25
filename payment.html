@@ -94,12 +94,185 @@
             margin-top: 10px;
         }
         
-        /* Error message styling - red text, no symbol */
         .error-text {
             color: #dc2626;
             font-size: 12px;
             margin-top: 4px;
             display: none;
+        }
+        
+        /* Invoice Summary Modal - EXACT DESIGN FROM YOUR FILE */
+        .invoice-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.25);
+            backdrop-filter: blur(4px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .invoice-modal-container {
+            width: 100%;
+            transform: translateY(0);
+            overflow-y: auto;
+            border-radius: 12px;
+            background: white;
+            text-align: left;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.2);
+            max-width: 448px;
+            padding: 40px 0;
+        }
+
+        .invoice-modal-content {
+            padding: 0 24px;
+        }
+
+        .invoice-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 16px;
+        }
+
+        .invoice-modal-header h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            font-family: 'CircularStdBold', system-ui, -apple-system, sans-serif;
+            color: #1a2c3e;
+            margin: 0;
+        }
+
+        .invoice-close-icon {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            color: #5a6e7c;
+            transition: color 0.2s;
+        }
+
+        .invoice-close-icon:hover {
+            color: #1a2c3e;
+        }
+
+        .invoice-summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 16px;
+        }
+
+        .invoice-summary-header p {
+            font-size: 0.875rem;
+            color: #6c7a8a;
+            font-weight: 500;
+        }
+
+        .invoice-summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 16px;
+        }
+
+        .invoice-item-name {
+            font-size: 0.875rem;
+            color: #1a2c3e;
+            width: 66.666%;
+        }
+
+        .invoice-item-amount {
+            font-size: 0.875rem;
+            color: #1a2c3e;
+        }
+
+        .invoice-service-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 16px;
+        }
+
+        .invoice-quantity-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+            padding: 0 16px;
+        }
+
+        .invoice-quantity-label {
+            font-size: 0.875rem;
+            color: #1a2c3e;
+        }
+
+        .invoice-total-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f3f4f6;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-left: 16px;
+            margin-right: 16px;
+        }
+
+        .invoice-total-label {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .invoice-total-amount {
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+
+        .invoice-button-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 20px;
+            margin-top: 20px;
+            padding: 0 16px;
+        }
+
+        .invoice-btn-cancel {
+            width: 100%;
+            font-weight: 500;
+            border: 1px solid #0c8c0c;
+            background: white;
+            color: #0c8c0c;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .invoice-btn-cancel:hover {
+            background: #f0fdf4;
+        }
+
+        .invoice-btn-proceed {
+            width: 100%;
+            font-weight: 500;
+            border: 1px solid transparent;
+            background: #0c8c0c;
+            color: white;
+            padding: 12px 16px;
+            font-size: 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            grid-column: span 2;
+        }
+
+        .invoice-btn-proceed:hover {
+            background: #0a700a;
         }
         
         @media (min-width:768px){
@@ -309,50 +482,45 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL -->
-    <div id="invoiceModal" class="fixed inset-0 z-40 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
-                            <div class="flex justify-between items-center">
-                                <p class="text-xl font-CircularStdBold">Invoice Summary</p>
-                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex justify-between items-center mt-5">
-                                <p class="text-sm text-text-subtitle">Item</p>
-                                <p class="text-sm text-text-subtitle">Amount</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
-                                <p class="text-sm" id="invoiceItemAmount">NGN 500</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">SERVICE CHARGE (1%)</p>
-                                <p class="text-sm" id="serviceCharge">NGN 5</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">STAMP DUTY</p>
-                                <p class="text-sm" id="stampDuty">NGN 50</p>
-                            </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm">Quantity</p>
-                                <p class="text-sm" id="invoiceQuantity">1</p>
-                            </div>
-                        </div>
-                        <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5">
-                            <p class="text-sm font-semibold">Total</p>
-                            <p class="text-sm font-semibold" id="invoiceTotal">NGN 555</p>
-                        </div>
-                        <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                            <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
-                        </div>
-                    </div>
+    <!-- INVOICE SUMMARY MODAL - EXACT DESIGN FROM YOUR FILE -->
+    <div id="invoiceModal" class="invoice-modal-overlay">
+        <div class="invoice-modal-container">
+            <div class="invoice-modal-content">
+                <div class="invoice-modal-header">
+                    <h2>Invoice Summary</h2>
+                    <svg class="invoice-close-icon" onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+
+                <div class="invoice-summary-header">
+                    <p>Item</p>
+                    <p>Amount</p>
+                </div>
+
+                <div class="invoice-summary-row">
+                    <p class="invoice-item-name" id="invoiceItemName">FOUR FIGURE TABLE</p>
+                    <p class="invoice-item-amount" id="invoiceItemAmount">NGN 500</p>
+                </div>
+
+                <div class="invoice-service-row">
+                    <p class="invoice-item-name">SERVICE CHARGE</p>
+                    <p class="invoice-item-amount" id="serviceCharge">NGN 5</p>
+                </div>
+
+                <div class="invoice-quantity-row">
+                    <p class="invoice-quantity-label">Quantity</p>
+                    <p class="invoice-item-amount" id="invoiceQuantity">1</p>
+                </div>
+
+                <div class="invoice-total-section">
+                    <p class="invoice-total-label">Total</p>
+                    <p class="invoice-total-amount" id="invoiceTotal">NGN 555</p>
+                </div>
+
+                <div class="invoice-button-grid">
+                    <button type="button" class="invoice-btn-cancel" onclick="closeInvoiceModal()">Cancel</button>
+                    <button type="button" class="invoice-btn-proceed" onclick="showLoadingAndGenerateAccount()">Proceed</button>
                 </div>
             </div>
         </div>
@@ -540,7 +708,6 @@
             let isEmailValid = validateEmail(email);
             let isQuantityValid = validateQuantity(quantity);
             
-            // Show/hide error messages
             document.getElementById('phoneError').style.display = (!isPhoneValid && phone) ? 'block' : 'none';
             document.getElementById('emailError').style.display = (!isEmailValid && email) ? 'block' : 'none';
             document.getElementById('quantityError').style.display = (!isQuantityValid && quantity) ? 'block' : 'none';
@@ -582,16 +749,14 @@
             else { amountInput.value = ''; amountInput.readOnly = false; }
             document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
             
-            // Clear all fields
             document.getElementById('paymentCode').value = ''; 
             document.getElementById('fullName').value = ''; 
             document.getElementById('phone').value = ''; 
             document.getElementById('email').value = '';
             document.getElementById('paymentDescription').value = ''; 
-            document.getElementById('quantity').value = '';  // NO DEFAULT - user must input
+            document.getElementById('quantity').value = '';
             document.getElementById('currency').value = 'Naira';
             
-            // Hide error messages
             document.getElementById('codeError').style.display = 'none';
             document.getElementById('phoneError').style.display = 'none';
             document.getElementById('emailError').style.display = 'none';
@@ -600,7 +765,6 @@
             document.getElementById('proceedBtn').disabled = true;
             document.getElementById('paymentModal').classList.remove('hidden');
             
-            // Add event listeners for validation
             ['paymentCode','fullName','phone','email','amount','quantity'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
@@ -611,7 +775,11 @@
         }
         
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
-        function closeInvoiceModal() { document.getElementById('invoiceModal').classList.add('hidden'); }
+        
+        function closeInvoiceModal() { 
+            document.getElementById('invoiceModal').style.display = 'none'; 
+        }
+        
         function closeAccountModal() { 
             if (countdownInterval) clearInterval(countdownInterval);
             document.getElementById('accountModal').classList.add('hidden'); 
@@ -641,11 +809,11 @@
             document.getElementById('invoiceItemName').innerText = currentItem.name;
             document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
             document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
-            document.getElementById('stampDuty').innerText = `${currency} ${stampDuty.toLocaleString()}`;
             document.getElementById('invoiceQuantity').innerText = quantity;
             document.getElementById('invoiceTotal').innerText = `${currency} ${totalAmount.toLocaleString()}`;
+            
             closePaymentModal();
-            document.getElementById('invoiceModal').classList.remove('hidden');
+            document.getElementById('invoiceModal').style.display = 'flex';
         });
 
         function showLoadingAndGenerateAccount() {
