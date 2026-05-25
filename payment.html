@@ -29,7 +29,7 @@
         .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-flex{display:inline-flex}
         .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
         .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
-        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
+        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}
         .cursor-pointer{cursor:pointer}
         .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
         .col-span-2{grid-column:span 2 / span 2}
@@ -308,51 +308,51 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - PROPERLY ARRANGED WITH SPACE AFTER BUTTONS AND CENTERED -->
+    <!-- INVOICE SUMMARY MODAL - REDUCED BOX SIZE AND SPACING, CENTERED -->
     <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md">
-                    <div class="py-8">
-                        <div class="px-6">
-                            <div class="px-4">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-sm">
+                    <div class="py-5">
+                        <div class="px-5">
+                            <div class="px-3">
                                 <div class="flex justify-between items-center">
-                                    <p class="text-xl font-CircularStdBold">Invoice Summary</p>
-                                    <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
+                                    <p class="text-lg font-CircularStdBold">Invoice Summary</p>
+                                    <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 cursor-pointer">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
                                 </div>
                                 
-                                <div class="flex justify-between items-center mt-5">
-                                    <p class="text-sm text-text-subtitle">Item</p>
-                                    <p class="text-sm text-text-subtitle">Amount</p>
+                                <div class="flex justify-between items-center mt-3">
+                                    <p class="text-xs text-text-subtitle">Item</p>
+                                    <p class="text-xs text-text-subtitle">Amount</p>
                                 </div>
                                 
-                                <div class="flex justify-between text-black items-center mt-4">
+                                <div class="flex justify-between text-black items-center mt-2">
                                     <p class="text-sm w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
                                     <p class="text-sm" id="invoiceItemAmount">NGN 500</p>
                                 </div>
                                 
-                                <div class="flex justify-between text-black items-center mt-4">
+                                <div class="flex justify-between text-black items-center mt-2">
                                     <p class="text-sm w-2/3">SERVICE CHARGE (10%)</p>
                                     <p class="text-sm" id="serviceCharge">NGN 50</p>
                                 </div>
                                 
-                                <div class="flex justify-between text-black items-center mt-4">
+                                <div class="flex justify-between text-black items-center mt-2">
                                     <p class="text-sm">Quantity</p>
                                     <p class="text-sm" id="invoiceQuantity">1</p>
                                 </div>
                             </div>
                             
-                            <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5 mx-4">
+                            <div class="flex justify-between bg-gray-100 p-2 rounded text-gray-600 items-center mt-3 mx-3">
                                 <p class="text-sm font-semibold">Total</p>
                                 <p class="text-sm font-semibold" id="invoiceTotal">NGN 550</p>
                             </div>
                             
-                            <div class="grid grid-cols-3 gap-4 mt-6 px-4 pb-2">
-                                <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
+                            <div class="grid grid-cols-3 gap-3 mt-4 px-3 pb-1">
+                                <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-3 py-2 text-sm rounded-md">Cancel</button>
+                                <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-3 py-2 text-sm rounded-md col-span-2">Proceed</button>
                             </div>
                         </div>
                     </div>
