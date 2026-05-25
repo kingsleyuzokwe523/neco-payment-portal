@@ -94,10 +94,10 @@
             margin-top: 10px;
         }
         
-        /* Error message styling - added only this */
+        /* Error message styling - red text, no symbol */
         .error-text {
             color: #dc2626;
-            font-size: 11px;
+            font-size: 12px;
             margin-top: 4px;
             display: none;
         }
@@ -245,18 +245,18 @@
                             </div>
                             <div class="mt-5 flex gap-5 flex-col md:flex-row">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Phone number (max 11 digits)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Phone number</label>
                                     <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="0800 000 0000" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
-                                    <div id="phoneError" class="error-text">❌ Invalid phone number - must be numbers only, max 11 digits</div>
+                                    <div id="phoneError" class="error-text">Invalid phone number</div>
                                 </div>
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Email (must be @gmail.com)</label>
+                                    <label class="block text-sm font-medium text-gray-700">Email</label>
                                     <div class="mt-1 relative">
                                         <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                     </div>
-                                    <div id="emailError" class="error-text">❌ Invalid email - must be a valid @gmail.com address</div>
+                                    <div id="emailError" class="error-text">Invalid email address</div>
                                 </div>
                             </div>
                             <div class="mt-5">
@@ -282,13 +282,6 @@
                                     </div>
                                 </div>
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Quantity (User inputs)</label>
-                                    <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                    <div id="quantityError" class="error-text">❌ Please enter a valid quantity</div>
-                                </div>
-                                <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Currency</label>
                                     <div class="mt-1 relative">
                                         <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
@@ -296,6 +289,13 @@
                                             <option>Dollars</option>
                                         </select>
                                     </div>
+                                </div>
+                                <div class="w-full">
+                                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
+                                    <div class="mt-1 relative">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                    </div>
+                                    <div id="quantityError" class="error-text">Invalid quantity</div>
                                 </div>
                             </div>
                             <div class="grid grid-cols-3 mt-8 gap-5">
@@ -505,7 +505,7 @@
 
         // Validation functions
         function validatePhone(phone) {
-            return phone && /^[0-9]+$/.test(phone) && phone.length <= 11;
+            return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
         }
         
         function validateEmail(email) {
@@ -630,9 +630,9 @@
             let amount = parseFloat(document.getElementById('amount').value);
             
             if (!fullName) { alert('Please fill all payer details'); return; }
-            if (!validatePhone(phone)) { alert('Phone number must be numbers only, max 11 digits'); return; }
-            if (!validateEmail(email)) { alert('Email must be a valid Gmail address (@gmail.com)'); return; }
-            if (!validateQuantity(quantity)) { alert('Please enter a valid quantity'); return; }
+            if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
+            if (!validateEmail(email)) { alert('Invalid email address'); return; }
+            if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
             if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
             
             const serviceCharge = Math.ceil(amount * 0.01), stampDuty = 50, totalAmount = (amount + serviceCharge + stampDuty) * quantity;
