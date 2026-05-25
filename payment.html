@@ -29,7 +29,7 @@
         .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-flex{display:inline-flex}
         .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
         .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
-        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
+        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}
         .cursor-pointer{cursor:pointer}
         .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
         .col-span-2{grid-column:span 2 / span 2}
@@ -45,7 +45,7 @@
         .bg-black{background-color:#000}.bg-black\/50{background-color:rgba(0,0,0,0.5)}.bg-green-600{background-color:#16a34a}
         .bg-primary-700{background-color:#054c0f}.bg-opacity-25{background-color:rgba(0,0,0,0.25)}
         .backdrop-blur-sm{backdrop-filter:blur(4px)}
-        .p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-4{padding:1rem}
+        .p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-4{padding:1rem}.p-2{padding:.5rem}
         .px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}
         .px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
         .py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
@@ -68,7 +68,7 @@
         .mx-auto{margin-left:auto;margin-right:auto}
         .card-amount p{margin:0;line-height:1.3}
         
-        /* Full page white loading overlay */
+        /* Loading overlay */
         .loading-overlay {
             position: fixed;
             top: 0;
@@ -84,13 +84,13 @@
         }
         
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid #054c0f;
+            width: 50px;
+            height: 50px;
+            border: 3px solid #e5e7eb;
+            border-top: 3px solid #054c0f;
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
         
         @keyframes spin {
@@ -98,16 +98,50 @@
             100% { transform: rotate(360deg); }
         }
         
+        /* Smaller countdown timer - side positioned */
+        .countdown-wrapper {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
         .countdown-timer {
             font-family: monospace;
-            font-size: 24px;
+            font-size: 16px;
             font-weight: bold;
             color: #dc2626;
             background: #fee2e2;
             display: inline-block;
-            padding: 8px 16px;
-            border-radius: 8px;
-            margin-top: 10px;
+            padding: 4px 12px;
+            border-radius: 20px;
+        }
+        
+        /* Error message styling */
+        .error-text {
+            color: #dc2626;
+            font-size: 11px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        /* Smaller buttons */
+        .btn-small {
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+        }
+        
+        /* Account details - straight line layout, smaller */
+        .account-details-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+        
+        .account-details-line:last-child {
+            border-bottom: none;
         }
         
         @media (min-width:768px){
@@ -125,7 +159,7 @@
         body{font-family:'CircularStd',system-ui,sans-serif}
         
         .modal-scroll-content {
-            max-height: 90vh;
+            max-height: 85vh;
             overflow-y: auto;
         }
     </style>
@@ -134,8 +168,8 @@
     <!-- Full Page White Loading Overlay -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
-        <p style="font-size: 18px; color: #054c0f; font-weight: 600;">Please wait...</p>
-        <p style="font-size: 14px; color: #666; margin-top: 10px;">Account details are being generated</p>
+        <p style="font-size: 16px; color: #054c0f; font-weight: 600;">Please wait...</p>
+        <p style="font-size: 12px; color: #666; margin-top: 8px;">Account details are being generated</p>
     </div>
 
     <div id="app">
@@ -145,7 +179,7 @@
                     <nav class="flex justify-between items-center">
                         <div class="h-14 w-14">
                             <a href="index.html">
-                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
+                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 50px; width: auto;">
                             </a>
                         </div>
                         <div>
@@ -215,104 +249,107 @@
         </div>
     </div>
 
-    <!-- PAYMENT FORM MODAL -->
+    <!-- PAYMENT FORM MODAL - Smaller size like original NECO -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-6 modal-scroll-content">
                     <form id="paymentFormModal">
-                        <div class="px-3 md:px-10">
+                        <div class="px-4 md:px-6">
                             <div class="flex justify-between">
                                 <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
-                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
+                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 cursor-pointer">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
-                            <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
+                            <p id="modalItemName" class="mt-2 font-CircularStdBold text-lg">FOUR FIGURE TABLE</p>
+                            <p class="text-xs mt-4 text-text-subtitle">Complete the form below with all necessary information</p>
                             
-                            <div class="mt-5">
+                            <div class="mt-4">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
                                     <div class="mt-1 relative">
-                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
                                     <div id="codeError" class="text-red-600 text-xs mt-1 hidden">Invalid code</div>
                                 </div>
                             </div>
-                            <div class="mt-5 flex justify-end">
-                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                            <div class="mt-3 flex justify-end">
+                                <a id="whatsappLink" class="text-xs text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
                             </div>
                         </div>
                         
-                        <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                        <div class="h-4 border-b-2 mt-4 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-3 md:px-10">
-                            <p class="mt-4">Payer's information</p>
-                            <div class="mt-5">
+                        <div class="px-4 md:px-6">
+                            <p class="mt-4 text-sm font-medium">Payer's information</p>
+                            <div class="mt-3">
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Full name</label>
                                     <div class="mt-1 relative">
-                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
                                 </div>
                             </div>
-                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                            <div class="mt-3 flex gap-3 flex-col md:flex-row">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Phone number</label>
+                                    <label class="block text-sm font-medium text-gray-700">Phone number (11 digits)</label>
                                     <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="0800 000 0000" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
+                                    <div id="phoneError" class="error-text">Phone number must be exactly 11 digits</div>
                                 </div>
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                                    <label class="block text-sm font-medium text-gray-700">Email (must end with @gmail.com)</label>
                                     <div class="mt-1 relative">
-                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
+                                    <div id="emailError" class="error-text">Email must be a valid Gmail address (@gmail.com)</div>
                                 </div>
                             </div>
-                            <div class="mt-5">
+                            <div class="mt-3">
                                 <p class="block text-sm font-medium text-gray-700">Description</p>
-                                <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
+                                <p class="text-xs my-1 pb-1 text-text-subtitle">Extra information on the item you are making payment for</p>
                                 <div class="w-full">
                                     <div class="mt-1 relative">
-                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                        <div class="h-4 border-b-2 mt-4 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-3 md:px-10">
-                            <p class="mt-4">Payment information</p>
-                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                        <div class="px-4 md:px-6">
+                            <p class="mt-4 text-sm font-medium">Payment information</p>
+                            <div class="mt-3 flex gap-3 flex-col md:flex-row">
                                 <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Amount</label>
+                                    <label class="block text-sm font-medium text-gray-700">Amount (₦)</label>
                                     <div class="mt-1 relative">
-                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                </div>
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Currency</label>
-                                    <div class="mt-1 relative">
-                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                            <option selected>Naira</option>
-                                            <option>Dollars</option>
-                                        </select>
+                                        <input id="amount" name="amount" placeholder="Enter amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-sm font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter here" value="1" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" value="" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
+                                    </div>
+                                    <div id="quantityError" class="error-text">Please enter quantity</div>
+                                </div>
+                                <div class="w-full">
+                                    <label class="block text-sm font-medium text-gray-700">Currency</label>
+                                    <div class="mt-1 relative">
+                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-3 py-2 text-sm">
+                                            <option selected>Naira</option>
+                                            <option>Dollars</option>
+                                        </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="grid grid-cols-3 mt-8 gap-5">
-                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
+                            <div class="grid grid-cols-3 mt-5 gap-3">
+                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-3 py-2 text-sm rounded-md">Cancel</button>
+                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-primary-700 hover:bg-primary-600 text-white border-transparent px-3 py-2 text-sm rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
                             </div>
                         </div>
                     </form>
@@ -321,48 +358,48 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - EXACT ORIGINAL NECO DESIGN -->
+    <!-- INVOICE SUMMARY MODAL - Original NECO design with proper spacing -->
     <div id="invoiceModal" class="fixed inset-0 z-40 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-6">
+                    <div class="px-5">
+                        <div class="px-3">
                             <div class="flex justify-between items-center">
-                                <p class="text-xl font-CircularStdBold">Invoice Summary</p>
-                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
+                                <p class="text-lg font-CircularStdBold">Invoice Summary</p>
+                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 cursor-pointer">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <div class="flex justify-between items-center mt-5">
-                                <p class="text-sm text-text-subtitle">Item</p>
-                                <p class="text-sm text-text-subtitle">Amount</p>
+                            <div class="flex justify-between items-center mt-4">
+                                <p class="text-xs text-text-subtitle">Item</p>
+                                <p class="text-xs text-text-subtitle">Amount</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
+                            <div class="flex justify-between text-black items-center mt-3">
                                 <p class="text-sm w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
                                 <p class="text-sm" id="invoiceItemAmount">NGN 500</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">SERVICE CHARGE</p>
+                            <div class="flex justify-between text-black items-center mt-3">
+                                <p class="text-sm w-2/3">SERVICE CHARGE (1%)</p>
                                 <p class="text-sm" id="serviceCharge">NGN 5</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
+                            <div class="flex justify-between text-black items-center mt-3">
                                 <p class="text-sm w-2/3">STAMP DUTY</p>
                                 <p class="text-sm" id="stampDuty">NGN 50</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
+                            <div class="flex justify-between text-black items-center mt-3">
                                 <p class="text-sm">Quantity</p>
                                 <p class="text-sm" id="invoiceQuantity">1</p>
                             </div>
                         </div>
-                        <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5">
-                            <p class="text-sm">Total</p>
+                        <div class="flex justify-between bg-gray-100 p-3 rounded text-gray-600 items-center mt-4">
+                            <p class="text-sm font-semibold">Total</p>
                             <p class="text-sm font-semibold" id="invoiceTotal">NGN 555</p>
                         </div>
-                        <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                            <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Proceed</button>
+                        <div class="grid grid-cols-3 mt-4 gap-3 px-3">
+                            <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-3 py-2 text-sm rounded-md">Cancel</button>
+                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-primary-700 hover:bg-primary-600 text-white border-transparent px-3 py-2 text-sm rounded-md col-span-2">Proceed</button>
                         </div>
                     </div>
                 </div>
@@ -370,39 +407,39 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MODAL -->
+    <!-- ACCOUNT MODAL - Smaller, straight line layout -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
-                            <div class="flex justify-center mb-4">
-                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 60px;">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-sm py-5">
+                    <div class="px-4">
+                        <div class="px-2">
+                            <div class="flex justify-center mb-3">
+                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 45px;">
                             </div>
-                            <div class="text-center mb-4">
-                                <p class="text-red-600 font-semibold">Pay to this account within the next 30 minutes</p>
+                            <div class="text-center mb-3">
+                                <p class="text-red-600 text-sm font-semibold">Pay to this account within 30 minutes</p>
                             </div>
-                            <div id="accountDetailsBox" class="bg-green-50 border border-green-600 rounded-md p-3 text-sm space-y-2"></div>
-                            <div class="text-center mt-3">
+                            <div id="accountDetailsBox" class="bg-green-50 border border-green-600 rounded-md p-2 text-xs"></div>
+                            <div class="countdown-wrapper">
                                 <div class="countdown-timer" id="countdownTimer">30:00</div>
                             </div>
-                            <div class="mb-4 mt-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Payment Receipt</label>
-                                <div onclick="document.getElementById('receiptInput').click()" class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-md p-3 text-center cursor-pointer hover:bg-gray-50 transition">
-                                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="mb-3 mt-3">
+                                <label class="block text-xs font-medium text-gray-700 mb-1">Upload Payment Receipt</label>
+                                <div onclick="document.getElementById('receiptInput').click()" class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-md p-2 text-center cursor-pointer hover:bg-gray-50 transition">
+                                    <svg class="w-6 h-6 mx-auto text-gray-400 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                                     </svg>
-                                    <p class="text-sm text-gray-500">Click to upload receipt</p>
+                                    <p class="text-xs text-gray-500">Click to upload receipt</p>
                                 </div>
                                 <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
                                 <p id="uploadedFileName" class="text-xs text-green-600 mt-1"></p>
                             </div>
                         </div>
-                        <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                            <button onclick="closeAccountModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                            <button onclick="confirmPayment()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Confirm Payment</button>
+                        <div class="grid grid-cols-3 mt-3 gap-2 px-2">
+                            <button onclick="closeAccountModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-2 py-1.5 text-xs rounded-md">Cancel</button>
+                            <button onclick="confirmPayment()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-primary-700 hover:bg-primary-600 text-white border-transparent px-2 py-1.5 text-xs rounded-md col-span-2">Confirm Payment</button>
                         </div>
                     </div>
                 </div>
@@ -411,7 +448,7 @@
     </div>
 
     <script>
-        // ============ ALL PAYMENT ITEMS - COMPLETE LIST ============
+        // ============ ALL PAYMENT ITEMS ============
         const paymentData = {
             "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
                 { name: "Four Figure Table", amount: 500 }, { name: "Non-Validation", amount: 10000 }, { name: "Syllabus", amount: 2000 },
@@ -449,28 +486,58 @@
         let currentFormData = {};
         let isCodeValid = false;
         let countdownInterval = null;
+        let currentPinData = null;
 
-        // PIN codes - ONLY NUMBERS, default 1234
+        // PIN codes with expiry tracking
         let paymentPinsDatabase = {
-            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011" }
+            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011", status: "active", expiresAt: null }
         };
 
         function validatePaymentCode(code) { 
-            return paymentPinsDatabase[code.trim()] ? { valid: true, accountDetails: paymentPinsDatabase[code.trim()] } : { valid: false, accountDetails: null }; 
+            const pin = paymentPinsDatabase[code.trim()];
+            if (pin && pin.status === "active") {
+                return { valid: true, accountDetails: pin };
+            }
+            return { valid: false, accountDetails: null }; 
         }
         
-        function checkCodeValidation() {
+        // Validation functions
+        function validatePhone(phone) {
+            return phone && phone.length === 11 && /^[0-9]+$/.test(phone);
+        }
+        
+        function validateEmail(email) {
+            return email && email.toLowerCase().endsWith('@gmail.com');
+        }
+        
+        function validateQuantity(quantity) {
+            return quantity && quantity > 0;
+        }
+        
+        function checkFormValidation() {
             const code = document.getElementById('paymentCode').value;
             const validation = validatePaymentCode(code);
             isCodeValid = validation.valid;
             currentValidatedAccount = validation.accountDetails;
-            if (code && !isCodeValid) {
-                document.getElementById('codeError').style.display = 'block';
-            } else {
-                document.getElementById('codeError').style.display = 'none';
-            }
-            const fullName = document.getElementById('fullName').value, phone = document.getElementById('phone').value, email = document.getElementById('email').value, amount = document.getElementById('amount').value;
-            document.getElementById('proceedBtn').disabled = !(isCodeValid && fullName && phone && email && amount);
+            
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const quantity = document.getElementById('quantity').value;
+            const fullName = document.getElementById('fullName').value;
+            const amount = document.getElementById('amount').value;
+            
+            let isPhoneValid = validatePhone(phone);
+            let isEmailValid = validateEmail(email);
+            let isQuantityValid = validateQuantity(parseInt(quantity));
+            
+            document.getElementById('phoneError').style.display = !isPhoneValid && phone ? 'block' : 'none';
+            document.getElementById('emailError').style.display = !isEmailValid && email ? 'block' : 'none';
+            document.getElementById('quantityError').style.display = !isQuantityValid && quantity ? 'block' : 'none';
+            
+            document.getElementById('codeError').style.display = (code && !isCodeValid) ? 'block' : 'none';
+            
+            const allValid = isCodeValid && fullName && isPhoneValid && isEmailValid && amount && isQuantityValid;
+            document.getElementById('proceedBtn').disabled = !allValid;
         }
 
         function renderGrid() {
@@ -504,12 +571,22 @@
             if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
             else { amountInput.value = ''; amountInput.readOnly = false; }
             document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-            document.getElementById('paymentCode').value = ''; document.getElementById('fullName').value = ''; document.getElementById('phone').value = ''; document.getElementById('email').value = '';
-            document.getElementById('paymentDescription').value = ''; document.getElementById('quantity').value = '1'; document.getElementById('currency').value = 'Naira';
+            document.getElementById('paymentCode').value = ''; 
+            document.getElementById('fullName').value = ''; 
+            document.getElementById('phone').value = ''; 
+            document.getElementById('email').value = '';
+            document.getElementById('paymentDescription').value = ''; 
+            document.getElementById('quantity').value = ''; 
+            document.getElementById('currency').value = 'Naira';
             document.getElementById('codeError').style.display = 'none';
+            document.getElementById('phoneError').style.display = 'none';
+            document.getElementById('emailError').style.display = 'none';
+            document.getElementById('quantityError').style.display = 'none';
             document.getElementById('proceedBtn').disabled = true;
             document.getElementById('paymentModal').classList.remove('hidden');
-            ['paymentCode','fullName','phone','email','amount'].forEach(id => document.getElementById(id).addEventListener('input', checkCodeValidation));
+            ['paymentCode','fullName','phone','email','amount','quantity'].forEach(id => {
+                document.getElementById(id).addEventListener('input', checkFormValidation);
+            });
         }
         
         function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
@@ -522,14 +599,24 @@
         document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
             e.preventDefault();
             if (!isCodeValid) { alert('Please enter a valid payment code (default: 1234)'); return; }
-            const fullName = document.getElementById('fullName').value, phone = document.getElementById('phone').value, email = document.getElementById('email').value;
-            const description = document.getElementById('paymentDescription').value, quantity = parseInt(document.getElementById('quantity').value) || 1;
+            
+            const fullName = document.getElementById('fullName').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const description = document.getElementById('paymentDescription').value;
+            const quantity = parseInt(document.getElementById('quantity').value);
             const currency = document.getElementById('currency').value;
             let amount = parseFloat(document.getElementById('amount').value);
+            
             if (!fullName || !phone || !email) { alert('Please fill all payer details'); return; }
+            if (!validatePhone(phone)) { alert('Phone number must be exactly 11 digits'); return; }
+            if (!validateEmail(email)) { alert('Email must be a valid Gmail address (@gmail.com)'); return; }
+            if (!quantity || quantity <= 0) { alert('Please enter a valid quantity'); return; }
             if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
+            
             const serviceCharge = Math.ceil(amount * 0.01), stampDuty = 50, totalAmount = (amount + serviceCharge + stampDuty) * quantity;
             currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, amount, serviceCharge, stampDuty, totalAmount };
+            
             document.getElementById('invoiceItemName').innerText = currentItem.name;
             document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
             document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
@@ -542,51 +629,68 @@
 
         function showLoadingAndGenerateAccount() {
             closeInvoiceModal();
-            // Show full page white loading overlay
             document.getElementById('loadingOverlay').style.display = 'flex';
             
             setTimeout(() => {
                 document.getElementById('loadingOverlay').style.display = 'none';
                 showAccountModal();
-            }, 3000);
+            }, 2000);
         }
 
-        function startCountdown(minutes) {
+        function startCountdown(minutes, pinCode) {
             let time = minutes * 60;
             const timerElement = document.getElementById('countdownTimer');
             
             if (countdownInterval) clearInterval(countdownInterval);
             
+            // Set expiry time
+            const expiryTime = new Date().getTime() + (minutes * 60 * 1000);
+            if (paymentPinsDatabase[pinCode]) {
+                paymentPinsDatabase[pinCode].expiresAt = expiryTime;
+            }
+            
             countdownInterval = setInterval(() => {
-                const mins = Math.floor(time / 60);
-                const secs = time % 60;
+                const now = new Date().getTime();
+                const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+                const mins = Math.floor(remaining / 60);
+                const secs = remaining % 60;
                 timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
                 
-                if (time <= 0) {
+                if (remaining <= 0) {
                     clearInterval(countdownInterval);
                     timerElement.textContent = "Expired";
                     timerElement.style.color = "#9ca3af";
                     timerElement.style.background = "#f3f4f6";
+                    // Mark PIN as expired
+                    if (paymentPinsDatabase[pinCode]) {
+                        paymentPinsDatabase[pinCode].status = "expired";
+                    }
                 }
-                time--;
             }, 1000);
         }
 
         function showAccountModal() {
-            const account = currentValidatedAccount;
+            const pinCode = currentFormData.paymentCode;
+            currentPinData = paymentPinsDatabase[pinCode];
+            
+            if (!currentPinData || currentPinData.status !== "active") {
+                alert("This payment code has expired or is invalid. Please contact admin.");
+                return;
+            }
+            
+            const account = currentPinData;
             document.getElementById('accountDetailsBox').innerHTML = `
-                <div class="text-center font-bold text-green-700 mb-2">Bank Transfer Details</div>
-                <div class="flex justify-between py-1 border-b"><span>Bank:</span><strong>${account.bankName}</strong></div>
-                <div class="flex justify-between py-1 border-b"><span>Account Name:</span><span>${account.accountName}</span></div>
-                <div class="flex justify-between py-1 border-b"><span>Account Number:</span><span class="font-mono text-lg">${account.accountNumber}</span></div>
-                <div class="flex justify-between py-1 border-b"><span>Amount:</span><span class="text-green-700 font-bold">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
-                <div class="flex justify-between py-1"><span>Payment Code:</span><span class="font-mono">${currentFormData.paymentCode}</span></div>
+                <div class="account-details-line"><span>Bank:</span><strong>${account.bankName}</strong></div>
+                <div class="account-details-line"><span>Account Name:</span><span>${account.accountName}</span></div>
+                <div class="account-details-line"><span>Account Number:</span><span class="font-mono">${account.accountNumber}</span></div>
+                <div class="account-details-line"><span>Amount:</span><span class="text-green-700 font-bold">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
+                <div class="account-details-line"><span>Payment Code:</span><span class="font-mono">${currentFormData.paymentCode}</span></div>
             `;
             document.getElementById('receiptInput').value = ''; 
             document.getElementById('uploadedFileName').innerHTML = '';
             document.getElementById('accountModal').classList.remove('hidden');
             
-            startCountdown(30);
+            startCountdown(30, pinCode);
         }
 
         document.getElementById('receiptInput').addEventListener('change', (e) => { 
@@ -596,6 +700,13 @@
         function confirmPayment() { 
             if(!document.getElementById('receiptInput').files[0]) { alert('Please upload your payment receipt'); return; } 
             if (countdownInterval) clearInterval(countdownInterval);
+            
+            // Mark PIN as used
+            const pinCode = currentFormData.paymentCode;
+            if (paymentPinsDatabase[pinCode]) {
+                paymentPinsDatabase[pinCode].status = "used";
+            }
+            
             alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
             closeAccountModal(); 
         }
@@ -626,7 +737,9 @@
         });
         
         renderGrid();
-        window.addPaymentCode = (code,bank,accName,accNum,bankCode) => { paymentPinsDatabase[code.trim()] = { bankName: bank, accountName: accName, accountNumber: accNum, bankCode }; };
+        window.addPaymentCode = (code,bank,accName,accNum,bankCode) => { 
+            paymentPinsDatabase[code.trim()] = { bankName: bank, accountName: accName, accountNumber: accNum, bankCode, status: "active", expiresAt: null };
+        };
     </script>
 </body>
 </html>
