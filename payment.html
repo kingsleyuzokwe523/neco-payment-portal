@@ -101,28 +101,6 @@
             display: none;
         }
         
-        /* Reduced spacing for modals */
-        .modal-container-small {
-            max-width: 400px !important;
-        }
-        
-        .modal-padding-small {
-            padding: 16px 0 !important;
-        }
-        
-        .modal-inner-padding {
-            padding: 0 12px !important;
-        }
-        
-        .modal-row-spacing {
-            margin-top: 12px !important;
-        }
-        
-        .button-padding {
-            padding: 8px 12px !important;
-            font-size: 14px !important;
-        }
-        
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -221,14 +199,14 @@
         </div>
     </div>
 
-    <!-- PAYMENT FORM MODAL - Reduced size -->
+    <!-- PAYMENT FORM MODAL - Original design, spacing reduced -->
     <div id="paymentModal" class="fixed inset-0 z-30 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-3 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-4 modal-scroll-content">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-5 modal-scroll-content">
                     <form id="paymentFormModal">
-                        <div class="px-4">
+                        <div class="px-4 md:px-6">
                             <div class="flex justify-between">
                                 <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
                                 <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 cursor-pointer">
@@ -242,7 +220,7 @@
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Confirm payment code</label>
                                     <div class="mt-1 relative">
-                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                     <div id="codeError" class="text-red-600 text-xs mt-1 hidden">Invalid code</div>
                                 </div>
@@ -254,13 +232,13 @@
                         
                         <div class="h-3 border-b-2 mt-3 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-4">
+                        <div class="px-4 md:px-6">
                             <p class="mt-3 text-sm font-medium">Payer's information</p>
                             <div class="mt-2">
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Full name</label>
                                     <div class="mt-1 relative">
-                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                 </div>
                             </div>
@@ -268,14 +246,14 @@
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Phone number</label>
                                     <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                     <div id="phoneError" class="error-text">Invalid phone number</div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Email</label>
                                     <div class="mt-1 relative">
-                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                     <div id="emailError" class="error-text">Invalid email address</div>
                                 </div>
@@ -285,7 +263,7 @@
                                 <p class="text-xs my-1 text-text-subtitle">Extra information on the item you are making payment for</p>
                                 <div class="w-full">
                                     <div class="mt-1 relative">
-                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                 </div>
                             </div>
@@ -293,19 +271,19 @@
                         
                         <div class="h-3 border-b-2 mt-3 border-gray-300 border-dashed"></div>
                         
-                        <div class="px-4">
+                        <div class="px-4 md:px-6">
                             <p class="mt-3 text-sm font-medium">Payment information</p>
                             <div class="mt-2 flex gap-2 flex-col md:flex-row">
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Amount</label>
                                     <div class="mt-1 relative">
-                                        <input id="amount" name="amount" placeholder="Enter amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input id="amount" name="amount" placeholder="Enter amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                 </div>
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Currency</label>
                                     <div class="mt-1 relative">
-                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                             <option selected>Naira</option>
                                             <option>Dollars</option>
                                         </select>
@@ -314,7 +292,7 @@
                                 <div class="w-full">
                                     <label class="block text-xs font-medium text-gray-700">Quantity</label>
                                     <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5 text-sm">
+                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-3 py-1.5">
                                     </div>
                                     <div id="quantityError" class="error-text">Invalid quantity</div>
                                 </div>
@@ -330,12 +308,12 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - Reduced spacing -->
+    <!-- INVOICE SUMMARY MODAL - Original design preserved -->
     <div id="invoiceModal" class="relative z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-3 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-sm py-3">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-4">
                     <div class="px-4">
                         <div class="px-2">
                             <div class="flex justify-between items-center">
@@ -375,7 +353,7 @@
         </div>
     </div>
 
-    <!-- LOADING MODAL - Smaller -->
+    <!-- LOADING MODAL -->
     <div id="loadingModal" class="fixed inset-0 z-45 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
         <div class="fixed inset-0 flex items-center justify-center">
@@ -387,12 +365,12 @@
         </div>
     </div>
 
-    <!-- ACCOUNT MODAL - Smaller -->
+    <!-- ACCOUNT MODAL -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-3 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-sm py-3">
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-4">
                     <div class="px-4">
                         <div class="px-2">
                             <div class="flex justify-center mb-2">
