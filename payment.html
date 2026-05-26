@@ -13,9 +13,9 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-      /* ACCOUNT MODAL - EXACT LAYOUT */
+     /* ACCOUNT MODAL - LABELS LEFT, VALUES LEFT NEXT TO THEM */
 #accountModal .account-box {
-    max-width: 450px;
+    max-width: 480px;
     width: 100%;
     background: white;
     border-radius: 8px;
@@ -23,7 +23,7 @@
 }
 
 #accountModal .account-inner {
-    padding: 24px 20px;
+    padding: 24px 28px;
 }
 
 /* Logo - CENTERED */
@@ -43,23 +43,23 @@
     font-size: 12px;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
-/* Account details - CENTERED on page */
+/* Account details - BOTH LABEL AND VALUE ON THE LEFT */
 #accountModal .details-row {
     display: flex;
     align-items: center;
-    justify-content: center;
     padding: 8px 0;
+    gap: 20px;
 }
 
 #accountModal .details-label {
-    font-size: 13px;
+    font-size: 14px;
     color: #4b5563;
     font-weight: 500;
-    width: 100px;
-    text-align: right;
+    text-align: left;
+    width: 120px;
 }
 
 #accountModal .details-value {
@@ -67,39 +67,31 @@
     color: #111827;
     font-weight: 600;
     text-align: left;
-    width: 220px;
-    margin-left: 20px;
+    flex: 1;
 }
 
-/* Last row - no border */
-#accountModal .details-row:last-of-type {
-    margin-bottom: 0;
-}
-
-/* Countdown */
+/* Countdown - RIGHT ALIGNED */
 #accountModal .countdown-row {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    background: #fef2f2;
-    padding: 8px 12px;
-    border-radius: 6px;
-    margin: 16px 0;
+    background: transparent;
+    padding: 16px 0 8px 0;
+    margin: 0;
 }
 
 #accountModal .countdown-label {
-    font-size: 12px;
-    color: #991b1b;
-    font-weight: 500;
+    display: none;
 }
 
 #accountModal .countdown-timer {
-    font-size: 18px;
+    font-size: 22px;
     font-weight: bold;
     color: #dc2626;
     background: transparent;
     padding: 0;
     font-family: monospace;
+    text-align: right;
 }
 
 /* Upload area */
@@ -107,7 +99,7 @@
     background: #f9fafb;
     border: 2px dashed #d1d5db;
     border-radius: 8px;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
     margin: 16px 0;
@@ -125,7 +117,7 @@
 }
 
 #accountModal .upload-text {
-    font-size: 11px;
+    font-size: 12px;
     color: #6b7280;
 }
 
@@ -136,10 +128,10 @@
     margin-top: 6px;
 }
 
-/* Buttons - CENTERED, side by side */
+/* Buttons - CENTERED */
 #accountModal .button-group {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     margin-top: 20px;
     justify-content: center;
 }
@@ -148,7 +140,7 @@
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
-    padding: 10px 24px;
+    padding: 10px 28px;
     font-size: 14px;
     font-weight: 500;
     border-radius: 8px;
@@ -164,8 +156,8 @@
     background: #054c0f;
     border: none;
     color: white;
-    padding: 12px 32px;
-    font-size: 15px;
+    padding: 10px 28px;
+    font-size: 14px;
     font-weight: 600;
     border-radius: 8px;
     cursor: pointer;
