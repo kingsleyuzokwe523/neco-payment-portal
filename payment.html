@@ -148,11 +148,12 @@
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
-    padding: 8px 20px;
-    font-size: 13px;
+    padding: 10px 24px;
+    font-size: 14px;
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 #accountModal .btn-cancel-account:hover {
@@ -163,11 +164,13 @@
     background: #054c0f;
     border: none;
     color: white;
-    padding: 8px 24px;
-    font-size: 13px;
-    font-weight: 500;
-    border-radius: 6px;
+    padding: 12px 32px;
+    font-size: 15px;
+    font-weight: 600;
+    border-radius: 8px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 #accountModal .btn-confirm:hover {
@@ -226,49 +229,57 @@
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
         .mx-auto{margin-left:auto;margin-right:auto}
         .card-amount p{margin:0;line-height:1.3}
-        /* CUSTOM INVOICE MODAL STYLES - ADD THIS TO YOUR <style> TAG */
+       /* CUSTOM INVOICE MODAL STYLES */
 #invoiceModal .invoice-box {
-    max-width: 430px;
-    width: 150%;
-    min-height: 380px;  /* ← Set your desired minimum height */
+    max-width: 400px;
+    width: 100%;  /* ← FIXED: was 150% */
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     display: flex;
     flex-direction: column;
-    justify-content: center;  /* ← This centers content vertically */
+    justify-content: center;
 }
 
 #invoiceModal .invoice-inner {
-    padding: 28px;
+    padding: 24px;
 }
 
 #invoiceModal .invoice-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
-    padding-left: 4px;
-    padding-right: 4px;
 }
 
 #invoiceModal .invoice-buttons {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 24px;
 }
 
 #invoiceModal .invoice-buttons button {
-    width: 50%;
+    flex: 1;
     padding: 10px 0;
     font-size: 14px;
     border-radius: 6px;
     font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 #invoiceModal .btn-cancel {
     background-color: white;
-    border: 1px solid #ccc;
+    border: 1px solid #d1d5db;
+    color: #374151;
+}
+
+#invoiceModal .btn-cancel:hover {
+    background-color: #f9fafb;
 }
 
 #invoiceModal .btn-proceed {
     background-color: #054c0f;
+    border: none;
     color: white;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
@@ -276,39 +287,42 @@
 #invoiceModal .btn-proceed:hover {
     background-color: #009515;
 }
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid #16a34a;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .countdown-timer {
-            font-family: monospace;
-            font-size: 24px;
-            font-weight: bold;
-            color: #dc2626;
-            background: #fee2e2;
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        .error-text {
-            color: #dc2626;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
-        }
-        
+
+/* Loader */
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e5e7eb;
+    border-top: 4px solid #16a34a;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Countdown Timer - FIXED */
+.countdown-timer {
+    font-family: monospace;
+    font-size: 18px;
+    font-weight: bold;
+    color: #dc2626;
+    background: #fef2f2;
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+}
+
+/* Error text */
+.error-text {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -839,15 +853,25 @@ if (receiptInputElement) {
             document.getElementById('invoiceModal').style.display = 'block';
         });
 
-        function showLoadingAndGenerateAccount() {
-            closeInvoiceModal();
-            const loadingModal = document.getElementById('loadingModal');
-            loadingModal.style.display = 'flex';
-            setTimeout(() => {
+       function showLoadingAndGenerateAccount() {
+    closeInvoiceModal();
+    const loadingModal = document.getElementById('loadingModal');
+    
+    // Safety check - only proceed if loadingModal exists
+    if (loadingModal) {
+        loadingModal.style.display = 'flex';
+        setTimeout(() => {
+            if (loadingModal) {
                 loadingModal.style.display = 'none';
-                showAccountModal();
-            }, 3000);
-        }
+            }
+            showAccountModal();
+        }, 3000);
+    } else {
+        // If loading modal doesn't exist, just show account modal directly
+        console.warn('loadingModal not found, showing account modal directly');
+        showAccountModal();
+    }
+}
 
         function startCountdown(minutes, pinCode) {
             let time = minutes * 60;
