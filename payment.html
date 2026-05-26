@@ -71,7 +71,10 @@
 #invoiceModal .invoice-box {
     max-width: 430px;
     width: 150%;
-    height: 320px;
+    min-height: 450px;  /* ← Set your desired minimum height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;  /* ← This centers content vertically */
 }
 
 #invoiceModal .invoice-inner {
