@@ -308,23 +308,28 @@
         </div>
     </div>
 
-<!-- FIXED INVOICE SUMMARY MODAL - Smaller box, reduced spacing, centered properly -->
+<!-- INVOICE SUMMARY MODAL - EXACTLY MATCHING YOUR IMAGE -->
     <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 flex items-center justify-center p-4">
             <div class="bg-white rounded-md shadow-xl w-full" style="max-width: 384px;">
-                <div class="p-3">
-                    <div class="flex justify-between items-center mb-2">
-                        <p class="text-sm font-CircularStdBold font-semibold">Invoice Summary</p>
-                        <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 cursor-pointer text-gray-500">
+                <div class="p-4">
+                    <!-- Title -->
+                    <div class="flex justify-between items-center mb-3">
+                        <p class="text-base font-CircularStdBold font-semibold">Invoice Summary</p>
+                        <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 cursor-pointer text-gray-400 hover:text-gray-600">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
-                    <div class="flex justify-between text-xs text-gray-500 pb-1">
+                    
+                    <!-- Column Headers -->
+                    <div class="flex justify-between text-xs text-gray-500 pb-2 border-b">
                         <span>Item</span>
                         <span>Amount</span>
                     </div>
-                    <div class="mt-1 space-y-1">
+                    
+                    <!-- Rows -->
+                    <div class="mt-2 space-y-2">
                         <div class="flex justify-between text-sm">
                             <span id="invoiceItemName" class="font-medium">FOUR FIGURE TABLE</span>
                             <span id="invoiceItemAmount">NGN 500</span>
@@ -337,20 +342,23 @@
                             <span>Quantity</span>
                             <span id="invoiceQuantity">1</span>
                         </div>
-                        <div class="bg-gray-100 p-1 rounded flex justify-between text-sm font-semibold mt-1">
+                        
+                        <!-- Total Row with background -->
+                        <div class="bg-gray-100 p-2 rounded flex justify-between text-sm font-semibold mt-2">
                             <span>Total</span>
                             <span id="invoiceTotal">NGN 550</span>
                         </div>
                     </div>
-                    <div class="flex gap-2 mt-3">
-                        <button onclick="closeInvoiceModal()" class="flex-1 font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                        <button onclick="showLoadingAndGenerateAccount()" class="flex-1 font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md">Proceed</button>
+                    
+                    <!-- Buttons side by side -->
+                    <div class="flex gap-3 mt-4">
+                        <button onclick="closeInvoiceModal()" class="flex-1 font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 py-2.5 text-sm rounded-md">Cancel</button>
+                        <button onclick="showLoadingAndGenerateAccount()" class="flex-1 font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent py-2.5 text-sm rounded-md">Proceed</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
   <!-- FIXED LOADING MODAL - White background, NO box, just centered text -->
 <div id="loadingModal" class="fixed inset-0 z-50" style="display: none; background: white;">
     <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; text-align: center;">
