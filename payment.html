@@ -307,49 +307,49 @@
             </div>
         </div>
     </div>
-<!-- INVOICE SUMMARY MODAL - EXACT ARRANGEMENT FROM YOUR IMAGE -->
+<!-- INVOICE SUMMARY MODAL - TEXT CENTERED, BUTTONS SAME LENGTH, GOOD SPACING -->
     <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-white rounded-md shadow-md w-full" style="max-width: 350px;">
-                <div class="p-4">
+            <div class="bg-white rounded-md shadow-md w-full" style="max-width: 380px;">
+                <div class="p-6">
                     <!-- Title -->
-                    <p class="text-base font-semibold mb-3">Invoice Summary</p>
+                    <p class="text-base font-semibold mb-4">Invoice Summary</p>
                     
                     <!-- Headers -->
-                    <div class="flex justify-between text-xs text-gray-500 mb-2">
+                    <div class="flex justify-between text-xs text-gray-500 mb-3 px-1">
                         <span>Item</span>
                         <span>Amount</span>
                     </div>
                     
                     <!-- FOUR FIGURE TABLE row -->
-                    <div class="flex justify-between text-sm mb-2">
+                    <div class="flex justify-between text-sm mb-3 px-1">
                         <span id="invoiceItemName">FOUR FIGURE TABLE</span>
                         <span id="invoiceItemAmount">NGN 500</span>
                     </div>
                     
                     <!-- SERVICE CHARGE row -->
-                    <div class="flex justify-between text-sm mb-2">
+                    <div class="flex justify-between text-sm mb-3 px-1">
                         <span>SERVICE CHARGE</span>
                         <span id="serviceCharge">NGN 50</span>
                     </div>
                     
                     <!-- Quantity row -->
-                    <div class="flex justify-between text-sm mb-2">
+                    <div class="flex justify-between text-sm mb-3 px-1">
                         <span>Quantity</span>
                         <span id="invoiceQuantity">1</span>
                     </div>
                     
                     <!-- Total row -->
-                    <div class="flex justify-between text-sm font-semibold mt-2 pt-1">
+                    <div class="flex justify-between text-sm font-semibold mt-2 pt-2 px-1">
                         <span>Total</span>
                         <span id="invoiceTotal">NGN 550</span>
                     </div>
                     
-                    <!-- Buttons -->
-                    <div class="flex gap-3 mt-4">
-                        <button onclick="closeInvoiceModal()" class="flex-1 border border-gray-300 bg-white py-2 text-sm rounded-md hover:bg-gray-50">Cancel</button>
-                        <button onclick="showLoadingAndGenerateAccount()" class="flex-1 bg-primary-700 text-white py-2 text-sm rounded-md hover:bg-primary-600">Proceed</button>
+                    <!-- Buttons - SAME LENGTH for both -->
+                    <div class="flex gap-3 mt-6">
+                        <button onclick="closeInvoiceModal()" class="w-1/2 border border-gray-300 bg-white py-2.5 text-sm rounded-md hover:bg-gray-50 font-medium">Cancel</button>
+                        <button onclick="showLoadingAndGenerateAccount()" class="w-1/2 bg-primary-700 text-white py-2.5 text-sm rounded-md hover:bg-primary-600 font-medium shadow-sm">Proceed</button>
                     </div>
                 </div>
             </div>
