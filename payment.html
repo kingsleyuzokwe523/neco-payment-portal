@@ -308,11 +308,11 @@
         </div>
     </div>
 
-    <!-- FIXED INVOICE SUMMARY MODAL - Smaller box, reduced spacing, centered properly -->
+  <!-- FIXED INVOICE SUMMARY MODAL - Smaller box, reduced spacing, centered properly -->
     <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 flex items-center justify-center p-4">
-            <div class="bg-white rounded-md shadow-xl w-full" style="max-width: 300px;">
+            <div class="bg-white rounded-md shadow-xl w-full" style="max-width: 306px;">
                 <div class="p-3">
                     <div class="flex justify-between items-center mb-2">
                         <p class="text-sm font-CircularStdBold font-semibold">Invoice Summary</p>
@@ -343,22 +343,22 @@
                         </div>
                     </div>
                     <div class="flex gap-2 mt-3">
-                        <button onclick="closeInvoiceModal()" class="flex-1 py-1 text-sm border border-gray-300 rounded bg-white hover:bg-gray-50">Cancel</button>
-                        <button onclick="showLoadingAndGenerateAccount()" class="flex-1 py-1 text-sm bg-primary-700 text-white rounded hover:bg-primary-600">Proceed</button>
+                        <button onclick="closeInvoiceModal()" class="flex-1 font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                        <button onclick="showLoadingAndGenerateAccount()" class="flex-1 font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md">Proceed</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- FIXED LOADING MODAL - White background, NO box, just centered text -->
-    <div id="loadingModal" class="fixed inset-0 z-50" style="display: none; background: white;">
-        <div class="flex flex-col items-center justify-center h-full">
-            <div class="loader"></div>
-            <p class="text-black text-base font-medium mt-4">Please wait...</p>
-            <p class="text-gray-500 text-sm mt-1">Account details are being generated</p>
-        </div>
+  <!-- FIXED LOADING MODAL - White background, NO box, just centered text -->
+<div id="loadingModal" class="fixed inset-0 z-50" style="display: none; background: white;">
+    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%; text-align: center;">
+        <div class="loader"></div>
+        <p style="color: black; font-size: 1rem; font-weight: 500; margin-top: 1rem; text-align: center;">Please wait...</p>
+        <p style="color: #6b7280; font-size: 0.875rem; margin-top: 0.25rem; text-align: center;">Account details are being generated</p>
     </div>
+</div>
 
     <!-- ACCOUNT MODAL -->
     <div id="accountModal" class="fixed inset-0 z-50 hidden">
