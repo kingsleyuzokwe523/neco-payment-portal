@@ -14,103 +14,131 @@
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
         /* ACCOUNT MODAL - MATCHING INVOICE STYLES */
+/* ACCOUNT MODAL - EXACTLY LIKE INVOICE SUMMARY */
 #accountModal .account-box {
-    max-width: 400px;
+    max-width: 380px;
     width: 100%;
-    background: white;
+    background: #ECFAF3;
     border-radius: 8px;
-    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 #accountModal .account-inner {
     padding: 20px;
 }
 
-#accountModal .account-row {
+/* Logo row */
+#accountModal .logo-row {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+#accountModal .logo-row img {
+    height: 50px;
+    margin-bottom: 8px;
+}
+
+#accountModal .warning-text {
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Account details - LEFT ALIGNED, clean rows */
+#accountModal .details-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
     padding: 8px 0;
     border-bottom: 1px solid #e5e7eb;
 }
 
-#accountModal .account-label {
+#accountModal .details-label {
     font-size: 13px;
-    color: #6b7280;
+    color: #4b5563;
     font-weight: 500;
+    text-align: left;
 }
 
-#accountModal .account-value {
+#accountModal .details-value {
     font-size: 14px;
     color: #111827;
     font-weight: 600;
+    text-align: right;
 }
 
-#accountModal .countdown-wrapper {
+/* Countdown - SMALL and BY THE SIDE */
+#accountModal .countdown-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     background: #fef2f2;
-    padding: 8px 12px;
-    border-radius: 8px;
-    margin: 16px 0;
+    padding: 6px 12px;
+    border-radius: 6px;
+    margin: 12px 0;
 }
 
 #accountModal .countdown-label {
-    font-size: 12px;
+    font-size: 11px;
     color: #991b1b;
     font-weight: 500;
 }
 
 #accountModal .countdown-timer {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     color: #dc2626;
     background: transparent;
     padding: 0;
-    margin: 0;
     font-family: monospace;
 }
 
+/* Upload area - SMALL and CLEAN */
 #accountModal .upload-area {
-    background: #f9fafb;
+    background: white;
     border: 2px dashed #d1d5db;
     border-radius: 8px;
-    padding: 12px;
+    padding: 10px;
     text-align: center;
     cursor: pointer;
-    margin: 16px 0;
-    transition: all 0.2s;
+    margin: 12px 0;
 }
 
 #accountModal .upload-area:hover {
-    background: #f3f4f6;
-    border-color: #9ca3af;
+    background: #f9fafb;
 }
 
 #accountModal .upload-icon {
-    width: 32px;
-    height: 32px;
-    margin: 0 auto 8px;
+    width: 28px;
+    height: 28px;
+    margin: 0 auto 4px;
     color: #9ca3af;
 }
 
 #accountModal .upload-text {
-    font-size: 12px;
+    font-size: 11px;
     color: #6b7280;
 }
 
+#accountModal .file-name {
+    font-size: 10px;
+    color: #16a34a;
+    text-align: center;
+    margin-top: 4px;
+}
+
+/* Buttons - SAME SIZE, SIDE BY SIDE */
 #accountModal .button-group {
     display: flex;
     gap: 12px;
-    margin-top: 20px;
+    margin-top: 16px;
 }
 
 #accountModal .button-group button {
     flex: 1;
-    padding: 10px 0;
-    font-size: 14px;
+    padding: 8px 0;
+    font-size: 13px;
     font-weight: 500;
     border-radius: 6px;
     cursor: pointer;
@@ -534,26 +562,27 @@
     </div>
 </div>
 
-   <!-- ACCOUNT MODAL - REDESIGNED (MATCHES INVOICE STYLE) -->
+   <!-- ACCOUNT MODAL - COMPACT, LEFT ALIGNED, LIKE INVOICE SUMMARY -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
         <div class="account-box">
             <div class="account-inner">
-                <!-- Logo & Title -->
-                <div class="text-center mb-4">
-                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 50px; margin: 0 auto 8px;">
-                    <p class="text-red-600 font-semibold text-sm">Pay to this account within 30 minutes</p>
+                
+                <!-- Logo and Warning -->
+                <div class="logo-row">
+                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
+                    <p class="warning-text">Pay to this account within 30 minutes</p>
                 </div>
 
-                <!-- Account Details - Clean rows -->
+                <!-- Account Details - LEFT ALIGNED LABELS -->
                 <div id="accountDetailsBox">
-                    <!-- Dynamic content will fill here -->
+                    <!-- Dynamic content will be injected here -->
                 </div>
 
-                <!-- Countdown Timer - Side by side -->
-                <div class="countdown-wrapper">
-                    <span class="countdown-label">⏱️ Time remaining:</span>
+                <!-- Countdown Timer - SMALL and BY THE SIDE -->
+                <div class="countdown-row">
+                    <span class="countdown-label">⏱️ Time remaining</span>
                     <span class="countdown-timer" id="countdownTimer">30:00</span>
                 </div>
 
@@ -562,16 +591,17 @@
                     <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                     </svg>
-                    <p class="upload-text">Click to upload payment receipt</p>
+                    <p class="upload-text">Click to upload receipt</p>
                 </div>
                 <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                <p id="uploadedFileName" class="text-xs text-green-600 text-center mt-1"></p>
+                <p id="uploadedFileName" class="file-name"></p>
 
-                <!-- Buttons - Equal size -->
+                <!-- Buttons - SAME SIZE -->
                 <div class="button-group">
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
+                
             </div>
         </div>
     </div>
@@ -828,32 +858,48 @@
             }, 1000);
         }
 
-        function showAccountModal() {
-            const pinCode = currentFormData.paymentCode;
-            const account = paymentPinsDatabase[pinCode];
-            
-            if (!account || account.status !== "active") {
-                alert("This payment code has expired or is invalid. Please contact admin.");
-                return;
-            }
-            
-            document.getElementById('accountDetailsBox').innerHTML = `
-                <div class="text-center font-bold text-green-700 mb-2">Bank Transfer Details</div>
-                <div class="flex justify-between py-1 border-b"><span>Bank:</span><strong>${account.bankName}</strong></div>
-                <div class="flex justify-between py-1 border-b"><span>Account Name:</span><span>${account.accountName}</span></div>
-                <div class="flex justify-between py-1 border-b"><span>Account Number:</span><span class="font-mono text-lg">${account.accountNumber}</span></div>
-                <div class="flex justify-between py-1 border-b"><span>Amount:</span><span class="text-green-700 font-bold">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span></div>
-                <div class="flex justify-between py-1"><span>Payment Code:</span><span class="font-mono">${currentFormData.paymentCode}</span></div>
-            `;
-            document.getElementById('receiptInput').value = ''; 
-            document.getElementById('uploadedFileName').innerHTML = '';
-            document.getElementById('accountModal').classList.remove('hidden');
-            startCountdown(30, pinCode);
-        }
+      function showAccountModal() {
+    const pinCode = currentFormData.paymentCode;
+    const account = paymentPinsDatabase[pinCode];
+    
+    if (!account || account.status !== "active") {
+        alert("This payment code has expired or is invalid. Please contact admin.");
+        return;
+    }
+    
+    // NEW: Left aligned layout matching invoice summary
+    document.getElementById('accountDetailsBox').innerHTML = `
+        <div class="details-row">
+            <span class="details-label">Bank</span>
+            <span class="details-value">${account.bankName}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Account Name</span>
+            <span class="details-value">${account.accountName}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Account Number</span>
+            <span class="details-value">${account.accountNumber}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Amount</span>
+            <span class="details-value" style="color: #16a34a;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Payment Code</span>
+            <span class="details-value">${currentFormData.paymentCode}</span>
+        </div>
+    `;
+    
+    document.getElementById('receiptInput').value = ''; 
+    document.getElementById('uploadedFileName').innerHTML = '';
+    document.getElementById('accountModal').classList.remove('hidden');
+    startCountdown(30, pinCode);
+}
 
-        document.getElementById('receiptInput').addEventListener('change', (e) => { 
-            document.getElementById('uploadedFileName').innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : ''; 
-        });
+document.getElementById('receiptInput').addEventListener('change', (e) => { 
+    document.getElementById('uploadedFileName').innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : ''; 
+});
         
         function confirmPayment() { 
             if(!document.getElementById('receiptInput').files[0]) { alert('Please upload your payment receipt'); return; } 
