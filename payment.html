@@ -16,7 +16,7 @@
         /* ACCOUNT MODAL - MATCHING INVOICE STYLES */
 /* ACCOUNT MODAL - EXACTLY LIKE INVOICE SUMMARY */
 #accountModal .account-box {
-    max-width: 380px;
+    max-width: 450px;
     width: 100%;
     background: #ECFAF3;
     border-radius: 8px;
@@ -133,14 +133,15 @@
     display: flex;
     gap: 12px;
     margin-top: 16px;
+    justify-content: flex-start;  /* Left align */
 }
 
 #accountModal .button-group button {
-    flex: 1;
-    padding: 8px 0;
-    font-size: 13px;
+    flex: none;                   /* ← ADD THIS - buttons only as wide as content */
+    padding: 12px 24px;           /* ← Fixed width with left/right padding */
+    font-size: 15px;
     font-weight: 500;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
 }
 .details-row {
