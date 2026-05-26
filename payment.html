@@ -949,7 +949,24 @@ if (receiptInputElement) {
         // Clear file input value
         receiptInput.value = '';
     }
+    function confirmPayment() { 
+    if(!document.getElementById('receiptInput').files[0]) { 
+        alert('Please upload your payment receipt'); 
+        return; 
+    } 
+    if (countdownInterval) clearInterval(countdownInterval);
+    const pinCode = currentFormData.paymentCode;
+    if (paymentPinsDatabase[pinCode]) {
+        paymentPinsDatabase[pinCode].status = "used";
+    }
+    alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
+    closeAccountModal();
     
+    // ✅ GO BACK TO INDEX.HTML AFTER 2 SECONDS
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
+}
     // Clear file name display
     if (uploadedFileName) {
         uploadedFileName.innerHTML = '';
