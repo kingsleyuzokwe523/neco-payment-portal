@@ -29,7 +29,7 @@
         .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-flex{display:inline-flex}
         .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
         .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
-        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}.max-w-sm{max-width:24rem}
+        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
         .cursor-pointer{cursor:pointer}
         .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
         .col-span-2{grid-column:span 2 / span 2}
@@ -308,63 +308,57 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - CLEAN, CENTERED, REDUCED PADDING, TWO COLUMNS, BUTTONS SIDE BY SIDE -->
+    <!-- INVOICE SUMMARY MODAL - SMALLER PADDING, PROPER ARRANGEMENT -->
     <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
         <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-3">
-                <div class="w-full max-w-sm transform overflow-hidden rounded-md bg-white shadow-xl transition-all">
-                    <!-- REDUCED PADDING INSIDE BOX -->
-                    <div class="p-4">
-                        
+            <div class="flex min-h-full items-center justify-center p-4 text-center">
+                <div class="w-full max-w-md transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all">
+                    <!-- SMALLER PADDING - py-3 px-3 -->
+                    <div class="py-3 px-3">
                         <!-- Header -->
-                        <div class="flex justify-between items-center pb-2 border-b border-gray-200">
-                            <p class="text-base font-CircularStdBold text-gray-800">Invoice Summary</p>
-                            <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 cursor-pointer text-gray-500 hover:text-gray-700">
+                        <div class="flex justify-between items-center">
+                            <p class="text-xl font-CircularStdBold">Invoice Summary</p>
+                            <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
                         
-                        <!-- Header Row: Item | Amount -->
+                        <!-- Item | Amount Header -->
                         <div class="flex justify-between items-center mt-3">
-                            <p class="text-xs font-medium text-gray-500">Item</p>
-                            <p class="text-xs font-medium text-gray-500">Amount (NGN)</p>
+                            <p class="text-sm text-text-subtitle">Item</p>
+                            <p class="text-sm text-text-subtitle">Amount (NGN)</p>
                         </div>
                         
-                        <!-- Row 1: Item Name -->
-                        <div class="flex justify-between items-center mt-2">
-                            <p class="text-sm font-semibold text-gray-800" id="invoiceItemName">FOUR FIGURE TABLE</p>
-                            <p class="text-sm font-semibold text-gray-800" id="invoiceItemAmount">500</p>
+                        <!-- Item Name -->
+                        <div class="flex justify-between text-black items-center mt-3">
+                            <p class="text-sm w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
+                            <p class="text-sm" id="invoiceItemAmount">500</p>
                         </div>
                         
-                        <!-- Row 2: SERVICE CHARGE -->
-                        <div class="flex justify-between items-center mt-2">
-                            <p class="text-xs text-gray-600">SERVICE CHARGE (10%)</p>
-                            <p class="text-xs text-gray-600" id="serviceCharge">50</p>
+                        <!-- Service Charge -->
+                        <div class="flex justify-between text-black items-center mt-3">
+                            <p class="text-sm w-2/3">SERVICE CHARGE (10%)</p>
+                            <p class="text-sm" id="serviceCharge">50</p>
                         </div>
                         
-                        <!-- Row 3: Quantity -->
-                        <div class="flex justify-between items-center mt-2">
-                            <p class="text-xs text-gray-600">Quantity</p>
-                            <p class="text-xs text-gray-600" id="invoiceQuantity">1</p>
+                        <!-- Quantity -->
+                        <div class="flex justify-between text-black items-center mt-3">
+                            <p class="text-sm">Quantity</p>
+                            <p class="text-sm" id="invoiceQuantity">1</p>
                         </div>
                         
-                        <!-- Total Section -->
-                        <div class="flex justify-between items-center mt-3 p-2 bg-gray-100 rounded-md">
-                            <p class="text-sm font-bold text-gray-800">Total</p>
-                            <p class="text-sm font-bold text-gray-800" id="invoiceTotal">NGN 550</p>
+                        <!-- Total -->
+                        <div class="flex justify-between bg-gray-100 p-2 rounded text-gray-600 items-center mt-3">
+                            <p class="text-sm font-semibold">Total</p>
+                            <p class="text-sm font-semibold" id="invoiceTotal">NGN 550</p>
                         </div>
                         
-                        <!-- Buttons Side by Side: Cancel | Proceed -->
-                        <div class="flex gap-2 mt-4">
-                            <button type="button" onclick="closeInvoiceModal()" class="w-1/2 font-medium border border-primary-700 shadow-sm bg-white hover:bg-gray-50 text-primary-700 py-1.5 text-sm rounded-md transition-colors">
-                                Cancel
-                            </button>
-                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="w-1/2 font-medium border border-transparent shadow-sm bg-primary-700 hover:bg-primary-600 text-white py-1.5 text-sm rounded-md transition-colors">
-                                Proceed
-                            </button>
+                        <!-- Buttons: Cancel | Proceed -->
+                        <div class="grid grid-cols-3 gap-3 mt-4">
+                            <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-3 py-2 text-sm rounded-md">Cancel</button>
+                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="col-span-2 items-center mx-auto w-full font-medium border shadow-sm focus:outline-none bg-primary-700 hover:bg-primary-600 text-white border-transparent px-3 py-2 text-sm rounded-md">Proceed</button>
                         </div>
-                        
                     </div>
                 </div>
             </div>
