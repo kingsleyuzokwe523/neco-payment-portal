@@ -13,8 +13,7 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-        /* ACCOUNT MODAL - MATCHING INVOICE STYLES */
-/* ACCOUNT MODAL - EXACTLY LIKE INVOICE SUMMARY */
+        /* ACCOUNT MODAL - CLEAN VERSION */
 #accountModal .account-box {
     max-width: 450px;
     width: 100%;
@@ -45,12 +44,11 @@
     text-align: center;
 }
 
-/* Account details - LEFT ALIGNED, clean rows */
+/* Account details - Labels left, values next to them */
 #accountModal .details-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #e5e7eb;
 }
 
@@ -58,6 +56,7 @@
     font-size: 13px;
     color: #4b5563;
     font-weight: 500;
+    width: 130px;
     text-align: left;
 }
 
@@ -65,7 +64,9 @@
     font-size: 14px;
     color: #111827;
     font-weight: 600;
-    text-align: right;
+    text-align: left;
+    margin-left: 20px;
+    flex: 1;
 }
 
 /* Countdown - SMALL and BY THE SIDE */
@@ -74,19 +75,19 @@
     justify-content: space-between;
     align-items: center;
     background: #fef2f2;
-    padding: 6px 12px;
+    padding: 8px 12px;
     border-radius: 6px;
-    margin: 12px 0;
+    margin: 16px 0;
 }
 
 #accountModal .countdown-label {
-    font-size: 11px;
+    font-size: 12px;
     color: #991b1b;
     font-weight: 500;
 }
 
 #accountModal .countdown-timer {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     color: #dc2626;
     background: transparent;
@@ -99,10 +100,10 @@
     background: white;
     border: 2px dashed #d1d5db;
     border-radius: 8px;
-    padding: 10px;
+    padding: 12px;
     text-align: center;
     cursor: pointer;
-    margin: 12px 0;
+    margin: 16px 0;
 }
 
 #accountModal .upload-area:hover {
@@ -117,70 +118,51 @@
 }
 
 #accountModal .upload-text {
-    font-size: 11px;
+    font-size: 12px;
     color: #6b7280;
 }
 
 #accountModal .file-name {
-    font-size: 10px;
+    font-size: 11px;
     color: #16a34a;
     text-align: center;
-    margin-top: 4px;
+    margin-top: 6px;
 }
 
-/* Buttons - SAME SIZE, SIDE BY SIDE */
+/* Buttons - Cancel smaller, Confirm LARGER */
 #accountModal .button-group {
     display: flex;
-    gap: 12px;
-    margin-top: 16px;
-    justify-content: flex-start;  /* Left align */
+    gap: 16px;
+    margin-top: 20px;
+    justify-content: flex-start;
 }
 
-#accountModal .button-group button {
-    flex: none;                   /* ← ADD THIS - buttons only as wide as content */
-    padding: 12px 24px;           /* ← Fixed width with left/right padding */
-    font-size: 15px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-}
-/* Account Details - Perfect alignment */
-.details-row {
-    display: flex;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-.details-label {
-    font-size: 13px;
-    color: #4b5563;
-    font-weight: 500;
-    width: 130px;           /* ← Adjust this width as needed */
-    text-align: left;
-}
-
-.details-value {
-    font-size: 14px;
-    color: #111827;
-    font-weight: 600;
-    text-align: left;
-    margin-left: 20px;      /* ← Space between label and value */
-}
+/* Cancel button - normal size */
 #accountModal .btn-cancel-account {
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 #accountModal .btn-cancel-account:hover {
     background: #f0fdf4;
 }
 
+/* Confirm button - LARGER (more padding, bigger font) */
 #accountModal .btn-confirm {
     background: #054c0f;
     border: none;
     color: white;
+    padding: 12px 32px;      /* ← Larger than cancel */
+    font-size: 16px;         /* ← Bigger font */
+    font-weight: 600;        /* ← Bolder */
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 #accountModal .btn-confirm:hover {
@@ -585,64 +567,44 @@
     </div>
 </div>
 
-<!-- ACCOUNT MODAL - MATCHING INVOICE SUMMARY STYLE -->
+<!-- ACCOUNT MODAL - USING YOUR CSS CLASSES -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
-    <div class="fixed inset-0 overflow-y-auto">
-        <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all" style="max-width: 340px;">
-                <div class="p-4">
-                    <!-- Logo centered -->
-                    <div class="flex justify-center mb-4">
-                        <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 50px; width: auto;">
-                    </div>
-                    
-                    <!-- Close button top right -->
-                    <div class="flex justify-end">
-                        <svg onclick="closeAccountModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 cursor-pointer text-gray-500">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                    </div>
-                    
-                    <!-- Warning header -->
-                    <div class="text-center mb-3">
-                        <p class="text-red-600 font-semibold text-sm">Pay to this account within 30 minutes</p>
-                    </div>
-                    
-                    <!-- Header - Details arranged to the right -->
-                    <div class="flex justify-between text-xs text-gray-500 mt-2 pb-1 border-b border-gray-200">
-                        <span></span>
-                        <span>Details</span>
-                    </div>
-                    
-                    <!-- Account details will be injected here -->
-                    <div id="accountDetailsBox"></div>
-                    
-                    <!-- Countdown Timer -->
-                    <div class="flex justify-between items-center bg-red-50 px-3 py-2 rounded-md mt-3">
-                        <span class="text-xs text-red-700 font-medium">⏱️ Time remaining:</span>
-                        <span class="countdown-timer" id="countdownTimer" style="font-size: 16px; font-weight: bold; color: #dc2626; font-family: monospace;">30:00</span>
-                    </div>
-                    
-                    <!-- Upload Receipt Area -->
-                    <div class="mt-3">
-                        <label class="block text-xs font-medium text-gray-700 mb-1">Upload Payment Receipt</label>
-                        <div onclick="document.getElementById('receiptInput').click()" class="bg-gray-50 border-2 border-dashed border-gray-300 rounded-md p-2 text-center cursor-pointer hover:bg-gray-100 transition">
-                            <svg class="w-6 h-6 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                            </svg>
-                            <p class="text-xs text-gray-500">Click to upload receipt</p>
-                        </div>
-                        <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                        <p id="uploadedFileName" class="text-xs text-green-600 text-center mt-1"></p>
-                    </div>
-                    
-                    <!-- Buttons side by side -->
-                    <div class="flex gap-2 mt-4">
-                        <button onclick="closeAccountModal()" class="flex-1 py-2 text-sm border border-gray-300 rounded-md bg-white hover:bg-gray-50 text-gray-700">Cancel</button>
-                        <button onclick="confirmPayment()" class="flex-1 py-2 text-sm bg-primary-700 text-white rounded-md hover:bg-primary-600">Confirm Payment</button>
-                    </div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="account-box">
+            <div class="account-inner">
+                
+                <!-- Logo row -->
+                <div class="logo-row">
+                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
+                    <p class="warning-text">Pay to this account within 30 minutes</p>
                 </div>
+
+                <!-- Account details will be injected here -->
+                <div id="accountDetailsBox"></div>
+
+                <!-- Countdown Timer - side by side -->
+                <div class="countdown-row">
+                    <span class="countdown-label">⏱️ Time remaining</span>
+                    <span class="countdown-timer" id="countdownTimer">30:00</span>
+                </div>
+
+                <!-- Upload Receipt Area -->
+                <div class="upload-area" onclick="document.getElementById('receiptInput').click()">
+                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                    </svg>
+                    <p class="upload-text">Click to upload receipt</p>
+                </div>
+                <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                <p id="uploadedFileName" class="file-name"></p>
+
+                <!-- Buttons - Cancel and Confirm -->
+                <div class="button-group">
+                    <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
+                    <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
+                </div>
+                
             </div>
         </div>
     </div>
