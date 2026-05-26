@@ -13,7 +13,7 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-     /* ACCOUNT MODAL - LABELS LEFT, VALUES LEFT NEXT TO THEM */
+   /* ACCOUNT MODAL - SHIFTED TO CENTER */
 #accountModal .account-box {
     max-width: 480px;
     width: 100%;
@@ -46,12 +46,13 @@
     margin-bottom: 24px;
 }
 
-/* Account details - BOTH LABEL AND VALUE ON THE LEFT */
+/* Account details - SHIFTED TO CENTER (added margin-left) */
 #accountModal .details-row {
     display: flex;
     align-items: center;
     padding: 8px 0;
     gap: 20px;
+    margin-left: 40px;  /* ← SHIFTS EVERYTHING TO THE RIGHT (TO CENTER) */
 }
 
 #accountModal .details-label {
@@ -59,7 +60,7 @@
     color: #4b5563;
     font-weight: 500;
     text-align: left;
-    width: 120px;
+    width: 110px;
 }
 
 #accountModal .details-value {
@@ -70,7 +71,7 @@
     flex: 1;
 }
 
-/* Countdown - RIGHT ALIGNED */
+/* Countdown - SHIFTED TO CENTER */
 #accountModal .countdown-row {
     display: flex;
     justify-content: flex-end;
@@ -78,6 +79,7 @@
     background: transparent;
     padding: 16px 0 8px 0;
     margin: 0;
+    margin-right: 30px;  /* ← PUSHES TIMER MORE TO CENTER */
 }
 
 #accountModal .countdown-label {
@@ -570,10 +572,10 @@
     </div>
 </div>
 
-<!-- LOADING MODAL - MUST EXIST -->
-<div id="loadingModal" style="display: none; position: fixed; inset: 0; background: white; z-index: 9999;">
-    <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%;">
-        <div class="loader"></div>
+<!-- LOADING MODAL - EXPLICIT CENTERING -->
+<div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        <div class="loader" style="margin: 0 auto;"></div>
         <p style="margin-top: 16px; font-size: 16px; color: black; font-weight: 500;">Please wait...</p>
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
     </div>
