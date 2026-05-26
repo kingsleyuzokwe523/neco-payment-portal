@@ -13,11 +13,11 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-        /* ACCOUNT MODAL - CLEAN VERSION */
+        /* ACCOUNT MODAL - UPDATED */
 #accountModal .account-box {
     max-width: 450px;
     width: 100%;
-    background: #ECFAF3;
+    background: white;  /* ← Changed from #ECFAF3 to white */
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
@@ -26,15 +26,16 @@
     padding: 20px;
 }
 
-/* Logo row */
+/* Logo row - CENTERED */
 #accountModal .logo-row {
-    text-align: center;
+    text-align: center;  /* ← Already centered */
     margin-bottom: 16px;
 }
 
 #accountModal .logo-row img {
     height: 50px;
-    margin-bottom: 8px;
+    margin: 0 auto 8px;  /* ← Ensures centered */
+    display: block;      /* ← Helps with centering */
 }
 
 #accountModal .warning-text {
@@ -44,11 +45,12 @@
     text-align: center;
 }
 
-/* Account details - Labels left, values next to them */
+/* Account details - Labels and values shifted RIGHT */
 #accountModal .details-row {
     display: flex;
     align-items: center;
-    padding: 12px 0;
+    justify-content: center;  /* ← Centers the whole row */
+    padding: 10px 0;
     border-bottom: 1px solid #e5e7eb;
 }
 
@@ -56,8 +58,8 @@
     font-size: 13px;
     color: #4b5563;
     font-weight: 500;
-    width: 130px;
-    text-align: left;
+    width: 110px;
+    text-align: right;  /* ← Label aligned to the right */
 }
 
 #accountModal .details-value {
@@ -65,11 +67,36 @@
     color: #111827;
     font-weight: 600;
     text-align: left;
-    margin-left: 20px;
-    flex: 1;
+    margin-left: 30px;  /* ← Space between label and value */
+    width: 200px;       /* ← Fixed width for values */
 }
 
-/* Countdown - SMALL and BY THE SIDE */
+/* OR use this alternative - pushes everything to the center */
+#accountModal .details-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#accountModal .details-label {
+    font-size: 13px;
+    color: #4b5563;
+    font-weight: 500;
+    text-align: right;
+    width: 120px;
+}
+
+#accountModal .details-value {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 600;
+    text-align: left;
+    width: 220px;
+}
+
+/* Countdown */
 #accountModal .countdown-row {
     display: flex;
     justify-content: space-between;
@@ -95,9 +122,9 @@
     font-family: monospace;
 }
 
-/* Upload area - SMALL and CLEAN */
+/* Upload area */
 #accountModal .upload-area {
-    background: white;
+    background: #f9fafb;
     border: 2px dashed #d1d5db;
     border-radius: 8px;
     padding: 12px;
@@ -107,7 +134,7 @@
 }
 
 #accountModal .upload-area:hover {
-    background: #f9fafb;
+    background: #f3f4f6;
 }
 
 #accountModal .upload-icon {
@@ -129,15 +156,14 @@
     margin-top: 6px;
 }
 
-/* Buttons - Cancel smaller, Confirm LARGER */
+/* Buttons */
 #accountModal .button-group {
     display: flex;
     gap: 16px;
     margin-top: 20px;
-    justify-content: flex-start;
+    justify-content: center;  /* ← Centers buttons */
 }
 
-/* Cancel button - normal size */
 #accountModal .btn-cancel-account {
     background: white;
     border: 1px solid #054c0f;
@@ -153,14 +179,13 @@
     background: #f0fdf4;
 }
 
-/* Confirm button - LARGER (more padding, bigger font) */
 #accountModal .btn-confirm {
     background: #054c0f;
     border: none;
     color: white;
-    padding: 12px 32px;      /* ← Larger than cancel */
-    font-size: 16px;         /* ← Bigger font */
-    font-weight: 600;        /* ← Bolder */
+    padding: 12px 32px;
+    font-size: 16px;
+    font-weight: 600;
     border-radius: 8px;
     cursor: pointer;
 }
