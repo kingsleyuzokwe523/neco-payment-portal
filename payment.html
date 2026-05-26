@@ -308,51 +308,52 @@
         </div>
     </div>
 
-    <!-- INVOICE SUMMARY MODAL - EXACT FROM YOUR FILE (NO CHANGES) -->
+    <!-- INVOICE SUMMARY MODAL - REDUCED BOX SIZE & REDUCED SPACING BETWEEN TEXT -->
     <div id="invoiceModal" class="relative z-30" style="display: none;">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm opacity-100"></div>
         <div class="fixed inset-0 overflow-y-auto">
             <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
-                            <div class="flex justify-between items-center ">
-                                <p class="text-xl font-CircularStdBold ">Invoice Summary</p>
-                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-6 cursor-pointer">
+                <!-- Changed max-w-md to max-w-sm for smaller box -->
+                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-sm py-4">
+                    <div class="px-4">
+                        <div class="px-2">
+                            <div class="flex justify-between items-center">
+                                <p class="text-base font-CircularStdBold">Invoice Summary</p>
+                                <svg onclick="closeInvoiceModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="w-5 cursor-pointer">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
                             </div>
-                            <div class="flex justify-between items-center mt-5">
-                                <p class="text-sm text-text-subtitle">Item</p>
-                                <p class="text-sm text-text-subtitle">Amount</p>
+                            <!-- Reduced spacing: mt-5 to mt-2 -->
+                            <div class="flex justify-between items-center mt-2">
+                                <p class="text-xs text-text-subtitle">Item</p>
+                                <p class="text-xs text-text-subtitle">Amount</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
-                                <p class="text-sm" id="invoiceItemAmount">NGN 500</p>
+                            <!-- Reduced spacing: mt-5 to mt-1 -->
+                            <div class="flex justify-between text-black items-center mt-1">
+                                <p class="text-xs w-2/3" id="invoiceItemName">FOUR FIGURE TABLE</p>
+                                <p class="text-xs" id="invoiceItemAmount">NGN 500</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm w-2/3">SERVICE CHARGE</p>
-                                <p class="text-sm" id="serviceCharge">NGN 50</p>
+                            <!-- Reduced spacing: mt-5 to mt-1 -->
+                            <div class="flex justify-between text-black items-center mt-1">
+                                <p class="text-xs w-2/3">SERVICE CHARGE</p>
+                                <p class="text-xs" id="serviceCharge">NGN 50</p>
                             </div>
-                            <div class="flex justify-between text-black items-center mt-5">
-                                <p class="text-sm">Quantity</p>
-                                <p class="text-sm" id="invoiceQuantity">1</p>
+                            <!-- Reduced spacing: mt-5 to mt-1 -->
+                            <div class="flex justify-between text-black items-center mt-1">
+                                <p class="text-xs">Quantity</p>
+                                <p class="text-xs" id="invoiceQuantity">1</p>
                             </div>
                         </div>
-                        <div class="flex justify-between bg-gray-100 p-4 rounded text-gray-600 items-center mt-5">
-                            <p class="text-sm">Total</p>
-                            <p class="text-sm" id="invoiceTotal">NGN 550</p>
+                        <!-- Reduced spacing: mt-5 to mt-2, padding p-4 to p-2 -->
+                        <div class="flex justify-between bg-gray-100 p-2 rounded text-gray-600 items-center mt-2">
+                            <p class="text-xs">Total</p>
+                            <p class="text-xs" id="invoiceTotal">NGN 550</p>
                         </div>
-                        <form action="https://login.remita.net/remita/ecomm/finalize.reg" name="SubmitRemitaForm" method="POST">
-                            <input name="merchantId" type="hidden" value="2863353919">
-                            <input name="hash" type="hidden" value="56221dc5a1586efc916f55b9fea9f3397df93f06d7e44a67e576ccf6eebd168f01dd0a32fed7b24c06ee2d856402208d9c575055186ff372cc1f6c471b642778">
-                            <input name="rrr" type="hidden" value="271469844154">
-                            <input name="responseurl" type="hidden" value="https://payments.neco.gov.ng/payment">
-                            <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                                <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md w-full">Cancel</button>
-                                <button type="button" onclick="showLoadingAndGenerateAccount()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
-                            </div>
-                        </form>
+                        <!-- Reduced spacing: mt-5 to mt-2, gap-5 to gap-2, button padding smaller -->
+                        <div class="grid grid-cols-3 mt-2 gap-2 px-2">
+                            <button type="button" onclick="closeInvoiceModal()" class="items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-2 py-1.5 text-xs rounded-md">Cancel</button>
+                            <button type="button" onclick="showLoadingAndGenerateAccount()" class="col-span-2 items-center mx-auto w-full font-medium border shadow-sm focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-2 py-1.5 text-xs rounded-md">Proceed</button>
+                        </div>
                     </div>
                 </div>
             </div>
