@@ -13,7 +13,128 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-        
+        /* ACCOUNT MODAL - MATCHING INVOICE STYLES */
+#accountModal .account-box {
+    max-width: 400px;
+    width: 100%;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+}
+
+#accountModal .account-inner {
+    padding: 20px;
+}
+
+#accountModal .account-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+#accountModal .account-label {
+    font-size: 13px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+#accountModal .account-value {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 600;
+}
+
+#accountModal .countdown-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fef2f2;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin: 16px 0;
+}
+
+#accountModal .countdown-label {
+    font-size: 12px;
+    color: #991b1b;
+    font-weight: 500;
+}
+
+#accountModal .countdown-timer {
+    font-size: 18px;
+    font-weight: bold;
+    color: #dc2626;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+    font-family: monospace;
+}
+
+#accountModal .upload-area {
+    background: #f9fafb;
+    border: 2px dashed #d1d5db;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    margin: 16px 0;
+    transition: all 0.2s;
+}
+
+#accountModal .upload-area:hover {
+    background: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+#accountModal .upload-icon {
+    width: 32px;
+    height: 32px;
+    margin: 0 auto 8px;
+    color: #9ca3af;
+}
+
+#accountModal .upload-text {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+#accountModal .button-group {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+#accountModal .button-group button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#accountModal .btn-cancel-account {
+    background: white;
+    border: 1px solid #054c0f;
+    color: #054c0f;
+}
+
+#accountModal .btn-cancel-account:hover {
+    background: #f0fdf4;
+}
+
+#accountModal .btn-confirm {
+    background: #054c0f;
+    border: none;
+    color: white;
+}
+
+#accountModal .btn-confirm:hover {
+    background: #009515;
+}
         .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}
         @media (min-width:640px){.container{max-width:640px}}
         @media (min-width:768px){.container{max-width:768px}}
@@ -71,7 +192,7 @@
 #invoiceModal .invoice-box {
     max-width: 430px;
     width: 150%;
-    min-height: 400px;  /* ← Set your desired minimum height */
+    min-height: 380px;  /* ← Set your desired minimum height */
     display: flex;
     flex-direction: column;
     justify-content: center;  /* ← This centers content vertically */
@@ -413,46 +534,48 @@
     </div>
 </div>
 
-    <!-- ACCOUNT MODAL -->
-    <div id="accountModal" class="fixed inset-0 z-50 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-md py-10">
-                    <div class="px-6">
-                        <div class="px-4">
-                            <div class="flex justify-center mb-4">
-                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 60px;">
-                            </div>
-                            <div class="text-center mb-4">
-                                <p class="text-red-600 font-semibold">Pay to this account within the next 30 minutes</p>
-                            </div>
-                            <div id="accountDetailsBox" class="bg-green-50 border border-green-600 rounded-md p-3 text-sm space-y-2"></div>
-                            <div class="text-center mt-3">
-                                <div class="countdown-timer" id="countdownTimer">30:00</div>
-                            </div>
-                            <div class="mb-4 mt-4">
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Upload Payment Receipt</label>
-                                <div onclick="document.getElementById('receiptInput').click()" class="bg-gray-100 border-2 border-dashed border-gray-300 rounded-md p-3 text-center cursor-pointer hover:bg-gray-50 transition">
-                                    <svg class="w-8 h-8 mx-auto text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
-                                    </svg>
-                                    <p class="text-sm text-gray-500">Click to upload receipt</p>
-                                </div>
-                                <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                                <p id="uploadedFileName" class="text-xs text-green-600 mt-1"></p>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-3 mt-5 gap-5 px-4">
-                            <button onclick="closeAccountModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                            <button onclick="confirmPayment()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2">Confirm Payment</button>
-                        </div>
-                    </div>
+   <!-- ACCOUNT MODAL - REDESIGNED (MATCHES INVOICE STYLE) -->
+<div id="accountModal" class="fixed inset-0 z-50 hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
+    <div class="fixed inset-0 flex items-center justify-center p-4">
+        <div class="account-box">
+            <div class="account-inner">
+                <!-- Logo & Title -->
+                <div class="text-center mb-4">
+                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 50px; margin: 0 auto 8px;">
+                    <p class="text-red-600 font-semibold text-sm">Pay to this account within 30 minutes</p>
+                </div>
+
+                <!-- Account Details - Clean rows -->
+                <div id="accountDetailsBox">
+                    <!-- Dynamic content will fill here -->
+                </div>
+
+                <!-- Countdown Timer - Side by side -->
+                <div class="countdown-wrapper">
+                    <span class="countdown-label">⏱️ Time remaining:</span>
+                    <span class="countdown-timer" id="countdownTimer">30:00</span>
+                </div>
+
+                <!-- Upload Receipt Area -->
+                <div class="upload-area" onclick="document.getElementById('receiptInput').click()">
+                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                    </svg>
+                    <p class="upload-text">Click to upload payment receipt</p>
+                </div>
+                <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
+                <p id="uploadedFileName" class="text-xs text-green-600 text-center mt-1"></p>
+
+                <!-- Buttons - Equal size -->
+                <div class="button-group">
+                    <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
+                    <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
             </div>
         </div>
     </div>
-
+</div>
     <script>
         // FULL PAYMENT DATA - NOTHING REMOVED
         const paymentData = {
