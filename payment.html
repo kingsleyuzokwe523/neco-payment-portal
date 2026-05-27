@@ -13,7 +13,7 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
- /* San Francisco Fonts */
+/* San Francisco Fonts */
 @font-face {
     font-family: 'SF Pro Display';
     src: local('SF Pro Display'), local('SFProDisplay');
@@ -34,9 +34,9 @@
     font-family: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif !important;
 }
 
-/* ACCOUNT MODAL - UPDATED */
+/* ACCOUNT MODAL */
 #accountModal .account-box {
-    max-width: 400px;
+    max-width: 420px;
     width: 100%;
     background: white;
     border-radius: 12px;
@@ -88,25 +88,42 @@
     font-family: 'SF Pro Text', sans-serif;
 }
 
-/* Timer only - no warning box */
-#accountModal .timer-only {
+/* Warning text row - full width */
+#accountModal .warning-row {
+    margin: 20px 0 8px 0;
+    width: 100%;
+}
+
+#accountModal .warning-text-plain {
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 500;
+    background: transparent;
+    padding: 0;
+    display: block;
+    text-align: left;
+}
+
+/* Timer row - aligned to the right */
+#accountModal .timer-row {
     display: flex;
     justify-content: flex-end;
-    margin: 16px 0 12px 0;
+    margin: 0 0 16px 0;
+    width: 100%;
 }
 
 #accountModal .timer-box {
     background: white;
     border: 1.5px solid #16a34a;
     border-radius: 8px;
-    padding: 6px 16px;
+    padding: 5px 14px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 #accountModal .timer-small {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 600;
     color: #dc2626;
     font-family: 'SF Mono', 'SF Pro Text', monospace;
@@ -196,10 +213,10 @@
 }
 
 /* Hide any old elements */
-#accountModal .warning-text,
-#accountModal .warning-text-countdown,
 #accountModal .countdown-row,
 #accountModal .countdown-section,
+#accountModal .warning-text-countdown,
+#accountModal .warning-text,
 #accountModal .warning-timer-row {
     display: none;
 }
@@ -619,7 +636,7 @@
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
     </div>
 </div>
-<!-- ACCOUNT MODAL - WARNING TEXT NO BOX -->
+<!-- ACCOUNT MODAL - WARNING TOP, TIMER BOTTOM RIGHT -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -634,12 +651,16 @@
                 <!-- Account details - ALL LEFT ALIGNED -->
                 <div id="accountDetailsBox"></div>
 
-                <!-- Warning text (no box) + Timer box in same row -->
-                <div class="warning-timer-row">
-                    <div class="warning-text-plain"> Pay to this account within 30 minutes</div>
-                    <div class="timer-box">
+                <!-- Warning text on its own row -->
+                <div class="warning-row">
+                    <span class="warning-text-plain"> Pay to this account within 30 minutes</span>
+                </div>
+
+                <!-- Timer box on its own row, aligned to the right -->
+                <div class="timer-row">
+                    <span class="timer-box">
                         <span id="countdownTimer" class="timer-small">30:00</span>
-                    </div>
+                    </span>
                 </div>
 
                 <!-- Upload button -->
