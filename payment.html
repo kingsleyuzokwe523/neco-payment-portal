@@ -13,143 +13,138 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-   /* ACCOUNT MODAL - SHIFTED TO CENTER */
+  /* ACCOUNT MODAL - EXACT LAYOUT */
 #accountModal .account-box {
-    max-width: 380px;
+    max-width: 400px;
     width: 100%;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    height: auto;           /* Let height be determined by content */
-    max-height: 420px;      /* ← ADD THIS - limits maximum height */
-    overflow-y: auto;       /* ← ADD THIS - scroll if content exceeds */
+    height: auto;
+    max-height: 480px;
+    overflow-y: auto;
 }
-        
 
 #accountModal .account-inner {
-    padding: 18px 22px;
+    padding: 20px 24px;
 }
 
-        
-
-/* Logo - CENTERED */
+/* Logo centered */
 #accountModal .logo-row {
     text-align: center;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 #accountModal .logo-row img {
     height: 50px;
     display: inline-block;
 }
-.input-error {
-    border-color: #dc2626 !important;
-    background-color: #fef2f2 !important;
-}
 
-.error-text {
-    color: #dc2626;
-    font-size: 12px;
-    margin-top: 4px;
-    display: none;
-}
-/* Warning text - CENTERED */
-#accountModal .warning-text {
-    color: #dc2626;
-    font-size: 15px;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-/* Account details - SHIFTED TO CENTER (added margin-left) */
+/* Account details - label left, value right */
 #accountModal .details-row {
     display: flex;
-    align-items: center;
-    padding: 4px 0;
-    gap: 20px;
-    margin-left: 40px;  /* ← SHIFTS EVERYTHING TO THE RIGHT (TO CENTER) */
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6px 0;
+    gap: 16px;
 }
 
 #accountModal .details-label {
-    font-size: 15px;
+    font-size: 13px;
     color: #4b5563;
     font-weight: 500;
     text-align: left;
-    width: 110px;
+    min-width: 110px;
 }
 
 #accountModal .details-value {
-    font-size: 15px;
+    font-size: 13px;
     color: #111827;
     font-weight: 600;
-    text-align: left;
+    text-align: right;
     flex: 1;
+    word-break: break-word;
 }
 
-/* Countdown - SHIFTED TO CENTER */
-#accountModal .countdown-row {
+/* Warning and timer in one row */
+#accountModal .warning-timer-row {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    background: transparent;
-    padding: 16px 0 8px 0;
-    margin: 0;
-    margin-right: 30px;  /* ← PUSHES TIMER MORE TO CENTER */
+    margin: 20px 0 16px 0;
+    gap: 12px;
 }
 
-#accountModal .countdown-label {
-    display: none;
+#accountModal .warning-text {
+    color: #dc2626;
+    font-size: 12px;
+    font-weight: 600;
+    background: #fef2f2;
+    padding: 6px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
 }
 
-#accountModal .countdown-timer {
-    font-size: 14px;
+#accountModal .timer-box {
+    background: white;
+    border: 1.5px solid #16a34a;
+    border-radius: 6px;
+    padding: 4px 12px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#accountModal .timer-small {
+    font-size: 16px;
     font-weight: bold;
     color: #dc2626;
-    background: transparent;
-    padding: 0;
     font-family: monospace;
-    text-align: right;
+    text-align: center;
 }
 
-/* Upload area */
-#accountModal .upload-area {
+/* Smaller upload button */
+#accountModal .upload-area-small {
     background: #f9fafb;
-    border: 2px dashed #d1d5db;
-    border-radius: 8px;
-    padding: 12px;
+    border: 1.5px dashed #d1d5db;
+    border-radius: 6px;
+    padding: 8px 12px;
     text-align: center;
     cursor: pointer;
-    margin: 16px 0;
+    margin: 12px 0 8px 0;
+    transition: all 0.2s ease;
 }
 
-#accountModal .upload-area:hover {
+#accountModal .upload-area-small:hover {
     background: #f3f4f6;
+    border-color: #16a34a;
 }
 
-#accountModal .upload-icon {
-    width: 20px;
-    height: 28px;
-    margin: 0 auto 4px;
+#accountModal .upload-icon-small {
+    width: 18px;
+    height: 20px;
+    margin: 0 auto 3px;
     color: #9ca3af;
 }
 
-#accountModal .upload-text {
-    font-size: 12px;
+#accountModal .upload-text-small {
+    font-size: 11px;
     color: #6b7280;
+    margin: 0;
 }
 
-#accountModal .file-name {
-    font-size: 11px;
+#accountModal .file-name-small {
+    font-size: 10px;
     color: #16a34a;
     text-align: center;
-    margin-top: 6px;
+    margin-top: 4px;
+    font-weight: 500;
 }
 
-/* Buttons - CENTERED */
+/* Buttons */
 #accountModal .button-group {
     display: flex;
-    gap: 24px;
+    gap: 16px;
     margin-top: 20px;
     justify-content: center;
 }
@@ -158,10 +153,10 @@
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
-    padding: 10px 28px;
-    font-size: 14px;
+    padding: 8px 24px;
+    font-size: 13px;
     font-weight: 500;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -174,17 +169,26 @@
     background: #054c0f;
     border: none;
     color: white;
-    padding: 10px 28px;
-    font-size: 14px;
+    padding: 8px 24px;
+    font-size: 13px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 6px;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
 #accountModal .btn-confirm:hover {
     background: #009515;
+}
+
+/* Hide any old conflicting classes */
+#accountModal .countdown-row,
+#accountModal .countdown-section,
+#accountModal .warning-text-countdown,
+#accountModal .countdown-box,
+#accountModal .upload-area,
+#accountModal .file-name {
+    display: none;
 }
         .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}
         @media (min-width:640px){.container{max-width:640px}}
@@ -602,7 +606,7 @@
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
     </div>
 </div>
-  <!-- ACCOUNT MODAL - EXACT LAYOUT -->
+<!-- ACCOUNT MODAL - MATCH YOUR LAYOUT -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -613,30 +617,29 @@
                 <div class="logo-row">
                     <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
                 </div>
-                
-                <!-- Warning text -->
-                <div class="warning-text">Pay to this account within 30 minutes</div>
 
-                <!-- Account details injected here -->
+                <!-- Account details - label left, value right -->
                 <div id="accountDetailsBox"></div>
 
-                <!-- Countdown Timer -->
-                <div class="countdown-row">
-                    <span class="countdown-label">⏱️ Time remaining</span>
-                    <span class="countdown-timer" id="countdownTimer">30:00</span>
+                <!-- Warning text left, timer box right -->
+                <div class="warning-timer-row">
+                    <div class="warning-text">Pay to this account within 30 minutes</div>
+                    <div class="timer-box">
+                        <span id="countdownTimer" class="timer-small">30:00</span>
+                    </div>
                 </div>
 
-                <!-- Upload Receipt -->
-                <div class="upload-area" onclick="document.getElementById('receiptInput').click()">
-                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Smaller upload button -->
+                <div class="upload-area-small" onclick="document.getElementById('receiptInput').click()">
+                    <svg class="upload-icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
                     </svg>
-                    <p class="upload-text">Click to upload receipt</p>
+                    <p class="upload-text-small">Click to upload receipt</p>
                 </div>
                 <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
-                <p id="uploadedFileName" class="file-name"></p>
+                <p id="uploadedFileName" class="file-name-small"></p>
 
-                <!-- Buttons centered -->
+                <!-- Buttons -->
                 <div class="button-group">
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
