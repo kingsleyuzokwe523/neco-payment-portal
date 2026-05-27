@@ -24,10 +24,13 @@
     max-height: 420px;      /* ← ADD THIS - limits maximum height */
     overflow-y: auto;       /* ← ADD THIS - scroll if content exceeds */
 }
+        
 
 #accountModal .account-inner {
     padding: 18px 22px;
 }
+
+        
 
 /* Logo - CENTERED */
 #accountModal .logo-row {
@@ -39,7 +42,17 @@
     height: 50px;
     display: inline-block;
 }
+.input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+}
 
+.error-text {
+    color: #dc2626;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
+}
 /* Warning text - CENTERED */
 #accountModal .warning-text {
     color: #dc2626;
@@ -417,115 +430,121 @@
             </div>
         </div>
     </div>
-
-    <!-- PAYMENT FORM MODAL -->
-    <div id="paymentModal" class="fixed inset-0 z-30 hidden">
-        <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
-        <div class="fixed inset-0 overflow-y-auto">
-            <div class="flex min-h-full items-center justify-center p-4 text-center">
-                <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
-                    <form id="paymentFormModal">
-                        <div class="px-3 md:px-10">
-                            <div class="flex justify-between">
-                                <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
-                                <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
-                            <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
-                            
-                            <div class="mt-5">
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Confirm payment code</label>
-                                    <div class="mt-1 relative">
-                                        <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                    <div id="codeError" class="text-red-600 text-xs mt-1 hidden">Invalid code</div>
+<!-- PAYMENT FORM MODAL -->
+<div id="paymentModal" class="fixed inset-0 z-30 hidden">
+    <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
+    <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center">
+            <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
+                <form id="paymentFormModal">
+                    <div class="px-3 md:px-10">
+                        <div class="flex justify-between">
+                            <p class="text-xs text-[#4E4E4E]">You are making payment for</p>
+                            <svg onclick="closePaymentModal()" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 cursor-pointer">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
+                        <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
+                        
+                        <div class="mt-5">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Confirm payment code <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                            </div>
-                            <div class="mt-5 flex justify-end">
-                                <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                                <div id="codeError" class="error-text">Invalid code</div>
+                                <div id="codeRequiredError" class="error-text">Required</div>
                             </div>
                         </div>
-                        
-                        <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
-                        
-                        <div class="px-3 md:px-10">
-                            <p class="mt-4">Payer's information</p>
-                            <div class="mt-5">
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Full name</label>
-                                    <div class="mt-1 relative">
-                                        <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
+                        <div class="mt-5 flex justify-end">
+                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                        </div>
+                    </div>
+                    
+                    <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                    
+                    <div class="px-3 md:px-10">
+                        <p class="mt-4">Payer's information</p>
+                        <div class="mt-5">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Full name <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input id="fullName" name="fullName" placeholder="John Doe" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                            </div>
-                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Phone number</label>
-                                    <div class="mt-1 relative">
-                                        <input id="phone" name="phone" placeholder="08012345678" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                    <div id="phoneError" class="error-text">Invalid phone number</div>
-                                </div>
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Email</label>
-                                    <div class="mt-1 relative">
-                                        <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                    <div id="emailError" class="error-text">Invalid email address</div>
-                                </div>
-                            </div>
-                            <div class="mt-5">
-                                <p class="block text-sm font-medium text-gray-700">Description</p>
-                                <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
-                                <div class="w-full">
-                                    <div class="mt-1 relative">
-                                        <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                </div>
+                                <div id="fullNameError" class="error-text">Required</div>
                             </div>
                         </div>
-                        
-                        <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
-                        
-                        <div class="px-3 md:px-10">
-                            <p class="mt-4">Payment information</p>
-                            <div class="mt-5 flex gap-5 flex-col md:flex-row">
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Amount</label>
-                                    <div class="mt-1 relative">
-                                        <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
+                        <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Phone number <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input id="phone" name="phone" placeholder="08000000000" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Currency</label>
-                                    <div class="mt-1 relative">
-                                        <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                            <option selected>NGN</option>
-                                            <option>USD</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="w-full">
-                                    <label class="block text-sm font-medium text-gray-700">Quantity</label>
-                                    <div class="mt-1 relative">
-                                        <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
-                                    </div>
-                                    <div id="quantityError" class="error-text">Invalid quantity</div>
-                                </div>
+                                <div id="phoneError" class="error-text">Invalid phone number</div>
+                                <div id="phoneRequiredError" class="error-text">Required</div>
                             </div>
-                            <div class="grid grid-cols-3 mt-8 gap-5">
-                                <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                                <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Email <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input id="email" name="email" placeholder="johndoe@gmail.com" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                </div>
+                                <div id="emailError" class="error-text">Invalid email address</div>
+                                <div id="emailRequiredError" class="error-text">Required</div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="mt-5">
+                            <p class="block text-sm font-medium text-gray-700">Description <span class="text-red-600">*</span></p>
+                            <p class="text-xs my-2 pb-2 text-text-subtitle">Extra information on the item you are making payment for</p>
+                            <div class="w-full">
+                                <div class="mt-1 relative">
+                                    <input id="paymentDescription" name="paymentDescription" placeholder="Enter description" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                </div>
+                            </div>
+                            <div id="descriptionError" class="error-text">Required</div>
+                        </div>
+                    </div>
+                    
+                    <div class="h-4 border-b-2 mt-5 border-gray-300 border-dashed"></div>
+                    
+                    <div class="px-3 md:px-10">
+                        <p class="mt-4">Payment information</p>
+                        <div class="mt-5 flex gap-5 flex-col md:flex-row">
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Amount <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input id="amount" name="amount" placeholder="Enter payment amount" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                </div>
+                                <div id="amountError" class="error-text">Required</div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Currency</label>
+                                <div class="mt-1 relative">
+                                    <select id="currency" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                        <option selected>NGN</option>
+                                        <option>USD</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="w-full">
+                                <label class="block text-sm font-medium text-gray-700">Quantity <span class="text-red-600">*</span></label>
+                                <div class="mt-1 relative">
+                                    <input type="number" id="quantity" name="quantity" placeholder="Enter quantity" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
+                                </div>
+                                <div id="quantityError" class="error-text">Invalid quantity</div>
+                                <div id="quantityRequiredError" class="error-text">Required</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 mt-8 gap-5">
+                            <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                            <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+</div>
 <!-- INVOICE SUMMARY MODAL - USING CSS CLASSES -->
 <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
@@ -724,30 +743,138 @@ if (receiptInputElement) {
         }
     });
 }
-        function checkFormValidation() {
-            const code = document.getElementById('paymentCode').value;
-            const validation = validatePaymentCode(code);
-            isCodeValid = validation.valid;
-            currentValidatedAccount = validation.accountDetails;
-            
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const quantity = document.getElementById('quantity').value;
-            const fullName = document.getElementById('fullName').value;
-            const amount = document.getElementById('amount').value;
-            
-            let isPhoneValid = validatePhone(phone);
-            let isEmailValid = validateEmail(email);
-            let isQuantityValid = validateQuantity(quantity);
-            
-            document.getElementById('phoneError').style.display = (!isPhoneValid && phone) ? 'block' : 'none';
-            document.getElementById('emailError').style.display = (!isEmailValid && email) ? 'block' : 'none';
-            document.getElementById('quantityError').style.display = (!isQuantityValid && quantity) ? 'block' : 'none';
-            document.getElementById('codeError').style.display = (code && !isCodeValid) ? 'block' : 'none';
-            
-            const allValid = isCodeValid && fullName && isPhoneValid && isEmailValid && amount && isQuantityValid;
-            document.getElementById('proceedBtn').disabled = !allValid;
-        }
+       function checkFormValidation() {
+    const code = document.getElementById('paymentCode').value;
+    const validation = validatePaymentCode(code);
+    isCodeValid = validation.valid;
+    currentValidatedAccount = validation.accountDetails;
+    
+    const fullName = document.getElementById('fullName').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const description = document.getElementById('paymentDescription').value;
+    const quantity = document.getElementById('quantity').value;
+    const amount = document.getElementById('amount').value;
+    
+    let isPhoneValid = validatePhone(phone);
+    let isEmailValid = validateEmail(email);
+    let isQuantityValid = validateQuantity(quantity);
+    
+    // Required field checks
+    let isFullNameValid = fullName && fullName.trim() !== '';
+    let isDescriptionValid = description && description.trim() !== '';
+    let isAmountValid = amount && parseFloat(amount) > 0;
+    let isCodeProvided = code && code.trim() !== '';
+    let isPhoneProvided = phone && phone.trim() !== '';
+    let isEmailProvided = email && email.trim() !== '';
+    let isQuantityProvided = quantity && quantity.toString().trim() !== '';
+    
+    // === FULL NAME ===
+    const fullNameError = document.getElementById('fullNameError');
+    if (!isFullNameValid) {
+        fullNameError.style.display = 'block';
+        document.getElementById('fullName').classList.add('input-error');
+    } else {
+        fullNameError.style.display = 'none';
+        document.getElementById('fullName').classList.remove('input-error');
+    }
+    
+    // === DESCRIPTION ===
+    const descError = document.getElementById('descriptionError');
+    if (!isDescriptionValid) {
+        descError.style.display = 'block';
+        document.getElementById('paymentDescription').classList.add('input-error');
+    } else {
+        descError.style.display = 'none';
+        document.getElementById('paymentDescription').classList.remove('input-error');
+    }
+    
+    // === AMOUNT ===
+    const amountError = document.getElementById('amountError');
+    if (!isAmountValid) {
+        amountError.style.display = 'block';
+        document.getElementById('amount').classList.add('input-error');
+    } else {
+        amountError.style.display = 'none';
+        document.getElementById('amount').classList.remove('input-error');
+    }
+    
+    // === PAYMENT CODE - Show "Required" if empty, "Invalid code" if wrong ===
+    const codeError = document.getElementById('codeError');
+    const codeRequiredError = document.getElementById('codeRequiredError');
+    if (!isCodeProvided) {
+        codeRequiredError.style.display = 'block';
+        codeError.style.display = 'none';
+        document.getElementById('paymentCode').classList.add('input-error');
+    } else if (!isCodeValid) {
+        codeRequiredError.style.display = 'none';
+        codeError.style.display = 'block';
+        document.getElementById('paymentCode').classList.add('input-error');
+    } else {
+        codeRequiredError.style.display = 'none';
+        codeError.style.display = 'none';
+        document.getElementById('paymentCode').classList.remove('input-error');
+    }
+    
+    // === PHONE - Show "Required" if empty, "Invalid phone number" if wrong ===
+    const phoneError = document.getElementById('phoneError');
+    const phoneRequiredError = document.getElementById('phoneRequiredError');
+    if (!isPhoneProvided) {
+        phoneRequiredError.style.display = 'block';
+        phoneError.style.display = 'none';
+        document.getElementById('phone').classList.add('input-error');
+    } else if (!isPhoneValid) {
+        phoneRequiredError.style.display = 'none';
+        phoneError.style.display = 'block';
+        document.getElementById('phone').classList.add('input-error');
+    } else {
+        phoneRequiredError.style.display = 'none';
+        phoneError.style.display = 'none';
+        document.getElementById('phone').classList.remove('input-error');
+    }
+    
+    // === EMAIL - Show "Required" if empty, "Invalid email address" if wrong ===
+    const emailError = document.getElementById('emailError');
+    const emailRequiredError = document.getElementById('emailRequiredError');
+    if (!isEmailProvided) {
+        emailRequiredError.style.display = 'block';
+        emailError.style.display = 'none';
+        document.getElementById('email').classList.add('input-error');
+    } else if (!isEmailValid) {
+        emailRequiredError.style.display = 'none';
+        emailError.style.display = 'block';
+        document.getElementById('email').classList.add('input-error');
+    } else {
+        emailRequiredError.style.display = 'none';
+        emailError.style.display = 'none';
+        document.getElementById('email').classList.remove('input-error');
+    }
+    
+    // === QUANTITY - Show "Required" if empty, "Invalid quantity" if wrong ===
+    const quantityError = document.getElementById('quantityError');
+    const quantityRequiredError = document.getElementById('quantityRequiredError');
+    if (!isQuantityProvided) {
+        quantityRequiredError.style.display = 'block';
+        quantityError.style.display = 'none';
+        document.getElementById('quantity').classList.add('input-error');
+    } else if (!isQuantityValid) {
+        quantityRequiredError.style.display = 'none';
+        quantityError.style.display = 'block';
+        document.getElementById('quantity').classList.add('input-error');
+    } else {
+        quantityRequiredError.style.display = 'none';
+        quantityError.style.display = 'none';
+        document.getElementById('quantity').classList.remove('input-error');
+    }
+    
+    // Check all valid
+    const allValid = isCodeValid && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+    
+    const proceedBtn = document.getElementById('proceedBtn');
+    if (proceedBtn) {
+        proceedBtn.disabled = !allValid;
+    }
+}
         function confirmPayment() { 
     if(!document.getElementById('receiptInput').files[0]) { 
         alert('Please upload your payment receipt'); 
