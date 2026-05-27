@@ -15,7 +15,7 @@
         img,svg{display:block;vertical-align:middle}
    /* ACCOUNT MODAL - SHIFTED TO CENTER */
 #accountModal .account-box {
-    max-width: 480px;
+    max-width: 380px;
     width: 100%;
     background: white;
     border-radius: 8px;
@@ -87,7 +87,7 @@
 }
 
 #accountModal .countdown-timer {
-    font-size: 22px;
+    font-size: 14px;
     font-weight: bold;
     color: #dc2626;
     background: transparent;
@@ -112,7 +112,7 @@
 }
 
 #accountModal .upload-icon {
-    width: 28px;
+    width: 20px;
     height: 28px;
     margin: 0 auto 4px;
     color: #9ca3af;
@@ -745,6 +745,24 @@ if (receiptInputElement) {
             const allValid = isCodeValid && fullName && isPhoneValid && isEmailValid && amount && isQuantityValid;
             document.getElementById('proceedBtn').disabled = !allValid;
         }
+        function confirmPayment() { 
+    if(!document.getElementById('receiptInput').files[0]) { 
+        alert('Please upload your payment receipt'); 
+        return; 
+    } 
+    if (countdownInterval) clearInterval(countdownInterval);
+    const pinCode = currentFormData.paymentCode;
+    if (paymentPinsDatabase[pinCode]) {
+        paymentPinsDatabase[pinCode].status = "used";
+    }
+    alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
+    closeAccountModal();
+    
+    // ✅ GO BACK TO INDEX.HTML AFTER 2 SECONDS
+    setTimeout(() => {
+        window.location.href = 'index.html';
+    }, 2000);
+}
 
         function renderGrid() {
             const grid = document.getElementById('paymentGrid');
