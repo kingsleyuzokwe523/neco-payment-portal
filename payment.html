@@ -34,52 +34,52 @@
     font-family: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif !important;
 }
 
-/* ACCOUNT MODAL */
+/* ACCOUNT MODAL - SMALLER OVERALL */
 #accountModal .account-box {
-    max-width: 420px;
+    max-width: 380px;  /* Reduced from 420px */
     width: 100%;
     background: white;
-    border-radius: 12px;
+    border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     height: auto;
-    max-height: 480px;
+    max-height: 460px;  /* Reduced from 480px */
     overflow-y: auto;
 }
 
 #accountModal .account-inner {
-    padding: 20px 24px;
+    padding: 16px 20px;  /* Reduced from 20px 24px */
 }
 
-/* Logo centered */
+/* Logo centered - smaller */
 #accountModal .logo-row {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 14px;  /* Reduced from 20px */
 }
 
 #accountModal .logo-row img {
-    height: 50px;
+    height: 42px;  /* Reduced from 50px */
     display: inline-block;
 }
 
-/* Account details - ALL LEFT ALIGNED */
+/* Account details - tighter spacing */
 #accountModal .details-row {
     display: flex;
     align-items: baseline;
-    padding: 8px 0;
-    gap: 16px;
+    padding: 5px 0;  /* Reduced from 8px */
+    gap: 12px;  /* Reduced from 16px */
 }
 
 #accountModal .details-label {
-    font-size: 14px;
+    font-size: 12px;  /* Reduced from 14px */
     color: #6b7280;
     font-weight: 500;
     text-align: left;
-    min-width: 120px;
+    min-width: 105px;  /* Reduced from 120px */
     font-family: 'SF Pro Text', sans-serif;
 }
 
 #accountModal .details-value {
-    font-size: 14px;
+    font-size: 12px;  /* Reduced from 14px */
     color: #111827;
     font-weight: 600;
     text-align: left;
@@ -88,15 +88,15 @@
     font-family: 'SF Pro Text', sans-serif;
 }
 
-/* Warning text row - full width */
+/* Warning text row - SMALLER TEXT */
 #accountModal .warning-row {
-    margin: 20px 0 8px 0;
+    margin: 12px 0 4px 0;  /* Reduced margin */
     width: 100%;
 }
 
 #accountModal .warning-text-plain {
     color: #dc2626;
-    font-size: 12px;
+    font-size: 10px;  /* Made smaller */
     font-weight: 500;
     background: transparent;
     padding: 0;
@@ -104,26 +104,26 @@
     text-align: left;
 }
 
-/* Timer row - aligned to the right */
+/* Timer row - smaller box */
 #accountModal .timer-row {
     display: flex;
     justify-content: flex-end;
-    margin: 0 0 16px 0;
+    margin: 0 0 10px 0;  /* Reduced margin */
     width: 100%;
 }
 
 #accountModal .timer-box {
     background: white;
     border: 1.5px solid #16a34a;
-    border-radius: 8px;
-    padding: 5px 14px;
+    border-radius: 6px;  /* Reduced from 8px */
+    padding: 3px 10px;  /* Reduced padding */
     display: inline-flex;
     align-items: center;
     justify-content: center;
 }
 
 #accountModal .timer-small {
-    font-size: 16px;
+    font-size: 13px;  /* Reduced from 16px */
     font-weight: 600;
     color: #dc2626;
     font-family: 'SF Mono', 'SF Pro Text', monospace;
@@ -131,15 +131,15 @@
     letter-spacing: 1px;
 }
 
-/* Upload button */
+/* Upload button - smaller */
 #accountModal .upload-area-small {
     background: #f9fafb;
     border: 1.5px dashed #d1d5db;
-    border-radius: 8px;
-    padding: 10px 12px;
+    border-radius: 6px;  /* Reduced from 8px */
+    padding: 8px 10px;  /* Reduced from 10px 12px */
     text-align: center;
     cursor: pointer;
-    margin: 16px 0 12px 0;
+    margin: 10px 0 8px 0;  /* Reduced margin */
     transition: all 0.2s ease;
 }
 
@@ -149,32 +149,32 @@
 }
 
 #accountModal .upload-icon-small {
-    width: 20px;
-    height: 22px;
-    margin: 0 auto 4px;
+    width: 16px;  /* Reduced from 20px */
+    height: 18px;  /* Reduced from 22px */
+    margin: 0 auto 3px;
     color: #9ca3af;
 }
 
 #accountModal .upload-text-small {
-    font-size: 12px;
+    font-size: 11px;  /* Reduced from 12px */
     color: #6b7280;
     margin: 0;
     font-weight: 500;
 }
 
 #accountModal .file-name-small {
-    font-size: 11px;
+    font-size: 10px;  /* Reduced from 11px */
     color: #16a34a;
     text-align: center;
-    margin-top: 6px;
+    margin-top: 4px;
     font-weight: 500;
 }
 
-/* Buttons */
+/* Buttons - smaller */
 #accountModal .button-group {
     display: flex;
-    gap: 16px;
-    margin-top: 20px;
+    gap: 12px;  /* Reduced from 16px */
+    margin-top: 14px;  /* Reduced from 20px */
     justify-content: center;
 }
 
@@ -182,10 +182,10 @@
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
-    padding: 10px 28px;
-    font-size: 14px;
+    padding: 7px 22px;  /* Reduced from 10px 28px */
+    font-size: 12px;  /* Reduced from 14px */
     font-weight: 500;
-    border-radius: 8px;
+    border-radius: 6px;  /* Reduced from 8px */
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: 'SF Pro Text', sans-serif;
@@ -199,10 +199,10 @@
     background: #054c0f;
     border: none;
     color: white;
-    padding: 10px 28px;
-    font-size: 14px;
+    padding: 7px 22px;  /* Reduced from 10px 28px */
+    font-size: 12px;  /* Reduced from 14px */
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 6px;  /* Reduced from 8px */
     cursor: pointer;
     transition: all 0.2s ease;
     font-family: 'SF Pro Text', sans-serif;
