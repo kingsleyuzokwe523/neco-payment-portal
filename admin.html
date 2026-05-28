@@ -519,9 +519,27 @@
             cursor: pointer;
         }
         
+        /* Mobile Menu Styles */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 99;
+        }
+        
+        .mobile-overlay.active {
+            display: block;
+        }
+        
         @media (max-width: 768px) {
             .sidebar {
                 left: -280px;
+                transition: left 0.3s ease;
+                z-index: 100;
             }
             .sidebar.open {
                 left: 0;
@@ -572,6 +590,7 @@
     
     <div class="dashboard-container" id="dashboardContainer">
         <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
+        <div class="mobile-overlay" id="mobileOverlay" onclick="closeSidebar()"></div>
         
         <div class="sidebar" id="sidebar">
             <div class="sidebar-header">
@@ -685,7 +704,7 @@
             <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
             <div class="modal-body">
                 <div class="neco-form-group"><label>Item Name</label><input type="text" id="itemName" placeholder="e.g., Four Figure Table"></div>
-                <div class="neco-form-group"><label>Amount (₦)</label><input type="number" id="itemAmount" placeholder="e.g., 500"></div>
+                <div class="neco-form-group"><label>Amount (₦) <span style="color:#666; font-size:11px;">(Leave empty for "Enter amount")</span></label><input type="number" id="itemAmount" placeholder="e.g., 500"></div>
             </div>
             <div class="modal-footer"><button onclick="closeModal('itemModal')">Cancel</button><button onclick="saveItem()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Save</button></div>
         </div>
@@ -708,6 +727,8 @@
     <script>
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "admin123";
+        
+        let expiryInterval = null;
         
         function login() {
             const username = document.getElementById('username').value;
@@ -734,7 +755,7 @@
             startPinExpiryChecker();
         }
         
-        // ============ ALL 57 PAYMENT ITEMS (PRE-LOADED) ============
+        // ============ ALL 57 PAYMENT ITEMS ============
         let categories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
             { id: 2, name: "SSCE External", color: "#145596" },
@@ -787,7 +808,7 @@
             // Gifted (id: 5) - 1 item
             { id: 32, name: "Non-Validation", categoryId: 5, amount: 4000 },
             
-            // Others (id: 6) - 25 items (total 57)
+            // Others (id: 6) - 25 items
             { id: 33, name: "Reprint Of Certificate", categoryId: 6, amount: 50000 },
             { id: 34, name: "Sale Of Government Assets", categoryId: 6, amount: null },
             { id: 35, name: "Registration Of Contractors", categoryId: 6, amount: null },
@@ -821,7 +842,6 @@
         let selectedCategoryName = "SSCE Internal";
         let currentEditingItemId = null;
         let currentEditingKey = null;
-        let expiryInterval = null;
         
         let homeContent = {
             heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -855,6 +875,13 @@
                     saveToLocalStorage();
                 }
             }, 1000);
+        }
+        
+        function stopPinExpiryChecker() {
+            if (expiryInterval) {
+                clearInterval(expiryInterval);
+                expiryInterval = null;
+            }
         }
         
         function getRemainingTime(expiresAt) {
@@ -927,6 +954,7 @@
             return paymentItems.filter(item => item.categoryId === selectedCategoryId);
         }
         
+        // ============ FIXED renderItemsForCategory FUNCTION ============
         function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
             if (!selectedCategoryId) {
@@ -940,23 +968,27 @@
                 return;
             }
             
-            container.innerHTML = `
-                <table class="items-table">
-                    <thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead>
-                    <tbody>
-                        ${items.map(item => `
-                            <tr>
-                                <td>${item.name}</td>
-                                <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount'}</td>
-                                <td>
-                                    <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
-                                    <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
-                                </td>
-                            </tr>
-                        `).join('')}
-                    </tbody>
-                </table>
-            `;
+            let tableHtml = '<table class="items-table">';
+            tableHtml += '<thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead>';
+            tableHtml += '<tbody>';
+            
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                const amountDisplay = item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount';
+                tableHtml += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${amountDisplay}</td>
+                        <td>
+                            <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
+                            <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            }
+            
+            tableHtml += '</tbody></table>';
+            container.innerHTML = tableHtml;
         }
         
         function openAddItemModal() {
@@ -1078,30 +1110,57 @@
                 tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>';
                 return;
             }
-            tbody.innerHTML = paymentPins.map((pin, idx) => {
+            let pinsHtml = '';
+            for (let idx = 0; idx < paymentPins.length; idx++) {
+                const pin = paymentPins[idx];
                 let statusClass = "badge-active";
                 if (pin.status === "expired") statusClass = "badge-expired";
                 if (pin.status === "used") statusClass = "badge-used";
                 const timeLeft = getRemainingTime(pin.expiresAt);
-                return `<tr>
-                    <td><code>${pin.pin}</code></td>
-                    <td>${pin.bankName}</td>
-                    <td>${pin.accountName}</td>
-                    <td>${pin.accountNumber}</td>
-                    <td><span class="badge ${statusClass}">${pin.status}</span></td>
-                    <td><span class="countdown-small">${timeLeft}</span></td>
-                    <td>${new Date(pin.createdAt).toLocaleDateString()}</td>
-                    <td>
-                        <button class="delete-btn" onclick="deletePin(${idx})">Delete</button>
-                        ${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}
-                    </td>
-                </tr>`;
-            }).join('');
+                pinsHtml += `
+                    <tr>
+                        <td><code>${pin.pin}</code></td>
+                        <td>${pin.bankName}</td>
+                        <td>${pin.accountName}</td>
+                        <td>${pin.accountNumber}</td>
+                        <td><span class="badge ${statusClass}">${pin.status}</span></td>
+                        <td><span class="countdown-small">${timeLeft}</span></td>
+                        <td>${new Date(pin.createdAt).toLocaleDateString()}</td>
+                        <td>
+                            <button class="delete-btn" onclick="deletePin(${idx})">Delete</button>
+                            ${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}
+                        </td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = pinsHtml;
         }
         
         function loadHomePreview() {
             const container = document.getElementById('homePreview');
-            container.innerHTML = `<div style="max-width:1200px; margin:0 auto;"><div style="background:linear-gradient(135deg, #054c0f 0%, #009515 100%); padding:60px 40px; text-align:center; border-radius:12px;"><div class="editable-element" onclick="openTextEditor('heroNote')"><p style="background:rgba(255,255,255,0.2); display:inline-block; padding:5px 15px; border-radius:30px; color:white;">${homeContent.heroNote}</p></div><div class="editable-element" onclick="openTextEditor('heroTitle')"><h1 style="font-size:48px; margin-top:20px; color:white;">${homeContent.heroTitle}</h1></div></div><div style="padding:40px;"><div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px;">${homeContent.howItWorksTitle}</h2></div><div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px;">${homeContent.footerNote}</p></div><div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">${homeContent.steps.map((step, i) => `<div style="background:#f5f5f5; border-radius:12px; padding:20px; text-align:center;"><div class="editable-element" onclick="openTextEditor('step_${i}_title')"><h4>${step.title}</h4></div><div class="editable-element" onclick="openTextEditor('step_${i}_desc')"><p style="color:#666; font-size:13px;">${step.description}</p></div></div>`).join('')}</div></div></div>`;
+            let stepsHtml = '';
+            for (let i = 0; i < homeContent.steps.length; i++) {
+                const step = homeContent.steps[i];
+                stepsHtml += `
+                    <div style="background:#f5f5f5; border-radius:12px; padding:20px; text-align:center;">
+                        <div class="editable-element" onclick="openTextEditor('step_${i}_title')"><h4>${step.title}</h4></div>
+                        <div class="editable-element" onclick="openTextEditor('step_${i}_desc')"><p style="color:#666; font-size:13px;">${step.description}</p></div>
+                    </div>
+                `;
+            }
+            container.innerHTML = `<div style="max-width:1200px; margin:0 auto;">
+                <div style="background:linear-gradient(135deg, #054c0f 0%, #009515 100%); padding:60px 40px; text-align:center; border-radius:12px;">
+                    <div class="editable-element" onclick="openTextEditor('heroNote')"><p style="background:rgba(255,255,255,0.2); display:inline-block; padding:5px 15px; border-radius:30px; color:white;">${homeContent.heroNote}</p></div>
+                    <div class="editable-element" onclick="openTextEditor('heroTitle')"><h1 style="font-size:48px; margin-top:20px; color:white;">${homeContent.heroTitle}</h1></div>
+                </div>
+                <div style="padding:40px;">
+                    <div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px;">${homeContent.howItWorksTitle}</h2></div>
+                    <div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px;">${homeContent.footerNote}</p></div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">
+                        ${stepsHtml}
+                    </div>
+                </div>
+            </div>`;
         }
         
         function openTextEditor(key) {
@@ -1138,35 +1197,82 @@
             saveToLocalStorage();
         }
         
-        function saveHomeChanges() { saveToLocalStorage(); alert('✅ Home page changes saved!'); }
+        function saveHomeChanges() { 
+            saveToLocalStorage(); 
+            alert('✅ Home page changes saved!'); 
+        }
         
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
-            if (payments.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>'; return; }
-            tbody.innerHTML = payments.map(payment => `<tr>
-                <td>${new Date(payment.date).toLocaleDateString()}</td>
-                <td>${payment.itemName}</td>
-                <td>${payment.fullName}</td>
-                <td>${payment.phone}</td>
-                <td>${payment.email}</td>
-                <td>₦${payment.amount.toLocaleString()}</td>
-                <td>${payment.paymentCode}</td>
-                <td><span class="badge badge-active">Completed</span></td>
-            </tr>`).join('');
+            if (payments.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>'; 
+                return; 
+            }
+            let paymentsHtml = '';
+            for (let i = 0; i < payments.length; i++) {
+                const payment = payments[i];
+                paymentsHtml += `
+                    <tr>
+                        <td>${new Date(payment.date).toLocaleDateString()}</td>
+                        <td>${payment.itemName}</td>
+                        <td>${payment.fullName}</td>
+                        <td>${payment.phone}</td>
+                        <td>${payment.email}</td>
+                        <td>₦${payment.amount.toLocaleString()}</td>
+                        <td>${payment.paymentCode}</td>
+                        <td><span class="badge badge-active">Completed</span></td>
+                    </tr>
+                `;
+            }
+            tbody.innerHTML = paymentsHtml;
         }
         
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function logout() { localStorage.removeItem('adminLoggedIn'); location.reload(); }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+        }
+        
+        function logout() { 
+            stopPinExpiryChecker();
+            localStorage.removeItem('adminLoggedIn'); 
+            location.reload(); 
+        }
+        
+        function toggleSidebar() { 
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.toggle('open');
+            if (sidebar.classList.contains('open')) {
+                overlay.classList.add('active');
+            } else {
+                overlay.classList.remove('active');
+            }
+        }
+        
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobileOverlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
         
         function showTab(tabId, title) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const allTabs = document.querySelectorAll('.tab-content');
+            for (let i = 0; i < allTabs.length; i++) {
+                allTabs[i].classList.remove('active');
+            }
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
             document.getElementById('pageTitle').innerHTML = title;
             if (tabId === 'pin-manager') renderPins();
             if (tabId === 'view-payments') renderPayments();
             if (tabId === 'home-editor') loadHomePreview();
             if (tabId === 'dashboard') updateDashboard();
+            if (tabId === 'payment-editor') {
+                renderItemsForCategory();
+            }
+            closeSidebar();
         }
         
         function initDashboard() {
@@ -1177,41 +1283,79 @@
             loadHomePreview();
             renderItemsForCategory();
             
-            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
-                item.onclick = function() {
-                    const tabId = this.getAttribute('data-tab');
-                    let title = this.querySelector('span').innerHTML;
-                    showTab(tabId, title);
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                };
-            });
-            
-            const categoryHeader = document.querySelector('.menu-category-header');
-            if (categoryHeader) {
-                categoryHeader.onclick = function(e) { e.stopPropagation(); toggleCategories(); };
-            }
-            
-            document.querySelectorAll('.sub-menu li').forEach(item => {
+            // Setup main menu items
+            const menuItems = document.querySelectorAll('.menu-item[data-tab]');
+            for (let i = 0; i < menuItems.length; i++) {
+                const item = menuItems[i];
                 item.onclick = function(e) {
                     e.stopPropagation();
-                    selectCategory(this.getAttribute('data-category'), parseInt(this.getAttribute('data-id')), this.getAttribute('data-color'));
+                    const tabId = this.getAttribute('data-tab');
+                    const titleSpan = this.querySelector('span');
+                    let title = titleSpan ? titleSpan.innerHTML : tabId;
+                    const allMenuItems = document.querySelectorAll('.menu-item, .menu-category-header');
+                    for (let j = 0; j < allMenuItems.length; j++) {
+                        allMenuItems[j].classList.remove('active');
+                    }
+                    this.classList.add('active');
+                    showTab(tabId, title);
                 };
-            });
+            }
             
-            // Make sure SSCE Internal is selected and active
-            selectCategory("SSCE Internal", 1, "#0CA60C");
+            // Setup categories header
+            const categoryHeader = document.querySelector('.menu-category-header');
+            if (categoryHeader) {
+                categoryHeader.onclick = function(e) {
+                    e.stopPropagation();
+                    toggleCategories();
+                };
+            }
             
-            // Set active class on SSCE Internal in sidebar
-            document.querySelectorAll('.sub-menu li').forEach(li => {
-                li.classList.remove('active');
-                if (li.getAttribute('data-category') === "SSCE Internal") {
-                    li.classList.add('active');
+            // Setup submenu category clicks
+            const subMenuItems = document.querySelectorAll('.sub-menu li');
+            for (let i = 0; i < subMenuItems.length; i++) {
+                const item = subMenuItems[i];
+                item.onclick = function(e) {
+                    e.stopPropagation();
+                    const categoryName = this.getAttribute('data-category');
+                    const categoryId = parseInt(this.getAttribute('data-id'));
+                    const color = this.getAttribute('data-color');
+                    selectCategory(categoryName, categoryId, color);
+                    
+                    const allMenuItems = document.querySelectorAll('.menu-item, .menu-category-header');
+                    for (let j = 0; j < allMenuItems.length; j++) {
+                        allMenuItems[j].classList.remove('active');
+                    }
+                    document.getElementById('pageTitle').innerHTML = `Payment Editor - ${categoryName}`;
+                    const allTabs = document.querySelectorAll('.tab-content');
+                    for (let j = 0; j < allTabs.length; j++) {
+                        allTabs[j].classList.remove('active');
+                    }
+                    document.getElementById('payment-editor').classList.add('active');
+                    closeSidebar();
+                };
+            }
+            
+            // Set active class on SSCE Internal
+            const allSubItems = document.querySelectorAll('.sub-menu li');
+            for (let i = 0; i < allSubItems.length; i++) {
+                allSubItems[i].classList.remove('active');
+                if (allSubItems[i].getAttribute('data-category') === "SSCE Internal") {
+                    allSubItems[i].classList.add('active');
                 }
-            });
+            }
+            
+            // Make sure payment editor is visible
+            const paymentEditor = document.getElementById('payment-editor');
+            if (paymentEditor) {
+                paymentEditor.classList.add('active');
+            }
         }
         
-        window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+        window.onclick = function(e) { 
+            if (e.target.classList.contains('modal')) {
+                e.target.style.display = 'none';
+            }
+        }
     </script>
 </body>
 </html>
