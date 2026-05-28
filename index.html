@@ -18,7 +18,33 @@
     min-width: 180px;
     z-index: 9999;
 }
+/* Mobile Menu Full Width */
+#mobileMenu {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-radius: 0;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    z-index: 9999;
+}
 
+#mobileMenu a {
+    display: block;
+    padding: 16px 20px;
+    color: #4b5563;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+#mobileMenu a:hover {
+    background-color: #f0fdf4;
+    color: #054c0f;
+}
 #mobileMenu a {
     display: block;
     padding: 12px 20px;
@@ -62,8 +88,8 @@
 </nav>
 
 <!-- Mobile Menu -->
-<div id="mobileMenu" style="display: none; position: absolute; top: 70px; right: 15px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 8px 0; min-width: 180px; z-index: 1000;">
-    <a href="payment.html" style="display: block; padding: 12px 20px; color: #4b5563; text-decoration: none; font-size: 14px; font-weight: 500;">Make payment</a>
+<div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 0; z-index: 9999;">
+    <a href="payment.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Make payment</a>
 </div>
 
                 </div>
