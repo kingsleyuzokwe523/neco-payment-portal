@@ -610,19 +610,22 @@
                     <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 <ul class="sub-menu" id="categorySubMenu">
-                    <li data-category="SSCE External" data-id="1" data-color="#145596">
+                    <li data-category="SSCE Internal" data-id="1" data-color="#0CA60C">
+                        <span class="category-color-dot" style="background: #0CA60C;"></span> SSCE Internal
+                    </li>
+                    <li data-category="SSCE External" data-id="2" data-color="#145596">
                         <span class="category-color-dot" style="background: #145596;"></span> SSCE External
                     </li>
-                    <li data-category="BECE" data-id="2" data-color="#642D56">
+                    <li data-category="BECE" data-id="3" data-color="#642D56">
                         <span class="category-color-dot" style="background: #642D56;"></span> BECE
                     </li>
-                    <li data-category="NCEE" data-id="3" data-color="#1887EB">
+                    <li data-category="NCEE" data-id="4" data-color="#1887EB">
                         <span class="category-color-dot" style="background: #1887EB;"></span> NCEE
                     </li>
-                    <li data-category="Gifted" data-id="4" data-color="#24809C">
+                    <li data-category="Gifted" data-id="5" data-color="#24809C">
                         <span class="category-color-dot" style="background: #24809C;"></span> Gifted
                     </li>
-                    <li data-category="Others" data-id="5" data-color="#36454F">
+                    <li data-category="Others" data-id="6" data-color="#36454F">
                         <span class="category-color-dot" style="background: #36454F;"></span> Others
                     </li>
                 </ul>
@@ -650,7 +653,7 @@
             <!-- Dashboard Tab -->
             <div id="dashboard" class="tab-content active">
                 <div class="stats-grid">
-                    <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">5</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
+                    <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">6</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Active PINs</h4><div class="number" id="totalActivePins">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Payments</h4><div class="number" id="totalPayments">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
@@ -773,33 +776,83 @@
         
         // ============ DATA ============
         let categories = [
-            { id: 1, name: "SSCE External", color: "#145596" },
-            { id: 2, name: "BECE", color: "#642D56" },
-            { id: 3, name: "NCEE", color: "#1887EB" },
-            { id: 4, name: "Gifted", color: "#24809C" },
-            { id: 5, name: "Others", color: "#36454F" }
+            { id: 1, name: "SSCE Internal", color: "#0CA60C" },
+            { id: 2, name: "SSCE External", color: "#145596" },
+            { id: 3, name: "BECE", color: "#642D56" },
+            { id: 4, name: "NCEE", color: "#1887EB" },
+            { id: 5, name: "Gifted", color: "#24809C" },
+            { id: 6, name: "Others", color: "#36454F" }
         ];
         
         let paymentItems = [
+            // SSCE Internal (id: 1)
             { id: 1, name: "Four Figure Table", categoryId: 1, amount: 500 },
-            { id: 2, name: "Walk-in", categoryId: 1, amount: 43000 },
+            { id: 2, name: "Non-Validation", categoryId: 1, amount: 10000 },
             { id: 3, name: "Syllabus", categoryId: 1, amount: 2000 },
-            { id: 4, name: "Result Slips", categoryId: 1, amount: 1600 },
-            { id: 5, name: "Remarking Ssce Ext", categoryId: 1, amount: 20000 },
-            { id: 6, name: "Collection Of Certificate", categoryId: 1, amount: 500 },
-            { id: 7, name: "Non-Validation", categoryId: 1, amount: 10000 },
-            { id: 8, name: "Remarking Bece", categoryId: 2, amount: 15000 },
-            { id: 9, name: "Non-Validation", categoryId: 2, amount: 10000 },
-            { id: 10, name: "Non-Validation", categoryId: 3, amount: 4000 },
-            { id: 11, name: "Non-Validation", categoryId: 4, amount: 4000 },
-            { id: 12, name: "Reprint Of Certificate", categoryId: 5, amount: 50000 },
-            { id: 13, name: "Change Of School Name", categoryId: 5, amount: 15000 },
-            { id: 14, name: "Reprint Of School Results Per Candidate", categoryId: 5, amount: 400 },
-            { id: 15, name: "Staff Identity Card", categoryId: 5, amount: 1000 },
-            { id: 16, name: "Result Checker (token)", categoryId: 5, amount: 1000 },
-            { id: 17, name: "Examination Bag", categoryId: 5, amount: 15000 },
-            { id: 18, name: "Confirmation Of Result", categoryId: 5, amount: 10000 },
-            { id: 19, name: "E-verification Of Result", categoryId: 5, amount: 5000 }
+            { id: 4, name: "Photo Album", categoryId: 1, amount: 2700 },
+            { id: 5, name: "Late Ca3 Upload", categoryId: 1, amount: 40000 },
+            { id: 6, name: "Remarking Ssce (i)", categoryId: 1, amount: 20000 },
+            { id: 7, name: "Unviable Centre Fee", categoryId: 1, amount: 70000 },
+            { id: 8, name: "Late Registration Fee", categoryId: 1, amount: 5000 },
+            { id: 9, name: "Ssce Fresh Accreditation (public Schools)", categoryId: 1, amount: 200000 },
+            { id: 10, name: "Ssce Re-accreditation (public Schools)", categoryId: 1, amount: 150000 },
+            { id: 11, name: "Ssce Fresh Accreditation (private Schools)", categoryId: 1, amount: 200000 },
+            { id: 12, name: "Ssce Re-accreditation (private Schools)", categoryId: 1, amount: 150000 },
+            { id: 13, name: "Ssce Fresh Accreditation (foreign Schools)", categoryId: 1, amount: 2000000 },
+            { id: 14, name: "Ssce Re-accreditation (foreign Schools)", categoryId: 1, amount: 1500000 },
+            { id: 15, name: "Chief Examiners Report Fee (per Copy)", categoryId: 1, amount: 2500 },
+            
+            // SSCE External (id: 2)
+            { id: 16, name: "Four Figure Table", categoryId: 2, amount: 500 },
+            { id: 17, name: "Walk-in", categoryId: 2, amount: 43000 },
+            { id: 18, name: "Syllabus", categoryId: 2, amount: 2000 },
+            { id: 19, name: "Result Slips", categoryId: 2, amount: 1600 },
+            { id: 20, name: "Remarking Ssce Ext", categoryId: 2, amount: 20000 },
+            { id: 21, name: "Collection Of Certificate", categoryId: 2, amount: 500 },
+            { id: 22, name: "Non-Validation", categoryId: 2, amount: 10000 },
+            
+            // BECE (id: 3)
+            { id: 23, name: "Remarking Bece", categoryId: 3, amount: 15000 },
+            { id: 24, name: "Non-Validation", categoryId: 3, amount: 10000 },
+            { id: 25, name: "Bece Fresh Accreditation (public Schools)", categoryId: 3, amount: 170000 },
+            { id: 26, name: "Bece Re-accreditation (public Schools)", categoryId: 3, amount: 140000 },
+            { id: 27, name: "Bece Fresh Accreditation (private Schools)", categoryId: 3, amount: 170000 },
+            { id: 28, name: "Bece Re-accreditation (private Schools)", categoryId: 3, amount: 140000 },
+            { id: 29, name: "Bece Fresh Accreditation (foreign Schools)", categoryId: 3, amount: 1500000 },
+            { id: 30, name: "Bece Re-accreditation (foreign Schools)", categoryId: 3, amount: 1000000 },
+            
+            // NCEE (id: 4)
+            { id: 31, name: "Non-Validation", categoryId: 4, amount: 4000 },
+            
+            // Gifted (id: 5)
+            { id: 32, name: "Non-Validation", categoryId: 5, amount: 4000 },
+            
+            // Others (id: 6)
+            { id: 33, name: "Reprint Of Certificate", categoryId: 6, amount: 50000 },
+            { id: 34, name: "Sale Of Government Assets", categoryId: 6, amount: null },
+            { id: 35, name: "Registration Of Contractors", categoryId: 6, amount: null },
+            { id: 36, name: "Tender Fees", categoryId: 6, amount: null },
+            { id: 37, name: "Refund", categoryId: 6, amount: null },
+            { id: 38, name: "Change Of School Name", categoryId: 6, amount: 15000 },
+            { id: 39, name: "Payment For Consultancy Services", categoryId: 6, amount: null },
+            { id: 40, name: "Payment Of Dead Scripts", categoryId: 6, amount: null },
+            { id: 41, name: "Reprint Of School Results Per Candidate", categoryId: 6, amount: 400 },
+            { id: 42, name: "Return Of Dta", categoryId: 6, amount: null },
+            { id: 43, name: "Staff Identity Card", categoryId: 6, amount: 1000 },
+            { id: 44, name: "Result Checker (token)", categoryId: 6, amount: 1000 },
+            { id: 45, name: "Examination Bag", categoryId: 6, amount: 15000 },
+            { id: 46, name: "Confirmation Of Result By International Institutions Or Organizations Per Candidates", categoryId: 6, amount: 10000 },
+            { id: 47, name: "Waterproof Certificate Jacket/folder", categoryId: 6, amount: 2500 },
+            { id: 48, name: "Candidates Registration Number Request", categoryId: 6, amount: 3000 },
+            { id: 49, name: "Photocard Reprint (ssce-external)", categoryId: 6, amount: 3000 },
+            { id: 50, name: "Ssce External Certificate Safekeeping (renewable Every 5 Years)", categoryId: 6, amount: 7500 },
+            { id: 51, name: "Statistical Request-organization/association (annual Awards)", categoryId: 6, amount: 100000 },
+            { id: 52, name: "Statistical Request-individual (research) 1-5 Years", categoryId: 6, amount: 10000 },
+            { id: 53, name: "Statistical Request-individual (research) 6-10 Years", categoryId: 6, amount: 20000 },
+            { id: 54, name: "State Governments (registration Projection/candidates Performance Annually)", categoryId: 6, amount: 50000 },
+            { id: 55, name: "Shortfalls On Accreditation", categoryId: 6, amount: null },
+            { id: 56, name: "E-verification Of Result", categoryId: 6, amount: 5000 },
+            { id: 57, name: "Candidate Attestation Of Result In Lieu Of Lost Certificate", categoryId: 6, amount: 50000 }
         ];
         
         let paymentPins = [];
@@ -945,7 +998,7 @@
                         ${items.map(item => `
                             <tr>
                                 <td>${item.name}</td>
-                                <td>₦${item.amount.toLocaleString()}</td>
+                                <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount'}</td>
                                 <td>
                                     <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
                                     <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
@@ -976,16 +1029,16 @@
             currentEditingItemId = itemId;
             document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
             document.getElementById('itemName').value = item.name;
-            document.getElementById('itemAmount').value = item.amount;
+            document.getElementById('itemAmount').value = item.amount || '';
             document.getElementById('itemModal').style.display = 'flex';
         }
         
         function saveItem() {
             const name = document.getElementById('itemName').value;
-            const amount = parseInt(document.getElementById('itemAmount').value);
+            const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
             
-            if (!name || !amount) {
-                alert('Please fill all fields');
+            if (!name) {
+                alert('Please fill item name');
                 return;
             }
             
