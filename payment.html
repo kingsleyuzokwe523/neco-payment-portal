@@ -940,102 +940,77 @@
         let isEmailProvided = email && email.trim() !== '';
         let isQuantityProvided = quantity && quantity.toString().trim() !== '';
         
-        // FULL NAME
         const fullNameError = document.getElementById('fullNameError');
         if (!isFullNameValid) {
             fullNameError.style.display = 'block';
-            document.getElementById('fullName').classList.add('input-error');
         } else {
             fullNameError.style.display = 'none';
-            document.getElementById('fullName').classList.remove('input-error');
         }
         
-        // DESCRIPTION
         const descError = document.getElementById('descriptionError');
         if (!isDescriptionValid) {
             descError.style.display = 'block';
-            document.getElementById('paymentDescription').classList.add('input-error');
         } else {
             descError.style.display = 'none';
-            document.getElementById('paymentDescription').classList.remove('input-error');
         }
         
-        // AMOUNT
         const amountError = document.getElementById('amountError');
         if (!isAmountValid) {
             amountError.style.display = 'block';
-            document.getElementById('amount').classList.add('input-error');
         } else {
             amountError.style.display = 'none';
-            document.getElementById('amount').classList.remove('input-error');
         }
         
-        // PAYMENT CODE
         const codeError = document.getElementById('codeError');
         const codeRequiredError = document.getElementById('codeRequiredError');
         if (!isCodeProvided) {
             codeRequiredError.style.display = 'block';
             codeError.style.display = 'none';
-            document.getElementById('paymentCode').classList.add('input-error');
         } else if (!isCodeValid) {
             codeRequiredError.style.display = 'none';
             codeError.style.display = 'block';
-            document.getElementById('paymentCode').classList.add('input-error');
         } else {
             codeRequiredError.style.display = 'none';
             codeError.style.display = 'none';
-            document.getElementById('paymentCode').classList.remove('input-error');
         }
         
-        // PHONE
         const phoneError = document.getElementById('phoneError');
         const phoneRequiredError = document.getElementById('phoneRequiredError');
         if (!isPhoneProvided) {
             phoneRequiredError.style.display = 'block';
             phoneError.style.display = 'none';
-            document.getElementById('phone').classList.add('input-error');
         } else if (!isPhoneValid) {
             phoneRequiredError.style.display = 'none';
             phoneError.style.display = 'block';
-            document.getElementById('phone').classList.add('input-error');
         } else {
             phoneRequiredError.style.display = 'none';
             phoneError.style.display = 'none';
-            document.getElementById('phone').classList.remove('input-error');
         }
         
-        // EMAIL
         const emailError = document.getElementById('emailError');
         const emailRequiredError = document.getElementById('emailRequiredError');
         if (!isEmailProvided) {
             emailRequiredError.style.display = 'block';
             emailError.style.display = 'none';
-            document.getElementById('email').classList.add('input-error');
         } else if (!isEmailValid) {
             emailRequiredError.style.display = 'none';
             emailError.style.display = 'block';
-            document.getElementById('email').classList.add('input-error');
         } else {
             emailRequiredError.style.display = 'none';
             emailError.style.display = 'none';
-            document.getElementById('email').classList.remove('input-error');
         }
         
-        // QUANTITY
         const quantityError = document.getElementById('quantityError');
         const quantityRequiredError = document.getElementById('quantityRequiredError');
         if (!isQuantityProvided) {
             quantityRequiredError.style.display = 'block';
             quantityError.style.display = 'none';
-            document.getElementById('quantity').classList.add('input-error');
         } else if (!isQuantityValid) {
             quantityRequiredError.style.display = 'none';
             quantityError.style.display = 'block';
-            document.getElementById('quantity').classList.add('input-error');
         } else {
             quantityRequiredError.style.display = 'none';
             quantityError.style.display = 'none';
-            document.getElementById('quantity').classList.remove('input-error');
         }
         
         const allValid = isCodeValid && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
@@ -1119,8 +1094,6 @@
     document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
         e.preventDefault();
         
-
-        
         if (!isCodeValid) { alert('Please enter a valid payment code (default: 1234)'); return; }
         
         const fullName = document.getElementById('fullName').value;
@@ -1200,87 +1173,85 @@
     }
 
     function showAccountModal() {
-    const pinCode = currentFormData.paymentCode;
-    const account = paymentPinsDatabase[pinCode];
-    
-    if (!account || account.status !== "active") {
-        alert("This payment code has expired or is invalid. Please contact admin.");
-        return;
-    }
-    
-    document.getElementById('accountDetailsBox').innerHTML = `
-        <div class="details-row">
-            <span class="details-label">Bank</span>
-            <span class="details-value">${account.bankName}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Account Name</span>
-            <span class="details-value">${account.accountName}</span>
-        </div>
-      <div class="details-row-copy">
-    <span class="details-label-copy">Account Number</span>
-    <div class="details-value-copy">
-        <span id="accountNumberText">${account.accountNumber}</span>
-        <button class="copy-btn" onclick="copyToClipboard('${account.accountNumber}')" title="Copy account number">
-            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-            </svg>
-        </button>
-    </div>
-</div>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Amount</span>
-            <span class="details-value" style="color: #16a34a;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Payment Code</span>
-            <span class="details-value">${currentFormData.paymentCode}</span>
-        </div>
-    `;
-    
-    const receiptInput = document.getElementById('receiptInput');
-    const uploadedFileName = document.getElementById('uploadedFileName');
-    
-    if (receiptInput) {
-        if (receiptInput._listener) {
-            receiptInput.removeEventListener('change', receiptInput._listener);
+        const pinCode = currentFormData.paymentCode;
+        const account = paymentPinsDatabase[pinCode];
+        
+        if (!account || account.status !== "active") {
+            alert("This payment code has expired or is invalid. Please contact admin.");
+            return;
         }
         
-        const listener = (e) => {
-            if (uploadedFileName) {
-                uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-            }
-        };
-        receiptInput.addEventListener('change', listener);
-        receiptInput._listener = listener;
-        receiptInput.value = '';
-    }
-    
-    if (uploadedFileName) {
-        uploadedFileName.innerHTML = '';
-    }
-    
-    document.getElementById('accountModal').classList.remove('hidden');
-    startCountdown(30, pinCode);
-}
-function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(function() {
-        // Show notification
-        const notification = document.getElementById('copyNotification');
-        notification.style.display = 'flex';
-        notification.classList.add('copy-notification-show');
+        document.getElementById('accountDetailsBox').innerHTML = `
+            <div class="details-row">
+                <span class="details-label">Bank</span>
+                <span class="details-value">${account.bankName}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Name</span>
+                <span class="details-value">${account.accountName}</span>
+            </div>
+            <div class="details-row-copy">
+                <span class="details-label-copy">Account Number</span>
+                <div class="details-value-copy">
+                    <span id="accountNumberText">${account.accountNumber}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${account.accountNumber}')" title="Copy account number">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Amount</span>
+                <span class="details-value">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Payment Code</span>
+                <span class="details-value">${currentFormData.paymentCode}</span>
+            </div>
+        `;
         
-        // Hide after animation
-        setTimeout(function() {
-            notification.classList.remove('copy-notification-show');
-            notification.style.display = 'none';
-        }, 2000);
-    }).catch(function(err) {
-        console.error('Could not copy text: ', err);
-        alert('Failed to copy. Please copy manually.');
-    });
-}
+        const receiptInput = document.getElementById('receiptInput');
+        const uploadedFileName = document.getElementById('uploadedFileName');
+        
+        if (receiptInput) {
+            if (receiptInput._listener) {
+                receiptInput.removeEventListener('change', receiptInput._listener);
+            }
+            
+            const listener = (e) => {
+                if (uploadedFileName) {
+                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+                }
+            };
+            receiptInput.addEventListener('change', listener);
+            receiptInput._listener = listener;
+            receiptInput.value = '';
+        }
+        
+        if (uploadedFileName) {
+            uploadedFileName.innerHTML = '';
+        }
+        
+        document.getElementById('accountModal').classList.remove('hidden');
+        startCountdown(30, pinCode);
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
+            const notification = document.getElementById('copyNotification');
+            notification.style.display = 'flex';
+            notification.classList.add('copy-notification-show');
+            
+            setTimeout(function() {
+                notification.classList.remove('copy-notification-show');
+                notification.style.display = 'none';
+            }, 2000);
+        }).catch(function(err) {
+            console.error('Could not copy text: ', err);
+            alert('Failed to copy. Please copy manually.');
+        });
+    }
 
     function confirmPayment() { 
         if(!document.getElementById('receiptInput').files[0]) { 
@@ -1328,42 +1299,7 @@ function copyToClipboard(text) {
             document.getElementById('searchInput').value = '';
         });
     });
-    <script>
-    var menuBtn = document.getElementById('mobileMenuBtn');
-    var cancelBtn = document.getElementById('cancelMenuBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
-    
-    if (menuBtn) {
-        // Open menu
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'block';
-            menuBtn.style.display = 'none';
-            if (cancelBtn) cancelBtn.style.display = 'block';
-        };
-        
-        // Close menu with cancel button
-        if (cancelBtn) {
-            cancelBtn.onclick = function(e) {
-                e.stopPropagation();
-                mobileMenu.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                menuBtn.style.display = 'block';
-            };
-        }
-        
-        // Close when clicking outside
-        document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    if (cancelBtn) cancelBtn.style.display = 'none';
-                    menuBtn.style.display = 'block';
-                }
-            }
-        };
-    }
-</script>
+
     // Search input
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
@@ -1381,6 +1317,41 @@ function copyToClipboard(text) {
     });
     
     renderGrid();
+</script>
+
+<!-- Mobile Menu Script (separate) -->
+<script>
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var cancelBtn = document.getElementById('cancelMenuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
+    
+    if (menuBtn) {
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'block';
+            menuBtn.style.display = 'none';
+            if (cancelBtn) cancelBtn.style.display = 'block';
+        };
+        
+        if (cancelBtn) {
+            cancelBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenu.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                menuBtn.style.display = 'block';
+            };
+        }
+        
+        document.onclick = function(e) {
+            if (mobileMenu && mobileMenu.style.display === 'block') {
+                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.style.display = 'none';
+                    if (cancelBtn) cancelBtn.style.display = 'none';
+                    menuBtn.style.display = 'block';
+                }
+            }
+        };
+    }
 </script>
 </body>
 </html>
