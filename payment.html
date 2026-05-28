@@ -72,32 +72,45 @@
     gap: 15px;
 }
 
+/* Warning and Timer in ONE STRAIGHT LINE */
+#accountModal .warning-timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 16px 0;
+    gap: 15px;
+}
+
+/* Warning text - SMALL */
 #accountModal .warning-text-small {
     color: #dc2626;
-    font-size: 12px;
+    font-size: 10px;  /* Made smaller */
     font-weight: 500;
     background: transparent;
     padding: 0;
+    white-space: nowrap;
 }
 
+/* Timer box - SMALLER */
 #accountModal .timer-box-small {
     background: white;
     border: 1.5px solid #16a34a;
-    border-radius: 6px;
-    padding: 4px 12px;
+    border-radius: 4px;  /* Smaller radius */
+    padding: 2px 8px;  /* Smaller padding */
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 #accountModal .timer-small {
-    font-size: 14px;
+    font-size: 11px;  /* Smaller font */
     font-weight: 600;
     color: #dc2626;
     font-family: monospace;
     text-align: center;
+    letter-spacing: 0.5px;  /* Less spacing */
 }
-
 #accountModal .upload-area-small {
     background: #f9fafb;
     border: 1.5px dashed #d1d5db;
