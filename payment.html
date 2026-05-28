@@ -441,6 +441,40 @@
 .copy-notification-show {
     animation: slideUpFade 2s ease forwards;
 }
+/* Mobile Menu */
+.mobile-menu {
+    position: fixed;
+    top: 70px;
+    right: 0;
+    width: 250px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 15px;
+    z-index: 1000;
+    display: none;
+}
+
+.mobile-menu.open {
+    display: block;
+}
+
+.mobile-menu a {
+    display: block;
+    padding: 12px 15px;
+    color: #054c0f;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.mobile-menu a:last-child {
+    border-bottom: none;
+}
+
+.mobile-menu a:hover {
+    background: #f0fdf4;
+}
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -473,16 +507,16 @@
                             </a>
                         </div>
                         <div>
-                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                                <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
-                            </ul>
-                        </div>
-                        <button class="lg:hidden" type="button">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
+    <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+        <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
+    </ul>
+</div>
+<button class="lg:hidden" type="button" id="mobileMenuBtn">
+    <span class="sr-only">Open main menu</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+    </svg>
+</button>
                     </nav>
                 </div>
             </div>
@@ -1281,6 +1315,28 @@ function copyToClipboard(text) {
             document.getElementById('searchInput').value = '';
         });
     });
+    // Mobile menu toggle
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+let mobileMenu = null;
+
+if (mobileMenuBtn) {
+    mobileMenuBtn.addEventListener('click', function() {
+        if (!mobileMenu) {
+            mobileMenu = document.createElement('div');
+            mobileMenu.className = 'mobile-menu';
+            mobileMenu.innerHTML = '<a href="index.html"> Back to Home</a>';
+            document.body.appendChild(mobileMenu);
+        }
+        mobileMenu.classList.toggle('open');
+    });
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        if (mobileMenu && mobileMenu.classList.contains('open') && !mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            mobileMenu.classList.remove('open');
+        }
+    });
+}
 
     // Search input
     document.getElementById('searchInput').addEventListener('input', (e) => {
