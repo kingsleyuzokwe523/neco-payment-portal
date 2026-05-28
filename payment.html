@@ -95,7 +95,11 @@
     justify-content: center;
     flex-shrink: 0;
 }
-
+/* Input error styling */
+.input-error {
+    border-color: #dc2626 !important;
+    background-color: #fef2f2 !important;
+}
 #accountModal .timer-small {
     font-size: 14px;  /* Smaller */
     font-weight: 600;
@@ -659,530 +663,514 @@
     </div>
 </div>
     
-    <script>
-        // FULL PAYMENT DATA - NOTHING REMOVED
-        const paymentData = {
-            "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
-                { name: "Four Figure Table", amount: 500 },
-                { name: "Non-Validation", amount: 10000 },
-                { name: "Syllabus", amount: 2000 },
-                { name: "Photo Album", amount: 2700 },
-                { name: "Late Ca3 Upload", amount: 40000 },
-                { name: "Remarking Ssce (i)", amount: 20000 },
-                { name: "Unviable Centre Fee", amount: 70000 },
-                { name: "Late Registration Fee", amount: 5000 },
-                { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
-                { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
-                { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
-                { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
-                { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
-            ]},
-            "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
-                { name: "Four Figure Table", amount: 500 },
-                { name: "Walk-in", amount: 43000 },
-                { name: "Syllabus", amount: 2000 },
-                { name: "Result Slips", amount: 1600 },
-                { name: "Remarking Ssce Ext", amount: 20000 },
-                { name: "Collection Of Certificate", amount: 500 },
-                { name: "Non-Validation", amount: 10000 }
-            ]},
-            "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
-                { name: "Remarking Bece", amount: 15000 },
-                { name: "Non-Validation", amount: 10000 },
-                { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
-                { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
-                { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
-                { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
-            ]},
-            "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [
-                { name: "Non-Validation", amount: 4000 }
-            ]},
-            "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [
-                { name: "Non-Validation", amount: 4000 }
-            ]},
-            "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
-                { name: "Reprint Of Certificate", amount: 50000 },
-                { name: "Change Of School Name", amount: 15000 },
-                { name: "Reprint Of School Results Per Candidate", amount: 400 },
-                { name: "Staff Identity Card", amount: 1000 },
-                { name: "Result Checker (token)", amount: 1000 },
-                { name: "Examination Bag", amount: 15000 },
-                { name: "Confirmation Of Result", amount: 10000 },
-                { name: "E-verification Of Result", amount: 5000 }
-            ]}
-        };
+<script>
+    // FULL PAYMENT DATA
+    const paymentData = {
+        "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
+            { name: "Four Figure Table", amount: 500 },
+            { name: "Non-Validation", amount: 10000 },
+            { name: "Syllabus", amount: 2000 },
+            { name: "Photo Album", amount: 2700 },
+            { name: "Late Ca3 Upload", amount: 40000 },
+            { name: "Remarking Ssce (i)", amount: 20000 },
+            { name: "Unviable Centre Fee", amount: 70000 },
+            { name: "Late Registration Fee", amount: 5000 },
+            { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
+            { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
+            { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
+            { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
+            { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
+            { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
+            { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
+        ]},
+        "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
+            { name: "Four Figure Table", amount: 500 },
+            { name: "Walk-in", amount: 43000 },
+            { name: "Syllabus", amount: 2000 },
+            { name: "Result Slips", amount: 1600 },
+            { name: "Remarking Ssce Ext", amount: 20000 },
+            { name: "Collection Of Certificate", amount: 500 },
+            { name: "Non-Validation", amount: 10000 }
+        ]},
+        "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
+            { name: "Remarking Bece", amount: 15000 },
+            { name: "Non-Validation", amount: 10000 },
+            { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
+            { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
+            { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
+            { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
+            { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
+            { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
+        ]},
+        "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [
+            { name: "Non-Validation", amount: 4000 }
+        ]},
+        "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [
+            { name: "Non-Validation", amount: 4000 }
+        ]},
+        "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
+            { name: "Reprint Of Certificate", amount: 50000 },
+            { name: "Change Of School Name", amount: 15000 },
+            { name: "Reprint Of School Results Per Candidate", amount: 400 },
+            { name: "Staff Identity Card", amount: 1000 },
+            { name: "Result Checker (token)", amount: 1000 },
+            { name: "Examination Bag", amount: 15000 },
+            { name: "Confirmation Of Result", amount: 10000 },
+            { name: "E-verification Of Result", amount: 5000 }
+        ]}
+    };
 
-        let currentCategory = "SSCE Internal";
-        let currentItem = null;
-        let currentValidatedAccount = null;
-        let currentFormData = {};
-        let isCodeValid = false;
-        let countdownInterval = null;
+    let currentCategory = "SSCE Internal";
+    let currentItem = null;
+    let currentValidatedAccount = null;
+    let currentFormData = {};
+    let isCodeValid = false;
+    let countdownInterval = null;
 
-        let paymentPinsDatabase = {
-            "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011", status: "active", expiresAt: null }
-        };
+    let paymentPinsDatabase = {
+        "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011", status: "active", expiresAt: null }
+    };
 
-        function validatePhone(phone) {
-            return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
+    function validatePhone(phone) {
+        return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
+    }
+    
+    function validateEmail(email) {
+        return email && email.toLowerCase().includes('@gmail.com');
+    }
+    
+    function validateQuantity(quantity) {
+        return quantity && parseInt(quantity) > 0;
+    }
+    
+    function validatePaymentCode(code) { 
+        const pin = paymentPinsDatabase[code.trim()];
+        if (pin && pin.status === "active") {
+            return { valid: true, accountDetails: pin };
         }
-        
-        function validateEmail(email) {
-            return email && email.toLowerCase().includes('@gmail.com');
-        }
-        
-        function validateQuantity(quantity) {
-            return quantity && parseInt(quantity) > 0;
-        }
-        
-        function validatePaymentCode(code) { 
-            const pin = paymentPinsDatabase[code.trim()];
-            if (pin && pin.status === "active") {
-                return { valid: true, accountDetails: pin };
+        return { valid: false, accountDetails: null }; 
+    }
+
+    // File upload listener
+    const receiptInputElement = document.getElementById('receiptInput');
+    if (receiptInputElement) {
+        receiptInputElement.addEventListener('change', (e) => { 
+            const fileNameElem = document.getElementById('uploadedFileName');
+            if (fileNameElem) {
+                fileNameElem.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
             }
-            return { valid: false, accountDetails: null }; 
-        }
-        // Safe event listener for file upload
-const receiptInputElement = document.getElementById('receiptInput');
-if (receiptInputElement) {
-    receiptInputElement.addEventListener('change', (e) => { 
-        const fileNameElem = document.getElementById('uploadedFileName');
-        if (fileNameElem) {
-            fileNameElem.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-        }
-    });
-}
-       function checkFormValidation() {
-    const code = document.getElementById('paymentCode').value;
-    const validation = validatePaymentCode(code);
-    isCodeValid = validation.valid;
-    currentValidatedAccount = validation.accountDetails;
-    
-    const fullName = document.getElementById('fullName').value;
-    const phone = document.getElementById('phone').value;
-    const email = document.getElementById('email').value;
-    const description = document.getElementById('paymentDescription').value;
-    const quantity = document.getElementById('quantity').value;
-    const amount = document.getElementById('amount').value;
-    
-    let isPhoneValid = validatePhone(phone);
-    let isEmailValid = validateEmail(email);
-    let isQuantityValid = validateQuantity(quantity);
-    
-    // Required field checks
-    let isFullNameValid = fullName && fullName.trim() !== '';
-    let isDescriptionValid = description && description.trim() !== '';
-    let isAmountValid = amount && parseFloat(amount) > 0;
-    let isCodeProvided = code && code.trim() !== '';
-    let isPhoneProvided = phone && phone.trim() !== '';
-    let isEmailProvided = email && email.trim() !== '';
-    let isQuantityProvided = quantity && quantity.toString().trim() !== '';
-    
-    // === FULL NAME ===
-    const fullNameError = document.getElementById('fullNameError');
-    if (!isFullNameValid) {
-        fullNameError.style.display = 'block';
-        document.getElementById('fullName').classList.add('input-error');
-    } else {
-        fullNameError.style.display = 'none';
-        document.getElementById('fullName').classList.remove('input-error');
+        });
     }
-    
-    // === DESCRIPTION ===
-    const descError = document.getElementById('descriptionError');
-    if (!isDescriptionValid) {
-        descError.style.display = 'block';
-        document.getElementById('paymentDescription').classList.add('input-error');
-    } else {
-        descError.style.display = 'none';
-        document.getElementById('paymentDescription').classList.remove('input-error');
-    }
-    
-    // === AMOUNT ===
-    const amountError = document.getElementById('amountError');
-    if (!isAmountValid) {
-        amountError.style.display = 'block';
-        document.getElementById('amount').classList.add('input-error');
-    } else {
-        amountError.style.display = 'none';
-        document.getElementById('amount').classList.remove('input-error');
-    }
-    
-    // === PAYMENT CODE - Show "Required" if empty, "Invalid code" if wrong ===
-    const codeError = document.getElementById('codeError');
-    const codeRequiredError = document.getElementById('codeRequiredError');
-    if (!isCodeProvided) {
-        codeRequiredError.style.display = 'block';
-        codeError.style.display = 'none';
-        document.getElementById('paymentCode').classList.add('input-error');
-    } else if (!isCodeValid) {
-        codeRequiredError.style.display = 'none';
-        codeError.style.display = 'block';
-        document.getElementById('paymentCode').classList.add('input-error');
-    } else {
-        codeRequiredError.style.display = 'none';
-        codeError.style.display = 'none';
-        document.getElementById('paymentCode').classList.remove('input-error');
-    }
-    
-    // === PHONE - Show "Required" if empty, "Invalid phone number" if wrong ===
-    const phoneError = document.getElementById('phoneError');
-    const phoneRequiredError = document.getElementById('phoneRequiredError');
-    if (!isPhoneProvided) {
-        phoneRequiredError.style.display = 'block';
-        phoneError.style.display = 'none';
-        document.getElementById('phone').classList.add('input-error');
-    } else if (!isPhoneValid) {
-        phoneRequiredError.style.display = 'none';
-        phoneError.style.display = 'block';
-        document.getElementById('phone').classList.add('input-error');
-    } else {
-        phoneRequiredError.style.display = 'none';
-        phoneError.style.display = 'none';
-        document.getElementById('phone').classList.remove('input-error');
-    }
-    
-    // === EMAIL - Show "Required" if empty, "Invalid email address" if wrong ===
-    const emailError = document.getElementById('emailError');
-    const emailRequiredError = document.getElementById('emailRequiredError');
-    if (!isEmailProvided) {
-        emailRequiredError.style.display = 'block';
-        emailError.style.display = 'none';
-        document.getElementById('email').classList.add('input-error');
-    } else if (!isEmailValid) {
-        emailRequiredError.style.display = 'none';
-        emailError.style.display = 'block';
-        document.getElementById('email').classList.add('input-error');
-    } else {
-        emailRequiredError.style.display = 'none';
-        emailError.style.display = 'none';
-        document.getElementById('email').classList.remove('input-error');
-    }
-    
-    // === QUANTITY - Show "Required" if empty, "Invalid quantity" if wrong ===
-    const quantityError = document.getElementById('quantityError');
-    const quantityRequiredError = document.getElementById('quantityRequiredError');
-    if (!isQuantityProvided) {
-        quantityRequiredError.style.display = 'block';
-        quantityError.style.display = 'none';
-        document.getElementById('quantity').classList.add('input-error');
-    } else if (!isQuantityValid) {
-        quantityRequiredError.style.display = 'none';
-        quantityError.style.display = 'block';
-        document.getElementById('quantity').classList.add('input-error');
-    } else {
-        quantityRequiredError.style.display = 'none';
-        quantityError.style.display = 'none';
-        document.getElementById('quantity').classList.remove('input-error');
-    }
-    
-    // Check all valid
-    const allValid = isCodeValid && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
-    
-    const proceedBtn = document.getElementById('proceedBtn');
-    if (proceedBtn) {
-        proceedBtn.disabled = !allValid;
-    }
-}
-      function confirmPayment() { 
-    if(!document.getElementById('receiptInput').files[0]) { 
-        alert('Please upload your payment receipt'); 
-        return; 
-    } 
-    
-    if (countdownInterval) clearInterval(countdownInterval);
-    const pinCode = currentFormData.paymentCode;
-    if (paymentPinsDatabase[pinCode]) {
-        paymentPinsDatabase[pinCode].status = "used";
-    }
-    
-    closeAccountModal();
-    
-    const loadingModal = document.getElementById('loadingModal');
-    if (loadingModal) {
-        // Set text for payment confirmation
-        const mainText = loadingModal.querySelector('p:first-of-type');
-        const subText = loadingModal.querySelector('p:last-of-type');
-        if (mainText) mainText.innerHTML = 'Please wait...';
-        if (subText) subText.innerHTML = 'Wait while we confirm your payment';
+
+    function checkFormValidation() {
+        const code = document.getElementById('paymentCode').value;
+        const validation = validatePaymentCode(code);
+        isCodeValid = validation.valid;
+        currentValidatedAccount = validation.accountDetails;
         
-        loadingModal.style.display = 'flex';
+        const fullName = document.getElementById('fullName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const description = document.getElementById('paymentDescription').value;
+        const quantity = document.getElementById('quantity').value;
+        const amount = document.getElementById('amount').value;
         
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3000);
-    } else {
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 3000);
+        let isPhoneValid = validatePhone(phone);
+        let isEmailValid = validateEmail(email);
+        let isQuantityValid = validateQuantity(quantity);
+        
+        let isFullNameValid = fullName && fullName.trim() !== '';
+        let isDescriptionValid = description && description.trim() !== '';
+        let isAmountValid = amount && parseFloat(amount) > 0;
+        let isCodeProvided = code && code.trim() !== '';
+        let isPhoneProvided = phone && phone.trim() !== '';
+        let isEmailProvided = email && email.trim() !== '';
+        let isQuantityProvided = quantity && quantity.toString().trim() !== '';
+        
+        // FULL NAME
+        const fullNameError = document.getElementById('fullNameError');
+        if (!isFullNameValid) {
+            fullNameError.style.display = 'block';
+            document.getElementById('fullName').classList.add('input-error');
+        } else {
+            fullNameError.style.display = 'none';
+            document.getElementById('fullName').classList.remove('input-error');
+        }
+        
+        // DESCRIPTION
+        const descError = document.getElementById('descriptionError');
+        if (!isDescriptionValid) {
+            descError.style.display = 'block';
+            document.getElementById('paymentDescription').classList.add('input-error');
+        } else {
+            descError.style.display = 'none';
+            document.getElementById('paymentDescription').classList.remove('input-error');
+        }
+        
+        // AMOUNT
+        const amountError = document.getElementById('amountError');
+        if (!isAmountValid) {
+            amountError.style.display = 'block';
+            document.getElementById('amount').classList.add('input-error');
+        } else {
+            amountError.style.display = 'none';
+            document.getElementById('amount').classList.remove('input-error');
+        }
+        
+        // PAYMENT CODE
+        const codeError = document.getElementById('codeError');
+        const codeRequiredError = document.getElementById('codeRequiredError');
+        if (!isCodeProvided) {
+            codeRequiredError.style.display = 'block';
+            codeError.style.display = 'none';
+            document.getElementById('paymentCode').classList.add('input-error');
+        } else if (!isCodeValid) {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'block';
+            document.getElementById('paymentCode').classList.add('input-error');
+        } else {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'none';
+            document.getElementById('paymentCode').classList.remove('input-error');
+        }
+        
+        // PHONE
+        const phoneError = document.getElementById('phoneError');
+        const phoneRequiredError = document.getElementById('phoneRequiredError');
+        if (!isPhoneProvided) {
+            phoneRequiredError.style.display = 'block';
+            phoneError.style.display = 'none';
+            document.getElementById('phone').classList.add('input-error');
+        } else if (!isPhoneValid) {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'block';
+            document.getElementById('phone').classList.add('input-error');
+        } else {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'none';
+            document.getElementById('phone').classList.remove('input-error');
+        }
+        
+        // EMAIL
+        const emailError = document.getElementById('emailError');
+        const emailRequiredError = document.getElementById('emailRequiredError');
+        if (!isEmailProvided) {
+            emailRequiredError.style.display = 'block';
+            emailError.style.display = 'none';
+            document.getElementById('email').classList.add('input-error');
+        } else if (!isEmailValid) {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'block';
+            document.getElementById('email').classList.add('input-error');
+        } else {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'none';
+            document.getElementById('email').classList.remove('input-error');
+        }
+        
+        // QUANTITY
+        const quantityError = document.getElementById('quantityError');
+        const quantityRequiredError = document.getElementById('quantityRequiredError');
+        if (!isQuantityProvided) {
+            quantityRequiredError.style.display = 'block';
+            quantityError.style.display = 'none';
+            document.getElementById('quantity').classList.add('input-error');
+        } else if (!isQuantityValid) {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'block';
+            document.getElementById('quantity').classList.add('input-error');
+        } else {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'none';
+            document.getElementById('quantity').classList.remove('input-error');
+        }
+        
+        const allValid = isCodeValid && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+        
+        const proceedBtn = document.getElementById('proceedBtn');
+        if (proceedBtn) {
+            proceedBtn.disabled = !allValid;
+        }
     }
-}
-        function renderGrid() {
-            const grid = document.getElementById('paymentGrid');
-            const cat = paymentData[currentCategory];
-            if (!cat) return;
-            grid.innerHTML = cat.items.map(item => {
-                const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
-                            <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
-                                <div class="py-8 px-5 text-black">${item.name}</div>
-                                <div>
-                                    <div class="h-[1px] bg-gray-200"></div>
-                                    <div class="p-5 flex justify-between items-center">
-                                        <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
-                                        <div class="card-amount">
-                                            <p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p>
-                                            <p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p>
-                                        </div>
+
+    function renderGrid() {
+        const grid = document.getElementById('paymentGrid');
+        const cat = paymentData[currentCategory];
+        if (!cat) return;
+        grid.innerHTML = cat.items.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
+                        <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
+                            <div class="py-8 px-5 text-black">${item.name}</div>
+                            <div>
+                                <div class="h-[1px] bg-gray-200"></div>
+                                <div class="p-5 flex justify-between items-center">
+                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
+                                    <div class="card-amount">
+                                        <p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p>
+                                        <p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p>
                                     </div>
                                 </div>
                             </div>
-                        </div>`;
-            }).join('');
-        }
+                        </div>
+                    </div>`;
+        }).join('');
+    }
 
-        function openPaymentModal(item) {
-            currentItem = item;
-            document.getElementById('modalItemName').innerText = item.name;
-            const amountInput = document.getElementById('amount');
-            if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
-            else { amountInput.value = ''; amountInput.readOnly = false; }
-            document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-            
-            document.getElementById('paymentCode').value = ''; 
-            document.getElementById('fullName').value = ''; 
-            document.getElementById('phone').value = ''; 
-            document.getElementById('email').value = '';
-            document.getElementById('paymentDescription').value = ''; 
-            document.getElementById('quantity').value = '';
-            document.getElementById('currency').value = 'NGN';
-            
-            document.getElementById('codeError').style.display = 'none';
-            document.getElementById('phoneError').style.display = 'none';
-            document.getElementById('emailError').style.display = 'none';
-            document.getElementById('quantityError').style.display = 'none';
-            
-            document.getElementById('proceedBtn').disabled = true;
-            document.getElementById('paymentModal').classList.remove('hidden');
-            
-            ['paymentCode','fullName','phone','email','amount','quantity'].forEach(id => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.removeEventListener('input', checkFormValidation);
-                    element.addEventListener('input', checkFormValidation);
-                }
-            });
-        }
+    function openPaymentModal(item) {
+        currentItem = item;
+        document.getElementById('modalItemName').innerText = item.name;
+        const amountInput = document.getElementById('amount');
+        if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
+        else { amountInput.value = ''; amountInput.readOnly = false; }
+        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         
-        function closePaymentModal() { document.getElementById('paymentModal').classList.add('hidden'); }
+        document.getElementById('paymentCode').value = ''; 
+        document.getElementById('fullName').value = ''; 
+        document.getElementById('phone').value = ''; 
+        document.getElementById('email').value = '';
+        document.getElementById('paymentDescription').value = ''; 
+        document.getElementById('quantity').value = '';
+        document.getElementById('currency').value = 'NGN';
         
-        function closeInvoiceModal() { 
-            document.getElementById('invoiceModal').style.display = 'none'; 
-        }
+        document.getElementById('codeError').style.display = 'none';
+        document.getElementById('phoneError').style.display = 'none';
+        document.getElementById('emailError').style.display = 'none';
+        document.getElementById('quantityError').style.display = 'none';
         
-        function closeAccountModal() { 
-            if (countdownInterval) clearInterval(countdownInterval);
-            document.getElementById('accountModal').classList.add('hidden'); 
-        }
-
-        document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!isCodeValid) { alert('Please enter a valid payment code (default: 1234)'); return; }
-            
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const description = document.getElementById('paymentDescription').value;
-            const quantity = parseInt(document.getElementById('quantity').value);
-            const currency = document.getElementById('currency').value;
-            let amount = parseFloat(document.getElementById('amount').value);
-            
-            if (!fullName) { alert('Please fill all payer details'); return; }
-            if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
-            if (!validateEmail(email)) { alert('Invalid email address'); return; }
-            if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
-            if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
-            
-            const serviceCharge = 50;
-            const totalAmount = (amount + serviceCharge) * quantity;
-            
-            currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount };
-            
-            document.getElementById('invoiceItemName').innerText = currentItem.name;
-            document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
-            document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
-            document.getElementById('invoiceQuantity').innerText = quantity;
-            document.getElementById('invoiceTotal').innerText = `${currency} ${totalAmount.toLocaleString()}`;
-            
-            closePaymentModal();
-            document.getElementById('invoiceModal').style.display = 'block';
+        document.getElementById('proceedBtn').disabled = true;
+        document.getElementById('paymentModal').classList.remove('hidden');
+        
+        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.removeEventListener('input', checkFormValidation);
+                element.addEventListener('input', checkFormValidation);
+            }
         });
+    }
+    
+    function closePaymentModal() { 
+        document.getElementById('paymentModal').classList.add('hidden'); 
+    }
+    
+    function closeInvoiceModal() { 
+        document.getElementById('invoiceModal').style.display = 'none'; 
+    }
+    
+    function closeAccountModal() { 
+        if (countdownInterval) clearInterval(countdownInterval);
+        document.getElementById('accountModal').classList.add('hidden'); 
+    }
+
+    document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Add confirmation prompt
+        if (!confirm("⚠️ CONFIRM PROCEED?\n\nAre you sure all information is correct?\n\nClick OK to continue to invoice.")) {
+            return;
+        }
+        
+        if (!isCodeValid) { alert('Please enter a valid payment code (default: 1234)'); return; }
+        
+        const fullName = document.getElementById('fullName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const description = document.getElementById('paymentDescription').value;
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const currency = document.getElementById('currency').value;
+        let amount = parseFloat(document.getElementById('amount').value);
+        
+        if (!fullName) { alert('Please fill all payer details'); return; }
+        if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
+        if (!validateEmail(email)) { alert('Invalid email address'); return; }
+        if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
+        if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
+        
+        const serviceCharge = 50;
+        const totalAmount = (amount + serviceCharge) * quantity;
+        
+        currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount };
+        
+        document.getElementById('invoiceItemName').innerText = currentItem.name;
+        document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
+        document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
+        document.getElementById('invoiceQuantity').innerText = quantity;
+        document.getElementById('invoiceTotal').innerText = `${currency} ${totalAmount.toLocaleString()}`;
+        
+        closePaymentModal();
+        document.getElementById('invoiceModal').style.display = 'block';
+    });
 
     function showLoadingAndGenerateAccount() {
-    closeInvoiceModal();
-    const loadingModal = document.getElementById('loadingModal');
-    
-    if (loadingModal) {
-        // Set text for account generation
-        const mainText = loadingModal.querySelector('p:first-of-type');
-        const subText = loadingModal.querySelector('p:last-of-type');
-        if (mainText) mainText.innerHTML = 'Please wait...';
-        if (subText) subText.innerHTML = 'Account details are being generated';
+        closeInvoiceModal();
+        const loadingModal = document.getElementById('loadingModal');
         
-        loadingModal.style.display = 'flex';
-        setTimeout(() => {
-            if (loadingModal) {
-                loadingModal.style.display = 'none';
-            }
-            showAccountModal();
-        }, 3000);
-    } else {
-        showAccountModal();
-    }
-}
-
-        function startCountdown(minutes, pinCode) {
-            let time = minutes * 60;
-            const timerElement = document.getElementById('countdownTimer');
-            if (countdownInterval) clearInterval(countdownInterval);
+        if (loadingModal) {
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Please wait...';
+            if (subText) subText.innerHTML = 'Account details are being generated';
             
-            const expiryTime = new Date().getTime() + (minutes * 60 * 1000);
-            if (paymentPinsDatabase[pinCode]) {
-                paymentPinsDatabase[pinCode].expiresAt = expiryTime;
-            }
-            
-            countdownInterval = setInterval(() => {
-                const now = new Date().getTime();
-                const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
-                const mins = Math.floor(remaining / 60);
-                const secs = remaining % 60;
-                timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                if (remaining <= 0) {
-                    clearInterval(countdownInterval);
-                    timerElement.textContent = "Expired";
-                    timerElement.style.color = "#9ca3af";
-                    timerElement.style.background = "#f3f4f6";
-                    if (paymentPinsDatabase[pinCode]) {
-                        paymentPinsDatabase[pinCode].status = "expired";
-                    }
+            loadingModal.style.display = 'flex';
+            setTimeout(() => {
+                if (loadingModal) {
+                    loadingModal.style.display = 'none';
                 }
-            }, 1000);
+                showAccountModal();
+            }, 3000);
+        } else {
+            showAccountModal();
         }
-
-      function showAccountModal() {
-    const pinCode = currentFormData.paymentCode;
-    const account = paymentPinsDatabase[pinCode];
-    
-    if (!account || account.status !== "active") {
-        alert("This payment code has expired or is invalid. Please contact admin.");
-        return;
     }
-    
-    document.getElementById('accountDetailsBox').innerHTML = `
-        <div class="details-row">
-            <span class="details-label">Bank</span>
-            <span class="details-value">${account.bankName}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Account Name</span>
-            <span class="details-value">${account.accountName}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Account Number</span>
-            <span class="details-value">${account.accountNumber}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Amount</span>
-            <span class="details-value" style="color: #16a34a;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Payment Code</span>
-            <span class="details-value">${currentFormData.paymentCode}</span>
-        </div>
-    `;
-    
-    const receiptInput = document.getElementById('receiptInput');
-    const uploadedFileName = document.getElementById('uploadedFileName');
-    
-    if (receiptInput) {
-        if (receiptInput._listener) {
-            receiptInput.removeEventListener('change', receiptInput._listener);
+
+    function startCountdown(minutes, pinCode) {
+        const timerElement = document.getElementById('countdownTimer');
+        if (countdownInterval) clearInterval(countdownInterval);
+        
+        const expiryTime = new Date().getTime() + (minutes * 60 * 1000);
+        if (paymentPinsDatabase[pinCode]) {
+            paymentPinsDatabase[pinCode].expiresAt = expiryTime;
         }
         
-        const listener = (e) => {
-            if (uploadedFileName) {
-                uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+        countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                timerElement.textContent = "Expired";
+                if (paymentPinsDatabase[pinCode]) {
+                    paymentPinsDatabase[pinCode].status = "expired";
+                }
             }
-        };
-        receiptInput.addEventListener('change', listener);
-        receiptInput._listener = listener;
-        receiptInput.value = '';
+        }, 1000);
     }
-    
-    if (uploadedFileName) {
-        uploadedFileName.innerHTML = '';
-    }
-    
-    document.getElementById('accountModal').classList.remove('hidden');
-    startCountdown(30, pinCode);
-}
-    function confirmPayment() { 
-    if(!document.getElementById('receiptInput').files[0]) { 
-        alert('Please upload your payment receipt'); 
-        return; 
-    } 
-    if (countdownInterval) clearInterval(countdownInterval);
-    const pinCode = currentFormData.paymentCode;
-    if (paymentPinsDatabase[pinCode]) {
-        paymentPinsDatabase[pinCode].status = "used";
-    }
-    alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
-    closeAccountModal();
-    
-    // ✅ GO BACK TO INDEX.HTML AFTER 2 SECONDS
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 2000);
-}
-    // Clear file name display
-    if (uploadedFileName) {
-        uploadedFileName.innerHTML = '';
-    }
-    
-    // Show the modal
-    document.getElementById('accountModal').classList.remove('hidden');
-    startCountdown(30, pinCode);
-}
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => {
-                    b.classList.remove('!bg-white', 'drop-shadow-md');
-                    b.style.backgroundColor = '#EBEBEB';
-                });
-                btn.classList.add('!bg-white', 'drop-shadow-md');
-                currentCategory = btn.getAttribute('data-category');
-                renderGrid();
-                document.getElementById('searchInput').value = '';
-            });
-        });
 
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const term = e.target.value.toLowerCase();
-            const cat = paymentData[currentCategory];
-            if(!cat) return;
-            const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-            if(filtered.length === 0) { document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; return; }
-            document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
-                const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div class="card-amount"><p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p><p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p></div></div></div></div></div>`;
-            }).join('');
-        });
+    function showAccountModal() {
+        const pinCode = currentFormData.paymentCode;
+        const account = paymentPinsDatabase[pinCode];
         
-        renderGrid();
-    </script>
+        if (!account || account.status !== "active") {
+            alert("This payment code has expired or is invalid. Please contact admin.");
+            return;
+        }
+        
+        document.getElementById('accountDetailsBox').innerHTML = `
+            <div class="details-row">
+                <span class="details-label">Bank</span>
+                <span class="details-value">${account.bankName}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Name</span>
+                <span class="details-value">${account.accountName}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Number</span>
+                <span class="details-value">${account.accountNumber}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Amount</span>
+                <span class="details-value" style="color: #16a34a;">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Payment Code</span>
+                <span class="details-value">${currentFormData.paymentCode}</span>
+            </div>
+        `;
+        
+        const receiptInput = document.getElementById('receiptInput');
+        const uploadedFileName = document.getElementById('uploadedFileName');
+        
+        if (receiptInput) {
+            if (receiptInput._listener) {
+                receiptInput.removeEventListener('change', receiptInput._listener);
+            }
+            
+            const listener = (e) => {
+                if (uploadedFileName) {
+                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+                }
+            };
+            receiptInput.addEventListener('change', listener);
+            receiptInput._listener = listener;
+            receiptInput.value = '';
+        }
+        
+        if (uploadedFileName) {
+            uploadedFileName.innerHTML = '';
+        }
+        
+        document.getElementById('accountModal').classList.remove('hidden');
+        startCountdown(30, pinCode);
+    }
+
+    function confirmPayment() { 
+        if(!document.getElementById('receiptInput').files[0]) { 
+            alert('Please upload your payment receipt'); 
+            return; 
+        } 
+        
+        if (countdownInterval) clearInterval(countdownInterval);
+        const pinCode = currentFormData.paymentCode;
+        if (paymentPinsDatabase[pinCode]) {
+            paymentPinsDatabase[pinCode].status = "used";
+        }
+        
+        closeAccountModal();
+        
+        const loadingModal = document.getElementById('loadingModal');
+        if (loadingModal) {
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Please wait...';
+            if (subText) subText.innerHTML = 'Wait while we confirm your payment';
+            
+            loadingModal.style.display = 'flex';
+            
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 3000);
+        } else {
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 3000);
+        }
+    }
+
+    // Category filters
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('!bg-white', 'drop-shadow-md');
+                b.style.backgroundColor = '#EBEBEB';
+            });
+            btn.classList.add('!bg-white', 'drop-shadow-md');
+            currentCategory = btn.getAttribute('data-category');
+            renderGrid();
+            document.getElementById('searchInput').value = '';
+        });
+    });
+
+    // Search input
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const cat = paymentData[currentCategory];
+        if(!cat) return;
+        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
+        if(filtered.length === 0) { 
+            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; 
+            return; 
+        }
+        document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div class="card-amount"><p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p><p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p></div></div></div></div></div>`;
+        }).join('');
+    });
+    
+    renderGrid();
+</script>
 </body>
 </html>
