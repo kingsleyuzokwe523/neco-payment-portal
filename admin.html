@@ -96,6 +96,7 @@
             border-radius: 8px;
             margin-bottom: 20px;
             text-align: center;
+            display: none;
         }
         
         /* Dashboard */
@@ -169,16 +170,10 @@
             cursor: pointer;
             transition: all 0.3s;
             border-left: 3px solid transparent;
-            font-weight: 500;
         }
         
         .menu-category-header:hover {
             background: rgba(255,255,255,0.1);
-        }
-        
-        .menu-category-header.active {
-            background: rgba(255,255,255,0.15);
-            border-left-color: white;
         }
         
         .sub-menu {
@@ -573,7 +568,7 @@
                 <h2>Admin Login</h2>
                 <p style="color: #6b7280; margin-top: 5px;">Enter your credentials to continue</p>
             </div>
-            <div id="errorMsg" class="error-msg" style="display: none;"></div>
+            <div id="errorMsg" class="error-msg"></div>
             <div class="form-group">
                 <label>Username</label>
                 <input type="text" id="username" placeholder="Enter username">
@@ -608,12 +603,6 @@
                     <span>Home Editor</span>
                 </div>
                 
-                <!-- Payment Editor -->
-                <div class="menu-item" data-tab="payment-editor">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path></svg>
-                    <span>Payment Editor</span>
-                </div>
-                
                 <!-- Categories with Sub-items -->
                 <div class="menu-category-header" onclick="toggleCategories()">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
@@ -621,22 +610,28 @@
                     <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 <ul class="sub-menu" id="categorySubMenu">
-                    <li data-category="SSCE External" data-color="#145596" onclick="selectCategoryFromSidebar('SSCE External', '#145596')">
+                    <li data-category="SSCE External" data-color="#145596" onclick="selectCategory('SSCE External', 1, '#145596')">
                         <span class="category-color-dot" style="background: #145596;"></span> SSCE External
                     </li>
-                    <li data-category="BECE" data-color="#642D56" onclick="selectCategoryFromSidebar('BECE', '#642D56')">
+                    <li data-category="BECE" data-color="#642D56" onclick="selectCategory('BECE', 2, '#642D56')">
                         <span class="category-color-dot" style="background: #642D56;"></span> BECE
                     </li>
-                    <li data-category="NCEE" data-color="#1887EB" onclick="selectCategoryFromSidebar('NCEE', '#1887EB')">
+                    <li data-category="NCEE" data-color="#1887EB" onclick="selectCategory('NCEE', 3, '#1887EB')">
                         <span class="category-color-dot" style="background: #1887EB;"></span> NCEE
                     </li>
-                    <li data-category="Gifted" data-color="#24809C" onclick="selectCategoryFromSidebar('Gifted', '#24809C')">
+                    <li data-category="Gifted" data-color="#24809C" onclick="selectCategory('Gifted', 4, '#24809C')">
                         <span class="category-color-dot" style="background: #24809C;"></span> Gifted
                     </li>
-                    <li data-category="Others" data-color="#36454F" onclick="selectCategoryFromSidebar('Others', '#36454F')">
+                    <li data-category="Others" data-color="#36454F" onclick="selectCategory('Others', 5, '#36454F')">
                         <span class="category-color-dot" style="background: #36454F;"></span> Others
                     </li>
                 </ul>
+                
+                <!-- PIN Manager -->
+                <div class="menu-item" data-tab="pin-manager">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
+                    <span>PIN Manager</span>
+                </div>
                 
                 <!-- View Payments -->
                 <div class="menu-item" data-tab="view-payments">
@@ -653,7 +648,7 @@
             </div>
             
             <!-- Dashboard Tab -->
-            <div id="dashboard" class="tab-content">
+            <div id="dashboard" class="tab-content active">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">5</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
@@ -671,7 +666,7 @@
                 </div>
             </div>
             
-            <!-- Payment Editor Tab -->
+            <!-- Payment Editor Tab (hidden - shows when category selected) -->
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -681,6 +676,17 @@
                     <div id="itemsListContainer">
                         <p style="text-align: center; color: #666; padding: 40px;">Click on a category from the sidebar to view and manage its items</p>
                     </div>
+                </div>
+            </div>
+            
+            <!-- PIN Manager Tab -->
+            <div id="pin-manager" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header"><h3>Payment PINs (One Time Use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
+                    <table class="items-table">
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Time Left</th><th>Created</th><th>Actions</th></tr></thead>
+                        <tbody id="pinsTableBody"></tbody>
+                    </table>
                 </div>
             </div>
             
@@ -719,6 +725,21 @@
             <div class="modal-footer"><button onclick="closeModal('itemModal')">Cancel</button><button onclick="saveItem()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Save</button></div>
         </div>
     </div>
+    
+    <!-- PIN Modal -->
+    <div id="pinModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
+            <div class="modal-body">
+                <div class="neco-form-group"><label>PIN Code (Numbers Only)</label><input type="text" id="pinCode" placeholder="e.g., 1234"><button onclick="generateRandomPin()" style="margin-top:5px;background:#6b7280;color:white;border:none;padding:5px;border-radius:4px;width:100%;">Generate Random PIN</button></div>
+                <div class="neco-form-group"><label>Bank Name</label><input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria"></div>
+                <div class="neco-form-group"><label>Account Name</label><input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services"></div>
+                <div class="neco-form-group"><label>Account Number</label><input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890"></div>
+                <div class="neco-form-group"><label>Bank Code (Optional)</label><input type="text" id="pinBankCode" placeholder="e.g., 011"></div>
+            </div>
+            <div class="modal-footer"><button onclick="closeModal('pinModal')">Cancel</button><button onclick="savePin()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Generate PIN</button></div>
+        </div>
+    </div>
 
     <script>
         // ============ LOGIN ============
@@ -734,6 +755,7 @@
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('dashboardContainer').style.display = 'block';
                 initDashboard();
+                startPinExpiryChecker();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -746,6 +768,7 @@
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
             initDashboard();
+            startPinExpiryChecker();
         }
         
         // ============ DATA ============
@@ -781,15 +804,17 @@
         
         let paymentPins = [];
         let payments = [];
-        let selectedCategory = null;
+        let selectedCategoryId = null;
+        let selectedCategoryName = null;
         let currentEditingItemId = null;
         let currentEditingKey = null;
+        let expiryInterval = null;
         
         let homeContent = {
             heroTitle: "NECO Corrections Just Got Faster and Simpler.",
             heroNote: "You do not need an account to make payment",
             howItWorksTitle: "How it works",
-            footerNote: "NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website (www.neco.gov.ng). Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.",
+            footerNote: "NOTE: Payment item code is required for any NECO payment",
             steps: [
                 { title: "Select Correction Type", description: "Select or search for the correction type you want" },
                 { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment" },
@@ -799,6 +824,35 @@
                 { title: "Get Confirmation", description: "Receive confirmation of your payment" }
             ]
         };
+        
+        // ============ PIN EXPIRY CHECKER ============
+        function startPinExpiryChecker() {
+            if (expiryInterval) clearInterval(expiryInterval);
+            expiryInterval = setInterval(() => {
+                const now = new Date().getTime();
+                let changed = false;
+                paymentPins.forEach(pin => {
+                    if (pin.status === "active" && pin.expiresAt && pin.expiresAt <= now) {
+                        pin.status = "expired";
+                        changed = true;
+                    }
+                });
+                if (changed) {
+                    renderPins();
+                    updateDashboard();
+                    saveToLocalStorage();
+                }
+            }, 1000);
+        }
+        
+        function getRemainingTime(expiresAt) {
+            if (!expiresAt) return "N/A";
+            const remaining = Math.max(0, Math.floor((expiresAt - new Date().getTime()) / 1000));
+            if (remaining <= 0) return "Expired";
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
         
         // ============ SAVE/LOAD ============
         function saveToLocalStorage() {
@@ -830,22 +884,36 @@
             document.getElementById('totalPayments').innerText = payments.length;
         }
         
-        // ============ CATEGORY SELECTION ============
-        function selectCategoryFromSidebar(categoryName, color) {
-            // Remove active class from all submenu items
+        // ============ SIDEBAR FUNCTIONS ============
+        function toggleCategories() {
+            const subMenu = document.getElementById('categorySubMenu');
+            const arrow = document.getElementById('categoryArrow');
+            subMenu.classList.toggle('open');
+            if (subMenu.classList.contains('open')) {
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+        
+        function selectCategory(categoryName, categoryId, color) {
+            selectedCategoryId = categoryId;
+            selectedCategoryName = categoryName;
+            
+            // Update active state in submenu
             document.querySelectorAll('.sub-menu li').forEach(item => {
                 item.classList.remove('active');
+                if (item.getAttribute('data-category') === categoryName) {
+                    item.classList.add('active');
+                }
             });
-            // Add active class to clicked item
-            event.currentTarget.classList.add('active');
             
-            selectedCategory = { name: categoryName, color: color };
-            const categoryId = categories.find(c => c.name === categoryName)?.id;
-            
+            // Update UI
             document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items`;
             document.getElementById('addItemBtn').style.display = 'block';
             
-            renderItemsForCategory(categoryId);
+            // Render items
+            renderItemsForCategory();
             
             // Switch to payment editor tab
             document.querySelectorAll('.menu-item, .menu-category-header').forEach(item => {
@@ -853,21 +921,21 @@
             });
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.getElementById('payment-editor').classList.add('active');
-            document.getElementById('pageTitle').innerText = `Payment Editor - ${categoryName}`;
+            document.getElementById('pageTitle').innerHTML = `Payment Editor - ${categoryName}`;
         }
         
-        function getItemsByCategory(categoryId) {
-            return paymentItems.filter(item => item.categoryId === categoryId);
+        function getItemsByCategory() {
+            return paymentItems.filter(item => item.categoryId === selectedCategoryId);
         }
         
-        function renderItemsForCategory(categoryId) {
+        function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
-            if (!categoryId) {
+            if (!selectedCategoryId) {
                 container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Select a category to view items</p>';
                 return;
             }
             
-            const items = getItemsByCategory(categoryId);
+            const items = getItemsByCategory();
             if (items.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No items in this category. Click "+ Add Item" to add one.</p>';
                 return;
@@ -884,4 +952,285 @@
                                 <td>
                                     <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
                                     <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
-                                
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+        
+        // ============ ITEM CRUD ============
+        function openAddItemModal() {
+            if (!selectedCategoryId) {
+                alert('Please select a category first');
+                return;
+            }
+            currentEditingItemId = null;
+            document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
+            document.getElementById('itemName').value = '';
+            document.getElementById('itemAmount').value = '';
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+        
+        function openEditItemModal(itemId) {
+            const item = paymentItems.find(i => i.id === itemId);
+            if (!item) return;
+            currentEditingItemId = itemId;
+            document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemAmount').value = item.amount;
+            document.getElementById('itemModal').style.display = 'flex';
+        }
+        
+        function saveItem() {
+            const name = document.getElementById('itemName').value;
+            const amount = parseInt(document.getElementById('itemAmount').value);
+            
+            if (!name || !amount) {
+                alert('Please fill all fields');
+                return;
+            }
+            
+            if (currentEditingItemId) {
+                const idx = paymentItems.findIndex(i => i.id === currentEditingItemId);
+                paymentItems[idx] = { ...paymentItems[idx], name, amount };
+            } else {
+                const newId = Math.max(...paymentItems.map(i => i.id), 0) + 1;
+                paymentItems.push({ id: newId, name, categoryId: selectedCategoryId, amount });
+            }
+            
+            closeModal('itemModal');
+            renderItemsForCategory();
+            updateDashboard();
+            saveToLocalStorage();
+        }
+        
+        function deleteItem(itemId) {
+            if (confirm('Delete this item?')) {
+                paymentItems = paymentItems.filter(i => i.id !== itemId);
+                renderItemsForCategory();
+                updateDashboard();
+                saveToLocalStorage();
+            }
+        }
+        
+        // ============ PIN CRUD ============
+        function generateRandomPin() {
+            const random = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('pinCode').value = random;
+        }
+        
+        function openPinModal() {
+            document.getElementById('pinCode').value = '';
+            document.getElementById('pinBankName').value = '';
+            document.getElementById('pinAccountName').value = '';
+            document.getElementById('pinAccountNumber').value = '';
+            document.getElementById('pinBankCode').value = '';
+            document.getElementById('pinModal').style.display = 'flex';
+        }
+        
+        function savePin() {
+            const pin = document.getElementById('pinCode').value;
+            const bankName = document.getElementById('pinBankName').value;
+            const accountName = document.getElementById('pinAccountName').value;
+            const accountNumber = document.getElementById('pinAccountNumber').value;
+            const bankCode = document.getElementById('pinBankCode').value;
+            
+            if (!pin || !bankName || !accountName || !accountNumber) {
+                alert('Please fill all required fields');
+                return;
+            }
+            
+            const expiresAt = new Date().getTime() + (30 * 60 * 1000);
+            
+            paymentPins.push({ 
+                pin, bankName, accountName, accountNumber, bankCode, 
+                status: "active", 
+                createdAt: new Date().toISOString(), 
+                expiresAt: expiresAt 
+            });
+            
+            closeModal('pinModal');
+            renderPins();
+            updateDashboard();
+            saveToLocalStorage();
+            alert(`PIN ${pin} generated! It will expire in 30 minutes.`);
+        }
+        
+        function deletePin(idx) {
+            if (confirm('Delete this PIN?')) {
+                paymentPins.splice(idx, 1);
+                renderPins();
+                updateDashboard();
+                saveToLocalStorage();
+            }
+        }
+        
+        function reactivatePin(idx) {
+            const newExpiry = new Date().getTime() + (30 * 60 * 1000);
+            paymentPins[idx].status = "active";
+            paymentPins[idx].expiresAt = newExpiry;
+            renderPins();
+            updateDashboard();
+            saveToLocalStorage();
+            alert(`PIN ${paymentPins[idx].pin} has been reactivated for 30 minutes!`);
+        }
+        
+        function renderPins() {
+            const tbody = document.getElementById('pinsTableBody');
+            if (paymentPins.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = paymentPins.map((pin, idx) => {
+                let statusClass = "badge-active";
+                if (pin.status === "expired") statusClass = "badge-expired";
+                if (pin.status === "used") statusClass = "badge-used";
+                const timeLeft = getRemainingTime(pin.expiresAt);
+                return `<tr>
+                    <td><code>${pin.pin}</code></td>
+                    <td>${pin.bankName}</td>
+                    <td>${pin.accountName}</td>
+                    <td>${pin.accountNumber}</td>
+                    <td><span class="badge ${statusClass}">${pin.status}</span></td>
+                    <td><span class="countdown-small">${timeLeft}</span></td>
+                    <td>${new Date(pin.createdAt).toLocaleDateString()}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deletePin(${idx})">Delete</button>
+                        ${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}
+                    </td>
+                </tr>`;
+            }).join('');
+        }
+        
+        // ============ HOME EDITOR ============
+        function loadHomePreview() {
+            const container = document.getElementById('homePreview');
+            container.innerHTML = `
+                <div style="max-width:1200px; margin:0 auto;">
+                    <div style="background:linear-gradient(135deg, #054c0f 0%, #009515 100%); padding:60px 40px; text-align:center; border-radius:12px;">
+                        <div class="editable-element" onclick="openTextEditor('heroNote')"><p style="background:rgba(255,255,255,0.2); display:inline-block; padding:5px 15px; border-radius:30px; color:white;">${homeContent.heroNote}</p></div>
+                        <div class="editable-element" onclick="openTextEditor('heroTitle')"><h1 style="font-size:48px; margin-top:20px; color:white;">${homeContent.heroTitle}</h1></div>
+                    </div>
+                    <div style="padding:40px;">
+                        <div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px;">${homeContent.howItWorksTitle}</h2></div>
+                        <div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px;">${homeContent.footerNote}</p></div>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">
+                            ${homeContent.steps.map((step, i) => `
+                                <div style="background:#f5f5f5; border-radius:12px; padding:20px; text-align:center;">
+                                    <div class="editable-element" onclick="openTextEditor('step_${i}_title')"><h4>${step.title}</h4></div>
+                                    <div class="editable-element" onclick="openTextEditor('step_${i}_desc')"><p style="color:#666; font-size:13px;">${step.description}</p></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        function openTextEditor(key) {
+            currentEditingKey = key;
+            let val = '';
+            if (key === 'heroTitle') val = homeContent.heroTitle;
+            else if (key === 'heroNote') val = homeContent.heroNote;
+            else if (key === 'howItWorksTitle') val = homeContent.howItWorksTitle;
+            else if (key === 'footerNote') val = homeContent.footerNote;
+            else if (key.startsWith('step_')) {
+                const parts = key.split('_');
+                const idx = parseInt(parts[1]);
+                if (parts[2] === 'title') val = homeContent.steps[idx].title;
+                else if (parts[2] === 'desc') val = homeContent.steps[idx].description;
+            }
+            document.getElementById('editTextContent').value = val;
+            document.getElementById('editTextModal').style.display = 'flex';
+        }
+        
+        function saveTextEdit() {
+            const newVal = document.getElementById('editTextContent').value;
+            if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newVal;
+            else if (currentEditingKey === 'heroNote') homeContent.heroNote = newVal;
+            else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newVal;
+            else if (currentEditingKey === 'footerNote') homeContent.footerNote = newVal;
+            else if (currentEditingKey.startsWith('step_')) {
+                const parts = currentEditingKey.split('_');
+                const idx = parseInt(parts[1]);
+                if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
+                else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
+            }
+            closeModal('editTextModal');
+            loadHomePreview();
+            saveToLocalStorage();
+        }
+        
+        function saveHomeChanges() { 
+            saveToLocalStorage(); 
+            alert('✅ Home page changes saved!'); 
+        }
+        
+        // ============ VIEW PAYMENTS ============
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            if (payments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>';
+                return;
+            }
+            tbody.innerHTML = payments.map(payment => `
+                <tr>
+                    <td>${new Date(payment.date).toLocaleDateString()}</td>
+                    <td>${payment.itemName}</td>
+                    <td>${payment.fullName}</td>
+                    <td>${payment.phone}</td>
+                    <td>${payment.email}</td>
+                    <td>₦${payment.amount.toLocaleString()}</td>
+                    <td>${payment.paymentCode}</td>
+                    <td><span class="badge badge-active">Completed</span></td>
+                </tr>
+            `).join('');
+        }
+        
+        // ============ UTILITIES ============
+        function closeModal(id) { 
+            document.getElementById(id).style.display = 'none'; 
+        }
+        
+        function logout() { 
+            localStorage.removeItem('adminLoggedIn'); 
+            location.reload(); 
+        }
+        
+        function toggleSidebar() { 
+            document.getElementById('sidebar').classList.toggle('open'); 
+        }
+        
+        // ============ INITIALIZATION ============
+        function initDashboard() {
+            loadFromLocalStorage();
+            updateDashboard();
+            renderPins();
+            renderPayments();
+            loadHomePreview();
+            
+            // Setup menu navigation
+            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
+                item.addEventListener('click', () => {
+                    const tabId = item.getAttribute('data-tab');
+                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+                    item.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById(tabId).classList.add('active');
+                    document.getElementById('pageTitle').innerHTML = item.querySelector('span').innerHTML;
+                    
+                    if (tabId === 'pin-manager') renderPins();
+                    if (tabId === 'view-payments') renderPayments();
+                    if (tabId === 'home-editor') loadHomePreview();
+                });
+            });
+        }
+        
+        window.onclick = function(e) { 
+            if (e.target.classList.contains('modal')) e.target.style.display = 'none'; 
+        }
+    </script>
+</body>
+</html>
