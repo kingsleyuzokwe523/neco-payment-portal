@@ -489,51 +489,71 @@
     </style>
 </head>
 <body>
-    <div id="app">
-        <div class="router">
-            <div class="shadow-md bg-white sticky w-full z-10 top-0">
-                <div class="container py-2 relative">
-                    <nav class="flex justify-between items-center">
-                        <div class="h-14 w-14">
-                            <a href="index.html">
-                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
-                            </a>
-                        </div>
-          <div>
-    <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-        <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
-    </ul>
-</div>
-<button class="lg:hidden" type="button" id="mobileMenuBtn">
-    <span class="sr-only">Open main menu</span>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-    </svg>
-</button>
-                    </nav>
-                </div>
-            </div>
-
-            <div class="container mt-20">
-                <div class="flex items-center flex-col md:flex-row justify-between">
-                    <div class="w-full md:w-3/5">
-                        <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
-                        <p class="mt-2">You can search for a payment item or select from the list</p>
+  <div id="app">
+    <div class="router">
+        <div class="shadow-md bg-white sticky w-full z-10 top-0">
+            <div class="container py-2 relative">
+                <nav class="flex justify-between items-center">
+                    <div class="h-14 w-14">
+                        <a href="index.html">
+                            <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
+                        </a>
                     </div>
-                    <div class="md:w-1/3 mt-5 md:mt-0 w-full">
-                        <div class="w-full">
-                            <div class="mt-1 relative">
-                                <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
-                                <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
-                                    </svg>
-                                </div>
+                    
+                    <!-- Desktop Menu -->
+                    <div>
+                        <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+                            <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Mobile Menu Buttons -->
+                    <div class="flex items-center gap-2 lg:hidden">
+                        <!-- Cancel/Close Button (X) -->
+                        <button type="button" id="cancelMenuBtn" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                        <!-- Hamburger Menu Button -->
+                        <button type="button" id="mobileMenuBtn">
+                            <span class="sr-only">Open main menu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </nav>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu Dropdown -->
+        <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
+            <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
+        </div>
+        
+        <div class="container mt-20">
+            <div class="flex items-center flex-col md:flex-row justify-between">
+                <div class="w-full md:w-3/5">
+                    <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
+                    <p class="mt-2">You can search for a payment item or select from the list</p>
+                </div>
+                <div class="md:w-1/3 mt-5 md:mt-0 w-full">
+                    <div class="w-full">
+                        <div class="mt-1 relative">
+                            <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
+                            <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                                </svg>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
+        </div>
+    </div>
+</div>
                 <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
                     <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
                         <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
@@ -1308,29 +1328,42 @@ function copyToClipboard(text) {
             document.getElementById('searchInput').value = '';
         });
     });
-    // Mobile menu toggle
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-let mobileMenu = null;
-
-if (mobileMenuBtn) {
-    mobileMenuBtn.addEventListener('click', function() {
-        if (!mobileMenu) {
-            mobileMenu = document.createElement('div');
-            mobileMenu.className = 'mobile-menu';
-            mobileMenu.innerHTML = '<a href="index.html"> Back to Home</a>';
-            document.body.appendChild(mobileMenu);
-        }
-        mobileMenu.classList.toggle('open');
-    });
+    <script>
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var cancelBtn = document.getElementById('cancelMenuBtn');
+    var mobileMenu = document.getElementById('mobileMenu');
     
-    // Close menu when clicking outside
-    document.addEventListener('click', function(e) {
-        if (mobileMenu && mobileMenu.classList.contains('open') && !mobileMenuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-            mobileMenu.classList.remove('open');
+    if (menuBtn) {
+        // Open menu
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'block';
+            menuBtn.style.display = 'none';
+            if (cancelBtn) cancelBtn.style.display = 'block';
+        };
+        
+        // Close menu with cancel button
+        if (cancelBtn) {
+            cancelBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenu.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                menuBtn.style.display = 'block';
+            };
         }
-    });
-}
-
+        
+        // Close when clicking outside
+        document.onclick = function(e) {
+            if (mobileMenu && mobileMenu.style.display === 'block') {
+                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.style.display = 'none';
+                    if (cancelBtn) cancelBtn.style.display = 'none';
+                    menuBtn.style.display = 'block';
+                }
+            }
+        };
+    }
+</script>
     // Search input
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
