@@ -22,20 +22,30 @@
                             </a>
                         </div>
                         <div>
-                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                                <li>
-                                    <!-- THE BUTTON YOU WANT ADDED - COPIED FROM YOUR FILE -->
-                                    <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
-                                </li>
-                            </ul>
-                        </div>
-                        <button class="lg:hidden" id="headlessui-disclosure-button-P19228616161" type="button" aria-expanded="false" data-headlessui-state="">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
+    <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+        <li>
+            <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
+        </li>
+    </ul>
+</div>
+<button class="lg:hidden" id="mobileMenuBtn" type="button">
+    <span class="sr-only">Open main menu</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+    </svg>
+</button>
                     </nav>
+<!-- Mobile Menu -->
+<div id="mobileMenu" style="display: none; position: absolute; top: 70px; right: 15px; background: white; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 8px 0; min-width: 180px; z-index: 1000;">
+    <a href="payment.html" class="mobile-menu-link" style="display: block; padding: 12px 20px; color: #4b5563; text-decoration: none; font-size: 14px; font-weight: 500; transition: all 0.2s;">Make payment</a>
+</div>
+
+<style>
+    .mobile-menu-link:hover {
+        background-color: #f9fafb;
+        color: #054c0f;
+    }
+</style>
                 </div>
             </div>
             <div class="container mt-10">
