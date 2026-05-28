@@ -13,133 +13,107 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-/* San Francisco Fonts */
-@font-face {
-    font-family: 'SF Pro Display';
-    src: local('SF Pro Display'), local('SFProDisplay');
-    font-weight: 400;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: 'SF Pro Text';
-    src: local('SF Pro Text'), local('SFProText');
-    font-weight: 500;
-    font-style: normal;
-}
-
-/* Apply San Francisco to account modal */
-#accountModal,
-#accountModal * {
-    font-family: 'SF Pro Text', 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, sans-serif !important;
-}
-
-/* ACCOUNT MODAL - SMALLER OVERALL */
+/* ACCOUNT MODAL - UPDATED */
 #accountModal .account-box {
-    max-width: 380px;  /* Reduced from 420px */
+    max-width: 400px;
     width: 100%;
     background: white;
-    border-radius: 10px;
+    border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     height: auto;
-    max-height: 460px;  /* Reduced from 480px */
+    max-height: 500px;
     overflow-y: auto;
 }
 
 #accountModal .account-inner {
-    padding: 16px 20px;  /* Reduced from 20px 24px */
+    padding: 20px 24px;
 }
 
-/* Logo centered - smaller */
+/* Logo centered */
 #accountModal .logo-row {
     text-align: center;
-    margin-bottom: 14px;  /* Reduced from 20px */
+    margin-bottom: 20px;
 }
 
 #accountModal .logo-row img {
-    height: 42px;  /* Reduced from 50px */
+    height: 50px;
     display: inline-block;
 }
 
-/* Account details - tighter spacing */
+/* Account details - INCREASED SPACING BY 3 */
 #accountModal .details-row {
     display: flex;
     align-items: baseline;
-    padding: 5px 0;  /* Reduced from 8px */
-    gap: 12px;  /* Reduced from 16px */
+    padding: 12px 0;  /* Increased from 8px to 12px (+4) */
+    gap: 16px;
 }
 
 #accountModal .details-label {
-    font-size: 12px;  /* Reduced from 14px */
+    font-size: 14px;
     color: #6b7280;
     font-weight: 500;
     text-align: left;
-    min-width: 105px;  /* Reduced from 120px */
-    font-family: 'SF Pro Text', sans-serif;
+    min-width: 115px;
 }
 
 #accountModal .details-value {
-    font-size: 12px;  /* Reduced from 14px */
+    font-size: 14px;
     color: #111827;
     font-weight: 600;
     text-align: left;
     flex: 1;
     word-break: break-word;
-    font-family: 'SF Pro Text', sans-serif;
 }
 
-/* Warning text row - SMALLER TEXT */
-#accountModal .warning-row {
-    margin: 12px 0 4px 0;  /* Reduced margin */
-    width: 100%;
+/* Warning and Timer in ONE STRAIGHT LINE */
+#accountModal .warning-timer-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0 16px 0;
+    gap: 15px;
 }
 
-#accountModal .warning-text-plain {
+/* Warning text - SMALLER */
+#accountModal .warning-text-small {
     color: #dc2626;
-    font-size: 15px;  /* Made smaller */
+    font-size: 11px;  /* Smaller */
     font-weight: 500;
     background: transparent;
     padding: 0;
-    display: block;
-    text-align: left;
+    white-space: nowrap;
 }
 
-/* Timer row - smaller box */
-#accountModal .timer-row {
-    display: flex;
-    justify-content: flex-end;
-    margin: 0 0 10px 0;  /* Reduced margin */
-    width: 100%;
-}
-
-#accountModal .timer-box {
+/* Timer box - SMALLER */
+#accountModal .timer-box-small {
     background: white;
     border: 1.5px solid #16a34a;
-    border-radius: 6px;  /* Reduced from 8px */
-    padding: 3px 10px;  /* Reduced padding */
+    border-radius: 6px;
+    padding: 3px 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
 }
 
 #accountModal .timer-small {
-    font-size: 13px;  /* Reduced from 16px */
+    font-size: 14px;  /* Smaller */
     font-weight: 600;
     color: #dc2626;
-    font-family: 'SF Mono', 'SF Pro Text', monospace;
+    font-family: monospace;
     text-align: center;
     letter-spacing: 1px;
 }
 
-/* Upload button - smaller */
+/* Upload button */
 #accountModal .upload-area-small {
     background: #f9fafb;
     border: 1.5px dashed #d1d5db;
-    border-radius: 6px;  /* Reduced from 8px */
-    padding: 8px 10px;  /* Reduced from 10px 12px */
+    border-radius: 8px;
+    padding: 10px 12px;
     text-align: center;
     cursor: pointer;
-    margin: 10px 0 8px 0;  /* Reduced margin */
+    margin: 16px 0 12px 0;
     transition: all 0.2s ease;
 }
 
@@ -149,32 +123,32 @@
 }
 
 #accountModal .upload-icon-small {
-    width: 16px;  /* Reduced from 20px */
-    height: 18px;  /* Reduced from 22px */
-    margin: 0 auto 3px;
+    width: 20px;
+    height: 22px;
+    margin: 0 auto 4px;
     color: #9ca3af;
 }
 
 #accountModal .upload-text-small {
-    font-size: 11px;  /* Reduced from 12px */
+    font-size: 12px;
     color: #6b7280;
     margin: 0;
     font-weight: 500;
 }
 
 #accountModal .file-name-small {
-    font-size: 10px;  /* Reduced from 11px */
+    font-size: 11px;
     color: #16a34a;
     text-align: center;
-    margin-top: 4px;
+    margin-top: 6px;
     font-weight: 500;
 }
 
-/* Buttons - smaller */
+/* Buttons */
 #accountModal .button-group {
     display: flex;
-    gap: 12px;  /* Reduced from 16px */
-    margin-top: 14px;  /* Reduced from 20px */
+    gap: 16px;
+    margin-top: 20px;
     justify-content: center;
 }
 
@@ -182,13 +156,12 @@
     background: white;
     border: 1px solid #054c0f;
     color: #054c0f;
-    padding: 7px 22px;  /* Reduced from 10px 28px */
-    font-size: 12px;  /* Reduced from 14px */
+    padding: 10px 28px;
+    font-size: 14px;
     font-weight: 500;
-    border-radius: 6px;  /* Reduced from 8px */
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'SF Pro Text', sans-serif;
 }
 
 #accountModal .btn-cancel-account:hover {
@@ -199,38 +172,22 @@
     background: #054c0f;
     border: none;
     color: white;
-    padding: 7px 22px;  /* Reduced from 10px 28px */
-    font-size: 12px;  /* Reduced from 14px */
+    padding: 10px 28px;
+    font-size: 14px;
     font-weight: 600;
-    border-radius: 6px;  /* Reduced from 8px */
+    border-radius: 8px;
     cursor: pointer;
     transition: all 0.2s ease;
-    font-family: 'SF Pro Text', sans-serif;
-}
-/* Loader animation */
-.loader {
-    width: 40px;
-    height: 40px;
-    border: 3px solid #e5e7eb;
-    border-top: 3px solid #054c0f;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto;
 }
 
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
 #accountModal .btn-confirm:hover {
     background: #009515;
 }
 
-/* Hide any old elements */
+/* Hide old elements */
+#accountModal .warning-text,
 #accountModal .countdown-row,
 #accountModal .countdown-section,
-#accountModal .warning-text-countdown,
-#accountModal .warning-text,
 #accountModal .warning-timer-row {
     display: none;
 }
@@ -650,7 +607,7 @@
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
     </div>
 </div>
-<!-- ACCOUNT MODAL - WARNING TOP, TIMER BOTTOM RIGHT -->
+<!-- ACCOUNT MODAL - WARNING AND TIMER IN ONE LINE -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -662,17 +619,13 @@
                     <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
                 </div>
 
-                <!-- Account details - ALL LEFT ALIGNED -->
+                <!-- Account details injected here -->
                 <div id="accountDetailsBox"></div>
 
-                <!-- Warning text on its own row -->
-                <div class="warning-row">
-                    <span class="warning-text-plain"> Pay to this account within 30 minutes</span>
-                </div>
-
-                <!-- Timer box on its own row, aligned to the right -->
-                <div class="timer-row">
-                    <span class="timer-box">
+                <!-- Warning text LEFT + Timer box RIGHT - SAME LINE -->
+                <div class="warning-timer-row">
+                    <span class="warning-text-small"> Pay to this account within 30 minutes</span>
+                    <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
                 </div>
@@ -692,6 +645,11 @@
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
 <!-- LOADING MODAL - SINGLE VERSION -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
@@ -700,11 +658,7 @@
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Wait while we confirm your payment</p>
     </div>
 </div>
-            </div>
-        </div>
-    </div>
     
-</div>
     <script>
         // FULL PAYMENT DATA - NOTHING REMOVED
         const paymentData = {
@@ -1151,28 +1105,31 @@ if (receiptInputElement) {
         </div>
     `;
     
-    // Make sure receiptInput exists before doing anything
     const receiptInput = document.getElementById('receiptInput');
     const uploadedFileName = document.getElementById('uploadedFileName');
     
     if (receiptInput) {
-        // Remove old listener to avoid duplicates
         if (receiptInput._listener) {
             receiptInput.removeEventListener('change', receiptInput._listener);
         }
         
-        // Add new listener
         const listener = (e) => {
             if (uploadedFileName) {
                 uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
             }
         };
         receiptInput.addEventListener('change', listener);
-        receiptInput._listener = listener; // Store to remove later
-        
-        // Clear file input value
+        receiptInput._listener = listener;
         receiptInput.value = '';
     }
+    
+    if (uploadedFileName) {
+        uploadedFileName.innerHTML = '';
+    }
+    
+    document.getElementById('accountModal').classList.remove('hidden');
+    startCountdown(30, pinCode);
+}
     function confirmPayment() { 
     if(!document.getElementById('receiptInput').files[0]) { 
         alert('Please upload your payment receipt'); 
