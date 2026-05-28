@@ -79,19 +79,26 @@
             </li>
         </ul>
     </div>
-    <button class="lg:hidden" id="mobileMenuBtn" type="button">
-        <span class="sr-only">Open main menu</span>
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-        </svg>
-    </button>
+   <button class="lg:hidden" id="mobileMenuBtn" type="button">
+    <span class="sr-only">Open main menu</span>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+    </svg>
+</button>
+
+<!-- Cancel Button (X) -->
+<button class="lg:hidden" id="cancelMenuBtn" type="button" style="display: none;">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+</button>
+
 </nav>
 
 <!-- Mobile Menu -->
 <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 0; z-index: 9999;">
     <a href="payment.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Make payment</a>
 </div>
-
                 </div>
             </div>
             <div class="container mt-10">
@@ -183,25 +190,31 @@
         </div>
     </div>
 <script>
-    // Mobile menu toggle - SIMPLE WORKING VERSION
     var menuBtn = document.getElementById('mobileMenuBtn');
+    var cancelBtn = document.getElementById('cancelMenuBtn');
     var mobileMenu = document.getElementById('mobileMenu');
     
     if (menuBtn) {
         menuBtn.onclick = function(e) {
             e.stopPropagation();
-            if (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') {
-                mobileMenu.style.display = 'block';
-            } else {
-                mobileMenu.style.display = 'none';
-            }
+            mobileMenu.style.display = 'block';
+            menuBtn.style.display = 'none';
+            cancelBtn.style.display = 'block';
         };
         
-        // Close when clicking outside
+        cancelBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            menuBtn.style.display = 'block';
+        };
+        
         document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+            if (mobileMenu.style.display === 'block') {
+                if (!menuBtn.contains(e.target) && !cancelBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
                     mobileMenu.style.display = 'none';
+                    cancelBtn.style.display = 'none';
+                    menuBtn.style.display = 'block';
                 }
             }
         };
