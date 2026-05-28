@@ -96,7 +96,7 @@
 
 #accountModal .warning-text-plain {
     color: #dc2626;
-    font-size: 10px;  /* Made smaller */
+    font-size: 15px;  /* Made smaller */
     font-weight: 500;
     background: transparent;
     padding: 0;
@@ -207,7 +207,21 @@
     transition: all 0.2s ease;
     font-family: 'SF Pro Text', sans-serif;
 }
+/* Loader animation */
+.loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top: 3px solid #054c0f;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto;
+}
 
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 #accountModal .btn-confirm:hover {
     background: #009515;
 }
@@ -678,10 +692,18 @@
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
-                
+                <!-- LOADING MODAL - WHITE BACKGROUND WITH LOADER -->
+<div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
+    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+        <div class="loader" style="margin: 0 auto;"></div>
+        <p style="margin-top: 16px; font-size: 16px; color: black; font-weight: 500;">Please wait...</p>
+        <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Wait while we confirm your payment</p>
+    </div>
+</div>
             </div>
         </div>
     </div>
+    
 </div>
     <script>
         // FULL PAYMENT DATA - NOTHING REMOVED
@@ -912,25 +934,36 @@ if (receiptInputElement) {
         proceedBtn.disabled = !allValid;
     }
 }
-        function confirmPayment() { 
+      function confirmPayment() { 
     if(!document.getElementById('receiptInput').files[0]) { 
         alert('Please upload your payment receipt'); 
         return; 
     } 
+    
     if (countdownInterval) clearInterval(countdownInterval);
     const pinCode = currentFormData.paymentCode;
     if (paymentPinsDatabase[pinCode]) {
         paymentPinsDatabase[pinCode].status = "used";
     }
-    alert(`✅ PAYMENT CONFIRMED!\n\nItem: ${currentItem.name}\nAmount: ${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}\nPayment Code: ${currentFormData.paymentCode}\nName: ${currentFormData.fullName}\n\nReceipt uploaded successfully. Thank you for your payment!`); 
+    
+    // Close account modal
     closeAccountModal();
     
-    // ✅ GO BACK TO INDEX.HTML AFTER 2 SECONDS
-    setTimeout(() => {
-        window.location.href = 'index.html';
-    }, 2000);
+    // Show loading modal with white background
+    const loadingModal = document.getElementById('loadingModal');
+    if (loadingModal) {
+        loadingModal.style.display = 'flex';
+        
+        // After 3 seconds, redirect to index.html
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 3000);
+    } else {
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 3000);
+    }
 }
-
         function renderGrid() {
             const grid = document.getElementById('paymentGrid');
             const cat = paymentData[currentCategory];
