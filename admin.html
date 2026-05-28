@@ -621,7 +621,7 @@
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
             
-            <div id="dashboard" class="tab-content active">
+            <div id="dashboard" class="tab-content">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">6</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
@@ -638,15 +638,13 @@
                 </div>
             </div>
             
-            <div id="payment-editor" class="tab-content">
+            <div id="payment-editor" class="tab-content active">
                 <div class="category-items-container">
                     <div class="category-items-header">
-                        <h3 id="selectedCategoryTitle">Select a category from the sidebar</h3>
-                        <button class="add-item-btn" id="addItemBtn" onclick="openAddItemModal()" style="display: none;">+ Add Item</button>
+                        <h3 id="selectedCategoryTitle">SSCE Internal Items (15 items)</h3>
+                        <button class="add-item-btn" id="addItemBtn" onclick="openAddItemModal()">+ Add Item</button>
                     </div>
-                    <div id="itemsListContainer">
-                        <p style="text-align: center; color: #666; padding: 40px;">Click on a category from the sidebar to view and manage its items</p>
-                    </div>
+                    <div id="itemsListContainer"></div>
                 </div>
             </div>
             
@@ -736,7 +734,7 @@
             startPinExpiryChecker();
         }
         
-        // ============ ALL 57 PAYMENT ITEMS ============
+        // ============ ALL 57 PAYMENT ITEMS (PRE-LOADED) ============
         let categories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
             { id: 2, name: "SSCE External", color: "#145596" },
@@ -919,16 +917,10 @@
                 }
             });
             
-            document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${getItemsByCategory().length} items)`;
+            const itemCount = paymentItems.filter(i => i.categoryId === categoryId).length;
+            document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${itemCount} items)`;
             document.getElementById('addItemBtn').style.display = 'block';
             renderItemsForCategory();
-            
-            document.querySelectorAll('.menu-item, .menu-category-header').forEach(item => {
-                item.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById('payment-editor').classList.add('active');
-            document.getElementById('pageTitle').innerHTML = `Payment Editor - ${categoryName}`;
         }
         
         function getItemsByCategory() {
@@ -1007,6 +999,8 @@
             }
             
             closeModal('itemModal');
+            const itemCount = paymentItems.filter(i => i.categoryId === selectedCategoryId).length;
+            document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
             renderItemsForCategory();
             updateDashboard();
             saveToLocalStorage();
@@ -1015,6 +1009,8 @@
         function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
                 paymentItems = paymentItems.filter(i => i.id !== itemId);
+                const itemCount = paymentItems.filter(i => i.categoryId === selectedCategoryId).length;
+                document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
                 renderItemsForCategory();
                 updateDashboard();
                 saveToLocalStorage();
@@ -1087,7 +1083,19 @@
                 if (pin.status === "expired") statusClass = "badge-expired";
                 if (pin.status === "used") statusClass = "badge-used";
                 const timeLeft = getRemainingTime(pin.expiresAt);
-                return `<tr><td><code>${pin.pin}</code></td><td>${pin.bankName}</td><td>${pin.accountName}</td><td>${pin.accountNumber}</td><td><span class="badge ${statusClass}">${pin.status}</span></td><td><span class="countdown-small">${timeLeft}</span></td><td>${new Date(pin.createdAt).toLocaleDateString()}</td><td><button class="delete-btn" onclick="deletePin(${idx})">Delete</button>${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}</td></tr>`;
+                return `<tr>
+                    <td><code>${pin.pin}</code></td>
+                    <td>${pin.bankName}</td>
+                    <td>${pin.accountName}</td>
+                    <td>${pin.accountNumber}</td>
+                    <td><span class="badge ${statusClass}">${pin.status}</span></td>
+                    <td><span class="countdown-small">${timeLeft}</span></td>
+                    <td>${new Date(pin.createdAt).toLocaleDateString()}</td>
+                    <td>
+                        <button class="delete-btn" onclick="deletePin(${idx})">Delete</button>
+                        ${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}
+                    </td>
+                </tr>`;
             }).join('');
         }
         
@@ -1135,7 +1143,16 @@
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (payments.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>'; return; }
-            tbody.innerHTML = payments.map(payment => `<tr><td>${new Date(payment.date).toLocaleDateString()}</td><td>${payment.itemName}</td><td>${payment.fullName}</td><td>${payment.phone}</td><td>${payment.email}</td><td>₦${payment.amount.toLocaleString()}</td><td>${payment.paymentCode}</td><td><span class="badge badge-active">Completed</span></td></tr>`).join('');
+            tbody.innerHTML = payments.map(payment => `<tr>
+                <td>${new Date(payment.date).toLocaleDateString()}</td>
+                <td>${payment.itemName}</td>
+                <td>${payment.fullName}</td>
+                <td>${payment.phone}</td>
+                <td>${payment.email}</td>
+                <td>₦${payment.amount.toLocaleString()}</td>
+                <td>${payment.paymentCode}</td>
+                <td><span class="badge badge-active">Completed</span></td>
+            </tr>`).join('');
         }
         
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
@@ -1170,7 +1187,10 @@
                 };
             });
             
-            document.querySelector('.menu-category-header').onclick = function(e) { e.stopPropagation(); toggleCategories(); };
+            const categoryHeader = document.querySelector('.menu-category-header');
+            if (categoryHeader) {
+                categoryHeader.onclick = function(e) { e.stopPropagation(); toggleCategories(); };
+            }
             
             document.querySelectorAll('.sub-menu li').forEach(item => {
                 item.onclick = function(e) {
@@ -1179,8 +1199,16 @@
                 };
             });
             
-            // Automatically select SSCE Internal on load
+            // Make sure SSCE Internal is selected and active
             selectCategory("SSCE Internal", 1, "#0CA60C");
+            
+            // Set active class on SSCE Internal in sidebar
+            document.querySelectorAll('.sub-menu li').forEach(li => {
+                li.classList.remove('active');
+                if (li.getAttribute('data-category') === "SSCE Internal") {
+                    li.classList.add('active');
+                }
+            });
         }
         
         window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
