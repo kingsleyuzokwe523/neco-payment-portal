@@ -692,7 +692,7 @@
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
-                <!-- LOADING MODAL - WHITE BACKGROUND WITH LOADER -->
+<!-- LOADING MODAL - SINGLE VERSION -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
         <div class="loader" style="margin: 0 auto;"></div>
@@ -946,15 +946,18 @@ if (receiptInputElement) {
         paymentPinsDatabase[pinCode].status = "used";
     }
     
-    // Close account modal
     closeAccountModal();
     
-    // Show loading modal with white background
     const loadingModal = document.getElementById('loadingModal');
     if (loadingModal) {
+        // Set text for payment confirmation
+        const mainText = loadingModal.querySelector('p:first-of-type');
+        const subText = loadingModal.querySelector('p:last-of-type');
+        if (mainText) mainText.innerHTML = 'Please wait...';
+        if (subText) subText.innerHTML = 'Wait while we confirm your payment';
+        
         loadingModal.style.display = 'flex';
         
-        // After 3 seconds, redirect to index.html
         setTimeout(() => {
             window.location.href = 'index.html';
         }, 3000);
@@ -1065,12 +1068,17 @@ if (receiptInputElement) {
             document.getElementById('invoiceModal').style.display = 'block';
         });
 
-       function showLoadingAndGenerateAccount() {
+    function showLoadingAndGenerateAccount() {
     closeInvoiceModal();
     const loadingModal = document.getElementById('loadingModal');
     
-    // Safety check - only proceed if loadingModal exists
     if (loadingModal) {
+        // Set text for account generation
+        const mainText = loadingModal.querySelector('p:first-of-type');
+        const subText = loadingModal.querySelector('p:last-of-type');
+        if (mainText) mainText.innerHTML = 'Please wait...';
+        if (subText) subText.innerHTML = 'Account details are being generated';
+        
         loadingModal.style.display = 'flex';
         setTimeout(() => {
             if (loadingModal) {
@@ -1079,8 +1087,6 @@ if (receiptInputElement) {
             showAccountModal();
         }, 3000);
     } else {
-        // If loading modal doesn't exist, just show account modal directly
-        console.warn('loadingModal not found, showing account modal directly');
         showAccountModal();
     }
 }
