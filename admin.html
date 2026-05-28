@@ -17,7 +17,6 @@
             background: #f0f2f5;
         }
         
-        /* Login Container */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -99,12 +98,10 @@
             display: none;
         }
         
-        /* Dashboard */
         .dashboard-container {
             display: none;
         }
         
-        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -161,7 +158,6 @@
             height: 20px;
         }
         
-        /* Categories section with indented sub-items */
         .menu-category-header {
             padding: 12px 25px;
             display: flex;
@@ -247,7 +243,6 @@
             background: #b91c1c;
         }
         
-        /* Tab Content */
         .tab-content {
             display: none;
         }
@@ -256,7 +251,6 @@
             display: block;
         }
         
-        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -296,7 +290,6 @@
             justify-content: center;
         }
         
-        /* Table Container */
         .table-container {
             background: white;
             border-radius: 12px;
@@ -323,7 +316,6 @@
             cursor: pointer;
         }
         
-        /* Home Editor Preview */
         .home-preview {
             background: white;
             border-radius: 12px;
@@ -358,7 +350,6 @@
             outline: 1px solid #f59e0b;
         }
         
-        /* Category Items Display */
         .category-items-container {
             background: white;
             border-radius: 12px;
@@ -414,7 +405,6 @@
             color: white;
         }
         
-        /* Modals */
         .modal {
             display: none;
             position: fixed;
@@ -560,7 +550,6 @@
     </style>
 </head>
 <body>
-    <!-- Login Overlay -->
     <div class="login-overlay" id="loginOverlay">
         <div class="login-container">
             <div class="login-header">
@@ -581,7 +570,6 @@
         </div>
     </div>
     
-    <!-- Dashboard -->
     <div class="dashboard-container" id="dashboardContainer">
         <button class="menu-toggle" onclick="toggleSidebar()">☰ Menu</button>
         
@@ -591,19 +579,16 @@
                 <h3>NECO Admin Panel</h3>
             </div>
             <div class="sidebar-menu">
-                <!-- Dashboard -->
                 <div class="menu-item" data-tab="dashboard">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span>Dashboard</span>
                 </div>
                 
-                <!-- Home Editor -->
                 <div class="menu-item" data-tab="home-editor">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     <span>Home Editor</span>
                 </div>
                 
-                <!-- Categories with Sub-items -->
                 <div class="menu-category-header">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     <span>Categories</span>
@@ -627,13 +612,11 @@
                     </li>
                 </ul>
                 
-                <!-- PIN Manager -->
                 <div class="menu-item" data-tab="pin-manager">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                     <span>PIN Manager</span>
                 </div>
                 
-                <!-- View Payments -->
                 <div class="menu-item" data-tab="view-payments">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span>View Payments</span>
@@ -647,7 +630,6 @@
                 <button class="logout-btn" onclick="logout()">Logout</button>
             </div>
             
-            <!-- Dashboard Tab -->
             <div id="dashboard" class="tab-content active">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">5</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
@@ -657,7 +639,6 @@
                 </div>
             </div>
             
-            <!-- Home Editor Tab -->
             <div id="home-editor" class="tab-content">
                 <div class="home-preview">
                     <div class="preview-header"><h3>🏠 Live Home Page Editor</h3><p style="font-size:12px; color:#666;">Click on any text to edit it</p></div>
@@ -666,7 +647,6 @@
                 </div>
             </div>
             
-            <!-- Payment Editor Tab (hidden - shows when category selected) -->
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -679,7 +659,6 @@
                 </div>
             </div>
             
-            <!-- PIN Manager Tab -->
             <div id="pin-manager" class="tab-content">
                 <div class="table-container">
                     <div class="table-header"><h3>Payment PINs (One Time Use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
@@ -690,7 +669,6 @@
                 </div>
             </div>
             
-            <!-- View Payments Tab -->
             <div id="view-payments" class="tab-content">
                 <div class="table-container">
                     <div class="table-header"><h3>All Payments</h3></div>
@@ -705,7 +683,6 @@
         </div>
     </div>
     
-    <!-- Edit Text Modal -->
     <div id="editTextModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Edit Text</h3><button onclick="closeModal('editTextModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
@@ -714,7 +691,6 @@
         </div>
     </div>
     
-    <!-- Item Modal -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
@@ -726,7 +702,6 @@
         </div>
     </div>
     
-    <!-- PIN Modal -->
     <div id="pinModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
@@ -742,7 +717,6 @@
     </div>
 
     <script>
-        // ============ LOGIN ============
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "admin123";
         
@@ -771,7 +745,6 @@
             startPinExpiryChecker();
         }
         
-        // ============ DATA ============
         let categories = [
             { id: 1, name: "SSCE External", color: "#145596" },
             { id: 2, name: "BECE", color: "#642D56" },
@@ -825,7 +798,6 @@
             ]
         };
         
-        // ============ PIN EXPIRY CHECKER ============
         function startPinExpiryChecker() {
             if (expiryInterval) clearInterval(expiryInterval);
             expiryInterval = setInterval(() => {
@@ -854,7 +826,6 @@
             return `${mins}:${secs.toString().padStart(2, '0')}`;
         }
         
-        // ============ SAVE/LOAD ============
         function saveToLocalStorage() {
             localStorage.setItem('neco_categories', JSON.stringify(categories));
             localStorage.setItem('neco_paymentItems', JSON.stringify(paymentItems));
@@ -876,7 +847,6 @@
             if (savedHome) homeContent = JSON.parse(savedHome);
         }
         
-        // ============ UPDATE FUNCTIONS ============
         function updateDashboard() {
             document.getElementById('totalItems').innerText = paymentItems.length;
             const activePins = paymentPins.filter(p => p.status === "active").length;
@@ -884,7 +854,6 @@
             document.getElementById('totalPayments').innerText = payments.length;
         }
         
-        // ============ SIDEBAR FUNCTIONS ============
         let categoriesOpen = false;
         
         function toggleCategories() {
@@ -903,7 +872,6 @@
             selectedCategoryId = categoryId;
             selectedCategoryName = categoryName;
             
-            // Update active state in submenu
             document.querySelectorAll('.sub-menu li').forEach(item => {
                 item.classList.remove('active');
                 if (item.getAttribute('data-category') === categoryName) {
@@ -911,14 +879,11 @@
                 }
             });
             
-            // Update UI
             document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items`;
             document.getElementById('addItemBtn').style.display = 'block';
             
-            // Render items
             renderItemsForCategory();
             
-            // Switch to payment editor tab
             document.querySelectorAll('.menu-item, .menu-category-header').forEach(item => {
                 item.classList.remove('active');
             });
@@ -963,7 +928,6 @@
             `;
         }
         
-        // ============ ITEM CRUD ============
         function openAddItemModal() {
             if (!selectedCategoryId) {
                 alert('Please select a category first');
@@ -1018,7 +982,6 @@
             }
         }
         
-        // ============ PIN CRUD ============
         function generateRandomPin() {
             const random = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById('pinCode').value = random;
@@ -1083,7 +1046,7 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (paymentPins.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></td>';
                 return;
             }
             tbody.innerHTML = paymentPins.map((pin, idx) => {
@@ -1107,7 +1070,6 @@
             }).join('');
         }
         
-        // ============ HOME EDITOR ============
         function loadHomePreview() {
             const container = document.getElementById('homePreview');
             container.innerHTML = `
@@ -1171,7 +1133,6 @@
             alert('✅ Home page changes saved!'); 
         }
         
-        // ============ VIEW PAYMENTS ============
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (payments.length === 0) {
@@ -1192,7 +1153,6 @@
             `).join('');
         }
         
-        // ============ UTILITIES ============
         function closeModal(id) { 
             document.getElementById(id).style.display = 'none'; 
         }
@@ -1206,7 +1166,19 @@
             document.getElementById('sidebar').classList.toggle('open'); 
         }
         
-        // ============ INITIALIZATION ============
+        function showTab(tabId, title) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('pageTitle').innerHTML = title;
+            
+            if (tabId === 'pin-manager') renderPins();
+            if (tabId === 'view-payments') renderPayments();
+            if (tabId === 'home-editor') loadHomePreview();
+            if (tabId === 'dashboard') updateDashboard();
+        }
+        
         function initDashboard() {
             loadFromLocalStorage();
             updateDashboard();
@@ -1214,59 +1186,20 @@
             renderPayments();
             loadHomePreview();
             
-            // Setup Dashboard menu click
-            const dashboardItem = document.querySelector('.menu-item[data-tab="dashboard"]');
-            if (dashboardItem) {
-                dashboardItem.addEventListener('click', function() {
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    let title = this.querySelector('span').innerHTML;
+                    
+                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => {
+                        i.classList.remove('active');
+                    });
                     this.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                    document.getElementById('dashboard').classList.add('active');
-                    document.getElementById('pageTitle').innerHTML = 'Dashboard';
-                    updateDashboard();
+                    
+                    showTab(tabId, title);
                 });
-            }
+            });
             
-            // Setup Home Editor menu click
-            const homeEditorItem = document.querySelector('.menu-item[data-tab="home-editor"]');
-            if (homeEditorItem) {
-                homeEditorItem.addEventListener('click', function() {
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                    document.getElementById('home-editor').classList.add('active');
-                    document.getElementById('pageTitle').innerHTML = 'Home Editor';
-                    loadHomePreview();
-                });
-            }
-            
-            // Setup PIN Manager menu click
-            const pinManagerItem = document.querySelector('.menu-item[data-tab="pin-manager"]');
-            if (pinManagerItem) {
-                pinManagerItem.addEventListener('click', function() {
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                    document.getElementById('pin-manager').classList.add('active');
-                    document.getElementById('pageTitle').innerHTML = 'PIN Manager';
-                    renderPins();
-                });
-            }
-            
-            // Setup View Payments menu click
-            const viewPaymentsItem = document.querySelector('.menu-item[data-tab="view-payments"]');
-            if (viewPaymentsItem) {
-                viewPaymentsItem.addEventListener('click', function() {
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                    document.getElementById('view-payments').classList.add('active');
-                    document.getElementById('pageTitle').innerHTML = 'View Payments';
-                    renderPayments();
-                });
-            }
-            
-            // Setup Categories header click (to expand/collapse)
             const categoryHeader = document.querySelector('.menu-category-header');
             if (categoryHeader) {
                 categoryHeader.addEventListener('click', function(e) {
@@ -1275,7 +1208,6 @@
                 });
             }
             
-            // Setup submenu category clicks
             document.querySelectorAll('.sub-menu li').forEach(item => {
                 item.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -1286,7 +1218,6 @@
                 });
             });
             
-            // Select first category by default
             if (categories.length > 0 && !selectedCategoryId) {
                 const firstCat = categories[0];
                 selectCategory(firstCat.name, firstCat.id, firstCat.color);
