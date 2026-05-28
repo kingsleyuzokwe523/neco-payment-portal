@@ -604,25 +604,25 @@
                 </div>
                 
                 <!-- Categories with Sub-items -->
-                <div class="menu-category-header" onclick="toggleCategories()">
+                <div class="menu-category-header">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     <span>Categories</span>
                     <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
                 <ul class="sub-menu" id="categorySubMenu">
-                    <li data-category="SSCE External" data-color="#145596" onclick="selectCategory('SSCE External', 1, '#145596')">
+                    <li data-category="SSCE External" data-id="1" data-color="#145596">
                         <span class="category-color-dot" style="background: #145596;"></span> SSCE External
                     </li>
-                    <li data-category="BECE" data-color="#642D56" onclick="selectCategory('BECE', 2, '#642D56')">
+                    <li data-category="BECE" data-id="2" data-color="#642D56">
                         <span class="category-color-dot" style="background: #642D56;"></span> BECE
                     </li>
-                    <li data-category="NCEE" data-color="#1887EB" onclick="selectCategory('NCEE', 3, '#1887EB')">
+                    <li data-category="NCEE" data-id="3" data-color="#1887EB">
                         <span class="category-color-dot" style="background: #1887EB;"></span> NCEE
                     </li>
-                    <li data-category="Gifted" data-color="#24809C" onclick="selectCategory('Gifted', 4, '#24809C')">
+                    <li data-category="Gifted" data-id="4" data-color="#24809C">
                         <span class="category-color-dot" style="background: #24809C;"></span> Gifted
                     </li>
-                    <li data-category="Others" data-color="#36454F" onclick="selectCategory('Others', 5, '#36454F')">
+                    <li data-category="Others" data-id="5" data-color="#36454F">
                         <span class="category-color-dot" style="background: #36454F;"></span> Others
                     </li>
                 </ul>
@@ -885,14 +885,17 @@
         }
         
         // ============ SIDEBAR FUNCTIONS ============
+        let categoriesOpen = false;
+        
         function toggleCategories() {
             const subMenu = document.getElementById('categorySubMenu');
             const arrow = document.getElementById('categoryArrow');
-            subMenu.classList.toggle('open');
             if (subMenu.classList.contains('open')) {
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
+                subMenu.classList.remove('open');
                 arrow.style.transform = 'rotate(0deg)';
+            } else {
+                subMenu.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
             }
         }
         
@@ -1211,21 +1214,83 @@
             renderPayments();
             loadHomePreview();
             
-            // Setup menu navigation
-            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
-                item.addEventListener('click', () => {
-                    const tabId = item.getAttribute('data-tab');
+            // Setup Dashboard menu click
+            const dashboardItem = document.querySelector('.menu-item[data-tab="dashboard"]');
+            if (dashboardItem) {
+                dashboardItem.addEventListener('click', function() {
                     document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
+                    this.classList.add('active');
                     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-                    document.getElementById(tabId).classList.add('active');
-                    document.getElementById('pageTitle').innerHTML = item.querySelector('span').innerHTML;
-                    
-                    if (tabId === 'pin-manager') renderPins();
-                    if (tabId === 'view-payments') renderPayments();
-                    if (tabId === 'home-editor') loadHomePreview();
+                    document.getElementById('dashboard').classList.add('active');
+                    document.getElementById('pageTitle').innerHTML = 'Dashboard';
+                    updateDashboard();
+                });
+            }
+            
+            // Setup Home Editor menu click
+            const homeEditorItem = document.querySelector('.menu-item[data-tab="home-editor"]');
+            if (homeEditorItem) {
+                homeEditorItem.addEventListener('click', function() {
+                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById('home-editor').classList.add('active');
+                    document.getElementById('pageTitle').innerHTML = 'Home Editor';
+                    loadHomePreview();
+                });
+            }
+            
+            // Setup PIN Manager menu click
+            const pinManagerItem = document.querySelector('.menu-item[data-tab="pin-manager"]');
+            if (pinManagerItem) {
+                pinManagerItem.addEventListener('click', function() {
+                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById('pin-manager').classList.add('active');
+                    document.getElementById('pageTitle').innerHTML = 'PIN Manager';
+                    renderPins();
+                });
+            }
+            
+            // Setup View Payments menu click
+            const viewPaymentsItem = document.querySelector('.menu-item[data-tab="view-payments"]');
+            if (viewPaymentsItem) {
+                viewPaymentsItem.addEventListener('click', function() {
+                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+                    document.getElementById('view-payments').classList.add('active');
+                    document.getElementById('pageTitle').innerHTML = 'View Payments';
+                    renderPayments();
+                });
+            }
+            
+            // Setup Categories header click (to expand/collapse)
+            const categoryHeader = document.querySelector('.menu-category-header');
+            if (categoryHeader) {
+                categoryHeader.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleCategories();
+                });
+            }
+            
+            // Setup submenu category clicks
+            document.querySelectorAll('.sub-menu li').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const categoryName = this.getAttribute('data-category');
+                    const categoryId = parseInt(this.getAttribute('data-id'));
+                    const color = this.getAttribute('data-color');
+                    selectCategory(categoryName, categoryId, color);
                 });
             });
+            
+            // Select first category by default
+            if (categories.length > 0 && !selectedCategoryId) {
+                const firstCat = categories[0];
+                selectCategory(firstCat.name, firstCat.id, firstCat.color);
+            }
         }
         
         window.onclick = function(e) { 
