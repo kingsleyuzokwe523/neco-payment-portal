@@ -14,11 +14,11 @@
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fb;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f0f2f5;
         }
         
-        /* Modern Login */
+        /* Login */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -34,11 +34,11 @@
         
         .login-container {
             background: white;
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 40px;
             width: 90%;
             max-width: 400px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
         }
         
         .login-header {
@@ -53,6 +53,7 @@
         
         .login-header h2 {
             color: #054c0f;
+            font-size: 24px;
         }
         
         .form-group {
@@ -68,10 +69,17 @@
         
         .form-group input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            font-size: 16px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #054c0f;
+            box-shadow: 0 0 0 3px rgba(5, 76, 15, 0.1);
         }
         
         .login-btn {
@@ -80,21 +88,23 @@
             background: #054c0f;
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.2s;
         }
         
         .login-btn:hover {
             background: #009515;
+            transform: translateY(-1px);
         }
         
         .error-msg {
             background: #fee2e2;
             color: #dc2626;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 12px;
+            border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
             display: none;
@@ -104,48 +114,49 @@
             display: none;
         }
         
-        /* Modern Sidebar */
+        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
             top: 0;
             width: 280px;
             height: 100%;
-            background: linear-gradient(135deg, #054c0f 0%, #009515 100%);
+            background: linear-gradient(180deg, #054c0f 0%, #0a7a1a 100%);
             color: white;
             z-index: 100;
             overflow-y: auto;
         }
         
         .sidebar-header {
-            padding: 25px;
+            padding: 24px;
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
         .sidebar-header img {
-            height: 50px;
+            height: 48px;
             margin-bottom: 10px;
         }
         
         .sidebar-header h3 {
             font-size: 14px;
             opacity: 0.8;
+            font-weight: 400;
         }
         
         .sidebar-menu {
-            padding: 20px 0;
+            padding: 20px 12px;
         }
         
         .menu-item {
-            padding: 12px 25px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            transition: all 0.3s;
-            margin: 5px 15px;
+            transition: all 0.2s;
             border-radius: 12px;
+            margin-bottom: 4px;
         }
         
         .menu-item:hover {
@@ -162,13 +173,13 @@
         }
         
         .menu-category-header {
-            padding: 12px 25px;
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
             cursor: pointer;
-            margin: 5px 15px;
             border-radius: 12px;
+            margin-bottom: 4px;
         }
         
         .menu-category-header:hover {
@@ -176,26 +187,22 @@
         }
         
         .sub-menu {
-            list-style: none;
-            padding-left: 30px;
+            padding-left: 32px;
             display: none;
-            margin: 5px 0;
+            margin: 8px 0;
         }
         
         .sub-menu.open {
             display: block;
         }
         
-        /* Category List */
         #categoryList {
             list-style: none;
-            padding-left: 0;
-            margin: 5px 0;
         }
         
         #categoryList li {
-            padding: 10px 15px;
-            margin: 3px 0;
+            padding: 10px 12px;
+            margin: 4px 0;
             border-radius: 10px;
             cursor: pointer;
             display: flex;
@@ -206,8 +213,7 @@
         }
         
         #categoryList li:hover {
-            background: rgba(255,255,255,0.2);
-            transform: translateX(5px);
+            background: rgba(255,255,255,0.18);
         }
         
         #categoryList li.active {
@@ -215,23 +221,21 @@
         }
         
         .category-color-dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            display: inline-block;
         }
         
         .category-name {
             flex: 1;
             font-size: 13px;
-            font-weight: 500;
         }
         
         .cat-delete-btn {
             background: rgba(239, 68, 68, 0.8);
             border: none;
             color: white;
-            padding: 4px 10px;
+            padding: 4px 8px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 11px;
@@ -243,15 +247,15 @@
         
         .main-content {
             margin-left: 280px;
-            padding: 20px;
+            padding: 24px;
             min-height: 100vh;
         }
         
         .top-bar {
             background: white;
             border-radius: 16px;
-            padding: 15px 25px;
-            margin-bottom: 25px;
+            padding: 16px 24px;
+            margin-bottom: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -260,6 +264,7 @@
         
         .top-bar h2 {
             color: #054c0f;
+            font-size: 20px;
         }
         
         .logout-btn {
@@ -269,6 +274,7 @@
             padding: 8px 20px;
             border-radius: 10px;
             cursor: pointer;
+            font-weight: 500;
         }
         
         .logout-btn:hover {
@@ -293,12 +299,17 @@
         
         .stat-card {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
         }
         
         .stat-info h4 {
@@ -309,15 +320,15 @@
         
         .stat-info .number {
             font-size: 32px;
-            font-weight: bold;
+            font-weight: 700;
             color: #054c0f;
         }
         
         .stat-icon {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             background: #e8f5e9;
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -326,8 +337,8 @@
         /* Tables */
         .table-container {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
             overflow-x: auto;
         }
@@ -345,22 +356,28 @@
             background: #054c0f;
             color: white;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
             cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .add-btn:hover {
+            background: #009515;
         }
         
         /* Home Editor */
         .home-preview {
             background: white;
-            border-radius: 16px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         
         .preview-header {
             background: #f9fafb;
-            padding: 15px 20px;
+            padding: 16px 24px;
             border-bottom: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
@@ -368,7 +385,7 @@
         }
         
         .preview-frame {
-            padding: 20px;
+            padding: 24px;
             max-height: 600px;
             overflow-y: auto;
         }
@@ -377,7 +394,7 @@
             cursor: pointer;
             transition: all 0.2s;
             padding: 8px;
-            border-radius: 8px;
+            border-radius: 10px;
         }
         
         .editable-element:hover {
@@ -388,8 +405,8 @@
         /* Payment Items */
         .category-items-container {
             background: white;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 20px;
+            padding: 24px;
             box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         
@@ -398,12 +415,23 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
-            padding-bottom: 15px;
+            padding-bottom: 16px;
             border-bottom: 2px solid #e5e7eb;
         }
         
         .category-items-header h3 {
             color: #054c0f;
+            font-size: 18px;
+        }
+        
+        .add-item-btn {
+            background: #054c0f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
         }
         
         .items-table {
@@ -412,7 +440,7 @@
         }
         
         .items-table th, .items-table td {
-            padding: 12px;
+            padding: 14px 12px;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
         }
@@ -424,11 +452,12 @@
         }
         
         .edit-btn, .delete-btn {
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 6px 14px;
+            border-radius: 8px;
             cursor: pointer;
-            margin: 0 3px;
+            margin: 0 4px;
             border: none;
+            font-weight: 500;
         }
         
         .edit-btn {
@@ -441,7 +470,7 @@
             color: white;
         }
         
-        /* Modals */
+        /* Modern PIN Modal */
         .modal {
             display: none;
             position: fixed;
@@ -450,6 +479,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -457,58 +487,124 @@
         
         .modal-content {
             background: white;
-            border-radius: 16px;
+            border-radius: 28px;
             width: 90%;
-            max-width: 450px;
+            max-width: 500px;
             max-height: 85vh;
             overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .modal-header {
-            padding: 20px;
+            padding: 24px 24px 16px 24px;
             border-bottom: 1px solid #e5e7eb;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #054c0f;
+        }
+        
+        .modal-header button {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #9ca3af;
+        }
+        
         .modal-body {
-            padding: 20px;
+            padding: 24px;
         }
         
         .modal-footer {
-            padding: 15px 20px;
+            padding: 16px 24px 24px 24px;
             border-top: 1px solid #e5e7eb;
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
+            gap: 12px;
         }
         
         .neco-form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         
         .neco-form-group label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: 500;
-            font-size: 13px;
+            margin-bottom: 8px;
+            font-weight: 600;
+            font-size: 14px;
             color: #374151;
         }
         
         .neco-form-group input, .neco-form-group select {
             width: 100%;
-            padding: 10px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
             background: #f9fafb;
             font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .neco-form-group input:focus, .neco-form-group select:focus {
+            outline: none;
+            border-color: #054c0f;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(5, 76, 15, 0.1);
+        }
+        
+        .neco-form-group small {
+            display: block;
+            margin-top: 6px;
+            font-size: 11px;
+            color: #6b7280;
+        }
+        
+        .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-save {
+            background: #054c0f;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        
+        .btn-save:hover {
+            background: #009515;
         }
         
         .badge {
-            padding: 4px 10px;
+            padding: 4px 12px;
             border-radius: 20px;
-            font-size: 11px;
+            font-size: 12px;
+            font-weight: 500;
         }
         
         .badge-active {
@@ -530,21 +626,13 @@
             background: #054c0f;
             color: white;
             border: none;
-            padding: 12px 24px;
-            border-radius: 10px;
+            padding: 14px 24px;
+            border-radius: 12px;
             cursor: pointer;
             margin-top: 20px;
             font-size: 16px;
+            font-weight: 600;
             width: 100%;
-        }
-        
-        .add-item-btn {
-            background: #054c0f;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            cursor: pointer;
         }
         
         .mobile-overlay {
@@ -588,9 +676,26 @@
             background: #054c0f;
             color: white;
             border: none;
-            padding: 10px;
-            border-radius: 8px;
+            padding: 10px 14px;
+            border-radius: 10px;
             cursor: pointer;
+        }
+        
+        /* Generate PIN button in modal */
+        .generate-pin-btn {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+        
+        .generate-pin-btn:hover {
+            background: #4b5563;
         }
     </style>
 </head>
@@ -713,37 +818,61 @@
         </div>
     </div>
     
+    <!-- Edit Text Modal -->
     <div id="editTextModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h3>Edit Text</h3><button onclick="closeModal('editTextModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
-            <div class="modal-body"><textarea id="editTextContent" rows="5" style="width:100%;padding:10px;"></textarea></div>
-            <div class="modal-footer"><button onclick="closeModal('editTextModal')">Cancel</button><button onclick="saveTextEdit()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Save</button></div>
+            <div class="modal-header"><h3>Edit Text</h3><button onclick="closeModal('editTextModal')">&times;</button></div>
+            <div class="modal-body"><textarea id="editTextContent" rows="5" style="width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:12px;"></textarea></div>
+            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('editTextModal')">Cancel</button><button class="btn-save" onclick="saveTextEdit()">Save</button></div>
         </div>
     </div>
     
+    <!-- Item Modal -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
+            <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')">&times;</button></div>
             <div class="modal-body">
                 <div class="neco-form-group"><label>Item Name</label><input type="text" id="itemName" placeholder="e.g., Four Figure Table"></div>
-                <div class="neco-form-group"><label>Amount (₦) <span style="color:#666; font-size:11px;">(Leave empty for "Enter amount")</span></label><input type="number" id="itemAmount" placeholder="e.g., 500"></div>
-                <div class="neco-form-group"><label>Category</label><select id="itemCategory" class="block w-full rounded-md border bg-[#F2F2F2] px-4 py-2.5"></select></div>
+                <div class="neco-form-group"><label>Amount (₦)</label><input type="number" id="itemAmount" placeholder="Leave empty for custom amount"></div>
+                <div class="neco-form-group"><label>Category</label><select id="itemCategory"></select></div>
             </div>
-            <div class="modal-footer"><button onclick="closeModal('itemModal')">Cancel</button><button onclick="saveItem()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Save</button></div>
+            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('itemModal')">Cancel</button><button class="btn-save" onclick="saveItem()">Save</button></div>
         </div>
     </div>
     
+    <!-- PIN Modal - Modern Design -->
     <div id="pinModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')" style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button></div>
+            <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
             <div class="modal-body">
-                <div class="neco-form-group"><label>PIN Code (Numbers Only)</label><input type="text" id="pinCode" placeholder="e.g., 1234"><button onclick="generateRandomPin()" style="margin-top:5px;background:#6b7280;color:white;border:none;padding:5px;border-radius:4px;width:100%;">Generate Random PIN</button></div>
-                <div class="neco-form-group"><label>Bank Name</label><input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria"></div>
-                <div class="neco-form-group"><label>Account Name</label><input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services"></div>
-                <div class="neco-form-group"><label>Account Number</label><input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10"><input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10"></div>
-                <div class="neco-form-group"><label>Bank Code (Optional)</label><input type="text" id="pinBankCode" placeholder="e.g., 011"></div>
+                <div class="neco-form-group">
+                    <label>PIN Code (Numbers Only)</label>
+                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric">
+                    <button class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
+                    <small>PIN will expire 30 minutes after generation</small>
+                </div>
+                <div class="neco-form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria">
+                </div>
+                <div class="neco-form-group">
+                    <label>Account Name</label>
+                    <input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services">
+                </div>
+                <div class="neco-form-group">
+                    <label>Account Number (10 digits only)</label>
+                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric">
+                    <small>Only numbers allowed. Must be exactly 10 digits.</small>
+                </div>
+                <div class="neco-form-group">
+                    <label>Bank Code (Optional)</label>
+                    <input type="text" id="pinBankCode" placeholder="e.g., 011">
+                </div>
             </div>
-            <div class="modal-footer"><button onclick="closeModal('pinModal')">Cancel</button><button onclick="savePin()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Generate PIN</button></div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button>
+                <button class="btn-save" onclick="savePin()">Generate PIN</button>
+            </div>
         </div>
     </div>
 
@@ -853,6 +982,12 @@
                         await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
                     }
                 }
+                if (pin.status === 'active' && pin.expires_at) {
+                    const expiryTime = new Date(pin.expires_at);
+                    if (now > expiryTime) {
+                        await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
+                    }
+                }
             }
             const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
             if (data) currentPaymentPins = data;
@@ -910,9 +1045,10 @@
             let html = '';
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
+                const isActive = selectedCategoryId === cat.id;
                 html += `
-                    <li class="${selectedCategoryId === cat.id ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}', true, event)">
-                        <span class="category-color-dot" style="background: ${cat.color};"></span>
+                    <li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}', true, event)">
+                        <span class="category-color-dot" style="background: ${cat.color}; width: 10px; height: 10px; border-radius: 50%; display: inline-block;"></span>
                         <span class="category-name">${cat.name}</span>
                         <button class="cat-delete-btn" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
                     </li>
@@ -974,7 +1110,7 @@
                     </tr>
                 `;
             }
-            tableHtml += '</tbody><table>';
+            tableHtml += '</tbody></table>';
             container.innerHTML = tableHtml;
         }
         
@@ -1109,14 +1245,25 @@
             let accountNumber = document.getElementById('pinAccountNumber').value;
             const bankCode = document.getElementById('pinBankCode').value;
             
-            // Validate account number - only 10 digits
-            accountNumber = accountNumber.replace(/\D/g, '');
-            if (accountNumber.length !== 10) {
-                alert('Account Number must be exactly 10 digits');
+            // Validate PIN - numbers only
+            if (!/^\d+$/.test(pin)) {
+                alert('PIN Code must contain only numbers');
                 return;
             }
             
-            if (!pin || !bankName || !accountName) {
+            if (pin.length < 4 || pin.length > 6) {
+                alert('PIN Code must be 4-6 digits');
+                return;
+            }
+            
+            // Validate Account Number - exactly 10 digits, numbers only
+            accountNumber = accountNumber.replace(/\D/g, '');
+            if (accountNumber.length !== 10) {
+                alert('Account Number must be exactly 10 digits (numbers only)');
+                return;
+            }
+            
+            if (!bankName || !accountName) {
                 alert('Please fill all required fields');
                 return;
             }
@@ -1151,7 +1298,7 @@
                 renderPins();
                 updateDashboard();
                 triggerSync();
-                alert(`PIN ${pin} generated! It will expire in 30 minutes.`);
+                alert(`✅ PIN ${pin} generated successfully! It will expire in 30 minutes.`);
             } catch (err) {
                 alert('Error creating PIN: ' + err.message);
             }
@@ -1172,7 +1319,7 @@
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
             if (currentPaymentPins.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td><tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>';
                 return;
             }
             
@@ -1216,21 +1363,21 @@
             for (let i = 0; i < homeContent.steps.length; i++) {
                 const step = homeContent.steps[i];
                 stepsHtml += `
-                    <div style="background:#f5f5f5; border-radius:12px; padding:20px; text-align:center;">
-                        <div class="editable-element" onclick="openTextEditor('step_${i}_title')"><h4>${step.title}</h4></div>
+                    <div style="background:#f5f5f5; border-radius:16px; padding:24px; text-align:center;">
+                        <div class="editable-element" onclick="openTextEditor('step_${i}_title')"><h4 style="margin-bottom:8px;">${step.title}</h4></div>
                         <div class="editable-element" onclick="openTextEditor('step_${i}_desc')"><p style="color:#666; font-size:13px;">${step.description}</p></div>
                     </div>
                 `;
             }
             
             container.innerHTML = `<div style="max-width:1200px; margin:0 auto;">
-                <div style="background:linear-gradient(135deg, #054c0f 0%, #009515 100%); padding:60px 40px; text-align:center; border-radius:12px;">
-                    <div class="editable-element" onclick="openTextEditor('heroNote')"><p style="background:rgba(255,255,255,0.2); display:inline-block; padding:5px 15px; border-radius:30px; color:white;">${homeContent.heroNote}</p></div>
+                <div style="background:linear-gradient(135deg, #054c0f 0%, #009515 100%); padding:60px 40px; text-align:center; border-radius:20px;">
+                    <div class="editable-element" onclick="openTextEditor('heroNote')"><p style="background:rgba(255,255,255,0.2); display:inline-block; padding:8px 20px; border-radius:40px; color:white;">${homeContent.heroNote}</p></div>
                     <div class="editable-element" onclick="openTextEditor('heroTitle')"><h1 style="font-size:48px; margin-top:20px; color:white;">${homeContent.heroTitle}</h1></div>
                 </div>
                 <div style="padding:40px;">
-                    <div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px;">${homeContent.howItWorksTitle}</h2></div>
-                    <div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px;">${homeContent.footerNote}</p></div>
+                    <div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px; margin-bottom:20px;">${homeContent.howItWorksTitle}</h2></div>
+                    <div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px; line-height:1.6;">${homeContent.footerNote}</p></div>
                     <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">${stepsHtml}</div>
                 </div>
             </div>`;
