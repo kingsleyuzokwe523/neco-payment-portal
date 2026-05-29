@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
+    <!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Database Config -->
+<script src="supabase-config.js"></script>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
     <style>
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
@@ -817,73 +821,30 @@
     </div>
 </div>
 <script>
-    // FULL PAYMENT DATA
-    const paymentData = {
-        "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
-            { name: "Four Figure Table", amount: 500 },
-            { name: "Non-Validation", amount: 10000 },
-            { name: "Syllabus", amount: 2000 },
-            { name: "Photo Album", amount: 2700 },
-            { name: "Late Ca3 Upload", amount: 40000 },
-            { name: "Remarking Ssce (i)", amount: 20000 },
-            { name: "Unviable Centre Fee", amount: 70000 },
-            { name: "Late Registration Fee", amount: 5000 },
-            { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
-            { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
-            { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
-            { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
-            { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
-            { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
-            { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
-        ]},
-        "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
-            { name: "Four Figure Table", amount: 500 },
-            { name: "Walk-in", amount: 43000 },
-            { name: "Syllabus", amount: 2000 },
-            { name: "Result Slips", amount: 1600 },
-            { name: "Remarking Ssce Ext", amount: 20000 },
-            { name: "Collection Of Certificate", amount: 500 },
-            { name: "Non-Validation", amount: 10000 }
-        ]},
-        "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
-            { name: "Remarking Bece", amount: 15000 },
-            { name: "Non-Validation", amount: 10000 },
-            { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
-            { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
-            { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
-            { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
-            { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
-            { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
-        ]},
-        "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [
-            { name: "Non-Validation", amount: 4000 }
-        ]},
-        "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [
-            { name: "Non-Validation", amount: 4000 }
-        ]},
-        "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
-            { name: "Reprint Of Certificate", amount: 50000 },
-            { name: "Change Of School Name", amount: 15000 },
-            { name: "Reprint Of School Results Per Candidate", amount: 400 },
-            { name: "Staff Identity Card", amount: 1000 },
-            { name: "Result Checker (token)", amount: 1000 },
-            { name: "Examination Bag", amount: 15000 },
-            { name: "Confirmation Of Result", amount: 10000 },
-            { name: "E-verification Of Result", amount: 5000 }
-        ]}
-    };
-
+    // ============ SUPABASE CONNECTION ============
+    let supabaseClient = null;
+    let NECO_DB = null;
+    
+    function waitForDB() {
+        return new Promise((resolve) => {
+            if (typeof window.NECO_DB !== 'undefined' && window.NECO_DB) {
+                resolve(window.NECO_DB);
+            } else {
+                setTimeout(() => resolve(waitForDB()), 100);
+            }
+        });
+    }
+    
+    // ============ GLOBAL VARIABLES ============
     let currentCategory = "SSCE Internal";
     let currentItem = null;
     let currentValidatedAccount = null;
     let currentFormData = {};
     let isCodeValid = false;
     let countdownInterval = null;
-
-    let paymentPinsDatabase = {
-        "1234": { bankName: "First Bank of Nigeria", accountName: "NECO Correction Services", accountNumber: "2024567890", bankCode: "011", status: "active", expiresAt: null }
-    };
-
+    let paymentData = {};
+    
+    // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
         return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
     }
@@ -896,28 +857,50 @@
         return quantity && parseInt(quantity) > 0;
     }
     
-    function validatePaymentCode(code) { 
-        const pin = paymentPinsDatabase[code.trim()];
-        if (pin && pin.status === "active") {
-            return { valid: true, accountDetails: pin };
-        }
-        return { valid: false, accountDetails: null }; 
-    }
-
-    // File upload listener
-    const receiptInputElement = document.getElementById('receiptInput');
-    if (receiptInputElement) {
-        receiptInputElement.addEventListener('change', (e) => { 
-            const fileNameElem = document.getElementById('uploadedFileName');
-            if (fileNameElem) {
-                fileNameElem.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+    // ============ LOAD PAYMENT DATA FROM SUPABASE ============
+    async function loadPaymentData() {
+        try {
+            const db = await waitForDB();
+            const categories = await db.getCategories();
+            const paymentItems = await db.getPaymentItems();
+            
+            const newPaymentData = {};
+            for (const category of categories) {
+                newPaymentData[category.name] = {
+                    color: category.color,
+                    bgColor: category.color,
+                    items: paymentItems.filter(item => item.category_id === category.id)
+                };
             }
-        });
+            
+            Object.assign(paymentData, newPaymentData);
+            console.log('✅ Payment data loaded from Supabase');
+            renderGrid();
+        } catch (error) {
+            console.error('Error loading payment data:', error);
+        }
     }
-
-    function checkFormValidation() {
+    
+    // ============ PIN VALIDATION FROM SUPABASE ============
+    async function validatePaymentCode(code) {
+        if (!code || code.trim() === '') {
+            return { valid: false, accountDetails: null };
+        }
+        
+        try {
+            const db = await waitForDB();
+            const result = await db.validatePin(code.trim());
+            return result;
+        } catch (error) {
+            console.error('PIN validation error:', error);
+            return { valid: false, accountDetails: null };
+        }
+    }
+    
+    // ============ CHECK FORM VALIDATION ============
+    async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
-        const validation = validatePaymentCode(code);
+        const validation = await validatePaymentCode(code);
         isCodeValid = validation.valid;
         currentValidatedAccount = validation.accountDetails;
         
@@ -940,26 +923,15 @@
         let isEmailProvided = email && email.trim() !== '';
         let isQuantityProvided = quantity && quantity.toString().trim() !== '';
         
+        // Show/hide error messages
         const fullNameError = document.getElementById('fullNameError');
-        if (!isFullNameValid) {
-            fullNameError.style.display = 'block';
-        } else {
-            fullNameError.style.display = 'none';
-        }
+        fullNameError.style.display = !isFullNameValid ? 'block' : 'none';
         
         const descError = document.getElementById('descriptionError');
-        if (!isDescriptionValid) {
-            descError.style.display = 'block';
-        } else {
-            descError.style.display = 'none';
-        }
+        descError.style.display = !isDescriptionValid ? 'block' : 'none';
         
         const amountError = document.getElementById('amountError');
-        if (!isAmountValid) {
-            amountError.style.display = 'block';
-        } else {
-            amountError.style.display = 'none';
-        }
+        amountError.style.display = !isAmountValid ? 'block' : 'none';
         
         const codeError = document.getElementById('codeError');
         const codeRequiredError = document.getElementById('codeRequiredError');
@@ -1020,11 +992,13 @@
             proceedBtn.disabled = !allValid;
         }
     }
-
+    
+    // ============ RENDER PAYMENT GRID ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
-        if (!cat) return;
+        if (!cat || !cat.items) return;
+        
         grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
             return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
@@ -1044,13 +1018,19 @@
                     </div>`;
         }).join('');
     }
-
+    
+    // ============ OPEN PAYMENT MODAL ============
     function openPaymentModal(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
         const amountInput = document.getElementById('amount');
-        if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
-        else { amountInput.value = ''; amountInput.readOnly = false; }
+        if (item.amount) { 
+            amountInput.value = item.amount; 
+            amountInput.readOnly = true; 
+        } else { 
+            amountInput.value = ''; 
+            amountInput.readOnly = false; 
+        }
         document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         
         document.getElementById('paymentCode').value = ''; 
@@ -1065,6 +1045,7 @@
         document.getElementById('phoneError').style.display = 'none';
         document.getElementById('emailError').style.display = 'none';
         document.getElementById('quantityError').style.display = 'none';
+        document.getElementById('codeRequiredError').style.display = 'none';
         
         document.getElementById('proceedBtn').disabled = true;
         document.getElementById('paymentModal').classList.remove('hidden');
@@ -1078,6 +1059,7 @@
         });
     }
     
+    // ============ CLOSE MODALS ============
     function closePaymentModal() { 
         document.getElementById('paymentModal').classList.add('hidden'); 
     }
@@ -1090,11 +1072,15 @@
         if (countdownInterval) clearInterval(countdownInterval);
         document.getElementById('accountModal').classList.add('hidden'); 
     }
-
-    document.getElementById('paymentFormModal').addEventListener('submit', (e) => {
+    
+    // ============ SUBMIT PAYMENT FORM ============
+    document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!isCodeValid) { alert('Please enter a valid payment code (default: 1234)'); return; }
+        if (!isCodeValid) { 
+            alert('Please enter a valid payment code'); 
+            return; 
+        }
         
         const fullName = document.getElementById('fullName').value;
         const phone = document.getElementById('phone').value;
@@ -1113,7 +1099,10 @@
         const serviceCharge = 50;
         const totalAmount = (amount + serviceCharge) * quantity;
         
-        currentFormData = { paymentCode: document.getElementById('paymentCode').value, fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount };
+        currentFormData = { 
+            paymentCode: document.getElementById('paymentCode').value, 
+            fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount 
+        };
         
         document.getElementById('invoiceItemName').innerText = currentItem.name;
         document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
@@ -1124,7 +1113,8 @@
         closePaymentModal();
         document.getElementById('invoiceModal').style.display = 'block';
     });
-
+    
+    // ============ SHOW LOADING AND GENERATE ACCOUNT ============
     function showLoadingAndGenerateAccount() {
         closeInvoiceModal();
         const loadingModal = document.getElementById('loadingModal');
@@ -1146,15 +1136,11 @@
             showAccountModal();
         }
     }
-
-    function startCountdown(minutes, pinCode) {
+    
+    // ============ START COUNTDOWN TIMER ============
+    function startCountdown(minutes, pinCode, expiryTime) {
         const timerElement = document.getElementById('countdownTimer');
         if (countdownInterval) clearInterval(countdownInterval);
-        
-        const expiryTime = new Date().getTime() + (minutes * 60 * 1000);
-        if (paymentPinsDatabase[pinCode]) {
-            paymentPinsDatabase[pinCode].expiresAt = expiryTime;
-        }
         
         countdownInterval = setInterval(() => {
             const now = new Date().getTime();
@@ -1165,36 +1151,39 @@
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 timerElement.textContent = "Expired";
-                if (paymentPinsDatabase[pinCode]) {
-                    paymentPinsDatabase[pinCode].status = "expired";
-                }
+                timerElement.style.color = "#9ca3af";
             }
         }, 1000);
     }
-
-    function showAccountModal() {
+    
+    // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
+    async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
-        const account = paymentPinsDatabase[pinCode];
+        const db = await waitForDB();
+        const result = await db.validatePin(pinCode);
         
-        if (!account || account.status !== "active") {
+        if (!result.valid) {
             alert("This payment code has expired or is invalid. Please contact admin.");
             return;
         }
         
+        const account = result.accountDetails;
+        const expiryTime = new Date(account.expires_at).getTime();
+        
         document.getElementById('accountDetailsBox').innerHTML = `
             <div class="details-row">
                 <span class="details-label">Bank</span>
-                <span class="details-value">${account.bankName}</span>
+                <span class="details-value">${account.bank_name}</span>
             </div>
             <div class="details-row">
                 <span class="details-label">Account Name</span>
-                <span class="details-value">${account.accountName}</span>
+                <span class="details-value">${account.account_name}</span>
             </div>
             <div class="details-row-copy">
                 <span class="details-label-copy">Account Number</span>
                 <div class="details-value-copy">
-                    <span id="accountNumberText">${account.accountNumber}</span>
-                    <button class="copy-btn" onclick="copyToClipboard('${account.accountNumber}')" title="Copy account number">
+                    <span id="accountNumberText">${account.account_number}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
                         <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
                         </svg>
@@ -1234,9 +1223,10 @@
         }
         
         document.getElementById('accountModal').classList.remove('hidden');
-        startCountdown(30, pinCode);
+        startCountdown(30, pinCode, expiryTime);
     }
-
+    
+    // ============ COPY TO CLIPBOARD ============
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
             const notification = document.getElementById('copyNotification');
@@ -1252,18 +1242,30 @@
             alert('Failed to copy. Please copy manually.');
         });
     }
-
-    function confirmPayment() { 
+    
+    // ============ CONFIRM PAYMENT ============
+    async function confirmPayment() { 
         if(!document.getElementById('receiptInput').files[0]) { 
             alert('Please upload your payment receipt'); 
             return; 
         } 
         
         if (countdownInterval) clearInterval(countdownInterval);
-        const pinCode = currentFormData.paymentCode;
-        if (paymentPinsDatabase[pinCode]) {
-            paymentPinsDatabase[pinCode].status = "used";
-        }
+        
+        const db = await waitForDB();
+        
+        // Mark PIN as used
+        await db.usePin(currentFormData.paymentCode);
+        
+        // Save payment record
+        await db.addPayment({
+            item_name: currentItem.name,
+            full_name: currentFormData.fullName,
+            phone: currentFormData.phone,
+            email: currentFormData.email,
+            amount: currentFormData.totalAmount,
+            payment_code: currentFormData.paymentCode
+        });
         
         closeAccountModal();
         
@@ -1285,8 +1287,8 @@
             }, 3000);
         }
     }
-
-    // Category filters
+    
+    // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.category-btn').forEach(b => {
@@ -1299,12 +1301,12 @@
             document.getElementById('searchInput').value = '';
         });
     });
-
-    // Search input
+    
+    // ============ SEARCH INPUT ============
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const cat = paymentData[currentCategory];
-        if(!cat) return;
+        if(!cat || !cat.items) return;
         const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
         if(filtered.length === 0) { 
             document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; 
@@ -1316,7 +1318,14 @@
         }).join('');
     });
     
-    renderGrid();
+    // ============ INITIALIZE PAGE ============
+    async function init() {
+        await loadPaymentData();
+        // Remove default PIN from paymentPinsDatabase (not needed anymore)
+        // PINs now come only from Supabase
+    }
+    
+    init();
 </script>
 
 <!-- Mobile Menu Script (separate) -->
