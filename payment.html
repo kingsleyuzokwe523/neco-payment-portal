@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
-    <!-- ONLY Supabase SDK - NO external config file -->
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* ===== YOUR ORIGINAL CSS - KEEP AS IS ===== */
+        /* YOUR ORIGINAL CSS - KEEP AS IS (same as before) */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -16,7 +16,6 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-/* ACCOUNT MODAL */
 #accountModal .account-box {
     max-width: 400px;
     width: 100%;
@@ -27,7 +26,6 @@
     max-height: 500px;
     overflow-y: auto;
 }
-/* Mobile Menu Full Width */
 #mobileMenu {
     position: fixed;
     top: 70px;
@@ -38,7 +36,6 @@
     box-shadow: 0 4px 20px rgba(0,0,0,0.15);
     z-index: 9999;
 }
-
 #mobileMenu a {
     display: block;
     padding: 16px 20px;
@@ -49,7 +46,6 @@
     text-align: center;
     transition: all 0.2s ease;
 }
-
 #mobileMenu a:hover {
     background-color: #f0fdf4;
     color: #054c0f;
@@ -57,24 +53,20 @@
 #accountModal .account-inner {
     padding: 20px 24px;
 }
-
 #accountModal .logo-row {
     text-align: center;
     margin-bottom: 20px;
 }
-
 #accountModal .logo-row img {
     height: 50px;
     display: inline-block;
 }
-
 #accountModal .details-row {
     display: flex;
     align-items: baseline;
     padding: 12px 0;
     gap: 16px;
 }
-
 #accountModal .details-label {
     font-size: 16px;
     color: #6b7280;
@@ -82,7 +74,6 @@
     text-align: left;
     min-width: 115px;
 }
-
 #accountModal .details-value {
     font-size: 16px;
     color: #111827;
@@ -91,8 +82,6 @@
     flex: 1;
     word-break: break-word;
 }
-
-/* Warning and Timer in ONE LINE */
 #accountModal .warning-timer-row {
     display: flex;
     justify-content: space-between;
@@ -100,15 +89,6 @@
     margin: 20px 0 16px 0;
     gap: 15px;
 }
-
-#accountModal .warning-timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 16px 0;
-    gap: 15px;
-}
-
 #accountModal .warning-text-small {
     color: #dc2626;
     font-size: 15px;
@@ -117,7 +97,6 @@
     padding: 0;
     white-space: nowrap;
 }
-
 #accountModal .timer-box-small {
     background: white;
     border: 1.5px solid #16a34a;
@@ -128,7 +107,6 @@
     justify-content: center;
     flex-shrink: 0;
 }
-
 #accountModal .timer-small {
     font-size: 11px;
     font-weight: 600;
@@ -146,40 +124,34 @@
     cursor: pointer;
     margin: 16px 0 12px 0;
 }
-
 #accountModal .upload-area-small:hover {
     background: #f3f4f6;
     border-color: #16a34a;
 }
-
 #accountModal .upload-icon-small {
     width: 20px;
     height: 22px;
     margin: 0 auto 4px;
     color: #9ca3af;
 }
-
 #accountModal .upload-text-small {
     font-size: 12px;
     color: #6b7280;
     margin: 0;
     font-weight: 500;
 }
-
 #accountModal .file-name-small {
     font-size: 11px;
     color: #16a34a;
     text-align: center;
     margin-top: 6px;
 }
-
 #accountModal .button-group {
     display: flex;
     gap: 16px;
     margin-top: 20px;
     justify-content: center;
 }
-
 #accountModal .btn-cancel-account {
     background: white;
     border: 1px solid #054c0f;
@@ -190,11 +162,9 @@
     border-radius: 8px;
     cursor: pointer;
 }
-
 #accountModal .btn-cancel-account:hover {
     background: #f0fdf4;
 }
-
 #accountModal .btn-confirm {
     background: #054c0f;
     border: none;
@@ -205,7 +175,6 @@
     border-radius: 8px;
     cursor: pointer;
 }
-
 #accountModal .btn-confirm:hover {
     background: #009515;
 }
@@ -273,56 +242,19 @@
     flex-direction: column;
     justify-content: center;
 }
-
 #invoiceModal .invoice-inner {
     padding: 24px;
-}
-/* Warning and Timer in ONE LINE */
-#accountModal .warning-timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 16px 0;
-    gap: 15px;
-}
-
-#accountModal .warning-text-small {
-    color: #dc2626;
-    font-size: 12px;
-    font-weight: 500;
-    background: transparent;
-    padding: 0;
-}
-
-#accountModal .timer-box-small {
-    background: white;
-    border: 1.5px solid #16a34a;
-    border-radius: 6px;
-    padding: 4px 12px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-#accountModal .timer-small {
-    font-size: 14px;
-    font-weight: 600;
-    color: #dc2626;
-    font-family: monospace;
-    text-align: center;
 }
 #invoiceModal .invoice-row {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
 }
-
 #invoiceModal .invoice-buttons {
     display: flex;
     gap: 12px;
     margin-top: 24px;
 }
-
 #invoiceModal .invoice-buttons button {
     flex: 1;
     padding: 10px 0;
@@ -332,29 +264,23 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
-
 #invoiceModal .btn-cancel {
     background-color: white;
     border: 1px solid #d1d5db;
     color: #374151;
 }
-
 #invoiceModal .btn-cancel:hover {
     background-color: #f9fafb;
 }
-
 #invoiceModal .btn-proceed {
     background-color: #054c0f;
     border: none;
     color: white;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
-
 #invoiceModal .btn-proceed:hover {
     background-color: #009515;
 }
-
-/* Loader */
 .loader {
     width: 50px;
     height: 50px;
@@ -364,32 +290,16 @@
     animation: spin 1s linear infinite;
     margin: 20px auto;
 }
-
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
-
-/* Countdown Timer - FIXED */
-.countdown-timer {
-    font-family: monospace;
-    font-size: 18px;
-    font-weight: bold;
-    color: #dc2626;
-    background: #fef2f2;
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 6px;
-}
-
-/* Error text */
 .error-text {
     color: #dc2626;
     font-size: 12px;
     margin-top: 4px;
     display: none;
 }
-/* Copy button styles */
 .copy-btn {
     background: none;
     border: none;
@@ -402,22 +312,17 @@
     border-radius: 4px;
     transition: all 0.2s ease;
 }
-
 .copy-btn:hover {
     background: #e5e7eb;
 }
-
 .copy-btn svg {
     width: 16px;
     height: 16px;
     color: #6b7280;
 }
-
 .copy-btn:hover svg {
     color: #054c0f;
 }
-
-/* Account number row with copy button */
 #accountModal .details-row-copy {
     display: flex;
     align-items: center;
@@ -425,14 +330,12 @@
     padding: 12px 0;
     gap: 16px;
 }
-
 #accountModal .details-label-copy {
     font-size: 14px;
     color: #6b7280;
     font-weight: 500;
     min-width: 115px;
 }
-
 #accountModal .details-value-copy {
     font-size: 14px;
     color: #111827;
@@ -443,31 +346,15 @@
     align-items: center;
     gap: 8px;
 }
-
-/* Notification popup animation */
 @keyframes slideUpFade {
-    0% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(20px);
-    }
-    10% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-    90% {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateX(-50%) translateY(-20px);
-    }
+    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
 }
-
 .copy-notification-show {
     animation: slideUpFade 2s ease forwards;
 }
-
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -509,13 +396,11 @@
                     
                     <!-- Mobile Menu Buttons -->
                     <div class="flex items-center gap-2 lg:hidden">
-                        <!-- Cancel/Close Button (X) -->
                         <button type="button" id="cancelMenuBtn" style="display: none;">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
                         </button>
-                        <!-- Hamburger Menu Button -->
                         <button type="button" id="mobileMenuBtn">
                             <span class="sr-only">Open main menu</span>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
@@ -527,7 +412,6 @@
             </div>
         </div>
         
-        <!-- Mobile Menu Dropdown -->
         <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
@@ -585,6 +469,7 @@
             </div>
         </div>
     </div>
+
 <!-- PAYMENT FORM MODAL -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
@@ -700,46 +585,34 @@
         </div>
     </div>
 </div>
-<!-- INVOICE SUMMARY MODAL - USING CSS CLASSES -->
+
+<!-- INVOICE SUMMARY MODAL -->
 <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
         <div class="bg-white rounded-md shadow-md invoice-box">
             <div class="invoice-inner">
-                <!-- Title -->
                 <p class="text-lg font-semibold mb-4">Invoice Summary</p>
-                
-                <!-- Headers -->
                 <div class="invoice-row">
                     <span class="text-lg text-gray-500">Item</span>
                     <span class="text-lg text-gray-500">Amount</span>
                 </div>
-                
-                <!-- FOUR FIGURE TABLE row -->
                 <div class="invoice-row">
                     <span id="invoiceItemName" class="text-lg">FOUR FIGURE TABLE</span>
                     <span id="invoiceItemAmount" class="text-lg">NGN 500</span>
                 </div>
-                
-                <!-- SERVICE CHARGE row -->
                 <div class="invoice-row">
                     <span class="text-lg">SERVICE CHARGE</span>
                     <span id="serviceCharge" class="text-lg">NGN 50</span>
                 </div>
-                
-                <!-- Quantity row -->
                 <div class="invoice-row">
                     <span class="text-lg">Quantity</span>
                     <span id="invoiceQuantity" class="text-lg">1</span>
                 </div>
-                
-                <!-- Total row -->
                 <div class="invoice-row font-semibold mt-2 pt-2">
                     <span class="text-lg">Total</span>
                     <span id="invoiceTotal" class="text-lg">NGN 550</span>
                 </div>
-                
-                <!-- Buttons -->
                 <div class="invoice-buttons">
                     <button onclick="closeInvoiceModal()" class="btn-cancel">Cancel</button>
                     <button onclick="showLoadingAndGenerateAccount()" class="btn-proceed">Proceed</button>
@@ -749,7 +622,7 @@
     </div>
 </div>
 
-<!-- LOADING MODAL - EXPLICIT CENTERING -->
+<!-- LOADING MODAL -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
         <div class="loader" style="margin: 0 auto;"></div>
@@ -757,30 +630,23 @@
         <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
     </div>
 </div>
-<!-- ACCOUNT MODAL - WITH COPY BUTTON -->
+
+<!-- ACCOUNT MODAL -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
         <div class="account-box">
             <div class="account-inner">
-                
-                <!-- Logo centered -->
                 <div class="logo-row">
                     <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
                 </div>
-
-                <!-- Account details injected here -->
                 <div id="accountDetailsBox"></div>
-
-                <!-- Warning text LEFT + Timer box RIGHT - SAME LINE -->
                 <div class="warning-timer-row">
                     <span class="warning-text-small"> Pay to this account within 30 minutes</span>
                     <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
                 </div>
-
-                <!-- Upload button -->
                 <div class="upload-area-small" onclick="document.getElementById('receiptInput').click()">
                     <svg class="upload-icon-small" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
@@ -789,13 +655,10 @@
                 </div>
                 <input type="file" id="receiptInput" class="hidden" accept=".pdf,.jpg,.jpeg,.png">
                 <p id="uploadedFileName" class="file-name-small"></p>
-
-                <!-- Buttons -->
                 <div class="button-group">
                     <button onclick="closeAccountModal()" class="btn-cancel-account">Cancel</button>
                     <button onclick="confirmPayment()" class="btn-confirm">Confirm Payment</button>
                 </div>
-                
             </div>
         </div>
     </div>
@@ -808,21 +671,12 @@
     </svg>
     <span>Copied!</span>
 </div>
-<!-- LOADING MODAL -->
-<div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
-    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-        <div class="loader" style="margin: 0 auto;"></div>
-        <p style="margin-top: 16px; font-size: 16px; color: black; font-weight: 500;">Please wait...</p>
-        <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Wait while we confirm your payment</p>
-    </div>
-</div>
+
 <script>
-    // ============ SUPABASE CONFIGURATION (DIRECT - NO EXTERNAL FILE) ============
+    // ============ SUPABASE CONFIGURATION ============
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-    
-    // Create supabase client ONLY ONCE
-    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     // ============ DEFAULT PAYMENT DATA (Shows Immediately) ============
     let paymentData = {
@@ -879,7 +733,8 @@
     let currentCategory = "SSCE Internal";
     let currentItem = null;
     let currentFormData = {};
-    let isCodeValid = false;
+    let isValidPin = false;
+    let currentPinDetails = null;
     let countdownInterval = null;
     
     // ============ VALIDATION FUNCTIONS ============
@@ -893,6 +748,39 @@
     
     function validateQuantity(quantity) {
         return quantity && parseInt(quantity) > 0;
+    }
+    
+    // ============ VALIDATE PIN WITH SUPABASE ============
+    async function validatePinWithSupabase(pinCode) {
+        try {
+            const { data, error } = await supabaseClient
+                .from('payment_pins')
+                .select('*')
+                .eq('pin', pinCode)
+                .eq('status', 'active')
+                .single();
+            
+            if (error || !data) {
+                return { valid: false, accountDetails: null };
+            }
+            
+            return { valid: true, accountDetails: data };
+        } catch (error) {
+            console.log('PIN validation error:', error);
+            return { valid: false, accountDetails: null };
+        }
+    }
+    
+    // ============ MARK PIN AS USED ============
+    async function markPinAsUsed(pinCode) {
+        try {
+            await supabaseClient
+                .from('payment_pins')
+                .update({ status: 'used' })
+                .eq('pin', pinCode);
+        } catch (error) {
+            console.error('Error marking PIN as used:', error);
+        }
     }
     
     // ============ RENDER GRID IMMEDIATELY ============
@@ -924,69 +812,20 @@
         }).join('');
     }
     
-    // Load default grid IMMEDIATELY - Page shows content right away
     renderGrid();
-    
-    // ============ OPEN PAYMENT MODAL ============
-    function openPaymentModal(item) {
-        currentItem = item;
-        document.getElementById('modalItemName').innerText = item.name;
-        const amountInput = document.getElementById('amount');
-        if (item.amount) { 
-            amountInput.value = item.amount; 
-            amountInput.readOnly = true; 
-        } else { 
-            amountInput.value = ''; 
-            amountInput.readOnly = false; 
-        }
-        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-        
-        document.getElementById('paymentCode').value = ''; 
-        document.getElementById('fullName').value = ''; 
-        document.getElementById('phone').value = ''; 
-        document.getElementById('email').value = '';
-        document.getElementById('paymentDescription').value = ''; 
-        document.getElementById('quantity').value = '';
-        document.getElementById('currency').value = 'NGN';
-        
-        document.getElementById('codeError').style.display = 'none';
-        document.getElementById('phoneError').style.display = 'none';
-        document.getElementById('emailError').style.display = 'none';
-        document.getElementById('quantityError').style.display = 'none';
-        document.getElementById('codeRequiredError').style.display = 'none';
-        
-        document.getElementById('proceedBtn').disabled = true;
-        document.getElementById('paymentModal').classList.remove('hidden');
-        
-        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.removeEventListener('input', checkFormValidation);
-                element.addEventListener('input', checkFormValidation);
-            }
-        });
-    }
-    
-    // ============ CLOSE MODALS ============
-    function closePaymentModal() { 
-        document.getElementById('paymentModal').classList.add('hidden'); 
-    }
-    
-    function closeInvoiceModal() { 
-        document.getElementById('invoiceModal').style.display = 'none'; 
-    }
-    
-    function closeAccountModal() { 
-        if (countdownInterval) clearInterval(countdownInterval);
-        document.getElementById('accountModal').classList.add('hidden'); 
-    }
     
     // ============ CHECK FORM VALIDATION ============
     async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
         
-        // Simple validation without database for immediate feedback
-        isCodeValid = code && code.trim() !== '';
+        if (code && code.trim() !== '') {
+            const result = await validatePinWithSupabase(code.trim());
+            isValidPin = result.valid;
+            currentPinDetails = result.accountDetails;
+        } else {
+            isValidPin = false;
+            currentPinDetails = null;
+        }
         
         const fullName = document.getElementById('fullName').value;
         const phone = document.getElementById('phone').value;
@@ -1013,6 +852,9 @@
         if (!isCodeProvided) {
             codeRequiredError.style.display = 'block';
             codeError.style.display = 'none';
+        } else if (!isValidPin) {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'block';
         } else {
             codeRequiredError.style.display = 'none';
             codeError.style.display = 'none';
@@ -1057,17 +899,70 @@
             quantityError.style.display = 'none';
         }
         
-        const allValid = isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
         const proceedBtn = document.getElementById('proceedBtn');
         if (proceedBtn) proceedBtn.disabled = !allValid;
+    }
+    
+    // ============ OPEN PAYMENT MODAL ============
+    function openPaymentModal(item) {
+        currentItem = item;
+        document.getElementById('modalItemName').innerText = item.name;
+        const amountInput = document.getElementById('amount');
+        if (item.amount) { 
+            amountInput.value = item.amount; 
+            amountInput.readOnly = true; 
+        } else { 
+            amountInput.value = ''; 
+            amountInput.readOnly = false; 
+        }
+        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        
+        document.getElementById('paymentCode').value = ''; 
+        document.getElementById('fullName').value = ''; 
+        document.getElementById('phone').value = ''; 
+        document.getElementById('email').value = '';
+        document.getElementById('paymentDescription').value = ''; 
+        document.getElementById('quantity').value = '';
+        document.getElementById('currency').value = 'NGN';
+        
+        document.getElementById('codeError').style.display = 'none';
+        document.getElementById('phoneError').style.display = 'none';
+        document.getElementById('emailError').style.display = 'none';
+        document.getElementById('quantityError').style.display = 'none';
+        document.getElementById('codeRequiredError').style.display = 'none';
+        
+        document.getElementById('proceedBtn').disabled = true;
+        document.getElementById('paymentModal').classList.remove('hidden');
+        
+        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.removeEventListener('input', checkFormValidation);
+                element.addEventListener('input', checkFormValidation);
+            }
+        });
+    }
+    
+    function closePaymentModal() { 
+        document.getElementById('paymentModal').classList.add('hidden'); 
+    }
+    
+    function closeInvoiceModal() { 
+        document.getElementById('invoiceModal').style.display = 'none'; 
+    }
+    
+    function closeAccountModal() { 
+        if (countdownInterval) clearInterval(countdownInterval);
+        document.getElementById('accountModal').classList.add('hidden'); 
     }
     
     // ============ SUBMIT PAYMENT FORM ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!document.getElementById('paymentCode').value) { 
-            alert('Please enter a payment code'); 
+        if (!isValidPin) { 
+            alert('Please enter a valid payment code'); 
             return; 
         }
         
@@ -1145,16 +1040,18 @@
     }
     
     // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
-    function showAccountModal() {
-        // For demo purposes, show a default account
-        // In production, this would validate the PIN with Supabase
-        const account = {
-            bank_name: "First Bank of Nigeria",
-            account_name: "NECO Correction Services",
-            account_number: "2024567890",
-            expires_at: new Date().getTime() + (30 * 60 * 1000)
-        };
-        const expiryTime = account.expires_at;
+    async function showAccountModal() {
+        // Validate PIN again to make sure it's still active
+        const result = await validatePinWithSupabase(currentFormData.paymentCode);
+        
+        if (!result.valid) {
+            alert("This payment code is invalid or has already been used.");
+            return;
+        }
+        
+        const account = result.accountDetails;
+        // PIN expires after 30 minutes from generation
+        const expiryTime = new Date(account.expires_at).getTime();
         
         document.getElementById('accountDetailsBox').innerHTML = `
             <div class="details-row">
@@ -1204,7 +1101,6 @@
         startCountdown(30, expiryTime);
     }
     
-    // ============ COPY TO CLIPBOARD ============
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
             const notification = document.getElementById('copyNotification');
@@ -1220,12 +1116,30 @@
     }
     
     // ============ CONFIRM PAYMENT ============
-    function confirmPayment() { 
+    async function confirmPayment() { 
         if(!document.getElementById('receiptInput').files[0]) { 
             alert('Please upload your payment receipt'); 
             return; 
         } 
         if (countdownInterval) clearInterval(countdownInterval);
+        
+        // Mark PIN as used
+        await markPinAsUsed(currentFormData.paymentCode);
+        
+        // Save payment record
+        try {
+            await supabaseClient.from('payments').insert({
+                item_name: currentItem.name,
+                full_name: currentFormData.fullName,
+                phone: currentFormData.phone,
+                email: currentFormData.email,
+                amount: currentFormData.totalAmount,
+                payment_code: currentFormData.paymentCode
+            });
+        } catch (error) {
+            console.error('Error saving payment:', error);
+        }
+        
         closeAccountModal();
         
         const loadingModal = document.getElementById('loadingModal');
@@ -1271,54 +1185,42 @@
         }).join('');
     });
     
-    // ============ SUPABASE SYNC (Background - Only updates if changed) ============
-    async function syncWithSupabase() {
+    // ============ SUPABASE SYNC FOR ITEMS (Background) ============
+    async function syncPaymentItems() {
         try {
-            const { data: categories } = await _supabase.from('categories').select('*');
-            const { data: items } = await _supabase.from('payment_items').select('*');
+            const { data: categories } = await supabaseClient.from('categories').select('*');
+            const { data: items } = await supabaseClient.from('payment_items').select('*');
             
             if (categories && categories.length > 0 && items) {
-                let hasChanges = false;
                 const newPaymentData = {};
-                
                 for (const category of categories) {
-                    const categoryItems = items.filter(item => item.category_id === category.id);
                     newPaymentData[category.name] = {
                         color: category.color,
                         bgColor: category.color,
-                        items: categoryItems
+                        items: items.filter(item => item.category_id === category.id)
                     };
-                    
-                    // Check if this category changed
-                    const oldCategory = paymentData[category.name];
-                    if (!oldCategory || JSON.stringify(oldCategory.items) !== JSON.stringify(categoryItems)) {
-                        hasChanges = true;
-                    }
                 }
-                
-                if (hasChanges || Object.keys(newPaymentData).length !== Object.keys(paymentData).length) {
-                    Object.assign(paymentData, newPaymentData);
-                    renderGrid();
-                    console.log('✅ Payment page updated from Supabase');
-                }
+                Object.assign(paymentData, newPaymentData);
+                renderGrid();
+                console.log('✅ Payment items synced with Supabase');
             }
         } catch (error) {
-            console.log('No changes from admin - using default payment data');
+            console.log('Using default payment items');
         }
     }
     
-    // Sync in background after page loads (does NOT block page display)
-    setTimeout(syncWithSupabase, 500);
+    // Sync in background
+    setTimeout(syncPaymentItems, 500);
     
-    // Listen for real-time sync from admin panel
+    // Listen for admin changes
     window.addEventListener('storage', function(e) {
         if (e.key === 'neco_sync_timestamp') {
-            syncWithSupabase();
+            syncPaymentItems();
         }
     });
 </script>
 
-<!-- Mobile Menu Script (separate) -->
+<!-- Mobile Menu Script -->
 <script>
     var menuBtn = document.getElementById('mobileMenuBtn');
     var cancelBtn = document.getElementById('cancelMenuBtn');
