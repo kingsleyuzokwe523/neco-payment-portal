@@ -5,9 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
-    <!-- Supabase SDK -->
+    <!-- ONLY Supabase SDK - NO external config file -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* ===== YOUR ORIGINAL CSS - KEEP AS IS ===== */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -100,7 +101,6 @@
     gap: 15px;
 }
 
-/* Warning and Timer in ONE STRAIGHT LINE */
 #accountModal .warning-timer-row {
     display: flex;
     justify-content: space-between;
@@ -109,7 +109,6 @@
     gap: 15px;
 }
 
-/* Warning text - SMALL */
 #accountModal .warning-text-small {
     color: #dc2626;
     font-size: 15px;
@@ -119,7 +118,6 @@
     white-space: nowrap;
 }
 
-/* Timer box - SMALLER */
 #accountModal .timer-box-small {
     background: white;
     border: 1.5px solid #16a34a;
@@ -819,9 +817,12 @@
     </div>
 </div>
 <script>
-    // ============ SUPABASE CONFIGURATION ============
+    // ============ SUPABASE CONFIGURATION (DIRECT - NO EXTERNAL FILE) ============
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+    
+    // Create supabase client ONLY ONCE
+    const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     // ============ DEFAULT PAYMENT DATA (Shows Immediately) ============
     let paymentData = {
@@ -1273,9 +1274,8 @@
     // ============ SUPABASE SYNC (Background - Only updates if changed) ============
     async function syncWithSupabase() {
         try {
-            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            const { data: categories } = await supabase.from('categories').select('*');
-            const { data: items } = await supabase.from('payment_items').select('*');
+            const { data: categories } = await _supabase.from('categories').select('*');
+            const { data: items } = await _supabase.from('payment_items').select('*');
             
             if (categories && categories.length > 0 && items) {
                 let hasChanges = false;
