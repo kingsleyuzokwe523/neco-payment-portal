@@ -645,7 +645,7 @@
             <div id="dashboard" class="tab-content">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">6</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
-                    <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">57</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
+                    <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Active PINs</h4><div class="number" id="totalActivePins">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Payments</h4><div class="number" id="totalPayments">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
                 </div>
@@ -685,7 +685,7 @@
                     <table class="items-table">
                         <thead><tr><th>Date</th><th>Item</th><th>Payer Name</th><th>Phone</th><th>Email</th><th>Amount</th><th>Payment Code</th><th>Status</th></thead>
                         <tbody id="paymentsTableBody">
-                            <td><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>
+                            <tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -733,7 +733,7 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
         // Create supabase client - ONLY ONCE
-        const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "admin123";
@@ -780,26 +780,52 @@
             }
         }
         
+        // Check if already logged in
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
-            loadAllData();
-            initDashboard();
+            // Load data after dashboard is visible
+            setTimeout(async () => {
+                await loadAllData();
+                initDashboard();
+            }, 100);
         }
         
         async function loadAllData() {
             try {
-                const { data: categories } = await _supabase.from('categories').select('*').order('id');
-                const { data: paymentItems } = await _supabase.from('payment_items').select('*').order('id');
-                const { data: paymentPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                const { data: payments } = await _supabase.from('payments').select('*').order('created_at', { ascending: false });
-                const { data: home } = await _supabase.from('home_content').select('*').limit(1).single();
+                console.log('Loading data from Supabase...');
                 
+                // Load categories
+                const { data: categories, error: catError } = await supabase.from('categories').select('*').order('id');
+                if (catError) throw catError;
                 if (categories) currentCategories = categories;
+                
+                // Load payment items
+                const { data: paymentItems, error: itemError } = await supabase.from('payment_items').select('*').order('id');
+                if (itemError) throw itemError;
                 if (paymentItems) currentPaymentItems = paymentItems;
+                
+                // Load payment pins
+                const { data: paymentPins, error: pinError } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                if (pinError) throw pinError;
                 if (paymentPins) currentPaymentPins = paymentPins;
+                
+                // Load payments
+                const { data: payments, error: payError } = await supabase.from('payments').select('*').order('created_at', { ascending: false });
+                if (payError) throw payError;
                 if (payments) currentPayments = payments;
+                
+                // Load home content
+                const { data: home, error: homeError } = await supabase.from('home_content').select('*').limit(1).single();
+                if (homeError && homeError.code !== 'PGRST116') throw homeError;
                 if (home) homeContent = home;
+                
+                console.log('Data loaded:', { 
+                    categories: currentCategories.length, 
+                    items: currentPaymentItems.length,
+                    pins: currentPaymentPins.length,
+                    payments: currentPayments.length
+                });
                 
                 updateDashboard();
                 renderPins();
@@ -810,6 +836,10 @@
                 if (currentCategories.length > 0 && !selectedCategoryId) {
                     selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
                 }
+                
+                // Trigger sync for other pages
+                triggerSync();
+                
             } catch (error) {
                 console.error('Error loading data:', error);
             }
@@ -949,12 +979,12 @@
             }
             
             if (currentEditingItemId) {
-                await _supabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+                await supabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
             } else {
-                await _supabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+                await supabase.from('payment_items').insert({ name, category_id: categoryId, amount });
             }
             
-            const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+            const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
             if (updatedItems) currentPaymentItems = updatedItems;
             
             closeModal('itemModal');
@@ -969,8 +999,8 @@
         
         async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
-                await _supabase.from('payment_items').delete().eq('id', itemId);
-                const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+                await supabase.from('payment_items').delete().eq('id', itemId);
+                const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
                 if (updatedItems) currentPaymentItems = updatedItems;
                 const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
                 document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
@@ -984,14 +1014,14 @@
             const hasItems = currentPaymentItems.some(i => i.category_id === categoryId);
             if (hasItems) {
                 if (!confirm('Category has items. Delete category and ALL items?')) return;
-                await _supabase.from('payment_items').delete().eq('category_id', categoryId);
+                await supabase.from('payment_items').delete().eq('category_id', categoryId);
             } else {
                 if (!confirm('Delete this category?')) return;
             }
-            await _supabase.from('categories').delete().eq('id', categoryId);
+            await supabase.from('categories').delete().eq('id', categoryId);
             
-            const { data: updatedCats } = await _supabase.from('categories').select('*').order('id');
-            const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+            const { data: updatedCats } = await supabase.from('categories').select('*').order('id');
+            const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
             if (updatedCats) currentCategories = updatedCats;
             if (updatedItems) currentPaymentItems = updatedItems;
             
@@ -1034,7 +1064,7 @@
             const expiresAt = new Date();
             expiresAt.setMinutes(expiresAt.getMinutes() + 30);
             
-            await _supabase.from('payment_pins').insert({
+            await supabase.from('payment_pins').insert({
                 pin: pin,
                 bank_name: bankName,
                 account_name: accountName,
@@ -1044,7 +1074,7 @@
                 expires_at: expiresAt.toISOString()
             });
             
-            const { data: updatedPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+            const { data: updatedPins } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
             if (updatedPins) currentPaymentPins = updatedPins;
             
             closeModal('pinModal');
@@ -1056,8 +1086,8 @@
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
-                await _supabase.from('payment_pins').delete().eq('id', pinId);
-                const { data: updatedPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                await supabase.from('payment_pins').delete().eq('id', pinId);
+                const { data: updatedPins } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 if (updatedPins) currentPaymentPins = updatedPins;
                 renderPins();
                 updateDashboard();
@@ -1153,14 +1183,14 @@
                 if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
                 else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
             }
-            await _supabase.from('home_content').update(homeContent).eq('id', 1);
+            await supabase.from('home_content').update(homeContent).eq('id', 1);
             closeModal('editTextModal');
             loadHomePreview();
             triggerSync();
         }
         
         async function saveHomeChanges() {
-            await _supabase.from('home_content').update(homeContent).eq('id', 1);
+            await supabase.from('home_content').update(homeContent).eq('id', 1);
             alert('✅ Home page changes saved!');
             triggerSync();
         }
