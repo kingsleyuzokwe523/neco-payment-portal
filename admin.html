@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Admin Panel</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
-    <!-- Supabase SDK - ONLY ONE COPY -->
+    <!-- Supabase SDK - ONLY ONCE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -586,7 +586,7 @@
                 <label>Password</label>
                 <input type="password" id="password" placeholder="Enter password">
             </div>
-            <button class="login-btn" onclick="login()">Login</button>
+            <button class="login-btn" onclick="doLogin()">Login</button>
         </div>
     </div>
     
@@ -639,7 +639,7 @@
         <div class="main-content">
             <div class="top-bar">
                 <h2 id="pageTitle">Dashboard</h2>
-                <button class="logout-btn" onclick="logout()">Logout</button>
+                <button class="logout-btn" onclick="doLogout()">Logout</button>
             </div>
             
             <div id="dashboard" class="tab-content">
@@ -675,7 +675,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    <table>
+                    </table>
                 </div>
             </div>
             
@@ -728,14 +728,14 @@
     </div>
 
     <script>
-        // ============ SUPABASE CONFIGURATION - SINGLE INSTANCE ============
-        const SB_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
-        const SB_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-        const supabase = window.supabase.createClient(SB_URL, SB_KEY);
+        // ============ SUPABASE CONFIGURATION ============
+        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
-        const ADMIN_USERNAME = "admin";
-        const ADMIN_PASSWORD = "admin123";
+        // Create supabase client - SINGLE INSTANCE
+        let supabase = null;
         
+        // Global variables
         let currentCategories = [];
         let currentPaymentItems = [];
         let currentPaymentPins = [];
@@ -760,15 +760,22 @@
             ]
         };
         
-        async function login() {
+        // Initialize Supabase
+        function initSupabase() {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        }
+        
+        // ============ LOGIN/LOGOUT ============
+        function doLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
-            if (username === ADMIN_USERNAME && password === ADMIN_PASSWORD) {
+            if (username === 'admin' && password === 'admin123') {
                 localStorage.setItem('adminLoggedIn', 'true');
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('dashboardContainer').style.display = 'block';
-                await loadAllData();
+                initSupabase();
+                loadAllData();
                 initDashboard();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
@@ -778,13 +785,21 @@
             }
         }
         
+        function doLogout() {
+            localStorage.removeItem('adminLoggedIn');
+            location.reload();
+        }
+        
+        // Check if already logged in
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
+            initSupabase();
             loadAllData();
             initDashboard();
         }
         
+        // ============ LOAD DATA ============
         async function loadAllData() {
             try {
                 const { data: categories } = await supabase.from('categories').select('*').order('id');
@@ -1067,7 +1082,7 @@
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
             if (currentPaymentPins.length === 0) {
-                tbody.innerHTML = '<td><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td><tr>';
                 return;
             }
             let pinsHtml = '';
@@ -1167,7 +1182,7 @@
             const tbody = document.getElementById('paymentsTableBody');
             if (!tbody) return;
             if (currentPayments.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td><tr>';
                 return;
             }
             let paymentsHtml = '';
@@ -1191,11 +1206,6 @@
         
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
-        }
-        
-        function logout() {
-            localStorage.removeItem('adminLoggedIn');
-            location.reload();
         }
         
         function toggleSidebar() {
