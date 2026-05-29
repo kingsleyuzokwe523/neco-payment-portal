@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Admin Panel</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
@@ -479,23 +481,9 @@
             color: #065f46;
         }
         
-        .badge-expired {
-            background: #fee2e2;
-            color: #991b1b;
-        }
-        
         .badge-used {
             background: #fef3c7;
             color: #92400e;
-        }
-        
-        .countdown-small {
-            font-size: 11px;
-            font-family: monospace;
-            background: #f3f4f6;
-            padding: 2px 6px;
-            border-radius: 12px;
-            display: inline-block;
         }
         
         .save-all-btn {
@@ -519,7 +507,6 @@
             cursor: pointer;
         }
         
-        /* Mobile Menu Styles */
         .mobile-overlay {
             display: none;
             position: fixed;
@@ -564,6 +551,21 @@
             padding: 10px;
             border-radius: 8px;
             cursor: pointer;
+        }
+        
+        .category-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .cat-delete-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            border: none;
+            background: #ef4444;
+            color: white;
         }
     </style>
 </head>
@@ -643,7 +645,7 @@
             <div id="dashboard" class="tab-content">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">6</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
-                    <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
+                    <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">57</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Active PINs</h4><div class="number" id="totalActivePins">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Payments</h4><div class="number" id="totalPayments">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></div></div>
                 </div>
@@ -651,7 +653,7 @@
             
             <div id="home-editor" class="tab-content">
                 <div class="home-preview">
-                    <div class="preview-header"><h3>🏠 Live Home Page Editor</h3><p style="font-size:12px; color:#666;">Click on any text to edit it</p></div>
+                    <div class="preview-header"><h3>🏠 Live Home Page Editor</h3><p style="font-size:12px; color:#666;">Click on any text to edit it. Changes will appear immediately on the home page.</p></div>
                     <div class="preview-frame" id="homePreview"></div>
                     <button class="save-all-btn" onclick="saveHomeChanges()">💾 Save All Home Page Changes</button>
                 </div>
@@ -660,7 +662,7 @@
             <div id="payment-editor" class="tab-content active">
                 <div class="category-items-container">
                     <div class="category-items-header">
-                        <h3 id="selectedCategoryTitle">SSCE Internal Items (15 items)</h3>
+                        <h3 id="selectedCategoryTitle">Select a category from the sidebar</h3>
                         <button class="add-item-btn" id="addItemBtn" onclick="openAddItemModal()">+ Add Item</button>
                     </div>
                     <div id="itemsListContainer"></div>
@@ -671,7 +673,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>Payment PINs (One Time Use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Time Left</th><th>Created</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
                     </table>
                 </div>
@@ -705,6 +707,7 @@
             <div class="modal-body">
                 <div class="neco-form-group"><label>Item Name</label><input type="text" id="itemName" placeholder="e.g., Four Figure Table"></div>
                 <div class="neco-form-group"><label>Amount (₦) <span style="color:#666; font-size:11px;">(Leave empty for "Enter amount")</span></label><input type="number" id="itemAmount" placeholder="e.g., 500"></div>
+                <div class="neco-form-group"><label>Category</label><select id="itemCategory" class="block w-full rounded-md border bg-[#F2F2F2] px-4 py-2.5"></select></div>
             </div>
             <div class="modal-footer"><button onclick="closeModal('itemModal')">Cancel</button><button onclick="saveItem()" style="background:#054c0f;color:white;padding:8px 16px;border:none;border-radius:6px;">Save</button></div>
         </div>
@@ -725,12 +728,121 @@
     </div>
 
     <script>
+        // ============ SUPABASE CONFIGURATION ============
+        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+        
+        let supabase = null;
+        
+        function initSupabase() {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return supabase;
+        }
+        
+        const NECO_DB = {
+            getCategories: async function() {
+                const { data, error } = await supabase.from('categories').select('*').order('id');
+                if (error) throw error;
+                return data;
+            },
+            addCategory: async function(category) {
+                const { data, error } = await supabase.from('categories').insert(category).select();
+                if (error) throw error;
+                return data[0];
+            },
+            deleteCategory: async function(id) {
+                const { error } = await supabase.from('categories').delete().eq('id', id);
+                if (error) throw error;
+            },
+            
+            getPaymentItems: async function() {
+                const { data, error } = await supabase.from('payment_items').select('*').order('id');
+                if (error) throw error;
+                return data;
+            },
+            addPaymentItem: async function(item) {
+                const { data, error } = await supabase.from('payment_items').insert(item).select();
+                if (error) throw error;
+                return data[0];
+            },
+            updatePaymentItem: async function(id, updates) {
+                const { data, error } = await supabase.from('payment_items').update(updates).eq('id', id).select();
+                if (error) throw error;
+                return data[0];
+            },
+            deletePaymentItem: async function(id) {
+                const { error } = await supabase.from('payment_items').delete().eq('id', id);
+                if (error) throw error;
+            },
+            
+            getPaymentPins: async function() {
+                const { data, error } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                return data;
+            },
+            generatePin: async function(pinData) {
+                const { data, error } = await supabase.from('payment_pins').insert({
+                    pin: pinData.pin,
+                    bank_name: pinData.bank_name,
+                    account_name: pinData.account_name,
+                    account_number: pinData.account_number,
+                    bank_code: pinData.bank_code || '',
+                    status: 'active'
+                }).select();
+                if (error) throw error;
+                return data[0];
+            },
+            deletePin: async function(id) {
+                const { error } = await supabase.from('payment_pins').delete().eq('id', id);
+                if (error) throw error;
+            },
+            
+            getPayments: async function() {
+                const { data, error } = await supabase.from('payments').select('*').order('created_at', { ascending: false });
+                if (error) throw error;
+                return data;
+            },
+            
+            getHomeContent: async function() {
+                const { data, error } = await supabase.from('home_content').select('*').limit(1).single();
+                if (error && error.code !== 'PGRST116') return null;
+                return data;
+            },
+            updateHomeContent: async function(id, updates) {
+                const { data, error } = await supabase.from('home_content').update(updates).eq('id', id).select();
+                if (error) throw error;
+                return data[0];
+            }
+        };
+        
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "admin123";
         
-        let expiryInterval = null;
+        let currentCategories = [];
+        let currentPaymentItems = [];
+        let currentPaymentPins = [];
+        let currentPayments = [];
+        let selectedCategoryId = null;
+        let selectedCategoryName = null;
+        let currentEditingItemId = null;
+        let currentEditingKey = null;
         
-        function login() {
+        let homeContent = {
+            heroTitle: "NECO Corrections Just Got Faster and Simpler.",
+            heroNote: "You do not need an account to make payment",
+            howItWorksTitle: "How it works",
+            footerNote: "NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website (www.neco.gov.ng). Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.",
+            steps: [
+                { title: "Select Correction Type", description: "Select or search for the correction type you want i.e Correction of Name, Date of Birth, Subject Entry etc" },
+                { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website www.neco.gov.ng. Ensure to verify your payment before proceeding to Pay." },
+                { title: "Fill the Correction Form", description: "Fill the correction form with your details and proceed to payment" },
+                { title: "Select Mode of Payment", description: "Select mode of payment i.e Card payment, Bank Transfer or USSD" },
+                { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed" },
+                { title: "Get Confirmation", description: "Your correction will be processed and you will receive confirmation" }
+            ]
+        };
+        
+        async function login() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             
@@ -738,8 +850,7 @@
                 localStorage.setItem('adminLoggedIn', 'true');
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('dashboardContainer').style.display = 'block';
-                initDashboard();
-                startPinExpiryChecker();
+                await initSupabaseAndLoadData();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -748,213 +859,86 @@
             }
         }
         
+        async function initSupabaseAndLoadData() {
+            initSupabase();
+            await loadAllData();
+            initDashboard();
+        }
+        
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
-            initDashboard();
-            startPinExpiryChecker();
+            initSupabaseAndLoadData();
         }
         
-        // ============ ALL 57 PAYMENT ITEMS ============
-        let categories = [
-            { id: 1, name: "SSCE Internal", color: "#0CA60C" },
-            { id: 2, name: "SSCE External", color: "#145596" },
-            { id: 3, name: "BECE", color: "#642D56" },
-            { id: 4, name: "NCEE", color: "#1887EB" },
-            { id: 5, name: "Gifted", color: "#24809C" },
-            { id: 6, name: "Others", color: "#36454F" }
-        ];
-        
-        let paymentItems = [
-            // SSCE Internal (id: 1) - 15 items
-            { id: 1, name: "Four Figure Table", categoryId: 1, amount: 500 },
-            { id: 2, name: "Non-Validation", categoryId: 1, amount: 10000 },
-            { id: 3, name: "Syllabus", categoryId: 1, amount: 2000 },
-            { id: 4, name: "Photo Album", categoryId: 1, amount: 2700 },
-            { id: 5, name: "Late Ca3 Upload", categoryId: 1, amount: 40000 },
-            { id: 6, name: "Remarking Ssce (i)", categoryId: 1, amount: 20000 },
-            { id: 7, name: "Unviable Centre Fee", categoryId: 1, amount: 70000 },
-            { id: 8, name: "Late Registration Fee", categoryId: 1, amount: 5000 },
-            { id: 9, name: "Ssce Fresh Accreditation (public Schools)", categoryId: 1, amount: 200000 },
-            { id: 10, name: "Ssce Re-accreditation (public Schools)", categoryId: 1, amount: 150000 },
-            { id: 11, name: "Ssce Fresh Accreditation (private Schools)", categoryId: 1, amount: 200000 },
-            { id: 12, name: "Ssce Re-accreditation (private Schools)", categoryId: 1, amount: 150000 },
-            { id: 13, name: "Ssce Fresh Accreditation (foreign Schools)", categoryId: 1, amount: 2000000 },
-            { id: 14, name: "Ssce Re-accreditation (foreign Schools)", categoryId: 1, amount: 1500000 },
-            { id: 15, name: "Chief Examiners Report Fee (per Copy)", categoryId: 1, amount: 2500 },
-            
-            // SSCE External (id: 2) - 7 items
-            { id: 16, name: "Four Figure Table", categoryId: 2, amount: 500 },
-            { id: 17, name: "Walk-in", categoryId: 2, amount: 43000 },
-            { id: 18, name: "Syllabus", categoryId: 2, amount: 2000 },
-            { id: 19, name: "Result Slips", categoryId: 2, amount: 1600 },
-            { id: 20, name: "Remarking Ssce Ext", categoryId: 2, amount: 20000 },
-            { id: 21, name: "Collection Of Certificate", categoryId: 2, amount: 500 },
-            { id: 22, name: "Non-Validation", categoryId: 2, amount: 10000 },
-            
-            // BECE (id: 3) - 8 items
-            { id: 23, name: "Remarking Bece", categoryId: 3, amount: 15000 },
-            { id: 24, name: "Non-Validation", categoryId: 3, amount: 10000 },
-            { id: 25, name: "Bece Fresh Accreditation (public Schools)", categoryId: 3, amount: 170000 },
-            { id: 26, name: "Bece Re-accreditation (public Schools)", categoryId: 3, amount: 140000 },
-            { id: 27, name: "Bece Fresh Accreditation (private Schools)", categoryId: 3, amount: 170000 },
-            { id: 28, name: "Bece Re-accreditation (private Schools)", categoryId: 3, amount: 140000 },
-            { id: 29, name: "Bece Fresh Accreditation (foreign Schools)", categoryId: 3, amount: 1500000 },
-            { id: 30, name: "Bece Re-accreditation (foreign Schools)", categoryId: 3, amount: 1000000 },
-            
-            // NCEE (id: 4) - 1 item
-            { id: 31, name: "Non-Validation", categoryId: 4, amount: 4000 },
-            
-            // Gifted (id: 5) - 1 item
-            { id: 32, name: "Non-Validation", categoryId: 5, amount: 4000 },
-            
-            // Others (id: 6) - 25 items
-            { id: 33, name: "Reprint Of Certificate", categoryId: 6, amount: 50000 },
-            { id: 34, name: "Sale Of Government Assets", categoryId: 6, amount: null },
-            { id: 35, name: "Registration Of Contractors", categoryId: 6, amount: null },
-            { id: 36, name: "Tender Fees", categoryId: 6, amount: null },
-            { id: 37, name: "Refund", categoryId: 6, amount: null },
-            { id: 38, name: "Change Of School Name", categoryId: 6, amount: 15000 },
-            { id: 39, name: "Payment For Consultancy Services", categoryId: 6, amount: null },
-            { id: 40, name: "Payment Of Dead Scripts", categoryId: 6, amount: null },
-            { id: 41, name: "Reprint Of School Results Per Candidate", categoryId: 6, amount: 400 },
-            { id: 42, name: "Return Of Dta", categoryId: 6, amount: null },
-            { id: 43, name: "Staff Identity Card", categoryId: 6, amount: 1000 },
-            { id: 44, name: "Result Checker (token)", categoryId: 6, amount: 1000 },
-            { id: 45, name: "Examination Bag", categoryId: 6, amount: 15000 },
-            { id: 46, name: "Confirmation Of Result By International Institutions Or Organizations Per Candidates", categoryId: 6, amount: 10000 },
-            { id: 47, name: "Waterproof Certificate Jacket/folder", categoryId: 6, amount: 2500 },
-            { id: 48, name: "Candidates Registration Number Request", categoryId: 6, amount: 3000 },
-            { id: 49, name: "Photocard Reprint (ssce-external)", categoryId: 6, amount: 3000 },
-            { id: 50, name: "Ssce External Certificate Safekeeping (renewable Every 5 Years)", categoryId: 6, amount: 7500 },
-            { id: 51, name: "Statistical Request-organization/association (annual Awards)", categoryId: 6, amount: 100000 },
-            { id: 52, name: "Statistical Request-individual (research) 1-5 Years", categoryId: 6, amount: 10000 },
-            { id: 53, name: "Statistical Request-individual (research) 6-10 Years", categoryId: 6, amount: 20000 },
-            { id: 54, name: "State Governments (registration Projection/candidates Performance Annually)", categoryId: 6, amount: 50000 },
-            { id: 55, name: "Shortfalls On Accreditation", categoryId: 6, amount: null },
-            { id: 56, name: "E-verification Of Result", categoryId: 6, amount: 5000 },
-            { id: 57, name: "Candidate Attestation Of Result In Lieu Of Lost Certificate", categoryId: 6, amount: 50000 }
-        ];
-        
-        let paymentPins = [];
-        let payments = [];
-        let selectedCategoryId = 1;
-        let selectedCategoryName = "SSCE Internal";
-        let currentEditingItemId = null;
-        let currentEditingKey = null;
-        
-        let homeContent = {
-            heroTitle: "NECO Corrections Just Got Faster and Simpler.",
-            heroNote: "You do not need an account to make payment",
-            howItWorksTitle: "How it works",
-            footerNote: "NOTE: Payment item code is required for any NECO payment",
-            steps: [
-                { title: "Select Correction Type", description: "Select or search for the correction type you want" },
-                { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment" },
-                { title: "Fill the Correction Form", description: "Fill the correction form with your details" },
-                { title: "Select Mode of Payment", description: "Select mode of payment" },
-                { title: "Confirm Your Payment", description: "Review and confirm your payment" },
-                { title: "Get Confirmation", description: "Receive confirmation of your payment" }
-            ]
-        };
-        
-        function startPinExpiryChecker() {
-            if (expiryInterval) clearInterval(expiryInterval);
-            expiryInterval = setInterval(() => {
-                const now = new Date().getTime();
-                let changed = false;
-                paymentPins.forEach(pin => {
-                    if (pin.status === "active" && pin.expiresAt && pin.expiresAt <= now) {
-                        pin.status = "expired";
-                        changed = true;
-                    }
-                });
-                if (changed) {
-                    renderPins();
-                    updateDashboard();
-                    saveToLocalStorage();
+        async function loadAllData() {
+            try {
+                currentCategories = await NECO_DB.getCategories();
+                currentPaymentItems = await NECO_DB.getPaymentItems();
+                currentPaymentPins = await NECO_DB.getPaymentPins();
+                currentPayments = await NECO_DB.getPayments();
+                const home = await NECO_DB.getHomeContent();
+                if (home) homeContent = home;
+                
+                updateDashboard();
+                renderPins();
+                renderPayments();
+                loadHomePreview();
+                renderCategorySidebar();
+                
+                if (currentCategories.length > 0 && !selectedCategoryId) {
+                    selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
                 }
-            }, 1000);
-        }
-        
-        function stopPinExpiryChecker() {
-            if (expiryInterval) {
-                clearInterval(expiryInterval);
-                expiryInterval = null;
+            } catch (error) {
+                console.error('Error loading data:', error);
             }
-        }
-        
-        function getRemainingTime(expiresAt) {
-            if (!expiresAt) return "N/A";
-            const remaining = Math.max(0, Math.floor((expiresAt - new Date().getTime()) / 1000));
-            if (remaining <= 0) return "Expired";
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
-            return `${mins}:${secs.toString().padStart(2, '0')}`;
-        }
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('neco_categories', JSON.stringify(categories));
-            localStorage.setItem('neco_paymentItems', JSON.stringify(paymentItems));
-            localStorage.setItem('neco_paymentPins', JSON.stringify(paymentPins));
-            localStorage.setItem('neco_payments', JSON.stringify(payments));
-            localStorage.setItem('neco_homeContent', JSON.stringify(homeContent));
-        }
-        
-        function loadFromLocalStorage() {
-            const savedCats = localStorage.getItem('neco_categories');
-            const savedItems = localStorage.getItem('neco_paymentItems');
-            const savedPins = localStorage.getItem('neco_paymentPins');
-            const savedPayments = localStorage.getItem('neco_payments');
-            const savedHome = localStorage.getItem('neco_homeContent');
-            if (savedCats) categories = JSON.parse(savedCats);
-            if (savedItems) paymentItems = JSON.parse(savedItems);
-            if (savedPins) paymentPins = JSON.parse(savedPins);
-            if (savedPayments) payments = JSON.parse(savedPayments);
-            if (savedHome) homeContent = JSON.parse(savedHome);
         }
         
         function updateDashboard() {
-            document.getElementById('totalItems').innerText = paymentItems.length;
-            const activePins = paymentPins.filter(p => p.status === "active").length;
+            document.getElementById('totalItems').innerText = currentPaymentItems.length;
+            const activePins = currentPaymentPins.filter(p => p.status === "active").length;
             document.getElementById('totalActivePins').innerText = activePins;
-            document.getElementById('totalPayments').innerText = payments.length;
+            document.getElementById('totalPayments').innerText = currentPayments.length;
         }
         
-        function toggleCategories() {
-            const subMenu = document.getElementById('categorySubMenu');
-            const arrow = document.getElementById('categoryArrow');
-            if (subMenu.classList.contains('open')) {
-                subMenu.classList.remove('open');
-                arrow.style.transform = 'rotate(0deg)';
-            } else {
-                subMenu.classList.add('open');
-                arrow.style.transform = 'rotate(180deg)';
+        function renderCategorySidebar() {
+            const container = document.getElementById('categoryList');
+            if (!container) return;
+            
+            let html = '';
+            for (let i = 0; i < currentCategories.length; i++) {
+                const cat = currentCategories[i];
+                html += `
+                    <li class="${selectedCategoryId === cat.id ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}')">
+                        <div class="category-color" style="background: ${cat.color};"></div>
+                        <span class="category-name">${cat.name}</span>
+                        <div class="category-actions">
+                            <button class="cat-delete-btn" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
+                        </div>
+                    </li>
+                `;
             }
+            container.innerHTML = html;
         }
         
         function selectCategory(categoryName, categoryId, color) {
             selectedCategoryId = categoryId;
             selectedCategoryName = categoryName;
             
-            document.querySelectorAll('.sub-menu li').forEach(item => {
-                item.classList.remove('active');
-                if (item.getAttribute('data-category') === categoryName) {
-                    item.classList.add('active');
+            const subItems = document.querySelectorAll('.sub-menu li');
+            for (let i = 0; i < subItems.length; i++) {
+                subItems[i].classList.remove('active');
+                if (subItems[i].getAttribute('data-category') === categoryName) {
+                    subItems[i].classList.add('active');
                 }
-            });
+            }
             
-            const itemCount = paymentItems.filter(i => i.categoryId === categoryId).length;
+            const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
             document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${itemCount} items)`;
             document.getElementById('addItemBtn').style.display = 'block';
             renderItemsForCategory();
         }
         
-        function getItemsByCategory() {
-            return paymentItems.filter(item => item.categoryId === selectedCategoryId);
-        }
-        
-        // ============ FIXED renderItemsForCategory FUNCTION ============
         function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
             if (!selectedCategoryId) {
@@ -962,16 +946,13 @@
                 return;
             }
             
-            const items = getItemsByCategory();
+            const items = currentPaymentItems.filter(item => item.category_id === selectedCategoryId);
             if (items.length === 0) {
                 container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No items in this category. Click "+ Add Item" to add one.</p>';
                 return;
             }
             
-            let tableHtml = '<table class="items-table">';
-            tableHtml += '<thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead>';
-            tableHtml += '<tbody>';
-            
+            let tableHtml = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const amountDisplay = item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount';
@@ -986,7 +967,6 @@
                     </tr>
                 `;
             }
-            
             tableHtml += '</tbody></table>';
             container.innerHTML = tableHtml;
         }
@@ -1000,22 +980,49 @@
             document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
             document.getElementById('itemName').value = '';
             document.getElementById('itemAmount').value = '';
+            // Populate category dropdown
+            const categorySelect = document.getElementById('itemCategory');
+            if (categorySelect) {
+                categorySelect.innerHTML = '';
+                for (let i = 0; i < currentCategories.length; i++) {
+                    const cat = currentCategories[i];
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.text = cat.name;
+                    if (cat.id === selectedCategoryId) option.selected = true;
+                    categorySelect.appendChild(option);
+                }
+            }
             document.getElementById('itemModal').style.display = 'flex';
         }
         
         function openEditItemModal(itemId) {
-            const item = paymentItems.find(i => i.id === itemId);
+            const item = currentPaymentItems.find(i => i.id === itemId);
             if (!item) return;
             currentEditingItemId = itemId;
             document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemAmount').value = item.amount || '';
+            // Populate category dropdown
+            const categorySelect = document.getElementById('itemCategory');
+            if (categorySelect) {
+                categorySelect.innerHTML = '';
+                for (let i = 0; i < currentCategories.length; i++) {
+                    const cat = currentCategories[i];
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.text = cat.name;
+                    if (cat.id === item.category_id) option.selected = true;
+                    categorySelect.appendChild(option);
+                }
+            }
             document.getElementById('itemModal').style.display = 'flex';
         }
         
-        function saveItem() {
+        async function saveItem() {
             const name = document.getElementById('itemName').value;
             const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
+            const categoryId = parseInt(document.getElementById('itemCategory').value);
             
             if (!name) {
                 alert('Please fill item name');
@@ -1023,30 +1030,54 @@
             }
             
             if (currentEditingItemId) {
-                const idx = paymentItems.findIndex(i => i.id === currentEditingItemId);
-                paymentItems[idx] = { ...paymentItems[idx], name, amount };
+                await NECO_DB.updatePaymentItem(currentEditingItemId, { name, amount, category_id: categoryId });
             } else {
-                const newId = Math.max(...paymentItems.map(i => i.id), 0) + 1;
-                paymentItems.push({ id: newId, name, categoryId: selectedCategoryId, amount });
+                await NECO_DB.addPaymentItem({ name, category_id: categoryId, amount });
             }
             
+            currentPaymentItems = await NECO_DB.getPaymentItems();
             closeModal('itemModal');
-            const itemCount = paymentItems.filter(i => i.categoryId === selectedCategoryId).length;
-            document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
-            renderItemsForCategory();
+            if (selectedCategoryId === categoryId) {
+                const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
+                document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
+                renderItemsForCategory();
+            }
             updateDashboard();
-            saveToLocalStorage();
         }
         
-        function deleteItem(itemId) {
+        async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
-                paymentItems = paymentItems.filter(i => i.id !== itemId);
-                const itemCount = paymentItems.filter(i => i.categoryId === selectedCategoryId).length;
+                await NECO_DB.deletePaymentItem(itemId);
+                currentPaymentItems = await NECO_DB.getPaymentItems();
+                const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
                 document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
                 renderItemsForCategory();
                 updateDashboard();
-                saveToLocalStorage();
             }
+        }
+        
+        async function deleteCategory(categoryId) {
+            const hasItems = currentPaymentItems.some(i => i.category_id === categoryId);
+            if (hasItems) {
+                if (!confirm('Category has items. Delete category and ALL items?')) return;
+                const itemsToDelete = currentPaymentItems.filter(i => i.category_id === categoryId);
+                for (const item of itemsToDelete) {
+                    await NECO_DB.deletePaymentItem(item.id);
+                }
+            } else {
+                if (!confirm('Delete this category?')) return;
+            }
+            await NECO_DB.deleteCategory(categoryId);
+            currentCategories = await NECO_DB.getCategories();
+            currentPaymentItems = await NECO_DB.getPaymentItems();
+            
+            if (selectedCategoryId === categoryId) {
+                selectedCategoryId = currentCategories.length > 0 ? currentCategories[0].id : null;
+                if (selectedCategoryId) selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
+            }
+            renderCategorySidebar();
+            renderItemsForCategory();
+            updateDashboard();
         }
         
         function generateRandomPin() {
@@ -1063,7 +1094,7 @@
             document.getElementById('pinModal').style.display = 'flex';
         }
         
-        function savePin() {
+        async function savePin() {
             const pin = document.getElementById('pinCode').value;
             const bankName = document.getElementById('pinBankName').value;
             const accountName = document.getElementById('pinAccountName').value;
@@ -1075,60 +1106,49 @@
                 return;
             }
             
-            const expiresAt = new Date().getTime() + (30 * 60 * 1000);
-            paymentPins.push({ pin, bankName, accountName, accountNumber, bankCode, status: "active", createdAt: new Date().toISOString(), expiresAt: expiresAt });
-            
+            await NECO_DB.generatePin({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, bank_code: bankCode });
+            currentPaymentPins = await NECO_DB.getPaymentPins();
             closeModal('pinModal');
             renderPins();
             updateDashboard();
-            saveToLocalStorage();
-            alert(`PIN ${pin} generated! It will expire in 30 minutes.`);
+            alert(`PIN ${pin} generated! It will stay active until used.`);
         }
         
-        function deletePin(idx) {
+        async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
-                paymentPins.splice(idx, 1);
+                await NECO_DB.deletePin(pinId);
+                currentPaymentPins = await NECO_DB.getPaymentPins();
                 renderPins();
                 updateDashboard();
-                saveToLocalStorage();
             }
-        }
-        
-        function reactivatePin(idx) {
-            const newExpiry = new Date().getTime() + (30 * 60 * 1000);
-            paymentPins[idx].status = "active";
-            paymentPins[idx].expiresAt = newExpiry;
-            renderPins();
-            updateDashboard();
-            saveToLocalStorage();
-            alert(`PIN ${paymentPins[idx].pin} has been reactivated for 30 minutes!`);
         }
         
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
-            if (paymentPins.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>';
+            if (!tbody) return;
+            if (currentPaymentPins.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>';
                 return;
             }
             let pinsHtml = '';
-            for (let idx = 0; idx < paymentPins.length; idx++) {
-                const pin = paymentPins[idx];
+            for (let i = 0; i < currentPaymentPins.length; i++) {
+                const pin = currentPaymentPins[i];
                 let statusClass = "badge-active";
-                if (pin.status === "expired") statusClass = "badge-expired";
-                if (pin.status === "used") statusClass = "badge-used";
-                const timeLeft = getRemainingTime(pin.expiresAt);
+                let statusText = "Active";
+                if (pin.status === "used") {
+                    statusClass = "badge-used";
+                    statusText = "Used";
+                }
                 pinsHtml += `
                     <tr>
                         <td><code>${pin.pin}</code></td>
-                        <td>${pin.bankName}</td>
-                        <td>${pin.accountName}</td>
-                        <td>${pin.accountNumber}</td>
-                        <td><span class="badge ${statusClass}">${pin.status}</span></td>
-                        <td><span class="countdown-small">${timeLeft}</span></td>
-                        <td>${new Date(pin.createdAt).toLocaleDateString()}</td>
+                        <td>${pin.bank_name}</td>
+                        <td>${pin.account_name}</td>
+                        <td>${pin.account_number}</td>
+                        <td><span class="badge ${statusClass}">${statusText}</span></td>
+                        <td>${new Date(pin.created_at).toLocaleDateString()}</td>
                         <td>
-                            <button class="delete-btn" onclick="deletePin(${idx})">Delete</button>
-                            ${pin.status !== "active" ? `<button class="edit-btn" onclick="reactivatePin(${idx})">Reactivate</button>` : ''}
+                            <button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button>
                         </td>
                     </tr>
                 `;
@@ -1138,6 +1158,7 @@
         
         function loadHomePreview() {
             const container = document.getElementById('homePreview');
+            if (!container) return;
             let stepsHtml = '';
             for (let i = 0; i < homeContent.steps.length; i++) {
                 const step = homeContent.steps[i];
@@ -1156,9 +1177,7 @@
                 <div style="padding:40px;">
                     <div class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="text-align:center;"><h2 style="font-size:32px;">${homeContent.howItWorksTitle}</h2></div>
                     <div class="editable-element" onclick="openTextEditor('footerNote')" style="margin:20px 0;"><p style="color:#666; font-size:14px;">${homeContent.footerNote}</p></div>
-                    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">
-                        ${stepsHtml}
-                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; margin-top:30px;">${stepsHtml}</div>
                 </div>
             </div>`;
         }
@@ -1180,7 +1199,7 @@
             document.getElementById('editTextModal').style.display = 'flex';
         }
         
-        function saveTextEdit() {
+        async function saveTextEdit() {
             const newVal = document.getElementById('editTextContent').value;
             if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newVal;
             else if (currentEditingKey === 'heroNote') homeContent.heroNote = newVal;
@@ -1192,34 +1211,36 @@
                 if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
                 else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
             }
+            await NECO_DB.updateHomeContent(1, homeContent);
             closeModal('editTextModal');
             loadHomePreview();
-            saveToLocalStorage();
+            alert('✅ Home page content updated! It will now show on the live home page.');
         }
         
-        function saveHomeChanges() { 
-            saveToLocalStorage(); 
-            alert('✅ Home page changes saved!'); 
+        async function saveHomeChanges() {
+            await NECO_DB.updateHomeContent(1, homeContent);
+            alert('✅ Home page changes saved! Refresh your home page to see the changes.');
         }
         
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
-            if (payments.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>'; 
-                return; 
+            if (!tbody) return;
+            if (currentPayments.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>';
+                return;
             }
             let paymentsHtml = '';
-            for (let i = 0; i < payments.length; i++) {
-                const payment = payments[i];
+            for (let i = 0; i < currentPayments.length; i++) {
+                const payment = currentPayments[i];
                 paymentsHtml += `
                     <tr>
-                        <td>${new Date(payment.date).toLocaleDateString()}</td>
-                        <td>${payment.itemName}</td>
-                        <td>${payment.fullName}</td>
+                        <td>${new Date(payment.created_at).toLocaleDateString()}</td>
+                        <td>${payment.item_name}</td>
+                        <td>${payment.full_name}</td>
                         <td>${payment.phone}</td>
                         <td>${payment.email}</td>
                         <td>₦${payment.amount.toLocaleString()}</td>
-                        <td>${payment.paymentCode}</td>
+                        <td>${payment.payment_code}</td>
                         <td><span class="badge badge-active">Completed</span></td>
                     </tr>
                 `;
@@ -1227,17 +1248,16 @@
             tbody.innerHTML = paymentsHtml;
         }
         
-        function closeModal(id) { 
-            document.getElementById(id).style.display = 'none'; 
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
         
-        function logout() { 
-            stopPinExpiryChecker();
-            localStorage.removeItem('adminLoggedIn'); 
-            location.reload(); 
+        function logout() {
+            localStorage.removeItem('adminLoggedIn');
+            location.reload();
         }
         
-        function toggleSidebar() { 
+        function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.getElementById('mobileOverlay');
             sidebar.classList.toggle('open');
@@ -1261,29 +1281,20 @@
                 allTabs[i].classList.remove('active');
             }
             const targetTab = document.getElementById(tabId);
-            if (targetTab) {
-                targetTab.classList.add('active');
-            }
+            if (targetTab) targetTab.classList.add('active');
             document.getElementById('pageTitle').innerHTML = title;
             if (tabId === 'pin-manager') renderPins();
             if (tabId === 'view-payments') renderPayments();
             if (tabId === 'home-editor') loadHomePreview();
             if (tabId === 'dashboard') updateDashboard();
-            if (tabId === 'payment-editor') {
-                renderItemsForCategory();
-            }
+            if (tabId === 'payment-editor') renderItemsForCategory();
             closeSidebar();
         }
         
         function initDashboard() {
-            loadFromLocalStorage();
-            updateDashboard();
-            renderPins();
-            renderPayments();
-            loadHomePreview();
+            renderCategorySidebar();
             renderItemsForCategory();
             
-            // Setup main menu items
             const menuItems = document.querySelectorAll('.menu-item[data-tab]');
             for (let i = 0; i < menuItems.length; i++) {
                 const item = menuItems[i];
@@ -1301,16 +1312,22 @@
                 };
             }
             
-            // Setup categories header
             const categoryHeader = document.querySelector('.menu-category-header');
             if (categoryHeader) {
                 categoryHeader.onclick = function(e) {
                     e.stopPropagation();
-                    toggleCategories();
+                    const subMenu = document.getElementById('categorySubMenu');
+                    const arrow = document.getElementById('categoryArrow');
+                    if (subMenu.classList.contains('open')) {
+                        subMenu.classList.remove('open');
+                        arrow.style.transform = 'rotate(0deg)';
+                    } else {
+                        subMenu.classList.add('open');
+                        arrow.style.transform = 'rotate(180deg)';
+                    }
                 };
             }
             
-            // Setup submenu category clicks
             const subMenuItems = document.querySelectorAll('.sub-menu li');
             for (let i = 0; i < subMenuItems.length; i++) {
                 const item = subMenuItems[i];
@@ -1334,24 +1351,9 @@
                     closeSidebar();
                 };
             }
-            
-            // Set active class on SSCE Internal
-            const allSubItems = document.querySelectorAll('.sub-menu li');
-            for (let i = 0; i < allSubItems.length; i++) {
-                allSubItems[i].classList.remove('active');
-                if (allSubItems[i].getAttribute('data-category') === "SSCE Internal") {
-                    allSubItems[i].classList.add('active');
-                }
-            }
-            
-            // Make sure payment editor is visible
-            const paymentEditor = document.getElementById('payment-editor');
-            if (paymentEditor) {
-                paymentEditor.classList.add('active');
-            }
         }
         
-        window.onclick = function(e) { 
+        window.onclick = function(e) {
             if (e.target.classList.contains('modal')) {
                 e.target.style.display = 'none';
             }
