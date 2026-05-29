@@ -52,25 +52,6 @@
             }
         }
         
-        /* Content wrapper for consistent spacing */
-        .content-wrapper {
-            padding-left: 1rem;
-            padding-right: 1rem;
-        }
-        
-        @media (min-width: 640px) {
-            .content-wrapper {
-                padding-left: 1.5rem;
-                padding-right: 1.5rem;
-            }
-        }
-        @media (min-width: 1024px) {
-            .content-wrapper {
-                padding-left: 2rem;
-                padding-right: 2rem;
-            }
-        }
-        
         #accountModal .account-box {
             max-width: 400px;
             width: 100%;
@@ -827,7 +808,7 @@
         } catch (error) {}
     }
     
-    // ============ RENDER GRID IMMEDIATELY ============
+    // ============ RENDER GRID IMMEDIATELY - WITH COLORED TOP BAR ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
@@ -835,8 +816,8 @@
         
         grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="rounded-md overflow-hidden shadow-sm">
-                        <div class="h-full w-full flex flex-col justify-between" style="background: #ECFAF3;">
+            return `<div class="bg-[${cat.color}] rounded-md overflow-hidden shadow-sm" style="background: ${cat.color};">
+                        <div class="h-full w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
                             <div class="py-8 px-5 text-black font-medium">${item.name}</div>
                             <div>
                                 <div class="h-[1px] bg-gray-200"></div>
@@ -1215,8 +1196,8 @@
         }
         document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="rounded-md overflow-hidden shadow-sm">
-                        <div class="h-full w-full flex flex-col justify-between" style="background: #ECFAF3;">
+            return `<div class="bg-[${cat.color}] rounded-md overflow-hidden shadow-sm" style="background: ${cat.color};">
+                        <div class="h-full w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
                             <div class="py-8 px-5 text-black font-medium">${item.name}</div>
                             <div>
                                 <div class="h-[1px] bg-gray-200"></div>
