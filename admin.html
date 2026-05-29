@@ -876,48 +876,71 @@
         
         // ============ LOAD DATA WITH ERROR HANDLING ============
         async function loadAllData() {
-            try {
-                // Load categories
-                const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
-                currentCategories = categories && categories.length > 0 ? categories : defaultCategories;
-                
-                // Load payment items
-                const { data: paymentItems } = await necoSupabase.from('payment_items').select('*').order('id');
-                currentPaymentItems = paymentItems || [];
-                
-                // Load payment pins
-                const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                currentPaymentPins = paymentPins || [];
-                
-                // Load payments
-                const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
-                currentPayments = payments || [];
-                
-                // Load home content (with error handling for missing table)
-                try {
-                    const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
-                    if (home) homeContent = home;
-                } catch (err) {
-                    console.log('Home content table not ready, using defaults');
-                }
-                
-                updateDashboard();
-                renderPins();
-                renderPayments();
-                loadHomePreview();
-                renderCategorySidebar();
-                
-                if (currentCategories.length > 0 && !selectedCategoryId) {
-                    selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-                currentCategories = defaultCategories;
-                renderCategorySidebar();
-                updateDashboard();
-            }
+    try {
+        // Load categories
+        const { data: categories, error: categoriesError } = await necoSupabase.from('categories').select('*').order('id');
+        if (categoriesError) {
+            console.error('Categories error:', categoriesError);
+            currentCategories = defaultCategories;
+        } else {
+            currentCategories = categories && categories.length > 0 ? categories : defaultCategories;
         }
         
+        // Load payment items
+        const { data: paymentItems, error: itemsError } = await necoSupabase.from('payment_items').select('*').order('id');
+        if (itemsError) {
+            console.error('Payment items error:', itemsError);
+            currentPaymentItems = [];
+        } else {
+            currentPaymentItems = paymentItems || [];
+        }
+        
+        // Load payment pins
+        const { data: paymentPins, error: pinsError } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+        if (pinsError) {
+            console.error('Payment pins error:', pinsError);
+            currentPaymentPins = [];
+        } else {
+            currentPaymentPins = paymentPins || [];
+        }
+        
+        // Load payments
+        const { data: payments, error: paymentsError } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
+        if (paymentsError) {
+            console.error('Payments error:', paymentsError);
+            currentPayments = [];
+        } else {
+            currentPayments = payments || [];
+        }
+        
+        // Load home content (with error handling for missing table)
+        try {
+            const { data: home, error: homeError } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
+            if (homeError) {
+                console.log('Home content error:', homeError);
+            }
+            if (home) homeContent = home;
+        } catch (err) {
+            console.log('Home content table not ready, using defaults');
+        }
+        
+        updateDashboard();
+        renderPins();
+        renderPayments();
+        loadHomePreview();
+        renderCategorySidebar();
+        
+        if (currentCategories.length > 0 && !selectedCategoryId) {
+            // Call selectCategory without event parameter (fromClick = false)
+            selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color, false);
+        }
+    } catch (error) {
+        console.error('Error loading data:', error);
+        currentCategories = defaultCategories;
+        renderCategorySidebar();
+        updateDashboard();
+    }
+}
         function updateDashboard() {
             document.getElementById('totalItems').innerText = currentPaymentItems.length;
             const activePins = currentPaymentPins.filter(p => p.status === "active").length;
@@ -927,47 +950,51 @@
         
         // ============ CLICKABLE CATEGORIES SIDEBAR ============
         function renderCategorySidebar() {
-            const container = document.getElementById('categoryList');
-            if (!container) return;
-            
-            let html = '';
-            for (let i = 0; i < currentCategories.length; i++) {
-                const cat = currentCategories[i];
-                const isActive = selectedCategoryId === cat.id;
-                html += `
-                    <li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}')">
-                        <span class="category-color-dot" style="background: ${cat.color};"></span>
-                        <span class="category-name">${cat.name}</span>
-                        <button class="cat-delete-btn" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
-                    </li>
-                `;
+    const container = document.getElementById('categoryList');
+    if (!container) return;
+    
+    let html = '';
+    for (let i = 0; i < currentCategories.length; i++) {
+        const cat = currentCategories[i];
+        const isActive = selectedCategoryId === cat.id;
+        html += `
+            <li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}', true)">
+                <span class="category-color-dot" style="background: ${cat.color};"></span>
+                <span class="category-name">${cat.name}</span>
+                <button class="cat-delete-btn" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
+            </li>
+        `;
+    }
+    container.innerHTML = html;
+}
+      function selectCategory(categoryName, categoryId, color, fromClick = false) {
+    selectedCategoryId = categoryId;
+    selectedCategoryName = categoryName;
+    
+    // Update active state in sidebar
+    const listItems = document.querySelectorAll('#categoryList li');
+    listItems.forEach(item => item.classList.remove('active'));
+    
+    if (fromClick && event && event.currentTarget) {
+        event.currentTarget.classList.add('active');
+    } else {
+        // When loading from data, find the matching category by name
+        for (let i = 0; i < listItems.length; i++) {
+            const nameSpan = listItems[i].querySelector('.category-name');
+            if (nameSpan && nameSpan.innerText === categoryName) {
+                listItems[i].classList.add('active');
+                break;
             }
-            container.innerHTML = html;
         }
-        
-        function selectCategory(categoryName, categoryId, color) {
-            selectedCategoryId = categoryId;
-            selectedCategoryName = categoryName;
-            
-            // Update active state in sidebar
-            const listItems = document.querySelectorAll('#categoryList li');
-            listItems.forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-            
-            // Update sub-menu active state
-            const subItems = document.querySelectorAll('.sub-menu li');
-            for (let i = 0; i < subItems.length; i++) {
-                subItems[i].classList.remove('active');
-                if (subItems[i].getAttribute('data-category') === categoryName) {
-                    subItems[i].classList.add('active');
-                }
-            }
-            
-            const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
-            document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${itemCount} items)`;
-            document.getElementById('addItemBtn').style.display = 'block';
-            renderItemsForCategory();
-        }
+    }
+    
+    const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+    const titleElement = document.getElementById('selectedCategoryTitle');
+    const addBtn = document.getElementById('addItemBtn');
+    if (titleElement) titleElement.innerHTML = `${categoryName} Items (${itemCount} items)`;
+    if (addBtn) addBtn.style.display = 'block';
+    renderItemsForCategory();
+}
         
         function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
