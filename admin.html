@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Admin Panel</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
-    <!-- Supabase SDK -->
+    <!-- Supabase SDK - ONLY ONCE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
@@ -653,7 +653,7 @@
             
             <div id="home-editor" class="tab-content">
                 <div class="home-preview">
-                    <div class="preview-header"><h3>🏠 Live Home Page Editor</h3><p style="font-size:12px; color:#666;">Click on any text to edit it. Changes will appear immediately on the home page.</p></div>
+                    <div class="preview-header"><h3>🏠 Live Home Page Editor</h3><p style="font-size:12px; color:#666;">Click on any text to edit it</p></div>
                     <div class="preview-frame" id="homePreview"></div>
                     <button class="save-all-btn" onclick="saveHomeChanges()">💾 Save All Home Page Changes</button>
                 </div>
@@ -685,7 +685,7 @@
                     <table class="items-table">
                         <thead><tr><th>Date</th><th>Item</th><th>Payer Name</th><th>Phone</th><th>Email</th><th>Amount</th><th>Payment Code</th><th>Status</th></thead>
                         <tbody id="paymentsTableBody">
-                            <tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>
+                            <td><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -732,88 +732,8 @@
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
-        let supabase = null;
-        
-        function initSupabase() {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            return supabase;
-        }
-        
-        const NECO_DB = {
-            getCategories: async function() {
-                const { data, error } = await supabase.from('categories').select('*').order('id');
-                if (error) throw error;
-                return data;
-            },
-            addCategory: async function(category) {
-                const { data, error } = await supabase.from('categories').insert(category).select();
-                if (error) throw error;
-                return data[0];
-            },
-            deleteCategory: async function(id) {
-                const { error } = await supabase.from('categories').delete().eq('id', id);
-                if (error) throw error;
-            },
-            
-            getPaymentItems: async function() {
-                const { data, error } = await supabase.from('payment_items').select('*').order('id');
-                if (error) throw error;
-                return data;
-            },
-            addPaymentItem: async function(item) {
-                const { data, error } = await supabase.from('payment_items').insert(item).select();
-                if (error) throw error;
-                return data[0];
-            },
-            updatePaymentItem: async function(id, updates) {
-                const { data, error } = await supabase.from('payment_items').update(updates).eq('id', id).select();
-                if (error) throw error;
-                return data[0];
-            },
-            deletePaymentItem: async function(id) {
-                const { error } = await supabase.from('payment_items').delete().eq('id', id);
-                if (error) throw error;
-            },
-            
-            getPaymentPins: async function() {
-                const { data, error } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
-                return data;
-            },
-            generatePin: async function(pinData) {
-                const { data, error } = await supabase.from('payment_pins').insert({
-                    pin: pinData.pin,
-                    bank_name: pinData.bank_name,
-                    account_name: pinData.account_name,
-                    account_number: pinData.account_number,
-                    bank_code: pinData.bank_code || '',
-                    status: 'active'
-                }).select();
-                if (error) throw error;
-                return data[0];
-            },
-            deletePin: async function(id) {
-                const { error } = await supabase.from('payment_pins').delete().eq('id', id);
-                if (error) throw error;
-            },
-            
-            getPayments: async function() {
-                const { data, error } = await supabase.from('payments').select('*').order('created_at', { ascending: false });
-                if (error) throw error;
-                return data;
-            },
-            
-            getHomeContent: async function() {
-                const { data, error } = await supabase.from('home_content').select('*').limit(1).single();
-                if (error && error.code !== 'PGRST116') return null;
-                return data;
-            },
-            updateHomeContent: async function(id, updates) {
-                const { data, error } = await supabase.from('home_content').update(updates).eq('id', id).select();
-                if (error) throw error;
-                return data[0];
-            }
-        };
+        // Create supabase client - ONLY ONCE
+        const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
         const ADMIN_USERNAME = "admin";
         const ADMIN_PASSWORD = "admin123";
@@ -831,14 +751,14 @@
             heroTitle: "NECO Corrections Just Got Faster and Simpler.",
             heroNote: "You do not need an account to make payment",
             howItWorksTitle: "How it works",
-            footerNote: "NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website (www.neco.gov.ng). Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.",
+            footerNote: "NOTE: Payment item code is required for any NECO payment",
             steps: [
-                { title: "Select Correction Type", description: "Select or search for the correction type you want i.e Correction of Name, Date of Birth, Subject Entry etc" },
-                { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website www.neco.gov.ng. Ensure to verify your payment before proceeding to Pay." },
-                { title: "Fill the Correction Form", description: "Fill the correction form with your details and proceed to payment" },
-                { title: "Select Mode of Payment", description: "Select mode of payment i.e Card payment, Bank Transfer or USSD" },
-                { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed" },
-                { title: "Get Confirmation", description: "Your correction will be processed and you will receive confirmation" }
+                { title: "Select Correction Type", description: "Select or search for the correction type you want" },
+                { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment" },
+                { title: "Fill the Correction Form", description: "Fill the correction form with your details" },
+                { title: "Select Mode of Payment", description: "Select mode of payment" },
+                { title: "Confirm Your Payment", description: "Review and confirm your payment" },
+                { title: "Get Confirmation", description: "Receive confirmation of your payment" }
             ]
         };
         
@@ -850,7 +770,8 @@
                 localStorage.setItem('adminLoggedIn', 'true');
                 document.getElementById('loginOverlay').style.display = 'none';
                 document.getElementById('dashboardContainer').style.display = 'block';
-                await initSupabaseAndLoadData();
+                await loadAllData();
+                initDashboard();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -859,25 +780,25 @@
             }
         }
         
-        async function initSupabaseAndLoadData() {
-            initSupabase();
-            await loadAllData();
-            initDashboard();
-        }
-        
         if (localStorage.getItem('adminLoggedIn') === 'true') {
             document.getElementById('loginOverlay').style.display = 'none';
             document.getElementById('dashboardContainer').style.display = 'block';
-            initSupabaseAndLoadData();
+            loadAllData();
+            initDashboard();
         }
         
         async function loadAllData() {
             try {
-                currentCategories = await NECO_DB.getCategories();
-                currentPaymentItems = await NECO_DB.getPaymentItems();
-                currentPaymentPins = await NECO_DB.getPaymentPins();
-                currentPayments = await NECO_DB.getPayments();
-                const home = await NECO_DB.getHomeContent();
+                const { data: categories } = await _supabase.from('categories').select('*').order('id');
+                const { data: paymentItems } = await _supabase.from('payment_items').select('*').order('id');
+                const { data: paymentPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                const { data: payments } = await _supabase.from('payments').select('*').order('created_at', { ascending: false });
+                const { data: home } = await _supabase.from('home_content').select('*').limit(1).single();
+                
+                if (categories) currentCategories = categories;
+                if (paymentItems) currentPaymentItems = paymentItems;
+                if (paymentPins) currentPaymentPins = paymentPins;
+                if (payments) currentPayments = payments;
                 if (home) homeContent = home;
                 
                 updateDashboard();
@@ -980,7 +901,6 @@
             document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
             document.getElementById('itemName').value = '';
             document.getElementById('itemAmount').value = '';
-            // Populate category dropdown
             const categorySelect = document.getElementById('itemCategory');
             if (categorySelect) {
                 categorySelect.innerHTML = '';
@@ -1003,7 +923,6 @@
             document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemAmount').value = item.amount || '';
-            // Populate category dropdown
             const categorySelect = document.getElementById('itemCategory');
             if (categorySelect) {
                 categorySelect.innerHTML = '';
@@ -1030,12 +949,14 @@
             }
             
             if (currentEditingItemId) {
-                await NECO_DB.updatePaymentItem(currentEditingItemId, { name, amount, category_id: categoryId });
+                await _supabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
             } else {
-                await NECO_DB.addPaymentItem({ name, category_id: categoryId, amount });
+                await _supabase.from('payment_items').insert({ name, category_id: categoryId, amount });
             }
             
-            currentPaymentItems = await NECO_DB.getPaymentItems();
+            const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+            if (updatedItems) currentPaymentItems = updatedItems;
+            
             closeModal('itemModal');
             if (selectedCategoryId === categoryId) {
                 const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
@@ -1043,16 +964,19 @@
                 renderItemsForCategory();
             }
             updateDashboard();
+            triggerSync();
         }
         
         async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
-                await NECO_DB.deletePaymentItem(itemId);
-                currentPaymentItems = await NECO_DB.getPaymentItems();
+                await _supabase.from('payment_items').delete().eq('id', itemId);
+                const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+                if (updatedItems) currentPaymentItems = updatedItems;
                 const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
                 document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
                 renderItemsForCategory();
                 updateDashboard();
+                triggerSync();
             }
         }
         
@@ -1060,16 +984,16 @@
             const hasItems = currentPaymentItems.some(i => i.category_id === categoryId);
             if (hasItems) {
                 if (!confirm('Category has items. Delete category and ALL items?')) return;
-                const itemsToDelete = currentPaymentItems.filter(i => i.category_id === categoryId);
-                for (const item of itemsToDelete) {
-                    await NECO_DB.deletePaymentItem(item.id);
-                }
+                await _supabase.from('payment_items').delete().eq('category_id', categoryId);
             } else {
                 if (!confirm('Delete this category?')) return;
             }
-            await NECO_DB.deleteCategory(categoryId);
-            currentCategories = await NECO_DB.getCategories();
-            currentPaymentItems = await NECO_DB.getPaymentItems();
+            await _supabase.from('categories').delete().eq('id', categoryId);
+            
+            const { data: updatedCats } = await _supabase.from('categories').select('*').order('id');
+            const { data: updatedItems } = await _supabase.from('payment_items').select('*').order('id');
+            if (updatedCats) currentCategories = updatedCats;
+            if (updatedItems) currentPaymentItems = updatedItems;
             
             if (selectedCategoryId === categoryId) {
                 selectedCategoryId = currentCategories.length > 0 ? currentCategories[0].id : null;
@@ -1078,6 +1002,7 @@
             renderCategorySidebar();
             renderItemsForCategory();
             updateDashboard();
+            triggerSync();
         }
         
         function generateRandomPin() {
@@ -1106,20 +1031,37 @@
                 return;
             }
             
-            await NECO_DB.generatePin({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, bank_code: bankCode });
-            currentPaymentPins = await NECO_DB.getPaymentPins();
+            const expiresAt = new Date();
+            expiresAt.setMinutes(expiresAt.getMinutes() + 30);
+            
+            await _supabase.from('payment_pins').insert({
+                pin: pin,
+                bank_name: bankName,
+                account_name: accountName,
+                account_number: accountNumber,
+                bank_code: bankCode,
+                status: 'active',
+                expires_at: expiresAt.toISOString()
+            });
+            
+            const { data: updatedPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+            if (updatedPins) currentPaymentPins = updatedPins;
+            
             closeModal('pinModal');
             renderPins();
             updateDashboard();
-            alert(`PIN ${pin} generated! It will stay active until used.`);
+            triggerSync();
+            alert(`PIN ${pin} generated! It will expire in 30 minutes.`);
         }
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
-                await NECO_DB.deletePin(pinId);
-                currentPaymentPins = await NECO_DB.getPaymentPins();
+                await _supabase.from('payment_pins').delete().eq('id', pinId);
+                const { data: updatedPins } = await _supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                if (updatedPins) currentPaymentPins = updatedPins;
                 renderPins();
                 updateDashboard();
+                triggerSync();
             }
         }
         
@@ -1211,15 +1153,16 @@
                 if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
                 else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
             }
-            await NECO_DB.updateHomeContent(1, homeContent);
+            await _supabase.from('home_content').update(homeContent).eq('id', 1);
             closeModal('editTextModal');
             loadHomePreview();
-            alert('✅ Home page content updated! It will now show on the live home page.');
+            triggerSync();
         }
         
         async function saveHomeChanges() {
-            await NECO_DB.updateHomeContent(1, homeContent);
-            alert('✅ Home page changes saved! Refresh your home page to see the changes.');
+            await _supabase.from('home_content').update(homeContent).eq('id', 1);
+            alert('✅ Home page changes saved!');
+            triggerSync();
         }
         
         function renderPayments() {
@@ -1289,6 +1232,10 @@
             if (tabId === 'dashboard') updateDashboard();
             if (tabId === 'payment-editor') renderItemsForCategory();
             closeSidebar();
+        }
+        
+        function triggerSync() {
+            localStorage.setItem('neco_sync_timestamp', Date.now().toString());
         }
         
         function initDashboard() {
