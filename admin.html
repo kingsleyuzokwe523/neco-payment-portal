@@ -184,31 +184,58 @@
             display: block;
         }
         
-        .sub-menu li {
+        /* Category List Styles */
+        #categoryList {
+            list-style: none;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+        
+        #categoryList li {
             padding: 10px 15px;
-            margin: 2px 0;
+            margin: 5px 0;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 13px;
             display: flex;
             align-items: center;
             gap: 10px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.2s;
         }
         
-        .sub-menu li:hover {
-            background: rgba(255,255,255,0.15);
+        #categoryList li:hover {
+            background: rgba(255,255,255,0.2);
         }
         
-        .sub-menu li.active {
-            background: rgba(255,255,255,0.25);
+        #categoryList li.active {
+            background: rgba(255,255,255,0.3);
+            border-left: 3px solid white;
         }
         
-        .category-color-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            display: inline-block;
+        .category-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+        }
+        
+        .category-name {
+            flex: 1;
+            font-size: 13px;
+        }
+        
+        .category-actions {
+            display: flex;
+            gap: 5px;
+        }
+        
+        .cat-delete-btn {
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            border: none;
+            background: #ef4444;
+            color: white;
         }
         
         .main-content {
@@ -461,7 +488,7 @@
             color: #374151;
         }
         
-        .neco-form-group input {
+        .neco-form-group input, .neco-form-group select {
             width: 100%;
             padding: 10px;
             border: 1px solid #d1d5db;
@@ -484,6 +511,11 @@
         .badge-used {
             background: #fef3c7;
             color: #92400e;
+        }
+        
+        .badge-expired {
+            background: #fee2e2;
+            color: #991b1b;
         }
         
         .save-all-btn {
@@ -552,21 +584,6 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        
-        .category-actions {
-            display: flex;
-            gap: 5px;
-        }
-        
-        .cat-delete-btn {
-            padding: 4px 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 12px;
-            border: none;
-            background: #ef4444;
-            color: white;
-        }
     </style>
 </head>
 <body>
@@ -615,14 +632,31 @@
                     <span>Categories</span>
                     <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-                <ul class="sub-menu" id="categorySubMenu">
-                    <li data-category="SSCE Internal" data-id="1" data-color="#0CA60C"><span class="category-color-dot" style="background: #0CA60C;"></span> SSCE Internal</li>
-                    <li data-category="SSCE External" data-id="2" data-color="#145596"><span class="category-color-dot" style="background: #145596;"></span> SSCE External</li>
-                    <li data-category="BECE" data-id="3" data-color="#642D56"><span class="category-color-dot" style="background: #642D56;"></span> BECE</li>
-                    <li data-category="NCEE" data-id="4" data-color="#1887EB"><span class="category-color-dot" style="background: #1887EB;"></span> NCEE</li>
-                    <li data-category="Gifted" data-id="5" data-color="#24809C"><span class="category-color-dot" style="background: #24809C;"></span> Gifted</li>
-                    <li data-category="Others" data-id="6" data-color="#36454F"><span class="category-color-dot" style="background: #36454F;"></span> Others</li>
-                </ul>
+                <div class="sub-menu" id="categorySubMenu">
+                    <!-- Dynamic category list will be populated here -->
+                    <div id="categoryList"></div>
+                    <!-- Static category list as fallback -->
+                    <ul style="list-style: none; padding-left: 0; margin-top: 10px;">
+                        <li data-category="SSCE Internal" data-id="1" data-color="#0CA60C" onclick="selectCategoryFromList('SSCE Internal', 1, '#0CA60C')">
+                            <span class="category-color-dot" style="background: #0CA60C;"></span> SSCE Internal
+                        </li>
+                        <li data-category="SSCE External" data-id="2" data-color="#145596" onclick="selectCategoryFromList('SSCE External', 2, '#145596')">
+                            <span class="category-color-dot" style="background: #145596;"></span> SSCE External
+                        </li>
+                        <li data-category="BECE" data-id="3" data-color="#642D56" onclick="selectCategoryFromList('BECE', 3, '#642D56')">
+                            <span class="category-color-dot" style="background: #642D56;"></span> BECE
+                        </li>
+                        <li data-category="NCEE" data-id="4" data-color="#1887EB" onclick="selectCategoryFromList('NCEE', 4, '#1887EB')">
+                            <span class="category-color-dot" style="background: #1887EB;"></span> NCEE
+                        </li>
+                        <li data-category="Gifted" data-id="5" data-color="#24809C" onclick="selectCategoryFromList('Gifted', 5, '#24809C')">
+                            <span class="category-color-dot" style="background: #24809C;"></span> Gifted
+                        </li>
+                        <li data-category="Others" data-id="6" data-color="#36454F" onclick="selectCategoryFromList('Others', 6, '#36454F')">
+                            <span class="category-color-dot" style="background: #36454F;"></span> Others
+                        </li>
+                    </ul>
+                </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
@@ -728,22 +762,23 @@
     </div>
 
     <script>
-        // ============ SUPABASE CONFIGURATION ============
+        // ============ SUPABASE CONFIGURATION (NO DUPLICATE ERROR) ============
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         
-        // Create supabase client - SINGLE INSTANCE
-        let supabase = null;
+        // Use unique variable name to avoid conflicts
+        let necoSupabase = null;
         
         // Global variables
         let currentCategories = [];
         let currentPaymentItems = [];
         let currentPaymentPins = [];
         let currentPayments = [];
-        let selectedCategoryId = null;
-        let selectedCategoryName = null;
+        let selectedCategoryId = 1;
+        let selectedCategoryName = "SSCE Internal";
         let currentEditingItemId = null;
         let currentEditingKey = null;
+        let pinExpiryInterval = null;
         
         let homeContent = {
             heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -762,7 +797,68 @@
         
         // Initialize Supabase
         function initSupabase() {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            if (!necoSupabase) {
+                necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            }
+            return necoSupabase;
+        }
+        
+        // ============ PIN EXPIRY SYSTEM ============
+        async function checkAndExpirePins() {
+            if (!necoSupabase) return;
+            
+            const now = new Date();
+            let updated = false;
+            
+            for (let i = 0; i < currentPaymentPins.length; i++) {
+                const pin = currentPaymentPins[i];
+                
+                // PIN is used - mark as expired after 30 minutes
+                if (pin.status === 'used' && pin.used_at) {
+                    const usedTime = new Date(pin.used_at);
+                    const minutesSinceUse = (now - usedTime) / (1000 * 60);
+                    
+                    if (minutesSinceUse >= 30 && pin.status !== 'expired') {
+                        await necoSupabase
+                            .from('payment_pins')
+                            .update({ status: 'expired', expired_at: now.toISOString() })
+                            .eq('id', pin.id);
+                        updated = true;
+                    }
+                }
+                
+                // PIN is active but past creation expiry
+                if (pin.status === 'active' && pin.expires_at) {
+                    const expiryTime = new Date(pin.expires_at);
+                    if (now > expiryTime) {
+                        await necoSupabase
+                            .from('payment_pins')
+                            .update({ status: 'expired', expired_at: now.toISOString() })
+                            .eq('id', pin.id);
+                        updated = true;
+                    }
+                }
+            }
+            
+            if (updated) {
+                const { data: updatedPins } = await necoSupabase
+                    .from('payment_pins')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                if (updatedPins) currentPaymentPins = updatedPins;
+                renderPins();
+                updateDashboard();
+            }
+        }
+        
+        // Start PIN expiry checker (runs every minute)
+        function startPinExpiryChecker() {
+            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
+            pinExpiryInterval = setInterval(() => {
+                if (currentPaymentPins.length > 0) {
+                    checkAndExpirePins();
+                }
+            }, 60000);
         }
         
         // ============ LOGIN/LOGOUT ============
@@ -777,6 +873,7 @@
                 initSupabase();
                 loadAllData();
                 initDashboard();
+                startPinExpiryChecker();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -786,6 +883,7 @@
         }
         
         function doLogout() {
+            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
             localStorage.removeItem('adminLoggedIn');
             location.reload();
         }
@@ -797,18 +895,19 @@
             initSupabase();
             loadAllData();
             initDashboard();
+            startPinExpiryChecker();
         }
         
         // ============ LOAD DATA ============
         async function loadAllData() {
             try {
-                const { data: categories } = await supabase.from('categories').select('*').order('id');
-                const { data: paymentItems } = await supabase.from('payment_items').select('*').order('id');
-                const { data: paymentPins } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                const { data: payments } = await supabase.from('payments').select('*').order('created_at', { ascending: false });
-                const { data: home } = await supabase.from('home_content').select('*').limit(1).single();
+                const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
+                const { data: paymentItems } = await necoSupabase.from('payment_items').select('*').order('id');
+                const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
+                const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).single();
                 
-                if (categories) currentCategories = categories;
+                if (categories && categories.length > 0) currentCategories = categories;
                 if (paymentItems) currentPaymentItems = paymentItems;
                 if (paymentPins) currentPaymentPins = paymentPins;
                 if (payments) currentPayments = payments;
@@ -821,7 +920,9 @@
                 renderCategorySidebar();
                 
                 if (currentCategories.length > 0 && !selectedCategoryId) {
-                    selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
+                    selectedCategoryId = currentCategories[0].id;
+                    selectedCategoryName = currentCategories[0].name;
+                    selectCategory(selectedCategoryName, selectedCategoryId, currentCategories[0].color);
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -839,26 +940,31 @@
             const container = document.getElementById('categoryList');
             if (!container) return;
             
-            let html = '';
+            let html = '<ul style="list-style: none; padding-left: 0;">';
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
                 html += `
-                    <li class="${selectedCategoryId === cat.id ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}')">
-                        <div class="category-color" style="background: ${cat.color};"></div>
-                        <span class="category-name">${cat.name}</span>
-                        <div class="category-actions">
-                            <button class="cat-delete-btn" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
-                        </div>
+                    <li class="${selectedCategoryId === cat.id ? 'active' : ''}" onclick="selectCategoryFromList('${cat.name}', ${cat.id}, '${cat.color}')">
+                        <div class="category-color-dot" style="background: ${cat.color}; width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 10px;"></div>
+                        ${cat.name}
+                        <button class="cat-delete-btn" style="float: right; margin-left: 10px;" onclick="event.stopPropagation(); deleteCategory(${cat.id})">🗑️</button>
                     </li>
                 `;
             }
+            html += '</ul>';
             container.innerHTML = html;
         }
         
-        function selectCategory(categoryName, categoryId, color) {
+        function selectCategoryFromList(categoryName, categoryId, color) {
             selectedCategoryId = categoryId;
             selectedCategoryName = categoryName;
             
+            // Update active state
+            const listItems = document.querySelectorAll('#categoryList li');
+            listItems.forEach(item => item.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            // Update sub-menu active state
             const subItems = document.querySelectorAll('.sub-menu li');
             for (let i = 0; i < subItems.length; i++) {
                 subItems[i].classList.remove('active');
@@ -866,6 +972,16 @@
                     subItems[i].classList.add('active');
                 }
             }
+            
+            const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+            document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${itemCount} items)`;
+            document.getElementById('addItemBtn').style.display = 'block';
+            renderItemsForCategory();
+        }
+        
+        function selectCategory(categoryName, categoryId, color) {
+            selectedCategoryId = categoryId;
+            selectedCategoryName = categoryName;
             
             const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
             document.getElementById('selectedCategoryTitle').innerHTML = `${categoryName} Items (${itemCount} items)`;
@@ -962,12 +1078,12 @@
             }
             
             if (currentEditingItemId) {
-                await supabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+                await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
             } else {
-                await supabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+                await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
             }
             
-            const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
+            const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
             if (updatedItems) currentPaymentItems = updatedItems;
             
             closeModal('itemModal');
@@ -982,8 +1098,8 @@
         
         async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
-                await supabase.from('payment_items').delete().eq('id', itemId);
-                const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
+                await necoSupabase.from('payment_items').delete().eq('id', itemId);
+                const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
                 if (updatedItems) currentPaymentItems = updatedItems;
                 const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
                 document.getElementById('selectedCategoryTitle').innerHTML = `${selectedCategoryName} Items (${itemCount} items)`;
@@ -997,20 +1113,23 @@
             const hasItems = currentPaymentItems.some(i => i.category_id === categoryId);
             if (hasItems) {
                 if (!confirm('Category has items. Delete category and ALL items?')) return;
-                await supabase.from('payment_items').delete().eq('category_id', categoryId);
+                await necoSupabase.from('payment_items').delete().eq('category_id', categoryId);
             } else {
                 if (!confirm('Delete this category?')) return;
             }
-            await supabase.from('categories').delete().eq('id', categoryId);
+            await necoSupabase.from('categories').delete().eq('id', categoryId);
             
-            const { data: updatedCats } = await supabase.from('categories').select('*').order('id');
-            const { data: updatedItems } = await supabase.from('payment_items').select('*').order('id');
+            const { data: updatedCats } = await necoSupabase.from('categories').select('*').order('id');
+            const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
             if (updatedCats) currentCategories = updatedCats;
             if (updatedItems) currentPaymentItems = updatedItems;
             
             if (selectedCategoryId === categoryId) {
-                selectedCategoryId = currentCategories.length > 0 ? currentCategories[0].id : null;
-                if (selectedCategoryId) selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color);
+                selectedCategoryId = currentCategories.length > 0 ? currentCategories[0].id : 1;
+                if (selectedCategoryId) {
+                    const cat = currentCategories.find(c => c.id === selectedCategoryId);
+                    if (cat) selectCategory(cat.name, cat.id, cat.color);
+                }
             }
             renderCategorySidebar();
             renderItemsForCategory();
@@ -1044,38 +1163,62 @@
                 return;
             }
             
+            // Check for duplicate PIN
+            const existingPin = currentPaymentPins.find(p => p.pin === pin);
+            if (existingPin) {
+                alert('PIN code already exists! Please use a different PIN.');
+                return;
+            }
+            
             const expiresAt = new Date();
             expiresAt.setMinutes(expiresAt.getMinutes() + 30);
             
-            await supabase.from('payment_pins').insert({
+            await necoSupabase.from('payment_pins').insert({
                 pin: pin,
                 bank_name: bankName,
                 account_name: accountName,
                 account_number: accountNumber,
                 bank_code: bankCode,
                 status: 'active',
-                expires_at: expiresAt.toISOString()
+                expires_at: expiresAt.toISOString(),
+                created_at: new Date().toISOString()
             });
             
-            const { data: updatedPins } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+            const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
             if (updatedPins) currentPaymentPins = updatedPins;
             
             closeModal('pinModal');
             renderPins();
             updateDashboard();
             triggerSync();
-            alert(`PIN ${pin} generated! It will expire in 30 minutes.`);
+            alert(`PIN ${pin} generated! It will expire in 30 minutes if not used, or 30 minutes after use.`);
         }
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
-                await supabase.from('payment_pins').delete().eq('id', pinId);
-                const { data: updatedPins } = await supabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                await necoSupabase.from('payment_pins').delete().eq('id', pinId);
+                const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 if (updatedPins) currentPaymentPins = updatedPins;
                 renderPins();
                 updateDashboard();
                 triggerSync();
             }
+        }
+        
+        async function markPinAsUsed(pinCode) {
+            const pin = currentPaymentPins.find(p => p.pin === pinCode && p.status === 'active');
+            if (!pin) return false;
+            
+            const now = new Date();
+            await necoSupabase
+                .from('payment_pins')
+                .update({ status: 'used', used_at: now.toISOString() })
+                .eq('id', pin.id);
+            
+            const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+            if (updatedPins) currentPaymentPins = updatedPins;
+            renderPins();
+            return true;
         }
         
         function renderPins() {
@@ -1085,23 +1228,53 @@
                 tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td><tr>';
                 return;
             }
+            
             let pinsHtml = '';
+            const now = new Date();
+            
             for (let i = 0; i < currentPaymentPins.length; i++) {
                 const pin = currentPaymentPins[i];
                 let statusClass = "badge-active";
                 let statusText = "Active";
+                let expiryInfo = "";
+                
                 if (pin.status === "used") {
                     statusClass = "badge-used";
                     statusText = "Used";
+                    if (pin.used_at) {
+                        const usedTime = new Date(pin.used_at);
+                        const minutesSinceUse = Math.floor((now - usedTime) / (1000 * 60));
+                        const remainingMinutes = 30 - minutesSinceUse;
+                        if (remainingMinutes > 0 && remainingMinutes <= 30) {
+                            expiryInfo = ` (expires in ${remainingMinutes} min)`;
+                        } else if (remainingMinutes <= 0) {
+                            statusText = "Expired";
+                            statusClass = "badge-expired";
+                        }
+                    }
+                } else if (pin.status === "expired") {
+                    statusClass = "badge-expired";
+                    statusText = "Expired";
+                } else if (pin.status === "active" && pin.expires_at) {
+                    const expiryTime = new Date(pin.expires_at);
+                    const remainingMinutes = Math.floor((expiryTime - now) / (1000 * 60));
+                    if (remainingMinutes <= 0) {
+                        statusText = "Expired";
+                        statusClass = "badge-expired";
+                    } else if (remainingMinutes <= 5) {
+                        statusText = `Active (expires in ${remainingMinutes} min)`;
+                        statusClass = "badge-active";
+                    }
                 }
+                
                 pinsHtml += `
                     <tr>
                         <td><code>${pin.pin}</code></td>
                         <td>${pin.bank_name}</td>
                         <td>${pin.account_name}</td>
                         <td>${pin.account_number}</td>
-                        <td><span class="badge ${statusClass}">${statusText}</span></td>
-                        <td>${new Date(pin.created_at).toLocaleDateString()}</td>
+                        <td><span class="badge ${statusClass}">${statusText}</span>${expiryInfo}</td>
+                        <td>${new Date(pin.created_at).toLocaleString()}</td>
                         <td>
                             <button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button>
                         </td>
@@ -1166,14 +1339,15 @@
                 if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
                 else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
             }
-            await supabase.from('home_content').update(homeContent).eq('id', 1);
+            await necoSupabase.from('home_content').update(homeContent).eq('id', 1);
             closeModal('editTextModal');
             loadHomePreview();
             triggerSync();
+            alert('✅ Home page changes saved!');
         }
         
         async function saveHomeChanges() {
-            await supabase.from('home_content').update(homeContent).eq('id', 1);
+            await necoSupabase.from('home_content').update(homeContent).eq('id', 1);
             alert('✅ Home page changes saved!');
             triggerSync();
         }
@@ -1283,28 +1457,10 @@
                 };
             }
             
-            const subMenuItems = document.querySelectorAll('.sub-menu li');
-            for (let i = 0; i < subMenuItems.length; i++) {
-                const item = subMenuItems[i];
-                item.onclick = function(e) {
-                    e.stopPropagation();
-                    const categoryName = this.getAttribute('data-category');
-                    const categoryId = parseInt(this.getAttribute('data-id'));
-                    const color = this.getAttribute('data-color');
-                    selectCategory(categoryName, categoryId, color);
-                    
-                    const allMenuItems = document.querySelectorAll('.menu-item, .menu-category-header');
-                    for (let j = 0; j < allMenuItems.length; j++) {
-                        allMenuItems[j].classList.remove('active');
-                    }
-                    document.getElementById('pageTitle').innerHTML = `Payment Editor - ${categoryName}`;
-                    const allTabs = document.querySelectorAll('.tab-content');
-                    for (let j = 0; j < allTabs.length; j++) {
-                        allTabs[j].classList.remove('active');
-                    }
-                    document.getElementById('payment-editor').classList.add('active');
-                    closeSidebar();
-                };
+            // Set default active category
+            if (currentCategories.length > 0) {
+                const firstCat = currentCategories[0];
+                selectCategory(firstCat.name, firstCat.id, firstCat.color);
             }
         }
         
@@ -1313,6 +1469,9 @@
                 e.target.style.display = 'none';
             }
         }
+        
+        // Export markPinAsUsed for payment page
+        window.markPinAsUsed = markPinAsUsed;
     </script>
 </body>
 </html>
