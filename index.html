@@ -5,6 +5,10 @@
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NECO Correction of Entries Portal</title>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Database Config -->
+    <script src="supabase-config.js"></script>
     <style>
         /* ===== Your original CSS stays EXACTLY the same ===== */
         #mobileMenu {
@@ -67,48 +71,43 @@
             <div class="shadow-md bg-white sticky w-full z-10 top-0">
                 <div class="container py-2 relative">
                     <nav class="flex justify-between items-center">
-    <div class="h-14 w-14">
-        <a href="https://neco.gov.ng/">
-            <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
-        </a>
-    </div>
-    <div>
-        <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-            <li>
-                <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
-            </li>
-        </ul>
-    </div>
-   <button class="lg:hidden" id="mobileMenuBtn" type="button">
-    <span class="sr-only">Open main menu</span>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-    </svg>
-</button>
-
-<!-- Cancel Button (X) -->
-<button class="lg:hidden" id="cancelMenuBtn" type="button" style="display: none;">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-    </svg>
-</button>
-
-</nav>
-
-<!-- Mobile Menu -->
-<div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 0; z-index: 9999;">
-    <a href="payment.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Make payment</a>
-</div>
+                        <div class="h-14 w-14">
+                            <a href="https://neco.gov.ng/">
+                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo">
+                            </a>
+                        </div>
+                        <div>
+                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
+                                <li>
+                                    <a class="text-white hover:bg-green-500 group flex items-center text-sm font-medium rounded p-2 bg-green-600" href="payment.html">Make payment</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <button class="lg:hidden" id="mobileMenuBtn" type="button">
+                            <span class="sr-only">Open main menu</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                            </svg>
+                        </button>
+                        <button class="lg:hidden" id="cancelMenuBtn" type="button" style="display: none;">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </nav>
+                    <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); padding: 0; z-index: 9999;">
+                        <a href="payment.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Make payment</a>
+                    </div>
                 </div>
             </div>
-            <div class="container mt-10">
+            <div class="container mt-10" id="homeContent">
                 <div class="flex items-center flex-col md:flex-row gap-10">
                     <div class="md:w-1/2">
                         <div class="flex bg-primary-400 text-xs w-fit gap-2 rounded-full items-center p-2 text-primary-600">
                             <p class="bg-primary-600 text-[#F2FFF4] rounded-full p-1">Note</p>
-                            <p>You do not need an account to make payment</p>
+                            <p id="heroNote">You do not need an account to make payment</p>
                         </div>
-                        <h1 class="text-3xl md:text-6xl font-CircularStdBold my-5 md:my-10 md:leading-tight 2xl:w-3/4 xl:w-4/5 tracking-tight">NECO Corrections Just Got Faster and Simpler.</h1>
+                        <h1 id="heroTitle" class="text-3xl md:text-6xl font-CircularStdBold my-5 md:my-10 md:leading-tight 2xl:w-3/4 xl:w-4/5 tracking-tight">NECO Corrections Just Got Faster and Simpler.</h1>
                         <div class="2xl:w-3/5 xl:w-3/4">
                             <div class="mt-7 w-full">
                                 <a href="payment.html">
@@ -137,88 +136,117 @@
                 </div>
                 <section class="py-10">
                     <div class="bg-pattern h-40 flex items-center bg-contain bg-no-repeat">
-                        <p class="text-3xl font-CircularStdBold">How it works</p>
+                        <p id="howItWorksTitle" class="text-3xl font-CircularStdBold">How it works</p>
                     </div>
-                    <p class="md:w-1/2 text-xs mt-5 text-[#4E4E4E]">NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-500">(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10">
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Select Correction Type</p>
-                            <p class="mt-5 text-xs">Select or search for the correction type you want i.e Correction of Name, Date of Birth, Subject Entry etc</p>
-                        </div>
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/scan.9917d49c.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Get Payment Item Code</p>
-                            <p class="mt-5 text-xs"><span>Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-600">www.neco.gov.ng.</span> Ensure to verify your payment before proceeding to Pay.</span></p>
-                        </div>
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/message-edit.1c2c253f.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Fill the Correction Form</p>
-                            <p class="mt-5 text-xs">Fill the correction form with your details and proceed to payment</p>
-                        </div>
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/wallet-add.aa766855.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Select Mode of Payment</p>
-                            <p class="mt-5 text-xs">Select mode of payment i.e Card payment, Bank Transfer or USSD</p>
-                        </div>
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/card-tick.5aab464d.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Confirm Your Payment</p>
-                            <p class="mt-5 text-xs">Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed</p>
-                        </div>
-                        <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]">
-                            <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                                <img src="https://payments.neco.gov.ng/assets/ticket-expired.f2545443.svg" alt="">
-                            </div>
-                            <p class="font-semibold mt-5">Get Confirmation</p>
-                            <p class="mt-5 text-xs">Your correction will be processed and you will receive confirmation</p>
-                        </div>
-                    </div>
+                    <p id="footerNote" class="md:w-1/2 text-xs mt-5 text-[#4E4E4E]">NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class="text-primary-500">(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-10" id="stepsContainer"></div>
                 </section>
             </div>
             <div class="Toastify"></div>
         </div>
     </div>
-<script>
-    var menuBtn = document.getElementById('mobileMenuBtn');
-    var cancelBtn = document.getElementById('cancelMenuBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
-    
-    if (menuBtn) {
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'block';
-            menuBtn.style.display = 'none';
-            cancelBtn.style.display = 'block';
-        };
+
+    <script>
+        var menuBtn = document.getElementById('mobileMenuBtn');
+        var cancelBtn = document.getElementById('cancelMenuBtn');
+        var mobileMenu = document.getElementById('mobileMenu');
         
-        cancelBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            menuBtn.style.display = 'block';
-        };
-        
-        document.onclick = function(e) {
-            if (mobileMenu.style.display === 'block') {
-                if (!menuBtn.contains(e.target) && !cancelBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                    menuBtn.style.display = 'block';
+        if (menuBtn) {
+            menuBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenu.style.display = 'block';
+                menuBtn.style.display = 'none';
+                cancelBtn.style.display = 'block';
+            };
+            
+            cancelBtn.onclick = function(e) {
+                e.stopPropagation();
+                mobileMenu.style.display = 'none';
+                cancelBtn.style.display = 'none';
+                menuBtn.style.display = 'block';
+            };
+            
+            document.onclick = function(e) {
+                if (mobileMenu.style.display === 'block') {
+                    if (!menuBtn.contains(e.target) && !cancelBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                        mobileMenu.style.display = 'none';
+                        cancelBtn.style.display = 'none';
+                        menuBtn.style.display = 'block';
+                    }
                 }
+            };
+        }
+
+        // ============ LOAD HOME CONTENT FROM SUPABASE ============
+        async function loadHomeContent() {
+            try {
+                // Wait for NECO_DB to be ready
+                if (typeof NECO_DB === 'undefined') {
+                    console.log('Waiting for database...');
+                    setTimeout(loadHomeContent, 500);
+                    return;
+                }
+                
+                // Get home content from database
+                const homeContent = await NECO_DB.getHomeContent();
+                
+                if (homeContent) {
+                    // Update hero section
+                    if (homeContent.hero_note) {
+                        document.getElementById('heroNote').innerText = homeContent.hero_note;
+                    }
+                    if (homeContent.hero_title) {
+                        document.getElementById('heroTitle').innerText = homeContent.hero_title;
+                    }
+                    if (homeContent.how_it_works_title) {
+                        document.getElementById('howItWorksTitle').innerText = homeContent.how_it_works_title;
+                    }
+                    if (homeContent.footer_note) {
+                        document.getElementById('footerNote').innerHTML = homeContent.footer_note;
+                    }
+                    
+                    // Load steps
+                    if (homeContent.steps && Array.isArray(homeContent.steps)) {
+                        const stepsContainer = document.getElementById('stepsContainer');
+                        stepsContainer.innerHTML = '';
+                        
+                        homeContent.steps.forEach(step => {
+                            const stepDiv = document.createElement('div');
+                            stepDiv.className = 'py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]';
+                            stepDiv.innerHTML = `
+                                <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                                    <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="">
+                                </div>
+                                <p class="font-semibold mt-5">${step.title}</p>
+                                <p class="mt-5 text-xs">${step.description}</p>
+                            `;
+                            stepsContainer.appendChild(stepDiv);
+                        });
+                    }
+                }
+                
+                console.log('✅ Home content loaded from Supabase');
+                
+            } catch (error) {
+                console.error('Error loading home content:', error);
             }
-        };
-    }
-</script>
+        }
+        
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Small delay to ensure supabase-config.js loads first
+            setTimeout(loadHomeContent, 100);
+        });
+        
+        // Listen for real-time updates from admin panel
+        if (typeof NECO_DB !== 'undefined' && NECO_DB.onSync) {
+            NECO_DB.onSync(function(table, payload) {
+                if (table === 'home_content') {
+                    console.log('Home content updated, refreshing...');
+                    loadHomeContent();
+                }
+            });
+        }
+    </script>
 </body>
 </html>
