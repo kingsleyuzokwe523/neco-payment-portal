@@ -18,7 +18,6 @@
             background: #f0f2f5;
         }
         
-        /* Login */
         .login-overlay {
             position: fixed;
             top: 0;
@@ -114,7 +113,6 @@
             display: none;
         }
         
-        /* Sidebar */
         .sidebar {
             position: fixed;
             left: 0;
@@ -289,7 +287,6 @@
             display: block;
         }
         
-        /* Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -334,7 +331,6 @@
             justify-content: center;
         }
         
-        /* Tables */
         .table-container {
             background: white;
             border-radius: 20px;
@@ -367,7 +363,6 @@
             background: #009515;
         }
         
-        /* Home Editor */
         .home-preview {
             background: white;
             border-radius: 20px;
@@ -402,7 +397,6 @@
             outline: 1px solid #f59e0b;
         }
         
-        /* Payment Items */
         .category-items-container {
             background: white;
             border-radius: 20px;
@@ -470,7 +464,6 @@
             color: white;
         }
         
-        /* Modern PIN Modal */
         .modal {
             display: none;
             position: fixed;
@@ -681,7 +674,6 @@
             cursor: pointer;
         }
         
-        /* Generate PIN button in modal */
         .generate-pin-btn {
             background: #6b7280;
             color: white;
@@ -696,6 +688,11 @@
         
         .generate-pin-btn:hover {
             background: #4b5563;
+        }
+        
+        .input-error {
+            border-color: #dc2626 !important;
+            background: #fef2f2 !important;
         }
     </style>
 </head>
@@ -818,7 +815,6 @@
         </div>
     </div>
     
-    <!-- Edit Text Modal -->
     <div id="editTextModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Edit Text</h3><button onclick="closeModal('editTextModal')">&times;</button></div>
@@ -827,7 +823,6 @@
         </div>
     </div>
     
-    <!-- Item Modal -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')">&times;</button></div>
@@ -840,33 +835,29 @@
         </div>
     </div>
     
-    <!-- PIN Modal - Modern Design -->
+    <!-- PIN MODAL - NO BANK CODE, ACCOUNT NUMBER ONLY DIGITS -->
     <div id="pinModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
             <div class="modal-body">
                 <div class="neco-form-group">
-                    <label>PIN Code (Numbers Only)</label>
-                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric">
-                    <button class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
+                    <label>PIN Code (Numbers Only) <span style="color:red;">*</span></label>
+                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <button type="button" class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
                     <small>PIN will expire 30 minutes after generation</small>
                 </div>
                 <div class="neco-form-group">
-                    <label>Bank Name</label>
+                    <label>Bank Name <span style="color:red;">*</span></label>
                     <input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria">
                 </div>
                 <div class="neco-form-group">
-                    <label>Account Name</label>
+                    <label>Account Name <span style="color:red;">*</span></label>
                     <input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services">
                 </div>
                 <div class="neco-form-group">
-                    <label>Account Number (10 digits only)</label>
-                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric">
+                    <label>Account Number (10 digits only) <span style="color:red;">*</span></label>
+                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
                     <small>Only numbers allowed. Must be exactly 10 digits.</small>
-                </div>
-                <div class="neco-form-group">
-                    <label>Bank Code (Optional)</label>
-                    <input type="text" id="pinBankCode" placeholder="e.g., 011">
                 </div>
             </div>
             <div class="modal-footer">
@@ -882,7 +873,6 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         let necoSupabase = null;
         
-        // Global variables
         let currentCategories = [];
         let currentPaymentItems = [];
         let currentPaymentPins = [];
@@ -893,7 +883,6 @@
         let currentEditingKey = null;
         let pinExpiryInterval = null;
         
-        // Default categories
         const defaultCategories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
             { id: 2, name: "SSCE External", color: "#145596" },
@@ -925,7 +914,6 @@
             return necoSupabase;
         }
         
-        // ============ LOGIN/LOGOUT ============
         function doLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
@@ -961,8 +949,7 @@
             startPinExpiryChecker();
         }
         
-        // ============ PIN EXPIRY ============
-        function startPinExpiryChecker() {
+        async function startPinExpiryChecker() {
             if (pinExpiryInterval) clearInterval(pinExpiryInterval);
             pinExpiryInterval = setInterval(() => {
                 checkAndExpirePins();
@@ -973,6 +960,8 @@
             if (!necoSupabase || currentPaymentPins.length === 0) return;
             
             const now = new Date();
+            let updated = false;
+            
             for (let i = 0; i < currentPaymentPins.length; i++) {
                 const pin = currentPaymentPins[i];
                 if (pin.status === 'used' && pin.used_at) {
@@ -980,22 +969,26 @@
                     const minutesSinceUse = (now - usedTime) / (1000 * 60);
                     if (minutesSinceUse >= 30 && pin.status !== 'expired') {
                         await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
+                        updated = true;
                     }
                 }
                 if (pin.status === 'active' && pin.expires_at) {
                     const expiryTime = new Date(pin.expires_at);
                     if (now > expiryTime) {
                         await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
+                        updated = true;
                     }
                 }
             }
-            const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-            if (data) currentPaymentPins = data;
-            renderPins();
-            updateDashboard();
+            
+            if (updated) {
+                const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+                if (data) currentPaymentPins = data;
+                renderPins();
+                updateDashboard();
+            }
         }
         
-        // ============ LOAD DATA ============
         async function loadAllData() {
             try {
                 const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
@@ -1026,6 +1019,9 @@
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
+                currentCategories = defaultCategories;
+                renderCategorySidebar();
+                updateDashboard();
             }
         }
         
@@ -1037,7 +1033,6 @@
             document.getElementById('totalPayments').innerText = currentPayments.length;
         }
         
-        // ============ CATEGORIES ============
         function renderCategorySidebar() {
             const container = document.getElementById('categoryList');
             if (!container) return;
@@ -1095,7 +1090,7 @@
                 return;
             }
             
-            let tableHtml = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
+            let tableHtml = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th><tr></thead><tbody>';
             for (let i = 0; i < items.length; i++) {
                 const item = items[i];
                 const amountDisplay = item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount';
@@ -1114,7 +1109,6 @@
             container.innerHTML = tableHtml;
         }
         
-        // ============ ITEMS ============
         function openAddItemModal() {
             if (!selectedCategoryId) {
                 alert('Please select a category first');
@@ -1223,7 +1217,6 @@
             triggerSync();
         }
         
-        // ============ PINS ============
         function generateRandomPin() {
             const random = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById('pinCode').value = random;
@@ -1234,7 +1227,6 @@
             document.getElementById('pinBankName').value = '';
             document.getElementById('pinAccountName').value = '';
             document.getElementById('pinAccountNumber').value = '';
-            document.getElementById('pinBankCode').value = '';
             document.getElementById('pinModal').style.display = 'flex';
         }
         
@@ -1243,7 +1235,6 @@
             const bankName = document.getElementById('pinBankName').value;
             const accountName = document.getElementById('pinAccountName').value;
             let accountNumber = document.getElementById('pinAccountNumber').value;
-            const bankCode = document.getElementById('pinBankCode').value;
             
             // Validate PIN - numbers only
             if (!/^\d+$/.test(pin)) {
@@ -1257,7 +1248,7 @@
             }
             
             // Validate Account Number - exactly 10 digits, numbers only
-            accountNumber = accountNumber.replace(/\D/g, '');
+            accountNumber = accountNumber.replace(/[^0-9]/g, '');
             if (accountNumber.length !== 10) {
                 alert('Account Number must be exactly 10 digits (numbers only)');
                 return;
@@ -1277,7 +1268,6 @@
                     bank_name: bankName,
                     account_name: accountName,
                     account_number: accountNumber,
-                    bank_code: bankCode,
                     status: 'active',
                     expires_at: expiresAt.toISOString()
                 });
@@ -1354,7 +1344,6 @@
             tbody.innerHTML = pinsHtml;
         }
         
-        // ============ HOME EDITOR ============
         function loadHomePreview() {
             const container = document.getElementById('homePreview');
             if (!container) return;
