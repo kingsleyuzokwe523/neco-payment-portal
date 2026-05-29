@@ -15,175 +15,226 @@
         button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
-#accountModal .account-box {
-    max-width: 400px;
-    width: 100%;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    height: auto;
-    max-height: 500px;
-    overflow-y: auto;
-}
-#mobileMenu {
-    position: fixed;
-    top: 70px;
-    left: 0;
-    right: 0;
-    background: white;
-    border-radius: 0;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-    z-index: 9999;
-}
-#mobileMenu a {
-    display: block;
-    padding: 16px 20px;
-    color: #4b5563;
-    text-decoration: none;
-    font-size: 16px;
-    font-weight: 500;
-    text-align: center;
-    transition: all 0.2s ease;
-}
-#mobileMenu a:hover {
-    background-color: #f0fdf4;
-    color: #054c0f;
-}
-#accountModal .account-inner {
-    padding: 20px 24px;
-}
-#accountModal .logo-row {
-    text-align: center;
-    margin-bottom: 20px;
-}
-#accountModal .logo-row img {
-    height: 50px;
-    display: inline-block;
-}
-#accountModal .details-row {
-    display: flex;
-    align-items: baseline;
-    padding: 12px 0;
-    gap: 16px;
-}
-#accountModal .details-label {
-    font-size: 16px;
-    color: #6b7280;
-    font-weight: 500;
-    text-align: left;
-    min-width: 115px;
-}
-#accountModal .details-value {
-    font-size: 16px;
-    color: #111827;
-    font-weight: 600;
-    text-align: left;
-    flex: 1;
-    word-break: break-word;
-}
-#accountModal .warning-timer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 16px 0;
-    gap: 15px;
-}
-#accountModal .warning-text-small {
-    color: #dc2626;
-    font-size: 15px;
-    font-weight: 500;
-    background: transparent;
-    padding: 0;
-    white-space: nowrap;
-}
-#accountModal .timer-box-small {
-    background: white;
-    border: 1.5px solid #16a34a;
-    border-radius: 4px;
-    padding: 2px 8px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-#accountModal .timer-small {
-    font-size: 11px;
-    font-weight: 600;
-    color: #dc2626;
-    font-family: monospace;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-#accountModal .upload-area-small {
-    background: #f9fafb;
-    border: 1.5px dashed #d1d5db;
-    border-radius: 8px;
-    padding: 10px 12px;
-    text-align: center;
-    cursor: pointer;
-    margin: 16px 0 12px 0;
-}
-#accountModal .upload-area-small:hover {
-    background: #f3f4f6;
-    border-color: #16a34a;
-}
-#accountModal .upload-icon-small {
-    width: 20px;
-    height: 22px;
-    margin: 0 auto 4px;
-    color: #9ca3af;
-}
-#accountModal .upload-text-small {
-    font-size: 12px;
-    color: #6b7280;
-    margin: 0;
-    font-weight: 500;
-}
-#accountModal .file-name-small {
-    font-size: 11px;
-    color: #16a34a;
-    text-align: center;
-    margin-top: 6px;
-}
-#accountModal .button-group {
-    display: flex;
-    gap: 16px;
-    margin-top: 20px;
-    justify-content: center;
-}
-#accountModal .btn-cancel-account {
-    background: white;
-    border: 1px solid #054c0f;
-    color: #054c0f;
-    padding: 10px 28px;
-    font-size: 14px;
-    font-weight: 500;
-    border-radius: 8px;
-    cursor: pointer;
-}
-#accountModal .btn-cancel-account:hover {
-    background: #f0fdf4;
-}
-#accountModal .btn-confirm {
-    background: #054c0f;
-    border: none;
-    color: white;
-    padding: 10px 28px;
-    font-size: 14px;
-    font-weight: 600;
-    border-radius: 8px;
-    cursor: pointer;
-}
-#accountModal .btn-confirm:hover {
-    background: #009515;
-}
-        .container{width:100%;margin-right:auto;margin-left:auto;padding-right:1rem;padding-left:1rem}
-        @media (min-width:640px){.container{max-width:640px}}
-        @media (min-width:768px){.container{max-width:768px}}
-        @media (min-width:1024px){.container{max-width:1024px}}
-        @media (min-width:1280px){.container{max-width:1280px;padding-right:4rem;padding-left:4rem}}
         
-        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+        /* Global container spacing fix */
+        .container {
+            width: 100%;
+            margin-right: auto;
+            margin-left: auto;
+            padding-right: 1rem;
+            padding-left: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .container {
+                max-width: 640px;
+                padding-right: 1.5rem;
+                padding-left: 1.5rem;
+            }
+        }
+        @media (min-width: 768px) {
+            .container {
+                max-width: 768px;
+            }
+        }
+        @media (min-width: 1024px) {
+            .container {
+                max-width: 1024px;
+                padding-right: 2rem;
+                padding-left: 2rem;
+            }
+        }
+        @media (min-width: 1280px) {
+            .container {
+                max-width: 1280px;
+                padding-right: 2rem;
+                padding-left: 2rem;
+            }
+        }
+        
+        /* Content wrapper for consistent spacing */
+        .content-wrapper {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+        
+        @media (min-width: 640px) {
+            .content-wrapper {
+                padding-left: 1.5rem;
+                padding-right: 1.5rem;
+            }
+        }
+        @media (min-width: 1024px) {
+            .content-wrapper {
+                padding-left: 2rem;
+                padding-right: 2rem;
+            }
+        }
+        
+        #accountModal .account-box {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            height: auto;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        #mobileMenu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            z-index: 9999;
+        }
+        #mobileMenu a {
+            display: block;
+            padding: 16px 20px;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+        #mobileMenu a:hover {
+            background-color: #f0fdf4;
+            color: #054c0f;
+        }
+        #accountModal .account-inner {
+            padding: 20px 24px;
+        }
+        #accountModal .logo-row {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #accountModal .logo-row img {
+            height: 50px;
+            display: inline-block;
+        }
+        #accountModal .details-row {
+            display: flex;
+            align-items: baseline;
+            padding: 12px 0;
+            gap: 16px;
+        }
+        #accountModal .details-label {
+            font-size: 16px;
+            color: #6b7280;
+            font-weight: 500;
+            text-align: left;
+            min-width: 115px;
+        }
+        #accountModal .details-value {
+            font-size: 16px;
+            color: #111827;
+            font-weight: 600;
+            text-align: left;
+            flex: 1;
+            word-break: break-word;
+        }
+        #accountModal .warning-timer-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 20px 0 16px 0;
+            gap: 15px;
+        }
+        #accountModal .warning-text-small {
+            color: #dc2626;
+            font-size: 15px;
+            font-weight: 500;
+            background: transparent;
+            padding: 0;
+            white-space: nowrap;
+        }
+        #accountModal .timer-box-small {
+            background: white;
+            border: 1.5px solid #16a34a;
+            border-radius: 4px;
+            padding: 2px 8px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        #accountModal .timer-small {
+            font-size: 11px;
+            font-weight: 600;
+            color: #dc2626;
+            font-family: monospace;
+            text-align: center;
+            letter-spacing: 0.5px;
+        }
+        #accountModal .upload-area-small {
+            background: #f9fafb;
+            border: 1.5px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 10px 12px;
+            text-align: center;
+            cursor: pointer;
+            margin: 16px 0 12px 0;
+        }
+        #accountModal .upload-area-small:hover {
+            background: #f3f4f6;
+            border-color: #16a34a;
+        }
+        #accountModal .upload-icon-small {
+            width: 20px;
+            height: 22px;
+            margin: 0 auto 4px;
+            color: #9ca3af;
+        }
+        #accountModal .upload-text-small {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+            font-weight: 500;
+        }
+        #accountModal .file-name-small {
+            font-size: 11px;
+            color: #16a34a;
+            text-align: center;
+            margin-top: 6px;
+        }
+        #accountModal .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        #accountModal .btn-cancel-account {
+            background: white;
+            border: 1px solid #054c0f;
+            color: #054c0f;
+            padding: 10px 28px;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #accountModal .btn-cancel-account:hover {
+            background: #f0fdf4;
+        }
+        #accountModal .btn-confirm {
+            background: #054c0f;
+            border: none;
+            color: white;
+            padding: 10px 28px;
+            font-size: 14px;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        #accountModal .btn-confirm:hover {
+            background: #009515;
+        }
+        
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
         .fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}
         .inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.right-0{right:0}.inset-y-0{top:0;bottom:0}
         .z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}
@@ -230,130 +281,131 @@
         .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
         .mx-auto{margin-left:auto;margin-right:auto}
         .card-amount p{margin:0;line-height:1.3}
-       /* CUSTOM INVOICE MODAL STYLES */
-#invoiceModal .invoice-box {
-    max-width: 400px;
-    width: 100%;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-#invoiceModal .invoice-inner {
-    padding: 24px;
-}
-#invoiceModal .invoice-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 12px;
-}
-#invoiceModal .invoice-buttons {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-}
-#invoiceModal .invoice-buttons button {
-    flex: 1;
-    padding: 10px 0;
-    font-size: 14px;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-#invoiceModal .btn-cancel {
-    background-color: white;
-    border: 1px solid #d1d5db;
-    color: #374151;
-}
-#invoiceModal .btn-cancel:hover {
-    background-color: #f9fafb;
-}
-#invoiceModal .btn-proceed {
-    background-color: #054c0f;
-    border: none;
-    color: white;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-}
-#invoiceModal .btn-proceed:hover {
-    background-color: #009515;
-}
-.loader {
-    width: 50px;
-    height: 50px;
-    border: 4px solid #e5e7eb;
-    border-top: 4px solid #16a34a;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 20px auto;
-}
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-.error-text {
-    color: #dc2626;
-    font-size: 12px;
-    margin-top: 4px;
-    display: none;
-}
-.copy-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    margin-left: 8px;
-    padding: 4px;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-.copy-btn:hover {
-    background: #e5e7eb;
-}
-.copy-btn svg {
-    width: 16px;
-    height: 16px;
-    color: #6b7280;
-}
-.copy-btn:hover svg {
-    color: #054c0f;
-}
-#accountModal .details-row-copy {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    gap: 16px;
-}
-#accountModal .details-label-copy {
-    font-size: 14px;
-    color: #6b7280;
-    font-weight: 500;
-    min-width: 115px;
-}
-#accountModal .details-value-copy {
-    font-size: 14px;
-    color: #111827;
-    font-weight: 600;
-    flex: 1;
-    word-break: break-word;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-@keyframes slideUpFade {
-    0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-    100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-}
-.copy-notification-show {
-    animation: slideUpFade 2s ease forwards;
-}
+        
+        #invoiceModal .invoice-box {
+            max-width: 400px;
+            width: 100%;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        #invoiceModal .invoice-inner {
+            padding: 24px;
+        }
+        #invoiceModal .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        #invoiceModal .invoice-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+        #invoiceModal .invoice-buttons button {
+            flex: 1;
+            padding: 10px 0;
+            font-size: 14px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        #invoiceModal .btn-cancel {
+            background-color: white;
+            border: 1px solid #d1d5db;
+            color: #374151;
+        }
+        #invoiceModal .btn-cancel:hover {
+            background-color: #f9fafb;
+        }
+        #invoiceModal .btn-proceed {
+            background-color: #054c0f;
+            border: none;
+            color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        #invoiceModal .btn-proceed:hover {
+            background-color: #009515;
+        }
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top: 4px solid #16a34a;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-text {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+        .copy-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 8px;
+            padding: 4px;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        .copy-btn:hover {
+            background: #e5e7eb;
+        }
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+        }
+        .copy-btn:hover svg {
+            color: #054c0f;
+        }
+        #accountModal .details-row-copy {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            gap: 16px;
+        }
+        #accountModal .details-label-copy {
+            font-size: 14px;
+            color: #6b7280;
+            font-weight: 500;
+            min-width: 115px;
+        }
+        #accountModal .details-value-copy {
+            font-size: 14px;
+            color: #111827;
+            font-weight: 600;
+            flex: 1;
+            word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        .copy-notification-show {
+            animation: slideUpFade 2s ease forwards;
+        }
+        
         @media (min-width:768px){
             .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
             .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
@@ -410,6 +462,7 @@
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
         
+        <!-- Hero Section with container -->
         <div class="container mt-20">
             <div class="flex items-center flex-col md:flex-row justify-between">
                 <div class="w-full md:w-3/5">
@@ -431,34 +484,40 @@
             </div>
         </div>
         
-        <div class="flex gap-3 mt-10 flex-wrap" id="categoryFilters">
-            <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
-                <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
-                <div>SSCE Internal</div>
-            </div>
-            <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
-                <div>SSCE External</div>
-            </div>
-            <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
-                <div>BECE</div>
-            </div>
-            <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
-                <div>NCEE</div>
-            </div>
-            <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
-                <div>Gifted</div>
-            </div>
-            <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
-                <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
-                <div>Others</div>
+        <!-- Category Filters with container -->
+        <div class="container mt-10">
+            <div class="flex gap-3 flex-wrap" id="categoryFilters">
+                <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
+                    <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
+                    <div>SSCE Internal</div>
+                </div>
+                <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
+                    <div>SSCE External</div>
+                </div>
+                <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
+                    <div>BECE</div>
+                </div>
+                <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
+                    <div>NCEE</div>
+                </div>
+                <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
+                    <div>Gifted</div>
+                </div>
+                <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
+                    <div>Others</div>
+                </div>
             </div>
         </div>
-
-        <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-10 mt-10" id="paymentGrid"></div>
+        
+        <!-- Payment Grid with container -->
+        <div class="container mt-10">
+            <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid"></div>
+        </div>
     </div>
 </div>
 
@@ -670,9 +729,9 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // ============ DEFAULT PAYMENT DATA (Shows Immediately) ============
+    // ============ DEFAULT PAYMENT DATA (Shows Immediately with unique category colors) ============
     let paymentData = {
-        "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
+        "SSCE Internal": { color: "#0CA60C", items: [
             { name: "Four Figure Table", amount: 500 },
             { name: "Non-Validation", amount: 10000 },
             { name: "Syllabus", amount: 2000 },
@@ -689,7 +748,7 @@
             { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
             { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
         ]},
-        "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
+        "SSCE External": { color: "#145596", items: [
             { name: "Four Figure Table", amount: 500 },
             { name: "Walk-in", amount: 43000 },
             { name: "Syllabus", amount: 2000 },
@@ -698,7 +757,7 @@
             { name: "Collection Of Certificate", amount: 500 },
             { name: "Non-Validation", amount: 10000 }
         ]},
-        "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
+        "BECE": { color: "#642D56", items: [
             { name: "Remarking Bece", amount: 15000 },
             { name: "Non-Validation", amount: 10000 },
             { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
@@ -708,9 +767,9 @@
             { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
             { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
         ]},
-        "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [{ name: "Non-Validation", amount: 4000 }]},
-        "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [{ name: "Non-Validation", amount: 4000 }]},
-        "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
+        "NCEE": { color: "#1887EB", items: [{ name: "Non-Validation", amount: 4000 }]},
+        "Gifted": { color: "#24809C", items: [{ name: "Non-Validation", amount: 4000 }]},
+        "Others": { color: "#36454F", items: [
             { name: "Reprint Of Certificate", amount: 50000 },
             { name: "Change Of School Name", amount: 15000 },
             { name: "Reprint Of School Results Per Candidate", amount: 400 },
@@ -776,16 +835,20 @@
         
         grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};">
-                        <div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background: #ECFAF3;">
-                            <div class="py-8 px-5 text-black">${item.name}</div>
+            return `<div class="rounded-md overflow-hidden shadow-sm">
+                        <div class="h-full w-full flex flex-col justify-between" style="background: #ECFAF3;">
+                            <div class="py-8 px-5 text-black font-medium">${item.name}</div>
                             <div>
                                 <div class="h-[1px] bg-gray-200"></div>
                                 <div class="p-5 flex justify-between items-center">
-                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3 font-medium" style="border-color: ${cat.color}; color: ${cat.color};">Make payment</button>
-                                    <div class="card-amount">
-                                        <p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p>
-                                        <p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p>
+                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                            class="text-xs border rounded-md py-3 px-4 font-medium transition-all"
+                                            style="border-color: ${cat.color}; color: ${cat.color};">
+                                        Make payment
+                                    </button>
+                                    <div class="card-amount text-right">
+                                        <p class="text-xs text-gray-500">Fixed Amount</p>
+                                        <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
                                     </div>
                                 </div>
                             </div>
@@ -1147,12 +1210,30 @@
         if(!cat || !cat.items) return;
         const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
         if(filtered.length === 0) { 
-            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10">No payment items found</div>'; 
+            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
             return; 
         }
         document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="bg-[${cat.color}] rounded-md" style="background: ${cat.bgColor};"><div class="h-full mt-1 w-full flex flex-col justify-between rounded-md" style="background:#ECFAF3;"><div class="py-8 px-5 text-black">${item.name}</div><div><div class="h-[1px] bg-gray-200"></div><div class="p-5 flex justify-between items-center"><button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' class="text-xs border rounded-md py-3 px-3" style="border-color:${cat.color};color:${cat.color};">Make payment</button><div class="card-amount"><p class="text-xs" style="margin:0; line-height:1.3;">Fixed Amount</p><p class="text-[#222222] font-semibold text-sm" style="margin:0; line-height:1.3;">${amountDisplay}</p></div></div></div></div></div>`;
+            return `<div class="rounded-md overflow-hidden shadow-sm">
+                        <div class="h-full w-full flex flex-col justify-between" style="background: #ECFAF3;">
+                            <div class="py-8 px-5 text-black font-medium">${item.name}</div>
+                            <div>
+                                <div class="h-[1px] bg-gray-200"></div>
+                                <div class="p-5 flex justify-between items-center">
+                                    <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                            class="text-xs border rounded-md py-3 px-4 font-medium transition-all"
+                                            style="border-color: ${cat.color}; color: ${cat.color};">
+                                        Make payment
+                                    </button>
+                                    <div class="card-amount text-right">
+                                        <p class="text-xs text-gray-500">Fixed Amount</p>
+                                        <p class="text-[#222222] font-semibold text-sm">${amountDisplay}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
         }).join('');
     });
     
@@ -1167,7 +1248,6 @@
                 for (const category of categories) {
                     newPaymentData[category.name] = {
                         color: category.color,
-                        bgColor: category.color,
                         items: items.filter(item => item.category_id === category.id)
                     };
                 }
