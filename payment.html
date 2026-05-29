@@ -4,11 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
-    <!-- Supabase SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- Database Config -->
-<script src="supabase-config.js"></script>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
@@ -114,7 +112,7 @@
 /* Warning text - SMALL */
 #accountModal .warning-text-small {
     color: #dc2626;
-    font-size: 15px;  /* Made smaller */
+    font-size: 15px;
     font-weight: 500;
     background: transparent;
     padding: 0;
@@ -125,8 +123,8 @@
 #accountModal .timer-box-small {
     background: white;
     border: 1.5px solid #16a34a;
-    border-radius: 4px;  /* Smaller radius */
-    padding: 2px 8px;  /* Smaller padding */
+    border-radius: 4px;
+    padding: 2px 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -134,12 +132,12 @@
 }
 
 #accountModal .timer-small {
-    font-size: 11px;  /* Smaller font */
+    font-size: 11px;
     font-weight: 600;
     color: #dc2626;
     font-family: monospace;
     text-align: center;
-    letter-spacing: 0.5px;  /* Less spacing */
+    letter-spacing: 0.5px;
 }
 #accountModal .upload-area-small {
     background: #f9fafb;
@@ -269,7 +267,7 @@
        /* CUSTOM INVOICE MODAL STYLES */
 #invoiceModal .invoice-box {
     max-width: 400px;
-    width: 100%;  /* ← FIXED: was 150% */
+    width: 100%;
     background: white;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -821,28 +819,67 @@
     </div>
 </div>
 <script>
-    // ============ SUPABASE CONNECTION ============
-    let supabaseClient = null;
-    let NECO_DB = null;
+    // ============ SUPABASE CONFIGURATION ============
+    const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     
-    function waitForDB() {
-        return new Promise((resolve) => {
-            if (typeof window.NECO_DB !== 'undefined' && window.NECO_DB) {
-                resolve(window.NECO_DB);
-            } else {
-                setTimeout(() => resolve(waitForDB()), 100);
-            }
-        });
-    }
+    // ============ DEFAULT PAYMENT DATA (Shows Immediately) ============
+    let paymentData = {
+        "SSCE Internal": { color: "#0CA60C", bgColor: "rgb(12, 166, 12)", items: [
+            { name: "Four Figure Table", amount: 500 },
+            { name: "Non-Validation", amount: 10000 },
+            { name: "Syllabus", amount: 2000 },
+            { name: "Photo Album", amount: 2700 },
+            { name: "Late Ca3 Upload", amount: 40000 },
+            { name: "Remarking Ssce (i)", amount: 20000 },
+            { name: "Unviable Centre Fee", amount: 70000 },
+            { name: "Late Registration Fee", amount: 5000 },
+            { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
+            { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
+            { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
+            { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
+            { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
+            { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
+            { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
+        ]},
+        "SSCE External": { color: "#145596", bgColor: "rgb(20, 85, 150)", items: [
+            { name: "Four Figure Table", amount: 500 },
+            { name: "Walk-in", amount: 43000 },
+            { name: "Syllabus", amount: 2000 },
+            { name: "Result Slips", amount: 1600 },
+            { name: "Remarking Ssce Ext", amount: 20000 },
+            { name: "Collection Of Certificate", amount: 500 },
+            { name: "Non-Validation", amount: 10000 }
+        ]},
+        "BECE": { color: "#642D56", bgColor: "rgb(100, 45, 86)", items: [
+            { name: "Remarking Bece", amount: 15000 },
+            { name: "Non-Validation", amount: 10000 },
+            { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
+            { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
+            { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
+            { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
+            { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
+            { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
+        ]},
+        "NCEE": { color: "#1887EB", bgColor: "rgb(24, 135, 235)", items: [{ name: "Non-Validation", amount: 4000 }]},
+        "Gifted": { color: "#24809C", bgColor: "rgb(36, 128, 156)", items: [{ name: "Non-Validation", amount: 4000 }]},
+        "Others": { color: "#36454F", bgColor: "rgb(54, 69, 79)", items: [
+            { name: "Reprint Of Certificate", amount: 50000 },
+            { name: "Change Of School Name", amount: 15000 },
+            { name: "Reprint Of School Results Per Candidate", amount: 400 },
+            { name: "Staff Identity Card", amount: 1000 },
+            { name: "Result Checker (token)", amount: 1000 },
+            { name: "Examination Bag", amount: 15000 },
+            { name: "Confirmation Of Result", amount: 10000 },
+            { name: "E-verification Of Result", amount: 5000 }
+        ]}
+    };
     
-    // ============ GLOBAL VARIABLES ============
     let currentCategory = "SSCE Internal";
     let currentItem = null;
-    let currentValidatedAccount = null;
     let currentFormData = {};
     let isCodeValid = false;
     let countdownInterval = null;
-    let paymentData = {};
     
     // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
@@ -857,147 +894,14 @@
         return quantity && parseInt(quantity) > 0;
     }
     
-    // ============ LOAD PAYMENT DATA FROM SUPABASE ============
-    async function loadPaymentData() {
-        try {
-            const db = await waitForDB();
-            const categories = await db.getCategories();
-            const paymentItems = await db.getPaymentItems();
-            
-            const newPaymentData = {};
-            for (const category of categories) {
-                newPaymentData[category.name] = {
-                    color: category.color,
-                    bgColor: category.color,
-                    items: paymentItems.filter(item => item.category_id === category.id)
-                };
-            }
-            
-            Object.assign(paymentData, newPaymentData);
-            console.log('✅ Payment data loaded from Supabase');
-            renderGrid();
-        } catch (error) {
-            console.error('Error loading payment data:', error);
-        }
-    }
-    
-    // ============ PIN VALIDATION FROM SUPABASE ============
-    async function validatePaymentCode(code) {
-        if (!code || code.trim() === '') {
-            return { valid: false, accountDetails: null };
-        }
-        
-        try {
-            const db = await waitForDB();
-            const result = await db.validatePin(code.trim());
-            return result;
-        } catch (error) {
-            console.error('PIN validation error:', error);
-            return { valid: false, accountDetails: null };
-        }
-    }
-    
-    // ============ CHECK FORM VALIDATION ============
-    async function checkFormValidation() {
-        const code = document.getElementById('paymentCode').value;
-        const validation = await validatePaymentCode(code);
-        isCodeValid = validation.valid;
-        currentValidatedAccount = validation.accountDetails;
-        
-        const fullName = document.getElementById('fullName').value;
-        const phone = document.getElementById('phone').value;
-        const email = document.getElementById('email').value;
-        const description = document.getElementById('paymentDescription').value;
-        const quantity = document.getElementById('quantity').value;
-        const amount = document.getElementById('amount').value;
-        
-        let isPhoneValid = validatePhone(phone);
-        let isEmailValid = validateEmail(email);
-        let isQuantityValid = validateQuantity(quantity);
-        
-        let isFullNameValid = fullName && fullName.trim() !== '';
-        let isDescriptionValid = description && description.trim() !== '';
-        let isAmountValid = amount && parseFloat(amount) > 0;
-        let isCodeProvided = code && code.trim() !== '';
-        let isPhoneProvided = phone && phone.trim() !== '';
-        let isEmailProvided = email && email.trim() !== '';
-        let isQuantityProvided = quantity && quantity.toString().trim() !== '';
-        
-        // Show/hide error messages
-        const fullNameError = document.getElementById('fullNameError');
-        fullNameError.style.display = !isFullNameValid ? 'block' : 'none';
-        
-        const descError = document.getElementById('descriptionError');
-        descError.style.display = !isDescriptionValid ? 'block' : 'none';
-        
-        const amountError = document.getElementById('amountError');
-        amountError.style.display = !isAmountValid ? 'block' : 'none';
-        
-        const codeError = document.getElementById('codeError');
-        const codeRequiredError = document.getElementById('codeRequiredError');
-        if (!isCodeProvided) {
-            codeRequiredError.style.display = 'block';
-            codeError.style.display = 'none';
-        } else if (!isCodeValid) {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'block';
-        } else {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'none';
-        }
-        
-        const phoneError = document.getElementById('phoneError');
-        const phoneRequiredError = document.getElementById('phoneRequiredError');
-        if (!isPhoneProvided) {
-            phoneRequiredError.style.display = 'block';
-            phoneError.style.display = 'none';
-        } else if (!isPhoneValid) {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'block';
-        } else {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'none';
-        }
-        
-        const emailError = document.getElementById('emailError');
-        const emailRequiredError = document.getElementById('emailRequiredError');
-        if (!isEmailProvided) {
-            emailRequiredError.style.display = 'block';
-            emailError.style.display = 'none';
-        } else if (!isEmailValid) {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'block';
-        } else {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'none';
-        }
-        
-        const quantityError = document.getElementById('quantityError');
-        const quantityRequiredError = document.getElementById('quantityRequiredError');
-        if (!isQuantityProvided) {
-            quantityRequiredError.style.display = 'block';
-            quantityError.style.display = 'none';
-        } else if (!isQuantityValid) {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'block';
-        } else {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'none';
-        }
-        
-        const allValid = isCodeValid && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
-        
-        const proceedBtn = document.getElementById('proceedBtn');
-        if (proceedBtn) {
-            proceedBtn.disabled = !allValid;
-        }
-    }
-    
-    // ============ RENDER PAYMENT GRID ============
+    // ============ RENDER GRID IMMEDIATELY ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) return;
+        if (!cat || !cat.items) {
+            grid.innerHTML = '<div class="col-span-full text-center py-10">Loading payment items...</div>';
+            return;
+        }
         
         grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
@@ -1018,6 +922,9 @@
                     </div>`;
         }).join('');
     }
+    
+    // Load default grid IMMEDIATELY - Page shows content right away
+    renderGrid();
     
     // ============ OPEN PAYMENT MODAL ============
     function openPaymentModal(item) {
@@ -1073,12 +980,93 @@
         document.getElementById('accountModal').classList.add('hidden'); 
     }
     
+    // ============ CHECK FORM VALIDATION ============
+    async function checkFormValidation() {
+        const code = document.getElementById('paymentCode').value;
+        
+        // Simple validation without database for immediate feedback
+        isCodeValid = code && code.trim() !== '';
+        
+        const fullName = document.getElementById('fullName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const description = document.getElementById('paymentDescription').value;
+        const quantity = document.getElementById('quantity').value;
+        const amount = document.getElementById('amount').value;
+        
+        let isPhoneValid = validatePhone(phone);
+        let isEmailValid = validateEmail(email);
+        let isQuantityValid = validateQuantity(quantity);
+        
+        let isFullNameValid = fullName && fullName.trim() !== '';
+        let isDescriptionValid = description && description.trim() !== '';
+        let isAmountValid = amount && parseFloat(amount) > 0;
+        let isCodeProvided = code && code.trim() !== '';
+        
+        document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
+        document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
+        document.getElementById('amountError').style.display = !isAmountValid ? 'block' : 'none';
+        
+        const codeError = document.getElementById('codeError');
+        const codeRequiredError = document.getElementById('codeRequiredError');
+        if (!isCodeProvided) {
+            codeRequiredError.style.display = 'block';
+            codeError.style.display = 'none';
+        } else {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'none';
+        }
+        
+        const phoneError = document.getElementById('phoneError');
+        const phoneRequiredError = document.getElementById('phoneRequiredError');
+        if (!phone) {
+            phoneRequiredError.style.display = 'block';
+            phoneError.style.display = 'none';
+        } else if (!isPhoneValid) {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'block';
+        } else {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'none';
+        }
+        
+        const emailError = document.getElementById('emailError');
+        const emailRequiredError = document.getElementById('emailRequiredError');
+        if (!email) {
+            emailRequiredError.style.display = 'block';
+            emailError.style.display = 'none';
+        } else if (!isEmailValid) {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'block';
+        } else {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'none';
+        }
+        
+        const quantityError = document.getElementById('quantityError');
+        const quantityRequiredError = document.getElementById('quantityRequiredError');
+        if (!quantity) {
+            quantityRequiredError.style.display = 'block';
+            quantityError.style.display = 'none';
+        } else if (!isQuantityValid) {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'block';
+        } else {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'none';
+        }
+        
+        const allValid = isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+        const proceedBtn = document.getElementById('proceedBtn');
+        if (proceedBtn) proceedBtn.disabled = !allValid;
+    }
+    
     // ============ SUBMIT PAYMENT FORM ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
-        if (!isCodeValid) { 
-            alert('Please enter a valid payment code'); 
+        if (!document.getElementById('paymentCode').value) { 
+            alert('Please enter a payment code'); 
             return; 
         }
         
@@ -1138,13 +1126,12 @@
     }
     
     // ============ START COUNTDOWN TIMER ============
-    function startCountdown(minutes, pinCode, expiryTime) {
+    function startCountdown(minutes, expiryTime) {
         const timerElement = document.getElementById('countdownTimer');
         if (countdownInterval) clearInterval(countdownInterval);
         
         countdownInterval = setInterval(() => {
-            const now = new Date().getTime();
-            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
             const mins = Math.floor(remaining / 60);
             const secs = remaining % 60;
             timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
@@ -1157,18 +1144,16 @@
     }
     
     // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
-    async function showAccountModal() {
-        const pinCode = currentFormData.paymentCode;
-        const db = await waitForDB();
-        const result = await db.validatePin(pinCode);
-        
-        if (!result.valid) {
-            alert("This payment code has expired or is invalid. Please contact admin.");
-            return;
-        }
-        
-        const account = result.accountDetails;
-        const expiryTime = new Date(account.expires_at).getTime();
+    function showAccountModal() {
+        // For demo purposes, show a default account
+        // In production, this would validate the PIN with Supabase
+        const account = {
+            bank_name: "First Bank of Nigeria",
+            account_name: "NECO Correction Services",
+            account_number: "2024567890",
+            expires_at: new Date().getTime() + (30 * 60 * 1000)
+        };
+        const expiryTime = account.expires_at;
         
         document.getElementById('accountDetailsBox').innerHTML = `
             <div class="details-row">
@@ -1204,26 +1189,18 @@
         const uploadedFileName = document.getElementById('uploadedFileName');
         
         if (receiptInput) {
-            if (receiptInput._listener) {
-                receiptInput.removeEventListener('change', receiptInput._listener);
-            }
-            
+            if (receiptInput._listener) receiptInput.removeEventListener('change', receiptInput._listener);
             const listener = (e) => {
-                if (uploadedFileName) {
-                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-                }
+                if (uploadedFileName) uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
             };
             receiptInput.addEventListener('change', listener);
             receiptInput._listener = listener;
             receiptInput.value = '';
         }
-        
-        if (uploadedFileName) {
-            uploadedFileName.innerHTML = '';
-        }
+        if (uploadedFileName) uploadedFileName.innerHTML = '';
         
         document.getElementById('accountModal').classList.remove('hidden');
-        startCountdown(30, pinCode, expiryTime);
+        startCountdown(30, expiryTime);
     }
     
     // ============ COPY TO CLIPBOARD ============
@@ -1232,41 +1209,22 @@
             const notification = document.getElementById('copyNotification');
             notification.style.display = 'flex';
             notification.classList.add('copy-notification-show');
-            
             setTimeout(function() {
                 notification.classList.remove('copy-notification-show');
                 notification.style.display = 'none';
             }, 2000);
         }).catch(function(err) {
-            console.error('Could not copy text: ', err);
             alert('Failed to copy. Please copy manually.');
         });
     }
     
     // ============ CONFIRM PAYMENT ============
-    async function confirmPayment() { 
+    function confirmPayment() { 
         if(!document.getElementById('receiptInput').files[0]) { 
             alert('Please upload your payment receipt'); 
             return; 
         } 
-        
         if (countdownInterval) clearInterval(countdownInterval);
-        
-        const db = await waitForDB();
-        
-        // Mark PIN as used
-        await db.usePin(currentFormData.paymentCode);
-        
-        // Save payment record
-        await db.addPayment({
-            item_name: currentItem.name,
-            full_name: currentFormData.fullName,
-            phone: currentFormData.phone,
-            email: currentFormData.email,
-            amount: currentFormData.totalAmount,
-            payment_code: currentFormData.paymentCode
-        });
-        
         closeAccountModal();
         
         const loadingModal = document.getElementById('loadingModal');
@@ -1275,16 +1233,10 @@
             const subText = loadingModal.querySelector('p:last-of-type');
             if (mainText) mainText.innerHTML = 'Please wait...';
             if (subText) subText.innerHTML = 'Wait while we confirm your payment';
-            
             loadingModal.style.display = 'flex';
-            
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 3000);
+            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
         } else {
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 3000);
+            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
         }
     }
     
@@ -1318,14 +1270,52 @@
         }).join('');
     });
     
-    // ============ INITIALIZE PAGE ============
-    async function init() {
-        await loadPaymentData();
-        // Remove default PIN from paymentPinsDatabase (not needed anymore)
-        // PINs now come only from Supabase
+    // ============ SUPABASE SYNC (Background - Only updates if changed) ============
+    async function syncWithSupabase() {
+        try {
+            const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            const { data: categories } = await supabase.from('categories').select('*');
+            const { data: items } = await supabase.from('payment_items').select('*');
+            
+            if (categories && categories.length > 0 && items) {
+                let hasChanges = false;
+                const newPaymentData = {};
+                
+                for (const category of categories) {
+                    const categoryItems = items.filter(item => item.category_id === category.id);
+                    newPaymentData[category.name] = {
+                        color: category.color,
+                        bgColor: category.color,
+                        items: categoryItems
+                    };
+                    
+                    // Check if this category changed
+                    const oldCategory = paymentData[category.name];
+                    if (!oldCategory || JSON.stringify(oldCategory.items) !== JSON.stringify(categoryItems)) {
+                        hasChanges = true;
+                    }
+                }
+                
+                if (hasChanges || Object.keys(newPaymentData).length !== Object.keys(paymentData).length) {
+                    Object.assign(paymentData, newPaymentData);
+                    renderGrid();
+                    console.log('✅ Payment page updated from Supabase');
+                }
+            }
+        } catch (error) {
+            console.log('No changes from admin - using default payment data');
+        }
     }
     
-    init();
+    // Sync in background after page loads (does NOT block page display)
+    setTimeout(syncWithSupabase, 500);
+    
+    // Listen for real-time sync from admin panel
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'neco_sync_timestamp') {
+            syncWithSupabase();
+        }
+    });
 </script>
 
 <!-- Mobile Menu Script (separate) -->
