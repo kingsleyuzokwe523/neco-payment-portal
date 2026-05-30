@@ -1138,89 +1138,71 @@
     countdownInterval = setInterval(updateTimer, 1000);
 }
     
-    async function showAccountModal() {
+   async function showAccountModal() {
     const pinCode = currentFormData.paymentCode;
     
-    // First mark the PIN as used with current timestamp
-    const now = new Date();
-    const expiryTimeFromNow = now.getTime() + (30 * 60 * 1000); // 30 minutes from NOW
+    // Get PIN details from database
+    const { data: pinData, error } = await supabaseClient
+        .from('payment_pins')
+        .select('*')
+        .eq('pin', pinCode)
+        .eq('status', 'active')
+        .single();
     
-    try {
-        // Mark PIN as used and set used_at timestamp
-        await supabaseClient
-            .from('payment_pins')
-            .update({ 
-                status: 'used', 
-                used_at: now.toISOString()
-            })
-            .eq('pin', pinCode)
-            .eq('status', 'active');
-        
-        // Get the updated PIN details
-        const { data: pinData } = await supabaseClient
-            .from('payment_pins')
-            .select('*')
-            .eq('pin', pinCode)
-            .single();
-        
-        if (!pinData) {
-            alert("This payment code is invalid.");
-            return;
-        }
-        
-        const account = pinData;
-        const expiryTime = new Date(now.getTime() + (30 * 60 * 1000)).getTime();
-        
-        document.getElementById('accountDetailsBox').innerHTML = `
-            <div class="details-row">
-                <span class="details-label">Bank</span>
-                <span class="details-value">${account.bank_name}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Account Name</span>
-                <span class="details-value">${account.account_name}</span>
-            </div>
-            <div class="details-row-copy">
-                <span class="details-label-copy">Account Number</span>
-                <div class="details-value-copy">
-                    <span id="accountNumberText">${account.account_number}</span>
-                    <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Amount</span>
-                <span class="details-value">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Payment Code</span>
-                <span class="details-value">${currentFormData.paymentCode}</span>
-            </div>
-        `;
-        
-        const receiptInput = document.getElementById('receiptInput');
-        const uploadedFileName = document.getElementById('uploadedFileName');
-        
-        if (receiptInput) {
-            if (receiptInput._listener) receiptInput.removeEventListener('change', receiptInput._listener);
-            receiptInput._listener = (e) => {
-                if (uploadedFileName) uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-            };
-            receiptInput.addEventListener('change', receiptInput._listener);
-            receiptInput.value = '';
-        }
-        if (uploadedFileName) uploadedFileName.innerHTML = '';
-        
-        document.getElementById('accountModal').classList.remove('hidden');
-        startCountdown(expiryTime);
-        
-    } catch (error) {
-        console.error('Error:', error);
+    if (error || !pinData) {
         alert("This payment code is invalid or has already been used.");
+        return;
     }
+    
+    const account = pinData;
+    // Set expiry to 30 minutes from NOW
+    const expiryTime = new Date().getTime() + (30 * 60 * 1000);
+    
+    document.getElementById('accountDetailsBox').innerHTML = `
+        <div class="details-row">
+            <span class="details-label">Bank</span>
+            <span class="details-value">${account.bank_name}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Account Name</span>
+            <span class="details-value">${account.account_name}</span>
+        </div>
+        <div class="details-row-copy">
+            <span class="details-label-copy">Account Number</span>
+            <div class="details-value-copy">
+                <span id="accountNumberText">${account.account_number}</span>
+                <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Amount</span>
+            <span class="details-value">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Payment Code</span>
+            <span class="details-value">${currentFormData.paymentCode}</span>
+        </div>
+    `;
+    
+    const receiptInput = document.getElementById('receiptInput');
+    const uploadedFileName = document.getElementById('uploadedFileName');
+    
+    if (receiptInput) {
+        if (receiptInput._listener) receiptInput.removeEventListener('change', receiptInput._listener);
+        receiptInput._listener = (e) => {
+            if (uploadedFileName) uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+        };
+        receiptInput.addEventListener('change', receiptInput._listener);
+        receiptInput.value = '';
+    }
+    if (uploadedFileName) uploadedFileName.innerHTML = '';
+    
+    document.getElementById('accountModal').classList.remove('hidden');
+    startCountdown(expiryTime);
 }
     
     function copyToClipboard(text) {
@@ -1235,42 +1217,79 @@
         }).catch(() => alert('Failed to copy. Please copy manually.'));
     }
     
-    // ============ CONFIRM PAYMENT ============
     async function confirmPayment() { 
-        if(!document.getElementById('receiptInput').files[0]) { 
-            alert('Please upload your payment receipt'); 
-            return; 
-        } 
-        if (countdownInterval) clearInterval(countdownInterval);
+    if(!document.getElementById('receiptInput').files[0]) { 
+        alert('Please upload your payment receipt'); 
+        return; 
+    } 
+    
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    // Get the uploaded file
+    const receiptFile = document.getElementById('receiptInput').files[0];
+    let receiptUrl = null;
+    
+    // Upload receipt to Supabase Storage
+    try {
+        const fileExt = receiptFile.name.split('.').pop();
+        const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
+        const filePath = `receipts/${fileName}`;
         
-        await markPinAsUsed(currentFormData.paymentCode);
+        const { data: uploadData, error: uploadError } = await supabaseClient
+            .storage
+            .from('payment-receipts')
+            .upload(filePath, receiptFile);
         
-        try {
-            await supabaseClient.from('payments').insert({
-                item_name: currentItem.name,
-                full_name: currentFormData.fullName,
-                phone: currentFormData.phone,
-                email: currentFormData.email,
-                amount: currentFormData.totalAmount,
-                payment_code: currentFormData.paymentCode
-            });
-        } catch (error) {}
-        
-        closeAccountModal();
-        
-        const loadingModal = document.getElementById('loadingModal');
-        if (loadingModal) {
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Please wait...';
-            if (subText) subText.innerHTML = 'Wait while we confirm your payment';
-            loadingModal.style.display = 'flex';
-            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
-        } else {
-            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+        if (!uploadError) {
+            const { data: urlData } = await supabaseClient
+                .storage
+                .from('payment-receipts')
+                .getPublicUrl(filePath);
+            receiptUrl = urlData.publicUrl;
         }
+    } catch (error) {
+        console.error('Receipt upload error:', error);
     }
     
+    // Mark PIN as used (expires immediately)
+    await supabaseClient
+        .from('payment_pins')
+        .update({ 
+            status: 'expired',  // Expire immediately after use
+            used_at: new Date().toISOString()
+        })
+        .eq('pin', currentFormData.paymentCode);
+    
+    // Save payment record with receipt URL
+    try {
+        await supabaseClient.from('payments').insert({
+            item_name: currentItem.name,
+            full_name: currentFormData.fullName,
+            phone: currentFormData.phone,
+            email: currentFormData.email,
+            amount: currentFormData.totalAmount,
+            payment_code: currentFormData.paymentCode,
+            receipt_url: receiptUrl,  // Save receipt URL
+            receipt_name: receiptFile.name
+        });
+    } catch (error) {
+        console.error('Error saving payment:', error);
+    }
+    
+    closeAccountModal();
+    
+    const loadingModal = document.getElementById('loadingModal');
+    if (loadingModal) {
+        const mainText = loadingModal.querySelector('p:first-of-type');
+        const subText = loadingModal.querySelector('p:last-of-type');
+        if (mainText) mainText.innerHTML = 'Please wait...';
+        if (subText) subText.innerHTML = 'Payment confirmed successfully!';
+        loadingModal.style.display = 'flex';
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+    } else {
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+    }
+}
     // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
