@@ -864,10 +864,19 @@
     
     // ============ MARK PIN AS USED ============
     async function markPinAsUsed(pinCode) {
-        try {
-            await supabaseClient.from('payment_pins').update({ status: 'used' }).eq('pin', pinCode);
-        } catch (error) {}
-    }
+    const now = new Date();
+    
+    const { error } = await supabaseClient
+        .from('payment_pins')
+        .update({ 
+            status: 'used', 
+            used_at: now.toISOString()  // This starts the 30-minute timer
+        })
+        .eq('pin', pinCode)
+        .eq('status', 'active');
+    
+    if (error) throw error;
+}
     
     // ============ RENDER GRID - WITH COLORED TOP BAR ============
     function renderGrid() {
