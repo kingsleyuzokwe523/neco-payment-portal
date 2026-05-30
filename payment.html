@@ -1158,19 +1158,25 @@
     // Set expiry to 30 minutes from NOW
     const expiryTime = new Date().getTime() + (30 * 60 * 1000);
     
+    // Calculate total amount correctly
+    const amount = parseFloat(currentFormData.amount) || 0;
+    const serviceCharge = 50;
+    const quantity = parseInt(currentFormData.quantity) || 1;
+    const totalAmount = (amount + serviceCharge) * quantity;
+    
     document.getElementById('accountDetailsBox').innerHTML = `
         <div class="details-row">
             <span class="details-label">Bank</span>
-            <span class="details-value">${account.bank_name}</span>
+            <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
         </div>
         <div class="details-row">
             <span class="details-label">Account Name</span>
-            <span class="details-value">${account.account_name}</span>
+            <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
         </div>
         <div class="details-row-copy">
             <span class="details-label-copy">Account Number</span>
             <div class="details-value-copy">
-                <span id="accountNumberText">${account.account_number}</span>
+                <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
                 <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
@@ -1180,29 +1186,48 @@
         </div>
         <div class="details-row">
             <span class="details-label">Amount</span>
-            <span class="details-value">${currentFormData.currency} ${currentFormData.totalAmount.toLocaleString()}</span>
+            <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
         </div>
         <div class="details-row">
             <span class="details-label">Payment Code</span>
-            <span class="details-value">${currentFormData.paymentCode}</span>
+            <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
         </div>
     `;
     
+    // Reset file input
     const receiptInput = document.getElementById('receiptInput');
     const uploadedFileName = document.getElementById('uploadedFileName');
     
     if (receiptInput) {
-        if (receiptInput._listener) receiptInput.removeEventListener('change', receiptInput._listener);
-        receiptInput._listener = (e) => {
-            if (uploadedFileName) uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-        };
-        receiptInput.addEventListener('change', receiptInput._listener);
-        receiptInput.value = '';
+        const newInput = receiptInput.cloneNode(true);
+        receiptInput.parentNode.replaceChild(newInput, receiptInput);
+        newInput.id = 'receiptInput';
+        newInput.classList.add('hidden');
+        newInput.accept = '.pdf,.jpg,.jpeg,.png';
+        
+        newInput.addEventListener('change', (e) => {
+            if (uploadedFileName) {
+                uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+            }
+        });
     }
     if (uploadedFileName) uploadedFileName.innerHTML = '';
     
     document.getElementById('accountModal').classList.remove('hidden');
     startCountdown(expiryTime);
+}
+
+// Helper function to escape HTML
+function escapeHtml(str) {
+    if (!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+        return c;
+    });
 }
     
     function copyToClipboard(text) {
@@ -1216,80 +1241,142 @@
             }, 2000);
         }).catch(() => alert('Failed to copy. Please copy manually.'));
     }
+   async function confirmPayment() { 
+    const receiptFile = document.getElementById('receiptInput').files[0];
     
-    async function confirmPayment() { 
-    if(!document.getElementById('receiptInput').files[0]) { 
+    if(!receiptFile) { 
         alert('Please upload your payment receipt'); 
         return; 
     } 
     
     if (countdownInterval) clearInterval(countdownInterval);
     
-    // Get the uploaded file
-    const receiptFile = document.getElementById('receiptInput').files[0];
+    // Show loading indicator
+    const loadingModal = document.getElementById('loadingModal');
+    if (loadingModal) {
+        loadingModal.style.display = 'flex';
+        const mainText = loadingModal.querySelector('p:first-of-type');
+        const subText = loadingModal.querySelector('p:last-of-type');
+        if (mainText) mainText.innerHTML = 'Processing your payment...';
+        if (subText) subText.innerHTML = 'Please wait while we save your payment';
+    }
+    
     let receiptUrl = null;
+    let receiptName = null;
     
     // Upload receipt to Supabase Storage
     try {
         const fileExt = receiptFile.name.split('.').pop();
         const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
         const filePath = `receipts/${fileName}`;
+        receiptName = receiptFile.name;
         
+        // Upload file
         const { data: uploadData, error: uploadError } = await supabaseClient
             .storage
             .from('payment-receipts')
             .upload(filePath, receiptFile);
         
-        if (!uploadError) {
-            const { data: urlData } = await supabaseClient
-                .storage
-                .from('payment-receipts')
-                .getPublicUrl(filePath);
-            receiptUrl = urlData.publicUrl;
+        if (uploadError) {
+            console.error('Upload error:', uploadError);
+            alert('Failed to upload receipt. Please try again.');
+            if (loadingModal) loadingModal.style.display = 'none';
+            return;
         }
+        
+        // Get public URL
+        const { data: urlData } = await supabaseClient
+            .storage
+            .from('payment-receipts')
+            .getPublicUrl(filePath);
+        receiptUrl = urlData.publicUrl;
+        
+        console.log('Receipt uploaded:', receiptUrl);
+        
     } catch (error) {
         console.error('Receipt upload error:', error);
+        alert('Error uploading receipt: ' + error.message);
+        if (loadingModal) loadingModal.style.display = 'none';
+        return;
     }
     
-    // Mark PIN as used (expires immediately)
-    await supabaseClient
-        .from('payment_pins')
-        .update({ 
-            status: 'expired',  // Expire immediately after use
-            used_at: new Date().toISOString()
-        })
-        .eq('pin', currentFormData.paymentCode);
+    // Calculate total amount correctly
+    const amount = parseFloat(currentFormData.amount) || 0;
+    const serviceCharge = 50;
+    const quantity = parseInt(currentFormData.quantity) || 1;
+    const totalAmount = (amount + serviceCharge) * quantity;
     
-    // Save payment record with receipt URL
+    // Prepare payment data - MATCH YOUR SUPABASE TABLE COLUMNS EXACTLY
+    const paymentData = {
+        payment_code: currentFormData.paymentCode,
+        full_name: currentFormData.fullName,
+        phone: currentFormData.phone,
+        email: currentFormData.email,
+        description: currentFormData.description || '',
+        item_name: currentItem.name,
+        amount: totalAmount,
+        currency: currentFormData.currency || 'NGN',
+        quantity: quantity,
+        receipt_url: receiptUrl,
+        receipt_name: receiptName,
+        status: 'pending',
+        created_at: new Date().toISOString()
+    };
+    
+    console.log('Saving payment to database:', paymentData);
+    
+    // Save payment record to Supabase
     try {
-        await supabaseClient.from('payments').insert({
-            item_name: currentItem.name,
-            full_name: currentFormData.fullName,
-            phone: currentFormData.phone,
-            email: currentFormData.email,
-            amount: currentFormData.totalAmount,
-            payment_code: currentFormData.paymentCode,
-            receipt_url: receiptUrl,  // Save receipt URL
-            receipt_name: receiptFile.name
-        });
+        const { data, error } = await supabaseClient
+            .from('payments')
+            .insert([paymentData])
+            .select();
+        
+        if (error) {
+            console.error('Save payment error:', error);
+            alert('Error saving payment: ' + error.message);
+            if (loadingModal) loadingModal.style.display = 'none';
+            return;
+        }
+        
+        console.log('Payment saved successfully:', data);
+        
+        // Mark PIN as used (only once!)
+        const { error: pinError } = await supabaseClient
+            .from('payment_pins')
+            .update({ 
+                status: 'used', 
+                used_at: new Date().toISOString()
+            })
+            .eq('pin', currentFormData.paymentCode);
+        
+        if (pinError) {
+            console.error('Error updating PIN status:', pinError);
+        }
+        
+        closeAccountModal();
+        
+        // Update loading modal with success message
+        if (loadingModal) {
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Please wait while we Confirm your Payment!';
+            if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
+            loadingModal.style.display = 'flex';
+        }
+        
+        // Redirect after delay
+        setTimeout(() => { 
+            window.location.href = 'index.html'; 
+        }, 3000);
+        
     } catch (error) {
-        console.error('Error saving payment:', error);
-    }
-    
-    closeAccountModal();
-    
-    const loadingModal = document.getElementById('loadingModal');
-    if (loadingModal) {
-        const mainText = loadingModal.querySelector('p:first-of-type');
-        const subText = loadingModal.querySelector('p:last-of-type');
-        if (mainText) mainText.innerHTML = 'Please wait...';
-        if (subText) subText.innerHTML = 'Payment confirmed successfully!';
-        loadingModal.style.display = 'flex';
-        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
-    } else {
-        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+        console.error('Error:', error);
+        alert('Error saving payment. Please contact support.');
+        if (loadingModal) loadingModal.style.display = 'none';
     }
 }
+   
     // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
