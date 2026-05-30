@@ -957,37 +957,34 @@
         }
         
         async function checkAndExpirePins() {
-            if (!necoSupabase || currentPaymentPins.length === 0) return;
+    if (!necoSupabase || currentPaymentPins.length === 0) return;
+    
+    const now = new Date();
+    let updated = false;
+    
+    for (let i = 0; i < currentPaymentPins.length; i++) {
+        const pin = currentPaymentPins[i];
+        
+        // Only check PINs that are "used" - they expire 30 minutes after use
+        if (pin.status === 'used' && pin.used_at) {
+            const usedTime = new Date(pin.used_at);
+            const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
             
-            const now = new Date();
-            let updated = false;
-            
-            for (let i = 0; i < currentPaymentPins.length; i++) {
-                const pin = currentPaymentPins[i];
-                if (pin.status === 'used' && pin.used_at) {
-                    const usedTime = new Date(pin.used_at);
-                    const minutesSinceUse = (now - usedTime) / (1000 * 60);
-                    if (minutesSinceUse >= 30 && pin.status !== 'expired') {
-                        await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
-                        updated = true;
-                    }
-                }
-                if (pin.status === 'active' && pin.expires_at) {
-                    const expiryTime = new Date(pin.expires_at);
-                    if (now > expiryTime) {
-                        await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
-                        updated = true;
-                    }
-                }
-            }
-            
-            if (updated) {
-                const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (data) currentPaymentPins = data;
-                renderPins();
-                updateDashboard();
+            if (now >= expiryFromUse && pin.status !== 'expired') {
+                await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
+                updated = true;
+                console.log(`PIN ${pin.pin} expired 30 minutes after being used`);
             }
         }
+    }
+    
+    if (updated) {
+        const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+        if (data) currentPaymentPins = data;
+        renderPins();
+        updateDashboard();
+    }
+}
         
         async function loadAllData() {
             try {
@@ -1231,68 +1228,69 @@
         }
         
         async function savePin() {
-            const pin = document.getElementById('pinCode').value;
-            const bankName = document.getElementById('pinBankName').value;
-            const accountName = document.getElementById('pinAccountName').value;
-            let accountNumber = document.getElementById('pinAccountNumber').value;
-            
-            // Validate PIN - numbers only
-            if (!/^\d+$/.test(pin)) {
-                alert('PIN Code must contain only numbers');
-                return;
+    const pin = document.getElementById('pinCode').value;
+    const bankName = document.getElementById('pinBankName').value;
+    const accountName = document.getElementById('pinAccountName').value;
+    let accountNumber = document.getElementById('pinAccountNumber').value;
+    
+    // Validate PIN - numbers only
+    if (!/^\d+$/.test(pin)) {
+        alert('PIN Code must contain only numbers');
+        return;
+    }
+    
+    if (pin.length < 4 || pin.length > 6) {
+        alert('PIN Code must be 4-6 digits');
+        return;
+    }
+    
+    // Validate Account Number - exactly 10 digits, numbers only
+    accountNumber = accountNumber.replace(/[^0-9]/g, '');
+    if (accountNumber.length !== 10) {
+        alert('Account Number must be exactly 10 digits (numbers only)');
+        return;
+    }
+    
+    if (!bankName || !accountName) {
+        alert('Please fill all required fields');
+        return;
+    }
+    
+    // NO expires_at - PIN stays active forever until used
+    const now = new Date();
+    
+    try {
+        const { error } = await necoSupabase.from('payment_pins').insert({
+            pin: pin,
+            bank_name: bankName,
+            account_name: accountName,
+            account_number: accountNumber,
+            status: 'active',  // Active forever until used
+            created_at: now.toISOString()
+            // NO expires_at column
+        });
+        
+        if (error) {
+            if (error.code === '23505') {
+                alert('PIN already exists! Please use a different PIN.');
+            } else {
+                alert('Error: ' + error.message);
             }
-            
-            if (pin.length < 4 || pin.length > 6) {
-                alert('PIN Code must be 4-6 digits');
-                return;
-            }
-            
-            // Validate Account Number - exactly 10 digits, numbers only
-            accountNumber = accountNumber.replace(/[^0-9]/g, '');
-            if (accountNumber.length !== 10) {
-                alert('Account Number must be exactly 10 digits (numbers only)');
-                return;
-            }
-            
-            if (!bankName || !accountName) {
-                alert('Please fill all required fields');
-                return;
-            }
-            
-            const expiresAt = new Date();
-            expiresAt.setMinutes(expiresAt.getMinutes() + 30);
-            
-            try {
-                const { error } = await necoSupabase.from('payment_pins').insert({
-                    pin: pin,
-                    bank_name: bankName,
-                    account_name: accountName,
-                    account_number: accountNumber,
-                    status: 'active',
-                    expires_at: expiresAt.toISOString()
-                });
-                
-                if (error) {
-                    if (error.code === '23505') {
-                        alert('PIN already exists! Please use a different PIN.');
-                    } else {
-                        alert('Error: ' + error.message);
-                    }
-                    return;
-                }
-                
-                const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (updatedPins) currentPaymentPins = updatedPins;
-                
-                closeModal('pinModal');
-                renderPins();
-                updateDashboard();
-                triggerSync();
-                alert(`✅ PIN ${pin} generated successfully! It will expire in 30 minutes.`);
-            } catch (err) {
-                alert('Error creating PIN: ' + err.message);
-            }
+            return;
         }
+        
+        const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+        if (updatedPins) currentPaymentPins = updatedPins;
+        
+        closeModal('pinModal');
+        renderPins();
+        updateDashboard();
+        triggerSync();
+        alert(`✅ PIN ${pin} generated successfully! It will stay active until used.`);
+    } catch (err) {
+        alert('Error creating PIN: ' + err.message);
+    }
+}
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
@@ -1305,44 +1303,68 @@
             }
         }
         
-        function renderPins() {
-            const tbody = document.getElementById('pinsTableBody');
-            if (!tbody) return;
-            if (currentPaymentPins.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>';
-                return;
-            }
-            
-            let pinsHtml = '';
-            for (let i = 0; i < currentPaymentPins.length; i++) {
-                const pin = currentPaymentPins[i];
-                let statusClass = "badge-active";
-                let statusText = "Active";
-                
-                if (pin.status === "used") {
-                    statusClass = "badge-used";
-                    statusText = "Used";
-                } else if (pin.status === "expired") {
-                    statusClass = "badge-expired";
+       function renderPins() {
+    const tbody = document.getElementById('pinsTableBody');
+    if (!tbody) return;
+    if (currentPaymentPins.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>';
+        return;
+    }
+    
+    let pinsHtml = '';
+    const now = new Date();
+    
+    for (let i = 0; i < currentPaymentPins.length; i++) {
+        const pin = currentPaymentPins[i];
+        let statusClass = "badge-active";
+        let statusText = "Active";
+        let timeLeft = "Never expires";
+        
+        if (pin.status === "used") {
+            statusClass = "badge-used";
+            statusText = "Used";
+            // Calculate time left from used_at (30 minutes from use)
+            if (pin.used_at) {
+                const usedTime = new Date(pin.used_at);
+                const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
+                const remainingMs = expiryFromUse - now;
+                if (remainingMs <= 0) {
+                    timeLeft = "Expired";
                     statusText = "Expired";
+                    statusClass = "badge-expired";
+                } else {
+                    const remainingMins = Math.floor(remainingMs / (1000 * 60));
+                    const remainingSecs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+                    timeLeft = `${remainingMins}:${remainingSecs.toString().padStart(2, '0')} remaining`;
                 }
-                
-                pinsHtml += `
-                    <tr>
-                        <td><code>${pin.pin}</code></td>
-                        <td>${pin.bank_name}</td>
-                        <td>${pin.account_name}</td>
-                        <td>${pin.account_number}</td>
-                        <td><span class="badge ${statusClass}">${statusText}</span></td>
-                        <td>${new Date(pin.created_at).toLocaleString()}</td>
-                        <td>
-                            <button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button>
-                        </td>
-                    </tr>
-                `;
+            } else {
+                timeLeft = "Will expire in 30 min after use";
             }
-            tbody.innerHTML = pinsHtml;
+        } else if (pin.status === "expired") {
+            statusClass = "badge-expired";
+            statusText = "Expired";
+            timeLeft = "Expired";
+        } else {
+            // Active PIN - never expires
+            timeLeft = "Stays active until used";
         }
+        
+        pinsHtml += `
+            <tr>
+                <td><code>${pin.pin}</code></td>
+                <td>${pin.bank_name}</td>
+                <td>${pin.account_name}</td>
+                <td>${pin.account_number}</td>
+                <td><span class="badge ${statusClass}">${statusText}</span><br><small style="font-size:10px;">${timeLeft}</small></td>
+                <td>${new Date(pin.created_at).toLocaleString()}</td>
+                <td>
+                    <button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button>
+                </td>
+            </tr>
+        `;
+    }
+    tbody.innerHTML = pinsHtml;
+}
         
         function loadHomePreview() {
             const container = document.getElementById('homePreview');
