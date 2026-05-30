@@ -1114,34 +1114,62 @@
         }
     }
     
-    // ============ START COUNTDOWN TIMER ============
-    function startCountdown(minutes, expiryTime) {
-        const timerElement = document.getElementById('countdownTimer');
-        if (countdownInterval) clearInterval(countdownInterval);
-        
-        countdownInterval = setInterval(() => {
-            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
-            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            if (remaining <= 0) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = "Expired";
-            }
-        }, 1000);
-    }
+    function startCountdown(expiryTime) {
+    const timerElement = document.getElementById('countdownTimer');
+    if (countdownInterval) clearInterval(countdownInterval);
     
-    // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
-    async function showAccountModal() {
-        const result = await validatePinWithSupabase(currentFormData.paymentCode);
+    function updateTimer() {
+        const now = new Date().getTime();
+        const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
         
-        if (!result.valid) {
-            alert("This payment code is invalid or has already been used.");
+        if (remaining <= 0) {
+            clearInterval(countdownInterval);
+            timerElement.textContent = "Expired";
+            timerElement.style.color = "#9ca3af";
             return;
         }
         
-        const account = result.accountDetails;
-        const expiryTime = new Date(account.expires_at).getTime();
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+    
+    updateTimer();
+    countdownInterval = setInterval(updateTimer, 1000);
+}
+    
+    async function showAccountModal() {
+    const pinCode = currentFormData.paymentCode;
+    
+    // First mark the PIN as used with current timestamp
+    const now = new Date();
+    const expiryTimeFromNow = now.getTime() + (30 * 60 * 1000); // 30 minutes from NOW
+    
+    try {
+        // Mark PIN as used and set used_at timestamp
+        await supabaseClient
+            .from('payment_pins')
+            .update({ 
+                status: 'used', 
+                used_at: now.toISOString()
+            })
+            .eq('pin', pinCode)
+            .eq('status', 'active');
+        
+        // Get the updated PIN details
+        const { data: pinData } = await supabaseClient
+            .from('payment_pins')
+            .select('*')
+            .eq('pin', pinCode)
+            .single();
+        
+        if (!pinData) {
+            alert("This payment code is invalid.");
+            return;
+        }
+        
+        const account = pinData;
+        const expiryTime = new Date(now.getTime() + (30 * 60 * 1000)).getTime();
         
         document.getElementById('accountDetailsBox').innerHTML = `
             <div class="details-row">
@@ -1187,8 +1215,13 @@
         if (uploadedFileName) uploadedFileName.innerHTML = '';
         
         document.getElementById('accountModal').classList.remove('hidden');
-        startCountdown(30, expiryTime);
+        startCountdown(expiryTime);
+        
+    } catch (error) {
+        console.error('Error:', error);
+        alert("This payment code is invalid or has already been used.");
     }
+}
     
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
