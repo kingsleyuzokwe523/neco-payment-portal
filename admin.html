@@ -802,18 +802,24 @@
             </div>
             
             <div id="view-payments" class="tab-content">
-                <div class="table-container">
-                    <div class="table-header"><h3>All Payments</h3></div>
-                    <table class="items-table">
-                        <thead><tr><th>Date</th><th>Item</th><th>Payer Name</th><th>Phone</th><th>Email</th><th>Amount</th><th>Payment Code</th><th>Status</th></thead>
-                        <tbody id="paymentsTableBody">
-                            <tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <div class="table-container">
+        <div class="table-header"><h3>All Payments</h3></div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Item</th>
+                    <th>Amount</th>
+                    <th>Payment Code</th>
+                    <th>Receipt</th>
+                </tr>
+            </thead>
+            <tbody id="paymentsTableBody">
+                <tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>
+            </tbody>
+        </table>
     </div>
+</div>
     
     <div id="editTextModal" class="modal">
         <div class="modal-content">
@@ -1318,7 +1324,7 @@
         const pin = currentPaymentPins[i];
         let statusClass = "badge-active";
         let statusText = "Active";
-        let timeLeft = "Never expires (until used)";
+        let timeLeft = "Never expires";
         
         if (pin.status === "used") {
             statusClass = "badge-used";
@@ -1335,7 +1341,9 @@
                 } else {
                     const remainingMins = Math.floor(remainingMs / (1000 * 60));
                     const remainingSecs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                    timeLeft = `${remainingMins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')} remaining`;
+                    // Ensure it shows exactly 30:00 max
+                    const displayMins = Math.min(remainingMins, 30);
+                    timeLeft = `${displayMins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')} remaining`;
                 }
             } else {
                 timeLeft = "Timer started";
@@ -1443,31 +1451,36 @@
         }
         
         function renderPayments() {
-            const tbody = document.getElementById('paymentsTableBody');
-            if (!tbody) return;
-            if (currentPayments.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No payments recorded yet</td></tr>';
-                return;
-            }
-            
-            let paymentsHtml = '';
-            for (let i = 0; i < currentPayments.length; i++) {
-                const payment = currentPayments[i];
-                paymentsHtml += `
-                    <tr>
-                        <td>${new Date(payment.created_at).toLocaleDateString()}</td>
-                        <td>${payment.item_name}</td>
-                        <td>${payment.full_name}</td>
-                        <td>${payment.phone}</td>
-                        <td>${payment.email}</td>
-                        <td>₦${payment.amount.toLocaleString()}</td>
-                        <td>${payment.payment_code}</td>
-                        <td><span class="badge badge-active">Completed</span></td>
-                    </tr>
-                `;
-            }
-            tbody.innerHTML = paymentsHtml;
-        }
+    const tbody = document.getElementById('paymentsTableBody');
+    if (!tbody) return;
+    if (currentPayments.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>';
+        return;
+    }
+    
+    let paymentsHtml = '';
+    for (let i = 0; i < currentPayments.length; i++) {
+        const payment = currentPayments[i];
+        const hasReceipt = payment.receipt_url && payment.receipt_url !== 'null' && payment.receipt_url !== '';
+        
+        paymentsHtml += `
+            <tr>
+                <td>${new Date(payment.created_at).toLocaleDateString()}</td>
+                <td>${payment.item_name}</td>
+                <td>₦${payment.amount.toLocaleString()}</td>
+                <td>${payment.payment_code}</td>
+                <td>
+                    ${hasReceipt ? 
+                        `<a href="${payment.receipt_url}" target="_blank" style="background:#054c0f; color:white; padding:5px 12px; border-radius:6px; text-decoration:none; font-size:12px; display:inline-block; margin-right:5px;">👁️ View</a>
+                         <a href="${payment.receipt_url}" download style="background:#3b82f6; color:white; padding:5px 12px; border-radius:6px; text-decoration:none; font-size:12px; display:inline-block;">⬇️ Download</a>` 
+                        : '<span style="color:#999;">No receipt uploaded</span>'
+                    }
+                </td>
+            </tr>
+        `;
+    }
+    tbody.innerHTML = paymentsHtml;
+}
         
         function closeModal(id) {
             document.getElementById(id).style.display = 'none';
