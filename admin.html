@@ -1303,7 +1303,7 @@
             }
         }
         
-       function renderPins() {
+      function renderPins() {
     const tbody = document.getElementById('pinsTableBody');
     if (!tbody) return;
     if (currentPaymentPins.length === 0) {
@@ -1318,16 +1318,16 @@
         const pin = currentPaymentPins[i];
         let statusClass = "badge-active";
         let statusText = "Active";
-        let timeLeft = "Never expires";
+        let timeLeft = "Never expires (until used)";
         
         if (pin.status === "used") {
             statusClass = "badge-used";
             statusText = "Used";
-            // Calculate time left from used_at (30 minutes from use)
             if (pin.used_at) {
                 const usedTime = new Date(pin.used_at);
                 const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
                 const remainingMs = expiryFromUse - now;
+                
                 if (remainingMs <= 0) {
                     timeLeft = "Expired";
                     statusText = "Expired";
@@ -1335,18 +1335,15 @@
                 } else {
                     const remainingMins = Math.floor(remainingMs / (1000 * 60));
                     const remainingSecs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                    timeLeft = `${remainingMins}:${remainingSecs.toString().padStart(2, '0')} remaining`;
+                    timeLeft = `${remainingMins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')} remaining`;
                 }
             } else {
-                timeLeft = "Will expire in 30 min after use";
+                timeLeft = "Timer started";
             }
         } else if (pin.status === "expired") {
             statusClass = "badge-expired";
             statusText = "Expired";
             timeLeft = "Expired";
-        } else {
-            // Active PIN - never expires
-            timeLeft = "Stays active until used";
         }
         
         pinsHtml += `
