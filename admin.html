@@ -173,7 +173,6 @@
             height: 20px;
         }
         
-        /* Logout button at bottom */
         .logout-menu-item {
             margin-top: auto;
             margin-bottom: 20px;
@@ -619,7 +618,7 @@
             background: #4b5563;
         }
         
-        /* WhatsApp Manager Styles */
+        /* WhatsApp Manager Styles - Clean & Simple */
         .whatsapp-manager {
             background: white;
             border-radius: 20px;
@@ -652,8 +651,7 @@
             background: #f0f2f5;
             border-radius: 16px;
             padding: 20px;
-            margin-bottom: 30px;
-            border: 1px solid #e5e7eb;
+            margin-top: 20px;
         }
         
         .whatsapp-preview-title {
@@ -666,35 +664,21 @@
             gap: 8px;
         }
         
-        .whatsapp-message-preview {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            border-left: 4px solid #25D366;
-        }
-        
-        .whatsapp-message-preview .message-label {
-            font-size: 11px;
-            color: #6b7280;
-            margin-bottom: 5px;
-        }
-        
-        .whatsapp-message-preview .message-text {
-            font-size: 14px;
-            color: #111827;
-            word-break: break-word;
-        }
-        
         .whatsapp-link-preview {
-            margin-top: 15px;
-            background: #f9fafb;
+            background: white;
             border-radius: 8px;
-            padding: 10px;
+            padding: 12px;
             font-family: monospace;
-            font-size: 12px;
+            font-size: 13px;
             color: #059669;
             word-break: break-all;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* Category list styles */
+        .category-list-container {
+            max-height: 300px;
+            overflow-y: auto;
         }
         
         /* Homepage preview styles */
@@ -769,6 +753,7 @@
                 </div>
                 <div class="sub-menu" id="categorySubMenu">
                     <div id="categoryList"></div>
+                    <button class="add-category-btn" onclick="openAddCategoryModal()" style="width:100%; margin-top:10px; padding:10px; background:#0ca60c; color:white; border:none; border-radius:10px; cursor:pointer;">+ Add Category</button>
                 </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
@@ -782,7 +767,6 @@
                 </div>
             </div>
             
-            <!-- Logout at bottom -->
             <div class="menu-item logout-menu-item" onclick="doLogout()">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                 <span>Logout</span>
@@ -814,7 +798,7 @@
                 </div>
             </div>
             
-            <!-- WhatsApp Manager Tab -->
+            <!-- WhatsApp Manager Tab - Clean & Simple -->
             <div id="whatsapp-manager" class="tab-content">
                 <div class="whatsapp-manager">
                     <div class="whatsapp-header">
@@ -823,28 +807,24 @@
                     </div>
                     <div class="whatsapp-body">
                         <div class="neco-form-group">
-                            <label>Admin WhatsApp Number</label>
+                            <label>WhatsApp Number</label>
                             <input type="text" id="whatsappNumber" placeholder="e.g., 2348123456789">
                             <small>Include country code without + sign. Example: 2348123456789</small>
                         </div>
                         
                         <div class="neco-form-group">
-                            <label>Default Message (Optional)</label>
-                            <textarea id="whatsappMessage" rows="3" placeholder="Hello, I need a payment code for" style="width:100%; padding:12px; border-radius:12px; border:1px solid #e2e8f0;"></textarea>
-                            <small>This message will be pre-filled when users click the WhatsApp link</small>
+                            <label>WhatsApp Telegram Link (Optional)</label>
+                            <input type="text" id="whatsappTelegramLink" placeholder="https://t.me/username or https://wa.me/2348123456789">
+                            <small>If you provide a custom link, it will be used instead of the number above</small>
                         </div>
                         
                         <div class="whatsapp-preview">
                             <div class="whatsapp-preview-title">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.89.55 3.66 1.52 5.17L2 22l4.83-1.52C8.34 21.45 10.11 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zM8.5 7.5h2c.2 0 .4.1.5.3l1 2c.1.2.1.4 0 .6l-.5.8c-.1.2-.1.4 0 .6l1.5 2.5c.1.2.3.3.5.3h2c.3 0 .5-.2.5-.5v-2c0-.3-.2-.5-.5-.5h-1c-.2 0-.4-.1-.5-.3l-1-2c-.1-.2-.1-.4 0-.6l.5-.8c.1-.2.1-.4 0-.6l-1.5-2.5c-.1-.2-.3-.3-.5-.3h-2c-.3 0-.5.2-.5.5V7c0 .3.2.5.5.5z"/></svg>
-                                <span>Live Preview</span>
-                            </div>
-                            <div class="whatsapp-message-preview">
-                                <div class="message-label">Message that will be sent</div>
-                                <div class="message-text" id="previewMessageText">Hello, I need a payment code for [ITEM NAME]</div>
+                                <span>Live Preview Link</span>
                             </div>
                             <div class="whatsapp-link-preview" id="previewLink">
-                                https://wa.me/2348123456789?text=Hello%2C%20I%20need%20a%20payment%20code%20for
+                                https://wa.me/2348123456789
                             </div>
                         </div>
                         
@@ -869,7 +849,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    \d
+                    </table>
                 </div>
             </div>
             
@@ -885,7 +865,6 @@
         </div>
     </div>
     
-    <!-- Add Category Modal -->
     <div id="addCategoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Add New Category</h3><button onclick="closeModal('addCategoryModal')">&times;</button></div>
@@ -935,7 +914,6 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         let necoSupabase = null;
         
-        // ALL 8 CATEGORIES WITH ALL 57+ ITEMS
         const defaultCategories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
             { id: 2, name: "SSCE External", color: "#145596" },
@@ -1121,7 +1099,6 @@
                 if (paymentItems && paymentItems.length > 0) {
                     currentPaymentItems = paymentItems;
                 } else {
-                    // Insert default items
                     for (let cat of defaultCategories) {
                         const items = defaultItems[cat.name] || [];
                         for (let item of items) {
@@ -1343,7 +1320,7 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs generated yet</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs generated yet</td>' + '</tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
                 let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
@@ -1484,38 +1461,56 @@
             tbody.innerHTML = html;
         }
         
-        // WhatsApp Settings Functions
+        // WhatsApp Settings Functions - Clean & Simple
         async function loadWhatsAppSettings() {
             try {
-                const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_message').maybeSingle();
+                const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
                 if (data) {
                     if (data.admin_whatsapp) document.getElementById('whatsappNumber').value = data.admin_whatsapp;
-                    if (data.whatsapp_message) document.getElementById('whatsappMessage').value = data.whatsapp_message;
+                    if (data.whatsapp_telegram_link) document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link;
                 }
                 updateWhatsAppPreview();
             } catch (err) {}
         }
         
         function updateWhatsAppPreview() {
-            const number = document.getElementById('whatsappNumber').value || '2348123456789';
-            const message = document.getElementById('whatsappMessage').value || 'Hello, I need a payment code for';
-            document.getElementById('previewMessageText').innerText = message + ' [ITEM NAME]';
-            document.getElementById('previewLink').innerHTML = `https://wa.me/${number}?text=${encodeURIComponent(message + ' ')}[ITEM_NAME]`;
+            const number = document.getElementById('whatsappNumber').value;
+            const customLink = document.getElementById('whatsappTelegramLink').value;
+            
+            if (customLink && customLink.trim() !== '') {
+                document.getElementById('previewLink').innerHTML = customLink;
+                document.getElementById('previewLink').style.color = '#059669';
+            } else if (number && number.trim() !== '') {
+                document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
+                document.getElementById('previewLink').style.color = '#059669';
+            } else {
+                document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
+                document.getElementById('previewLink').style.color = '#9ca3af';
+            }
         }
         
         async function saveWhatsAppSettings() {
             const whatsapp = document.getElementById('whatsappNumber').value;
-            const message = document.getElementById('whatsappMessage').value;
-            if (!whatsapp) { alert('Please enter WhatsApp number'); return; }
+            const telegramLink = document.getElementById('whatsappTelegramLink').value;
+            
+            if (!whatsapp && !telegramLink) {
+                alert('Please enter either a WhatsApp number or a Telegram link');
+                return;
+            }
+            
             try {
-                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, whatsapp_message: message });
+                await necoSupabase.from('settings').upsert({ 
+                    id: 1, 
+                    admin_whatsapp: whatsapp, 
+                    whatsapp_telegram_link: telegramLink 
+                });
                 alert('✅ WhatsApp settings saved successfully!');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
         }
         
         document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
-        document.getElementById('whatsappMessage')?.addEventListener('input', updateWhatsAppPreview);
+        document.getElementById('whatsappTelegramLink')?.addEventListener('input', updateWhatsAppPreview);
         
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
@@ -1559,7 +1554,6 @@
                     else { subMenu.classList.add('open'); arrow.style.transform = 'rotate(180deg)'; }
                 };
             }
-            // Open categories submenu by default
             document.getElementById('categorySubMenu').classList.add('open');
             document.getElementById('categoryArrow').style.transform = 'rotate(180deg)';
         }
