@@ -1103,80 +1103,81 @@
         countdownInterval = setInterval(updateTimer, 1000);
     }
     
-    async function showAccountModal() {
-        const pinCode = currentFormData.paymentCode;
-        
-        const { data: pinData, error } = await supabaseClient
-            .from('payment_pins')
-            .select('*')
-            .eq('pin', pinCode)
-            .single();
-        
-        if (error || !pinData) {
-            alert("Payment code not found. Please contact support.");
-            return;
-        }
-        
-        const account = pinData;
-        const usedTime = new Date(account.used_at);
-        const expiryTime = usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000);
-        
-        const amount = parseFloat(currentFormData.amount) || 0;
-        const serviceCharge = 50;
-        const quantity = parseInt(currentFormData.quantity) || 1;
-        const totalAmount = (amount + serviceCharge) * quantity;
-        
-        document.getElementById('accountDetailsBox').innerHTML = `
-            <div class="details-row">
-                <span class="details-label">Bank</span>
-                <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Account Name</span>
-                <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
-            </div>
-            <div class="details-row-copy">
-                <span class="details-label-copy">Account Number</span>
-                <div class="details-value-copy">
-                    <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
-                    <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Amount</span>
-                <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Payment Code</span>
-                <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
-            </div>
-        `;
-        
-        const receiptInput = document.getElementById('receiptInput');
-        const uploadedFileName = document.getElementById('uploadedFileName');
-        
-        if (receiptInput) {
-            const newInput = receiptInput.cloneNode(true);
-            receiptInput.parentNode.replaceChild(newInput, receiptInput);
-            newInput.id = 'receiptInput';
-            newInput.classList.add('hidden');
-            newInput.accept = '.pdf,.jpg,.jpeg,.png';
-            
-            newInput.addEventListener('change', (e) => {
-                if (uploadedFileName) {
-                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-                }
-            });
-        }
-        if (uploadedFileName) uploadedFileName.innerHTML = '';
-        
-        document.getElementById('accountModal').classList.remove('hidden');
-        startCountdown(expiryTime);
+   async function showAccountModal() {
+    const pinCode = currentFormData.paymentCode;
+    
+    const { data: pinData, error } = await supabaseClient
+        .from('payment_pins')
+        .select('*')
+        .eq('pin', pinCode)
+        .single();
+    
+    if (error || !pinData) {
+        alert("Payment code not found. Please contact support.");
+        return;
     }
+    
+    const account = pinData;
+    const usedTime = new Date(account.used_at);
+    // FIXED: Changed from 150 to 30 minutes
+    const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+    
+    const amount = parseFloat(currentFormData.amount) || 0;
+    const serviceCharge = 50;
+    const quantity = parseInt(currentFormData.quantity) || 1;
+    const totalAmount = (amount + serviceCharge) * quantity;
+    
+    document.getElementById('accountDetailsBox').innerHTML = `
+        <div class="details-row">
+            <span class="details-label">Bank</span>
+            <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Account Name</span>
+            <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
+        </div>
+        <div class="details-row-copy">
+            <span class="details-label-copy">Account Number</span>
+            <div class="details-value-copy">
+                <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
+                <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
+                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Amount</span>
+            <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
+        </div>
+        <div class="details-row">
+            <span class="details-label">Payment Code</span>
+            <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
+        </div>
+    `;
+    
+    const receiptInput = document.getElementById('receiptInput');
+    const uploadedFileName = document.getElementById('uploadedFileName');
+    
+    if (receiptInput) {
+        const newInput = receiptInput.cloneNode(true);
+        receiptInput.parentNode.replaceChild(newInput, receiptInput);
+        newInput.id = 'receiptInput';
+        newInput.classList.add('hidden');
+        newInput.accept = '.pdf,.jpg,.jpeg,.png';
+        
+        newInput.addEventListener('change', (e) => {
+            if (uploadedFileName) {
+                uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+            }
+        });
+    }
+    if (uploadedFileName) uploadedFileName.innerHTML = '';
+    
+    document.getElementById('accountModal').classList.remove('hidden');
+    startCountdown(expiryTime);
+}
     
     function escapeHtml(str) {
         if (!str) return '';
