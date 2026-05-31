@@ -1103,7 +1103,7 @@
         countdownInterval = setInterval(updateTimer, 1000);
     }
     
-   async function showAccountModal() {
+async function showAccountModal() {
     const pinCode = currentFormData.paymentCode;
     
     const { data: pinData, error } = await supabaseClient
@@ -1119,8 +1119,8 @@
     
     const account = pinData;
     const usedTime = new Date(account.used_at);
-    // FIXED: Changed from 150 to 30 minutes
-    const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+    // HARDCODED: 30 minutes (30 * 60 * 1000 = 1,800,000 milliseconds)
+    const expiryTime = usedTime.getTime() + 1800000;
     
     const amount = parseFloat(currentFormData.amount) || 0;
     const serviceCharge = 50;
