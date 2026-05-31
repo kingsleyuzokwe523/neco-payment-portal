@@ -863,39 +863,39 @@
     }
     
     async function markPinAsUsedAndProceed() {
-        const pinCode = currentFormData.paymentCode;
+    const pinCode = currentFormData.paymentCode;
+    
+    try {
+        const { error } = await supabaseClient
+            .from('payment_pins')
+            .update({ 
+                status: 'used', 
+                used_at: new Date().toISOString()  // ← This ensures current time
+            })
+            .eq('pin', pinCode)
+            .eq('status', 'active');
         
-        try {
-            const { error } = await supabaseClient
-                .from('payment_pins')
-                .update({ 
-                    status: 'used', 
-                    used_at: new Date().toISOString()
-                })
-                .eq('pin', pinCode)
-                .eq('status', 'active');
-            
-            if (error) {
-                alert('Error processing PIN. Please try again.');
-                return;
-            }
-            
-            closeInvoiceModal();
-            const loadingModal = document.getElementById('loadingModal');
-            if (loadingModal) {
-                loadingModal.style.display = 'flex';
-                setTimeout(() => {
-                    if (loadingModal) loadingModal.style.display = 'none';
-                    showAccountModal();
-                }, 2000);
-            } else {
-                showAccountModal();
-            }
-            
-        } catch (err) {
-            alert('Error processing payment. Please try again.');
+        if (error) {
+            alert('Error processing PIN. Please try again.');
+            return;
         }
+        
+        closeInvoiceModal();
+        const loadingModal = document.getElementById('loadingModal');
+        if (loadingModal) {
+            loadingModal.style.display = 'flex';
+            setTimeout(() => {
+                if (loadingModal) loadingModal.style.display = 'none';
+                showAccountModal();
+            }, 2000);
+        } else {
+            showAccountModal();
+        }
+        
+    } catch (err) {
+        alert('Error processing payment. Please try again.');
     }
+}
     
     async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
