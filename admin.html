@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>NECO Admin Panel</title>
+    <title>NECO Admin Panel - Fixed PIN System</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -228,8 +228,6 @@
             flex: 1;
             font-size: 13px;
         }
-        
-        /* NO DELETE BUTTON FOR CATEGORIES */
         
         .main-content {
             margin-left: 280px;
@@ -651,17 +649,12 @@
             .preview-frame {
                 padding: 12px;
             }
-            /* Payment table mobile view - receipts and delete in straight line */
             .payments-actions-cell {
                 display: flex;
                 flex-direction: row;
                 gap: 6px;
                 align-items: center;
                 flex-wrap: wrap;
-            }
-            .items-table td {
-                white-space: normal;
-                word-break: break-word;
             }
             .items-table {
                 display: block;
@@ -704,7 +697,6 @@
             background: #fef2f2 !important;
         }
         
-        /* Receipt buttons inline style */
         .receipt-link, .receipt-download, .receipt-view {
             display: inline-block;
             padding: 5px 12px;
@@ -750,73 +742,23 @@
             flex-wrap: wrap;
         }
 
-        /* Live homepage styles */
-        @font-face {
-            font-family: 'CircularStd';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
-        }
-        @font-face {
-            font-family: 'CircularStdBold';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf');
+        /* Timer column for PINs */
+        .timer-column {
+            font-family: monospace;
+            font-size: 12px;
+            font-weight: 600;
         }
         
-        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
-        .bg-primary-400 { background-color: #f5fbf5; }
-        .bg-primary-200 { background-color: #f8fff8; }
-        .bg-primary-600 { background-color: #009515; }
-        .text-primary-600 { color: #009515; }
-        .text-primary-500 { color: #378b3d; }
-        .bg-pattern { background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); background-size: contain; background-repeat: no-repeat; background-position: left center; }
-        .bg-contain { background-size: contain; }
-        .bg-no-repeat { background-repeat: no-repeat; }
-        .row-span-2 { grid-row: span 2 / span 2; }
-        .col-span-2 { grid-column: span 2 / span 2; }
-        .bg-green-600 { background-color: #16a34a; }
-        .bg-\[\#0CA60C\] { background-color: #0ca60c; }
-        .bg-\[\#145596\] { background-color: #145596; }
-        .bg-\[\#642D56\] { background-color: #642d56; }
-        .bg-\[\#1887EB\] { background-color: #1887eb; }
-        .bg-\[\#51B55F\] { background-color: #51b55f; }
-        .tracking-tight { letter-spacing: -0.025em; }
-        .gap-10 { gap: 2.5rem; }
-        .w-fit { width: fit-content; }
+        .timer-expired {
+            color: #dc2626;
+        }
         
-        .flex { display: flex; }
-        .flex-col { flex-direction: column; }
-        .items-center { align-items: center; }
-        .grid { display: grid; }
-        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
-        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .mt-5 { margin-top: 1.25rem; }
-        .mt-7 { margin-top: 1.75rem; }
-        .mt-10 { margin-top: 2.5rem; }
-        .my-5 { margin-top: 1.25rem; margin-bottom: 1.25rem; }
-        .p-1 { padding: 0.25rem; }
-        .p-2 { padding: 0.5rem; }
-        .p-3 { padding: 0.75rem; }
-        .p-5 { padding: 1.25rem; }
-        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
-        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
-        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-        .px-14 { padding-left: 3.5rem; padding-right: 3.5rem; }
-        .text-center { text-align: center; }
-        .text-xs { font-size: 0.75rem; line-height: 1rem; }
-        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-        .font-semibold { font-weight: 600; }
-        .rounded-full { border-radius: 9999px; }
-        .rounded { border-radius: 0.25rem; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
+        .timer-active {
+            color: #065f46;
+        }
         
-        @media (min-width: 768px) {
-            .md\:flex-row { flex-direction: row; }
-            .md\:w-1\/2 { width: 50%; }
-            .md\:w-5\/6 { width: 83.333333%; }
-            .md\:justify-end { justify-content: flex-end; }
-            .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
-            .md\:my-10 { margin-top: 2.5rem; margin-bottom: 2.5rem; }
-            .md\:leading-tight { line-height: 1.25; }
-            .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .timer-warning {
+            color: #d97706;
         }
     </style>
 </head>
@@ -879,6 +821,12 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span>View Payments</span>
                 </div>
+                
+                <!-- New Settings Menu Item -->
+                <div class="menu-item" data-tab="settings">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <span>Settings</span>
+                </div>
             </div>
         </div>
         
@@ -920,11 +868,22 @@
             
             <div id="pin-manager" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><h3>Payment PINs (One Time Use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
+                    <div class="table-header"><h3>Payment PINs (One Time Use - Expires 30 mins after use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>PIN</th>
+                                <th>Bank Name</th>
+                                <th>Account Name</th>
+                                <th>Account Number</th>
+                                <th>Status</th>
+                                <th>Time Left / Used At</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
                         <tbody id="pinsTableBody"></tbody>
-                    \d
+                    </table>
                 </div>
             </div>
             
@@ -945,6 +904,28 @@
                             <tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>
                         </tbody>
                     </table>
+                </div>
+            </div>
+            
+            <!-- Settings Tab -->
+            <div id="settings" class="tab-content">
+                <div class="table-container">
+                    <div class="table-header"><h3>⚙️ System Settings</h3></div>
+                    <div class="neco-form-group">
+                        <label>Admin WhatsApp Number (for support)</label>
+                        <input type="text" id="adminWhatsApp" placeholder="e.g., 2348123456789">
+                        <small>Include country code without + sign. This number will receive payment inquiries.</small>
+                    </div>
+                    <div class="neco-form-group">
+                        <label>PIN Expiry Time (minutes)</label>
+                        <input type="number" id="pinExpiryMinutes" placeholder="30" value="30" min="5" max="120">
+                        <small>How many minutes after "Proceed" click until PIN expires</small>
+                    </div>
+                    <div class="neco-form-group">
+                        <label>Bank Name (Default)</label>
+                        <input type="text" id="defaultBankName" placeholder="NECO Microfinance Bank">
+                    </div>
+                    <button class="add-btn" onclick="saveSettings()" style="width: 100%; margin-top: 20px;">💾 Save Settings</button>
                 </div>
             </div>
         </div>
@@ -1015,6 +996,11 @@
         let currentEditingItemId = null;
         let currentEditingKey = null;
         let pinExpiryInterval = null;
+        let settings = {
+            adminWhatsApp: '2348123456789',
+            pinExpiryMinutes: 30,
+            defaultBankName: 'NECO Microfinance Bank'
+        };
         
         const defaultCategories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
@@ -1069,6 +1055,7 @@
                 loadAllData();
                 initDashboard();
                 startPinExpiryChecker();
+                loadSettings();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -1090,13 +1077,15 @@
             loadAllData();
             initDashboard();
             startPinExpiryChecker();
+            loadSettings();
         }
         
         async function startPinExpiryChecker() {
             if (pinExpiryInterval) clearInterval(pinExpiryInterval);
             pinExpiryInterval = setInterval(() => {
                 checkAndExpirePins();
-            }, 60000);
+                renderPins(); // Re-render to update timers
+            }, 1000); // Update every second for live countdown
         }
         
         async function checkAndExpirePins() {
@@ -1108,7 +1097,7 @@
                 const pin = currentPaymentPins[i];
                 if (pin.status === 'used' && pin.used_at) {
                     const usedTime = new Date(pin.used_at);
-                    const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
+                    const expiryFromUse = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
                     if (now >= expiryFromUse && pin.status !== 'expired') {
                         await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
                         updated = true;
@@ -1119,9 +1108,30 @@
             if (updated) {
                 const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 if (data) currentPaymentPins = data;
-                renderPins();
                 updateDashboard();
             }
+        }
+        
+        function getTimeRemaining(pin) {
+            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active', remaining: null };
+            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired', remaining: 0 };
+            if (pin.status === 'used' && pin.used_at) {
+                const usedTime = new Date(pin.used_at);
+                const expiryFromUse = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
+                const now = new Date();
+                const remainingMs = expiryFromUse - now;
+                
+                if (remainingMs <= 0) {
+                    return { text: 'Expired', class: 'timer-expired', remaining: 0 };
+                }
+                
+                const mins = Math.floor(remainingMs / (1000 * 60));
+                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+                const timeStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                const warningClass = mins < 5 ? 'timer-warning' : 'timer-active';
+                return { text: `${timeStr} remaining`, class: warningClass, remaining: remainingMs };
+            }
+            return { text: 'Unknown', class: 'timer-expired', remaining: 0 };
         }
         
         async function loadAllData() {
@@ -1303,27 +1313,6 @@
             }
         }
         
-        async function deleteCategory(categoryId) {
-            if (!confirm('Delete this category? All items will be deleted.')) return;
-            await necoSupabase.from('payment_items').delete().eq('category_id', categoryId);
-            await necoSupabase.from('categories').delete().eq('id', categoryId);
-            const { data: updatedCats } = await necoSupabase.from('categories').select('*').order('id');
-            const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
-            if (updatedCats) currentCategories = updatedCats;
-            if (updatedItems) currentPaymentItems = updatedItems;
-            if (selectedCategoryId === categoryId) {
-                selectedCategoryId = currentCategories.length > 0 ? currentCategories[0].id : null;
-                if (selectedCategoryId) {
-                    const cat = currentCategories.find(c => c.id === selectedCategoryId);
-                    if (cat) selectCategory(cat.name, cat.id, cat.color, false);
-                }
-            }
-            renderCategorySidebar();
-            renderItemsForCategory();
-            updateDashboard();
-            triggerSync();
-        }
-        
         function generateRandomPin() {
             const random = Math.floor(1000 + Math.random() * 9000).toString();
             document.getElementById('pinCode').value = random;
@@ -1388,23 +1377,36 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
             let pinsHtml = '';
-            const now = new Date();
             for (let i = 0; i < currentPaymentPins.length; i++) {
                 const pin = currentPaymentPins[i];
-                let statusClass = "badge-active", statusText = "Active", timeLeft = "Never expires";
+                let statusClass = "badge-active", statusText = "Active";
+                let timeLeftHtml = '<span class="timer-active">Not used yet</span>';
+                
                 if (pin.status === "used") {
-                    statusClass = "badge-used"; statusText = "Used";
-                    if (pin.used_at) {
-                        const usedTime = new Date(pin.used_at);
-                        const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
-                        const remainingMs = expiryFromUse - now;
-                        if (remainingMs <= 0) { timeLeft = "Expired"; statusText = "Expired"; statusClass = "badge-expired"; }
-                        else { const remainingMins = Math.floor(remainingMs / (1000 * 60)); const remainingSecs = Math.floor((remainingMs % (1000 * 60)) / 1000); timeLeft = `${remainingMins.toString().padStart(2, '0')}:${remainingSecs.toString().padStart(2, '0')} remaining`; }
-                    }
-                } else if (pin.status === "expired") { statusClass = "badge-expired"; statusText = "Expired"; timeLeft = "Expired"; }
-                pinsHtml += `<tr><td><code>${escapeHtml(pin.pin)}</code></td><td>${escapeHtml(pin.bank_name)}</td><td>${escapeHtml(pin.account_name)}</td><td>${escapeHtml(pin.account_number)}</td><td><span class="badge ${statusClass}">${statusText}</span><br><small>${timeLeft}</small></td><td>${new Date(pin.created_at).toLocaleString()}</td><td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td></tr>`;
+                    statusClass = "badge-used"; 
+                    statusText = "Used";
+                    const timeRemaining = getTimeRemaining(pin);
+                    statusClass = timeRemaining.remaining <= 0 ? "badge-expired" : "badge-used";
+                    statusText = timeRemaining.remaining <= 0 ? "Expired" : "Used";
+                    timeLeftHtml = `<span class="timer-column ${timeRemaining.class}">⏱️ ${timeRemaining.text}</span>`;
+                } else if (pin.status === "expired") { 
+                    statusClass = "badge-expired"; 
+                    statusText = "Expired";
+                    timeLeftHtml = '<span class="timer-expired">❌ Expired</span>';
+                }
+                
+                pinsHtml += `<tr>
+                    <td><code>${escapeHtml(pin.pin)}</code></td>
+                    <td>${escapeHtml(pin.bank_name)}</td>
+                    <td>${escapeHtml(pin.account_name)}</td>
+                    <td>${escapeHtml(pin.account_number)}</td>
+                    <td><span class="badge ${statusClass}">${statusText}</span></td>
+                    <td>${timeLeftHtml}</td>
+                    <td>${new Date(pin.created_at).toLocaleString()}</td>
+                    <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
+                </tr>`;
             }
             tbody.innerHTML = pinsHtml;
         }
@@ -1546,6 +1548,58 @@
             tbody.innerHTML = paymentsHtml;
         }
         
+        // Settings functions
+        async function loadSettings() {
+            try {
+                const { data } = await necoSupabase.from('settings').select('*').maybeSingle();
+                if (data) {
+                    settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
+                    settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
+                    settings.defaultBankName = data.default_bank_name || 'NECO Microfinance Bank';
+                    
+                    document.getElementById('adminWhatsApp').value = settings.adminWhatsApp;
+                    document.getElementById('pinExpiryMinutes').value = settings.pinExpiryMinutes;
+                    document.getElementById('defaultBankName').value = settings.defaultBankName;
+                } else {
+                    // Create default settings
+                    await necoSupabase.from('settings').insert({
+                        admin_whatsapp: settings.adminWhatsApp,
+                        pin_expiry_minutes: settings.pinExpiryMinutes,
+                        default_bank_name: settings.defaultBankName
+                    });
+                }
+            } catch (err) {
+                console.log('Settings not available yet');
+            }
+        }
+        
+        async function saveSettings() {
+            const whatsapp = document.getElementById('adminWhatsApp').value;
+            const expiry = parseInt(document.getElementById('pinExpiryMinutes').value);
+            const bankName = document.getElementById('defaultBankName').value;
+            
+            if (!whatsapp) { alert('Please enter WhatsApp number'); return; }
+            if (expiry < 5 || expiry > 120) { alert('Expiry time must be between 5 and 120 minutes'); return; }
+            
+            settings.adminWhatsApp = whatsapp;
+            settings.pinExpiryMinutes = expiry;
+            settings.defaultBankName = bankName;
+            
+            try {
+                await necoSupabase.from('settings').upsert({
+                    id: 1,
+                    admin_whatsapp: whatsapp,
+                    pin_expiry_minutes: expiry,
+                    default_bank_name: bankName,
+                    updated_at: new Date().toISOString()
+                });
+                alert('✅ Settings saved successfully!');
+                triggerSync();
+            } catch (err) {
+                alert('Error saving settings: ' + err.message);
+            }
+        }
+        
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('mobileOverlay'); sidebar.classList.toggle('open'); if (sidebar.classList.contains('open')) overlay.classList.add('active'); else overlay.classList.remove('active'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
@@ -1559,6 +1613,7 @@
             if (tabId === 'home-editor') loadHomePreview();
             if (tabId === 'dashboard') updateDashboard();
             if (tabId === 'payment-editor') renderItemsForCategory();
+            if (tabId === 'settings') loadSettings();
             closeSidebar();
         }
         
