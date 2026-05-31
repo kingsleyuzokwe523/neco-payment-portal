@@ -123,6 +123,8 @@
             color: white;
             z-index: 100;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
         
         .sidebar-header {
@@ -144,6 +146,7 @@
         
         .sidebar-menu {
             padding: 20px 12px;
+            flex: 1;
         }
         
         .menu-item {
@@ -170,136 +173,15 @@
             height: 20px;
         }
         
-        /* WhatsApp settings in sidebar - clean design */
-        .whatsapp-section {
-            margin: 20px 0;
-            padding: 15px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
+        /* Logout button at bottom */
+        .logout-menu-item {
+            margin-top: auto;
+            margin-bottom: 20px;
+            background: rgba(220,38,38,0.2);
         }
         
-        .whatsapp-section .label {
-            font-size: 11px;
-            opacity: 0.7;
-            margin-bottom: 8px;
-            display: block;
-        }
-        
-        .whatsapp-section input {
-            width: 100%;
-            padding: 10px 12px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255,255,255,0.15);
-            color: white;
-            font-size: 13px;
-        }
-        
-        .whatsapp-section input::placeholder {
-            color: rgba(255,255,255,0.5);
-        }
-        
-        .whatsapp-section input:focus {
-            outline: none;
-            background: rgba(255,255,255,0.25);
-        }
-        
-        .whatsapp-section button {
-            width: 100%;
-            margin-top: 10px;
-            padding: 8px;
-            background: #25D366;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .whatsapp-section button:hover {
-            background: #128C7E;
-        }
-        
-        .menu-category-header {
-            padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-radius: 12px;
-            margin-bottom: 4px;
-            margin-top: 10px;
-        }
-        
-        .menu-category-header:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .sub-menu {
-            padding-left: 32px;
-            display: none;
-            margin: 8px 0;
-        }
-        
-        .sub-menu.open {
-            display: block;
-        }
-        
-        #categoryList {
-            list-style: none;
-        }
-        
-        #categoryList li {
-            padding: 10px 12px;
-            margin: 4px 0;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.2s;
-            background: rgba(255,255,255,0.08);
-        }
-        
-        #categoryList li:hover {
-            background: rgba(255,255,255,0.18);
-        }
-        
-        #categoryList li.active {
-            background: rgba(255,255,255,0.25);
-        }
-        
-        .category-color-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-        
-        .category-name {
-            flex: 1;
-            font-size: 13px;
-        }
-        
-        .add-category-btn {
-            width: 100%;
-            margin-top: 10px;
-            padding: 10px;
-            background: #0ca60c;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .add-category-btn:hover {
-            background: #089108;
+        .logout-menu-item:hover {
+            background: rgba(220,38,38,0.4);
         }
         
         .main-content {
@@ -322,20 +204,6 @@
         .top-bar h2 {
             color: #054c0f;
             font-size: 20px;
-        }
-        
-        .logout-btn {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 500;
-        }
-        
-        .logout-btn:hover {
-            background: #b91c1c;
         }
         
         .tab-content {
@@ -622,13 +490,6 @@
             box-shadow: 0 0 0 3px rgba(5, 76, 15, 0.1);
         }
         
-        .neco-form-group small {
-            display: block;
-            margin-top: 6px;
-            font-size: 11px;
-            color: #6b7280;
-        }
-        
         .btn-cancel {
             background: #f3f4f6;
             color: #374151;
@@ -758,6 +619,84 @@
             background: #4b5563;
         }
         
+        /* WhatsApp Manager Styles */
+        .whatsapp-manager {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .whatsapp-header {
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            padding: 30px;
+            text-align: center;
+            color: white;
+        }
+        
+        .whatsapp-header h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .whatsapp-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        
+        .whatsapp-body {
+            padding: 30px;
+        }
+        
+        .whatsapp-preview {
+            background: #f0f2f5;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .whatsapp-preview-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .whatsapp-message-preview {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            border-left: 4px solid #25D366;
+        }
+        
+        .whatsapp-message-preview .message-label {
+            font-size: 11px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .whatsapp-message-preview .message-text {
+            font-size: 14px;
+            color: #111827;
+            word-break: break-word;
+        }
+        
+        .whatsapp-link-preview {
+            margin-top: 15px;
+            background: #f9fafb;
+            border-radius: 8px;
+            padding: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            color: #059669;
+            word-break: break-all;
+        }
+        
         /* Homepage preview styles */
         @font-face {
             font-family: 'CircularStd';
@@ -808,12 +747,6 @@
                 <h3>NECO Admin Panel</h3>
             </div>
             <div class="sidebar-menu">
-                <!-- Logout button -->
-                <div class="menu-item" onclick="doLogout()" style="background: rgba(220,38,38,0.2); margin-bottom: 15px;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                    <span>Logout</span>
-                </div>
-                
                 <div class="menu-item" data-tab="dashboard">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span>Dashboard</span>
@@ -824,11 +757,9 @@
                     <span>Home Editor</span>
                 </div>
                 
-                <!-- WhatsApp Section - clean design -->
-                <div class="whatsapp-section">
-                    <span class="label">📱 Admin WhatsApp Number</span>
-                    <input type="text" id="sidebarWhatsApp" placeholder="2348123456789">
-                    <button onclick="saveSidebarWhatsApp()">Save WhatsApp</button>
+                <div class="menu-item" data-tab="whatsapp-manager">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    <span>WhatsApp Manager</span>
                 </div>
                 
                 <div class="menu-category-header">
@@ -838,10 +769,6 @@
                 </div>
                 <div class="sub-menu" id="categorySubMenu">
                     <div id="categoryList"></div>
-                    <button class="add-category-btn" onclick="openAddCategoryModal()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
-                        Add Category
-                    </button>
                 </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
@@ -854,12 +781,17 @@
                     <span>View Payments</span>
                 </div>
             </div>
+            
+            <!-- Logout at bottom -->
+            <div class="menu-item logout-menu-item" onclick="doLogout()">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span>Logout</span>
+            </div>
         </div>
         
         <div class="main-content">
             <div class="top-bar">
                 <h2 id="pageTitle">Dashboard</h2>
-                <button class="logout-btn" onclick="doLogout()">Logout</button>
             </div>
             
             <div id="dashboard" class="tab-content">
@@ -882,6 +814,45 @@
                 </div>
             </div>
             
+            <!-- WhatsApp Manager Tab -->
+            <div id="whatsapp-manager" class="tab-content">
+                <div class="whatsapp-manager">
+                    <div class="whatsapp-header">
+                        <h3>📱 WhatsApp Support Manager</h3>
+                        <p>Configure the WhatsApp number that users will contact for payment codes</p>
+                    </div>
+                    <div class="whatsapp-body">
+                        <div class="neco-form-group">
+                            <label>Admin WhatsApp Number</label>
+                            <input type="text" id="whatsappNumber" placeholder="e.g., 2348123456789">
+                            <small>Include country code without + sign. Example: 2348123456789</small>
+                        </div>
+                        
+                        <div class="neco-form-group">
+                            <label>Default Message (Optional)</label>
+                            <textarea id="whatsappMessage" rows="3" placeholder="Hello, I need a payment code for" style="width:100%; padding:12px; border-radius:12px; border:1px solid #e2e8f0;"></textarea>
+                            <small>This message will be pre-filled when users click the WhatsApp link</small>
+                        </div>
+                        
+                        <div class="whatsapp-preview">
+                            <div class="whatsapp-preview-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.89.55 3.66 1.52 5.17L2 22l4.83-1.52C8.34 21.45 10.11 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zM8.5 7.5h2c.2 0 .4.1.5.3l1 2c.1.2.1.4 0 .6l-.5.8c-.1.2-.1.4 0 .6l1.5 2.5c.1.2.3.3.5.3h2c.3 0 .5-.2.5-.5v-2c0-.3-.2-.5-.5-.5h-1c-.2 0-.4-.1-.5-.3l-1-2c-.1-.2-.1-.4 0-.6l.5-.8c.1-.2.1-.4 0-.6l-1.5-2.5c-.1-.2-.3-.3-.5-.3h-2c-.3 0-.5.2-.5.5V7c0 .3.2.5.5.5z"/></svg>
+                                <span>Live Preview</span>
+                            </div>
+                            <div class="whatsapp-message-preview">
+                                <div class="message-label">Message that will be sent</div>
+                                <div class="message-text" id="previewMessageText">Hello, I need a payment code for [ITEM NAME]</div>
+                            </div>
+                            <div class="whatsapp-link-preview" id="previewLink">
+                                https://wa.me/2348123456789?text=Hello%2C%20I%20need%20a%20payment%20code%20for
+                            </div>
+                        </div>
+                        
+                        <button class="add-btn" onclick="saveWhatsAppSettings()" style="width: 100%; margin-top: 20px;">💾 Save WhatsApp Settings</button>
+                    </div>
+                </div>
+            </div>
+            
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -898,7 +869,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    </table>
+                    \d
                 </div>
             </div>
             
@@ -908,7 +879,7 @@
                     <table class="items-table">
                         <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
                         <tbody id="paymentsTableBody"></tbody>
-                    </table>
+                    \d
                 </div>
             </div>
         </div>
@@ -964,20 +935,7 @@
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         let necoSupabase = null;
         
-        let currentCategories = [];
-        let currentPaymentItems = [];
-        let currentPaymentPins = [];
-        let currentPayments = [];
-        let selectedCategoryId = null;
-        let currentEditingItemId = null;
-        let currentEditingKey = null;
-        let pinExpiryInterval = null;
-        let settings = {
-            adminWhatsApp: '2348123456789',
-            pinExpiryMinutes: 30,
-            defaultBankName: 'NECO Microfinance Bank'
-        };
-        
+        // ALL 8 CATEGORIES WITH ALL 57+ ITEMS
         const defaultCategories = [
             { id: 1, name: "SSCE Internal", color: "#0CA60C" },
             { id: 2, name: "SSCE External", color: "#145596" },
@@ -986,6 +944,70 @@
             { id: 5, name: "Gifted", color: "#24809C" },
             { id: 6, name: "Others", color: "#36454F" }
         ];
+        
+        const defaultItems = {
+            "SSCE Internal": [
+                { name: "Four Figure Table", amount: 500 },
+                { name: "Non-Validation", amount: 10000 },
+                { name: "Syllabus", amount: 2000 },
+                { name: "Photo Album", amount: 2700 },
+                { name: "Late Ca3 Upload", amount: 40000 },
+                { name: "Remarking Ssce (i)", amount: 20000 },
+                { name: "Unviable Centre Fee", amount: 70000 },
+                { name: "Late Registration Fee", amount: 5000 },
+                { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
+                { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
+                { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
+                { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
+                { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
+                { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
+                { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
+            ],
+            "SSCE External": [
+                { name: "Four Figure Table", amount: 500 },
+                { name: "Walk-in", amount: 43000 },
+                { name: "Syllabus", amount: 2000 },
+                { name: "Result Slips", amount: 1600 },
+                { name: "Remarking Ssce Ext", amount: 20000 },
+                { name: "Collection Of Certificate", amount: 500 },
+                { name: "Non-Validation", amount: 10000 }
+            ],
+            "BECE": [
+                { name: "Remarking Bece", amount: 15000 },
+                { name: "Non-Validation", amount: 10000 },
+                { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
+                { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
+                { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
+                { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
+                { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
+                { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
+            ],
+            "NCEE": [
+                { name: "Non-Validation", amount: 4000 }
+            ],
+            "Gifted": [
+                { name: "Non-Validation", amount: 4000 }
+            ],
+            "Others": [
+                { name: "Reprint Of Certificate", amount: 50000 },
+                { name: "Change Of School Name", amount: 15000 },
+                { name: "Reprint Of School Results Per Candidate", amount: 400 },
+                { name: "Staff Identity Card", amount: 1000 },
+                { name: "Result Checker (token)", amount: 1000 },
+                { name: "Examination Bag", amount: 15000 },
+                { name: "Confirmation Of Result", amount: 10000 },
+                { name: "E-verification Of Result", amount: 5000 }
+            ]
+        };
+        
+        let currentCategories = [];
+        let currentPaymentItems = [];
+        let currentPaymentPins = [];
+        let currentPayments = [];
+        let selectedCategoryId = null;
+        let currentEditingItemId = null;
+        let currentEditingKey = null;
+        let pinExpiryInterval = null;
         
         let homeContent = {
             heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -1028,7 +1050,7 @@
                 loadAllData();
                 initDashboard();
                 startPinExpiryChecker();
-                loadSidebarWhatsApp();
+                loadWhatsAppSettings();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
@@ -1050,7 +1072,7 @@
             loadAllData();
             initDashboard();
             startPinExpiryChecker();
-            loadSidebarWhatsApp();
+            loadWhatsAppSettings();
         }
         
         async function startPinExpiryChecker() {
@@ -1086,13 +1108,36 @@
         async function loadAllData() {
             try {
                 const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
-                currentCategories = (categories && categories.length > 0) ? categories : defaultCategories;
+                if (categories && categories.length > 0) {
+                    currentCategories = categories;
+                } else {
+                    currentCategories = defaultCategories;
+                    for (let cat of defaultCategories) {
+                        await necoSupabase.from('categories').upsert({ id: cat.id, name: cat.name, color: cat.color });
+                    }
+                }
+                
                 const { data: paymentItems } = await necoSupabase.from('payment_items').select('*').order('id');
-                currentPaymentItems = paymentItems || [];
+                if (paymentItems && paymentItems.length > 0) {
+                    currentPaymentItems = paymentItems;
+                } else {
+                    // Insert default items
+                    for (let cat of defaultCategories) {
+                        const items = defaultItems[cat.name] || [];
+                        for (let item of items) {
+                            await necoSupabase.from('payment_items').insert({ name: item.name, amount: item.amount, category_id: cat.id });
+                        }
+                    }
+                    const { data: freshItems } = await necoSupabase.from('payment_items').select('*').order('id');
+                    currentPaymentItems = freshItems || [];
+                }
+                
                 const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 currentPaymentPins = paymentPins || [];
+                
                 const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
                 currentPayments = payments || [];
+                
                 try {
                     const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
                     if (home) {
@@ -1103,6 +1148,7 @@
                         homeContent.steps = home.steps || homeContent.steps;
                     }
                 } catch (err) {}
+                
                 updateDashboard();
                 renderPins();
                 renderPayments();
@@ -1161,7 +1207,7 @@
             selectedCategoryId = categoryId;
             const listItems = document.querySelectorAll('#categoryList li');
             listItems.forEach(item => item.classList.remove('active'));
-            event.currentTarget.classList.add('active');
+            if (event && event.currentTarget) event.currentTarget.classList.add('active');
             document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items`;
             renderItemsForCategory();
         }
@@ -1179,8 +1225,12 @@
             }
             let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount</th><th>Actions</th></tr></thead><tbody>';
             for (let item of items) {
-                html += `<tr><td>${escapeHtml(item.name)}</td><td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom'}</td>
-                <td><button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button><button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button></td></tr>`;
+                html += `<tr><td style="font-weight:500;">${escapeHtml(item.name)}</td>
+                <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
+                <td><button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
+                        <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+                    </td>
+                </tr>`;
             }
             html += '</tbody></table>';
             container.innerHTML = html;
@@ -1293,12 +1343,12 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs generated yet</td></tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
                 let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
                 html += `<tr>
-                    <td><code>${pin.pin}</code></td>
+                    <td><code>${escapeHtml(pin.pin)}</code></td>
                     <td>${escapeHtml(pin.bank_name)}</td>
                     <td>${escapeHtml(pin.account_name)}</td>
                     <td>${escapeHtml(pin.account_number)}</td>
@@ -1317,40 +1367,56 @@
             for (let i = 0; i < homeContent.steps.length; i++) {
                 const step = homeContent.steps[i];
                 stepsHtml += `
-                    <div style="background:#f8fff8; border-radius:16px; padding:2rem; text-align:center; border:1px solid #e5e7eb;">
-                        <div style="background:#51b55f; width:50px; height:50px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;">
-                            <span style="color:white; font-weight:bold;">${i+1}</span>
+                    <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]" style="background: #f8fff8; border-radius: 16px;">
+                        <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                            <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
                         </div>
-                        <p style="font-weight:600; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_title')">${escapeHtml(step.title)}</p>
-                        <p style="font-size:0.75rem; color:#666; margin-top:0.5rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_desc')">${escapeHtml(step.description)}</p>
+                        <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
+                        <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
                     </div>
                 `;
             }
             container.innerHTML = `
-                <div style="max-width:1200px; margin:0 auto;">
-                    <div style="display:flex; gap:2rem; flex-wrap:wrap;">
-                        <div style="flex:1;">
-                            <div style="display:inline-flex; background:#f5fbf5; border-radius:9999px; padding:0.5rem 1rem;">
-                                <span style="background:#009515; color:white; border-radius:9999px; padding:0.25rem 0.75rem; font-size:0.75rem;">Note</span>
-                                <span style="margin-left:0.5rem; font-size:0.75rem; color:#009515; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroNote')">${escapeHtml(homeContent.heroNote)}</span>
+                <div style="max-width: 1280px; margin: 0 auto;">
+                    <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                            <div style="flex: 1;">
+                                <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
+                                    <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
+                                    <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
+                                </div>
+                                <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
+                                <div style="margin-top: 1.75rem;">
+                                    <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
+                                </div>
                             </div>
-                            <h1 style="font-size:2rem; font-family:'CircularStdBold'; margin:1.5rem 0; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroTitle')">${escapeHtml(homeContent.heroTitle)}</h1>
-                            <button style="background:#16a34a; color:white; padding:0.75rem 1.5rem; border-radius:0.5rem; border:none;">Make payment</button>
-                        </div>
-                        <div style="flex:1;">
-                            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem;">
-                                <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" style="background:#0ca60c; padding:1rem;">
-                                <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" style="background:#f0f0f0; padding:1rem;">
-                                <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" style="background:#145596; padding:1rem;">
+                            <div>
+                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; max-width: 500px;">
+                                    <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" alt="" style="background: #0ca60c; padding: 1.25rem; width: 100%; height: 100%;">
+                                    <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" alt="" style="width: 100%; height: 100%;">
+                                    <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" alt="" style="background: #145596; padding: 1.25rem; width: 100%; height: 100%;">
+                                    <div style="grid-row: span 2;">
+                                        <img src="https://payments.neco.gov.ng/assets/boy-writing.e175dc8e.png" alt="" style="width: 100%; height: 100%;">
+                                    </div>
+                                    <img src="https://payments.neco.gov.ng/assets/child.58ead653.png" alt="" style="width: 100%; height: 100%; grid-column: span 2;">
+                                    <div style="grid-row: span 2;">
+                                        <img src="https://payments.neco.gov.ng/assets/girl.5dffe80d.png" alt="" style="background: #145596; width: 100%; height: 100%;">
+                                    </div>
+                                    <img src="https://payments.neco.gov.ng/assets/girl-school.14798cb1.png" alt="" style="background: #642d56; height: 100%; width: 100%;">
+                                    <img src="https://payments.neco.gov.ng/assets/Asterisk.96355d4c.svg" alt="" style="width: 100%; height: 100%; background: #1887eb; padding: 1.25rem;">
+                                    <img src="https://payments.neco.gov.ng/assets/Butterfly.758edbeb.svg" alt="" style="width: 100%; height: 100%; background: #642d56; padding: 1.25rem;">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div style="margin-top:2rem;">
-                        <div style="background-image:url('https://payments.neco.gov.ng/assets/images/group.png'); height:5rem; background-size:contain; background-repeat:no-repeat; display:flex; align-items:center;">
-                            <h2 style="font-size:1.5rem; font-family:'CircularStdBold'; cursor:pointer;" class="editable-element" onclick="openTextEditor('howItWorksTitle')">${escapeHtml(homeContent.howItWorksTitle)}</h2>
-                        </div>
-                        <p style="font-size:0.7rem; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('footerNote')">${homeContent.footerNote}</p>
-                        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:1.5rem;">${stepsHtml}</div>
+                        <section style="padding: 2.5rem 0;">
+                            <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
+                                <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
+                            </div>
+                            <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
+                                ${stepsHtml}
+                            </div>
+                        </section>
                     </div>
                 </div>
             `;
@@ -1400,7 +1466,7 @@
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (!tbody) return;
-            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="9">No payments</td></tr>'; return; }
+            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="9">No payments recorded yet</td></tr>'; return; }
             let html = '';
             for (let p of currentPayments) {
                 html += `<tr>
@@ -1411,33 +1477,45 @@
                     <td>${escapeHtml(p.full_name)}</td>
                     <td>${escapeHtml(p.phone)}</td>
                     <td>${escapeHtml(p.email)}</td>
-                    <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank">View</a>` : 'No receipt'}</td>
+                    <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
                     <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
                 </tr>`;
             }
             tbody.innerHTML = html;
         }
         
-        async function loadSidebarWhatsApp() {
+        // WhatsApp Settings Functions
+        async function loadWhatsAppSettings() {
             try {
-                const { data } = await necoSupabase.from('settings').select('admin_whatsapp').maybeSingle();
-                if (data && data.admin_whatsapp) {
-                    document.getElementById('sidebarWhatsApp').value = data.admin_whatsapp;
-                    settings.adminWhatsApp = data.admin_whatsapp;
+                const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_message').maybeSingle();
+                if (data) {
+                    if (data.admin_whatsapp) document.getElementById('whatsappNumber').value = data.admin_whatsapp;
+                    if (data.whatsapp_message) document.getElementById('whatsappMessage').value = data.whatsapp_message;
                 }
+                updateWhatsAppPreview();
             } catch (err) {}
         }
         
-        async function saveSidebarWhatsApp() {
-            const whatsapp = document.getElementById('sidebarWhatsApp').value;
-            if (!whatsapp) { alert('Enter WhatsApp number'); return; }
-            settings.adminWhatsApp = whatsapp;
+        function updateWhatsAppPreview() {
+            const number = document.getElementById('whatsappNumber').value || '2348123456789';
+            const message = document.getElementById('whatsappMessage').value || 'Hello, I need a payment code for';
+            document.getElementById('previewMessageText').innerText = message + ' [ITEM NAME]';
+            document.getElementById('previewLink').innerHTML = `https://wa.me/${number}?text=${encodeURIComponent(message + ' ')}[ITEM_NAME]`;
+        }
+        
+        async function saveWhatsAppSettings() {
+            const whatsapp = document.getElementById('whatsappNumber').value;
+            const message = document.getElementById('whatsappMessage').value;
+            if (!whatsapp) { alert('Please enter WhatsApp number'); return; }
             try {
-                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, pin_expiry_minutes: 30, default_bank_name: 'NECO Microfinance Bank' });
-                alert('✅ WhatsApp number saved!');
+                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, whatsapp_message: message });
+                alert('✅ WhatsApp settings saved successfully!');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
         }
+        
+        document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
+        document.getElementById('whatsappMessage')?.addEventListener('input', updateWhatsAppPreview);
         
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
@@ -1452,6 +1530,7 @@
             if (tabId === 'home-editor') loadHomePreview();
             if (tabId === 'dashboard') updateDashboard();
             if (tabId === 'payment-editor') renderItemsForCategory();
+            if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
             closeSidebar();
         }
         
@@ -1480,8 +1559,9 @@
                     else { subMenu.classList.add('open'); arrow.style.transform = 'rotate(180deg)'; }
                 };
             }
-            // Set payment-editor as active initially
-            document.querySelector('.menu-item[data-tab="payment-editor"]').classList.add('active');
+            // Open categories submenu by default
+            document.getElementById('categorySubMenu').classList.add('open');
+            document.getElementById('categoryArrow').style.transform = 'rotate(180deg)';
         }
         
         window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
