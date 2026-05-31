@@ -1079,33 +1079,42 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    function startCountdown(expiryTime) {
-        const timerElement = document.getElementById('countdownTimer');
-        if (countdownInterval) clearInterval(countdownInterval);
+   // ============ CORRECTED START COUNTDOWN FUNCTION ============
+function startCountdown(expiryTime) {
+    const timerElement = document.getElementById('countdownTimer');
+    if (!timerElement) return;
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    function updateTimer() {
+        const now = new Date().getTime();
+        const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
         
-        function updateTimer() {
-            const now = new Date().getTime();
-            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
-            
-            if (remaining <= 0) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = "Expired";
-                timerElement.style.color = "#9ca3af";
-                return;
+        if (remaining <= 0) {
+            clearInterval(countdownInterval);
+            timerElement.textContent = "Expired";
+            timerElement.style.color = "#9ca3af";
+            // FIXED: Call cancel function when timer expires
+            if (typeof cancelPaymentAndExpirePin === 'function') {
+                cancelPaymentAndExpirePin();
             }
-            
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
-            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            return;
         }
         
-        updateTimer();
-        countdownInterval = setInterval(updateTimer, 1000);
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        timerElement.style.color = "#dc2626";
     }
     
+    updateTimer();
+    countdownInterval = setInterval(updateTimer, 1000);
+}
+
+// ============ CORRECTED SHOW ACCOUNT MODAL FUNCTION ============
 async function showAccountModal() {
     const pinCode = currentFormData.paymentCode;
     
+    // Get PIN details from database
     const { data: pinData, error } = await supabaseClient
         .from('payment_pins')
         .select('*')
@@ -1118,9 +1127,35 @@ async function showAccountModal() {
     }
     
     const account = pinData;
+    
+    // FIXED: Check if PIN status is 'used' - if not, reject
+    if (account.status !== 'used') {
+        alert("This payment code is invalid or has already been used.");
+        window.location.href = 'index.html';
+        return;
+    }
+    
+    // FIXED: Check if used_at exists
+    if (!account.used_at) {
+        alert("Invalid payment session. Please start over.");
+        window.location.href = 'index.html';
+        return;
+    }
+    
     const usedTime = new Date(account.used_at);
-    // HARDCODED: 30 minutes (30 * 60 * 1000 = 1,800,000 milliseconds)
-    const expiryTime = usedTime.getTime() + 1800000;
+    const expiryTime = usedTime.getTime() + 1800000; // 30 minutes
+    
+    // FIXED: Check if already expired before showing modal
+    const now = new Date().getTime();
+    if (now >= expiryTime) {
+        alert("Your payment session has expired. Please start over.");
+        await supabaseClient
+            .from('payment_pins')
+            .update({ status: 'expired' })
+            .eq('pin', pinCode);
+        window.location.href = 'index.html';
+        return;
+    }
     
     const amount = parseFloat(currentFormData.amount) || 0;
     const serviceCharge = 50;
@@ -1178,7 +1213,6 @@ async function showAccountModal() {
     document.getElementById('accountModal').classList.remove('hidden');
     startCountdown(expiryTime);
 }
-    
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
