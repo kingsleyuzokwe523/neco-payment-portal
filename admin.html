@@ -183,6 +183,78 @@
             background: rgba(220,38,38,0.4);
         }
         
+        /* Category List Styles - Nice Design */
+        .category-list-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .category-item {
+            padding: 12px 15px;
+            margin: 6px 0;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .category-item:hover {
+            background: rgba(255,255,255,0.18);
+            transform: translateX(3px);
+        }
+        
+        .category-item.active {
+            background: rgba(255,255,255,0.25);
+            border-left: 3px solid #25D366;
+        }
+        
+        .category-color {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        
+        .category-name {
+            flex: 1;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .category-count {
+            font-size: 11px;
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+        
+        .add-category-btn {
+            width: 100%;
+            margin-top: 12px;
+            padding: 10px;
+            background: #0ca60c;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .add-category-btn:hover {
+            background: #089108;
+            transform: translateY(-1px);
+        }
+        
         .main-content {
             margin-left: 280px;
             padding: 24px;
@@ -287,6 +359,7 @@
         
         .add-btn:hover {
             background: #009515;
+            transform: scale(1.02);
         }
         
         .home-preview {
@@ -355,6 +428,10 @@
             font-weight: 500;
         }
         
+        .add-item-btn:hover {
+            background: #009515;
+        }
+        
         .items-table {
             width: 100%;
             border-collapse: collapse;
@@ -386,9 +463,17 @@
             color: white;
         }
         
+        .edit-btn:hover {
+            background: #2563eb;
+        }
+        
         .delete-btn {
             background: #ef4444;
             color: white;
+        }
+        
+        .delete-btn:hover {
+            background: #dc2626;
         }
         
         .modal {
@@ -549,6 +634,10 @@
             width: 100%;
         }
         
+        .save-all-btn:hover {
+            background: #009515;
+        }
+        
         .mobile-overlay {
             display: none;
             position: fixed;
@@ -612,13 +701,14 @@
             width: 100%;
             margin-top: 8px;
             font-weight: 500;
+            transition: all 0.2s;
         }
         
         .generate-pin-btn:hover {
             background: #4b5563;
         }
         
-        /* WhatsApp Manager Styles - Clean & Simple */
+        /* WhatsApp Manager Styles */
         .whatsapp-manager {
             background: white;
             border-radius: 20px;
@@ -673,12 +763,6 @@
             color: #059669;
             word-break: break-all;
             border: 1px solid #e5e7eb;
-        }
-        
-        /* Category list styles */
-        .category-list-container {
-            max-height: 300px;
-            overflow-y: auto;
         }
         
         /* Homepage preview styles */
@@ -746,14 +830,17 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
-                <div class="menu-category-header">
+                <div class="menu-category-header" style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-radius: 12px; margin-bottom: 4px; margin-top: 10px;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     <span>Categories</span>
                     <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                 </div>
-                <div class="sub-menu" id="categorySubMenu">
-                    <div id="categoryList"></div>
-                    <button class="add-category-btn" onclick="openAddCategoryModal()" style="width:100%; margin-top:10px; padding:10px; background:#0ca60c; color:white; border:none; border-radius:10px; cursor:pointer;">+ Add Category</button>
+                <div class="sub-menu" id="categorySubMenu" style="padding-left: 32px; display: none; margin: 8px 0;">
+                    <div id="categoryList" class="category-list-container"></div>
+                    <button class="add-category-btn" onclick="openAddCategoryModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
+                        Add Category
+                    </button>
                 </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
@@ -798,7 +885,6 @@
                 </div>
             </div>
             
-            <!-- WhatsApp Manager Tab - Clean & Simple -->
             <div id="whatsapp-manager" class="tab-content">
                 <div class="whatsapp-manager">
                     <div class="whatsapp-header">
@@ -813,9 +899,9 @@
                         </div>
                         
                         <div class="neco-form-group">
-                            <label>WhatsApp Telegram Link (Optional)</label>
+                            <label>Custom Link (Optional)</label>
                             <input type="text" id="whatsappTelegramLink" placeholder="https://t.me/username or https://wa.me/2348123456789">
-                            <small>If you provide a custom link, it will be used instead of the number above</small>
+                            <small>If provided, this link will be used instead of the number above</small>
                         </div>
                         
                         <div class="whatsapp-preview">
@@ -845,9 +931,23 @@
             
             <div id="pin-manager" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate PIN</button></div>
+                    <div class="table-header">
+                        <h3>🔐 Payment PINs (One Time Use - Expires 30 mins after use)</h3>
+                        <button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button>
+                    </div>
                     <table class="items-table">
-                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>PIN</th>
+                                <th>Bank Name</th>
+                                <th>Account Name</th>
+                                <th>Account Number</th>
+                                <th>Status</th>
+                                <th>Time Left</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
                         <tbody id="pinsTableBody"></tbody>
                     </table>
                 </div>
@@ -857,9 +957,21 @@
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <table class="items-table">
-                        <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Item Name</th>
+                                <th>Amount</th>
+                                <th>Payment Code</th>
+                                <th>Full Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Receipt</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
                         <tbody id="paymentsTableBody"></tbody>
-                    \d
+                    </table>
                 </div>
             </div>
         </div>
@@ -900,12 +1012,29 @@
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
             <div class="modal-body">
-                <div class="neco-form-group"><label>PIN Code</label><input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN"><button type="button" class="generate-pin-btn" onclick="generateRandomPin()">Generate Random PIN</button></div>
-                <div class="neco-form-group"><label>Bank Name</label><input type="text" id="pinBankName" placeholder="e.g., First Bank"></div>
-                <div class="neco-form-group"><label>Account Name</label><input type="text" id="pinAccountName" placeholder="e.g., NECO"></div>
-                <div class="neco-form-group"><label>Account Number</label><input type="text" id="pinAccountNumber" placeholder="10 digits" maxlength="10"></div>
+                <div class="neco-form-group">
+                    <label>PIN Code (Numbers Only)</label>
+                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <button type="button" class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
+                </div>
+                <div class="neco-form-group">
+                    <label>Bank Name</label>
+                    <input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria">
+                </div>
+                <div class="neco-form-group">
+                    <label>Account Name</label>
+                    <input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services">
+                </div>
+                <div class="neco-form-group">
+                    <label>Account Number (10 digits)</label>
+                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                    <small>Only numbers allowed. Must be exactly 10 digits.</small>
+                </div>
             </div>
-            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button><button class="btn-save" onclick="savePin()">Generate PIN</button></div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button>
+                <button class="btn-save" onclick="savePin()">Generate PIN</button>
+            </div>
         </div>
     </div>
 
@@ -1083,6 +1212,22 @@
             }
         }
         
+        function getTimeRemaining(pin) {
+            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
+            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
+            if (pin.status === 'used' && pin.used_at) {
+                const usedTime = new Date(pin.used_at);
+                const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
+                const now = new Date();
+                const remainingMs = expiryFromUse - now;
+                if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
+                const mins = Math.floor(remainingMs / (1000 * 60));
+                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} remaining`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
+            }
+            return { text: 'Unknown', class: 'timer-expired' };
+        }
+        
         async function loadAllData() {
             try {
                 const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
@@ -1156,10 +1301,14 @@
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
                 const isActive = selectedCategoryId === cat.id;
-                html += `<li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id})">
-                    <span class="category-color-dot" style="background: ${cat.color};"></span>
-                    <span class="category-name">${escapeHtml(cat.name)}</span>
-                </li>`;
+                const itemCount = currentPaymentItems.filter(item => item.category_id === cat.id).length;
+                html += `
+                    <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id})">
+                        <div class="category-color" style="background: ${cat.color};"></div>
+                        <span class="category-name">${escapeHtml(cat.name)}</span>
+                        <span class="category-count">${itemCount}</span>
+                    </div>
+                `;
             }
             container.innerHTML = html;
         }
@@ -1182,10 +1331,8 @@
         
         function selectCategory(categoryName, categoryId) {
             selectedCategoryId = categoryId;
-            const listItems = document.querySelectorAll('#categoryList li');
-            listItems.forEach(item => item.classList.remove('active'));
-            if (event && event.currentTarget) event.currentTarget.classList.add('active');
-            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items`;
+            renderCategorySidebar();
+            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
             renderItemsForCategory();
         }
         
@@ -1200,11 +1347,13 @@
                 container.innerHTML = '<p style="text-align:center;padding:40px;">No items. Click "+ Add Item"</p>';
                 return;
             }
-            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount</th><th>Actions</th></tr></thead><tbody>';
+            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
             for (let item of items) {
-                html += `<tr><td style="font-weight:500;">${escapeHtml(item.name)}</td>
-                <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
-                <td><button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
+                html += `<tr>
+                    <td style="font-weight:500;">${escapeHtml(item.name)}</td>
+                    <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
+                    <td>
+                        <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
                         <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
                     </td>
                 </tr>`;
@@ -1274,7 +1423,8 @@
         }
         
         function generateRandomPin() {
-            document.getElementById('pinCode').value = Math.floor(1000 + Math.random() * 9000).toString();
+            const random = Math.floor(1000 + Math.random() * 9000).toString();
+            document.getElementById('pinCode').value = random;
         }
         
         function openPinModal() {
@@ -1298,7 +1448,7 @@
             closeModal('pinModal');
             loadAllData();
             triggerSync();
-            alert(`✅ PIN ${pin} generated!`);
+            alert(`✅ PIN ${pin} generated successfully!`);
         }
         
         async function deletePin(pinId) {
@@ -1320,9 +1470,10 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs generated yet</td>' + '</tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
+                const timeRemaining = getTimeRemaining(pin);
                 let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
                 html += `<tr>
                     <td><code>${escapeHtml(pin.pin)}</code></td>
@@ -1330,6 +1481,7 @@
                     <td>${escapeHtml(pin.account_name)}</td>
                     <td>${escapeHtml(pin.account_number)}</td>
                     <td><span class="badge ${statusClass}">${pin.status}</span></td>
+                    <td><span class="${timeRemaining.class}">${timeRemaining.text}</span></td>
                     <td>${new Date(pin.created_at).toLocaleString()}</td>
                     <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
                 </tr>`;
@@ -1443,7 +1595,7 @@
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (!tbody) return;
-            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="9">No payments recorded yet</td></tr>'; return; }
+            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; return; }
             let html = '';
             for (let p of currentPayments) {
                 html += `<tr>
@@ -1461,7 +1613,6 @@
             tbody.innerHTML = html;
         }
         
-        // WhatsApp Settings Functions - Clean & Simple
         async function loadWhatsAppSettings() {
             try {
                 const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
@@ -1494,7 +1645,7 @@
             const telegramLink = document.getElementById('whatsappTelegramLink').value;
             
             if (!whatsapp && !telegramLink) {
-                alert('Please enter either a WhatsApp number or a Telegram link');
+                alert('Please enter either a WhatsApp number or a custom link');
                 return;
             }
             
