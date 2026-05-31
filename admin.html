@@ -183,23 +183,44 @@
             background: rgba(220,38,38,0.4);
         }
         
-        /* Category List Styles - Nice Design */
-        .category-list-container {
-            max-height: 400px;
-            overflow-y: auto;
+        /* Category styles */
+        .category-section {
+            margin-top: 15px;
         }
         
-        .category-item {
-            padding: 12px 15px;
-            margin: 6px 0;
-            border-radius: 12px;
-            cursor: pointer;
+        .category-header {
+            padding: 12px 16px;
             display: flex;
             align-items: center;
             gap: 12px;
+            cursor: pointer;
+            border-radius: 12px;
+            margin-bottom: 4px;
+        }
+        
+        .category-header:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        
+        .category-list {
+            padding-left: 0px;
+            margin: 8px 0;
+        }
+        
+        .category-list.open {
+            display: block;
+        }
+        
+        .category-item {
+            padding: 10px 12px;
+            margin: 5px 0;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
             transition: all 0.2s;
             background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.05);
         }
         
         .category-item:hover {
@@ -213,15 +234,15 @@
         }
         
         .category-color {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             flex-shrink: 0;
         }
         
         .category-name {
             flex: 1;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
         }
         
@@ -233,13 +254,13 @@
         }
         
         .add-category-btn {
-            width: 100%;
-            margin-top: 12px;
+            width: calc(100% - 24px);
+            margin: 10px 12px;
             padding: 10px;
             background: #0ca60c;
             color: white;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
             font-weight: 500;
             font-size: 13px;
@@ -247,12 +268,10 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
-            transition: all 0.2s;
         }
         
         .add-category-btn:hover {
             background: #089108;
-            transform: translateY(-1px);
         }
         
         .main-content {
@@ -359,7 +378,6 @@
         
         .add-btn:hover {
             background: #009515;
-            transform: scale(1.02);
         }
         
         .home-preview {
@@ -428,10 +446,6 @@
             font-weight: 500;
         }
         
-        .add-item-btn:hover {
-            background: #009515;
-        }
-        
         .items-table {
             width: 100%;
             border-collapse: collapse;
@@ -463,17 +477,9 @@
             color: white;
         }
         
-        .edit-btn:hover {
-            background: #2563eb;
-        }
-        
         .delete-btn {
             background: #ef4444;
             color: white;
-        }
-        
-        .delete-btn:hover {
-            background: #dc2626;
         }
         
         .modal {
@@ -567,13 +573,6 @@
             transition: all 0.2s;
         }
         
-        .neco-form-group input:focus, .neco-form-group select:focus {
-            outline: none;
-            border-color: #054c0f;
-            background: white;
-            box-shadow: 0 0 0 3px rgba(5, 76, 15, 0.1);
-        }
-        
         .btn-cancel {
             background: #f3f4f6;
             color: #374151;
@@ -634,10 +633,6 @@
             width: 100%;
         }
         
-        .save-all-btn:hover {
-            background: #009515;
-        }
-        
         .mobile-overlay {
             display: none;
             position: fixed;
@@ -667,9 +662,6 @@
             }
             .menu-toggle {
                 display: block;
-            }
-            .preview-frame {
-                padding: 12px;
             }
             .items-table {
                 display: block;
@@ -701,14 +693,12 @@
             width: 100%;
             margin-top: 8px;
             font-weight: 500;
-            transition: all 0.2s;
         }
         
         .generate-pin-btn:hover {
             background: #4b5563;
         }
         
-        /* WhatsApp Manager Styles */
         .whatsapp-manager {
             background: white;
             border-radius: 20px;
@@ -726,11 +716,6 @@
         .whatsapp-header h3 {
             font-size: 24px;
             margin-bottom: 10px;
-        }
-        
-        .whatsapp-header p {
-            opacity: 0.9;
-            font-size: 14px;
         }
         
         .whatsapp-body {
@@ -765,7 +750,6 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* Homepage preview styles */
         @font-face {
             font-family: 'CircularStd';
             src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
@@ -830,16 +814,19 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
-                <div class="menu-category-header" style="padding: 12px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; border-radius: 12px; margin-bottom: 4px; margin-top: 10px;">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                    <span>Categories</span>
-                    <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                </div>
-                <div class="sub-menu" id="categorySubMenu" style="padding-left: 32px; display: none; margin: 8px 0;">
-                    <div id="categoryList" class="category-list-container"></div>
+                <!-- CATEGORIES SECTION - FIXED -->
+                <div class="category-section">
+                    <div class="category-header" onclick="toggleCategories()">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                        <span>Categories</span>
+                        <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto; transition: transform 0.3s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                    </div>
+                    <div id="categoryListContainer" class="category-list" style="display: block;">
+                        <!-- Categories will be loaded here -->
+                    </div>
                     <button class="add-category-btn" onclick="openAddCategoryModal()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
-                        Add Category
+                        Add New Category
                     </button>
                 </div>
                 
@@ -895,26 +882,21 @@
                         <div class="neco-form-group">
                             <label>WhatsApp Number</label>
                             <input type="text" id="whatsappNumber" placeholder="e.g., 2348123456789">
-                            <small>Include country code without + sign. Example: 2348123456789</small>
+                            <small>Include country code without + sign</small>
                         </div>
-                        
                         <div class="neco-form-group">
                             <label>Custom Link (Optional)</label>
                             <input type="text" id="whatsappTelegramLink" placeholder="https://t.me/username or https://wa.me/2348123456789">
                             <small>If provided, this link will be used instead of the number above</small>
                         </div>
-                        
                         <div class="whatsapp-preview">
                             <div class="whatsapp-preview-title">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="#25D366" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12c0 1.89.55 3.66 1.52 5.17L2 22l4.83-1.52C8.34 21.45 10.11 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zM8.5 7.5h2c.2 0 .4.1.5.3l1 2c.1.2.1.4 0 .6l-.5.8c-.1.2-.1.4 0 .6l1.5 2.5c.1.2.3.3.5.3h2c.3 0 .5-.2.5-.5v-2c0-.3-.2-.5-.5-.5h-1c-.2 0-.4-.1-.5-.3l-1-2c-.1-.2-.1-.4 0-.6l.5-.8c.1-.2.1-.4 0-.6l-1.5-2.5c-.1-.2-.3-.3-.5-.3h-2c-.3 0-.5.2-.5.5V7c0 .3.2.5.5.5z"/></svg>
                                 <span>Live Preview Link</span>
                             </div>
-                            <div class="whatsapp-link-preview" id="previewLink">
-                                https://wa.me/2348123456789
-                            </div>
+                            <div class="whatsapp-link-preview" id="previewLink">https://wa.me/2348123456789</div>
                         </div>
-                        
-                        <button class="add-btn" onclick="saveWhatsAppSettings()" style="width: 100%; margin-top: 20px;">💾 Save WhatsApp Settings</button>
+                        <button class="add-btn" onclick="saveWhatsAppSettings()" style="width:100%; margin-top:20px;">💾 Save WhatsApp Settings</button>
                     </div>
                 </div>
             </div>
@@ -923,7 +905,7 @@
                 <div class="category-items-container">
                     <div class="category-items-header">
                         <h3 id="selectedCategoryTitle">Select a category from sidebar</h3>
-                        <button class="add-item-btn" id="addItemBtn" onclick="openAddItemModal()">+ Add Item</button>
+                        <button class="add-item-btn" onclick="openAddItemModal()">+ Add Item</button>
                     </div>
                     <div id="itemsListContainer"></div>
                 </div>
@@ -931,23 +913,9 @@
             
             <div id="pin-manager" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header">
-                        <h3>🔐 Payment PINs (One Time Use - Expires 30 mins after use)</h3>
-                        <button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button>
-                    </div>
+                    <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>PIN</th>
-                                <th>Bank Name</th>
-                                <th>Account Name</th>
-                                <th>Account Number</th>
-                                <th>Status</th>
-                                <th>Time Left</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
                     </table>
                 </div>
@@ -957,19 +925,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Item Name</th>
-                                <th>Amount</th>
-                                <th>Payment Code</th>
-                                <th>Full Name</th>
-                                <th>Phone</th>
-                                <th>Email</th>
-                                <th>Receipt</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
                         <tbody id="paymentsTableBody"></tbody>
                     </table>
                 </div>
@@ -1012,29 +968,12 @@
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
             <div class="modal-body">
-                <div class="neco-form-group">
-                    <label>PIN Code (Numbers Only)</label>
-                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <button type="button" class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
-                </div>
-                <div class="neco-form-group">
-                    <label>Bank Name</label>
-                    <input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria">
-                </div>
-                <div class="neco-form-group">
-                    <label>Account Name</label>
-                    <input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services">
-                </div>
-                <div class="neco-form-group">
-                    <label>Account Number (10 digits)</label>
-                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <small>Only numbers allowed. Must be exactly 10 digits.</small>
-                </div>
+                <div class="neco-form-group"><label>PIN Code</label><input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN"><button type="button" class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button></div>
+                <div class="neco-form-group"><label>Bank Name</label><input type="text" id="pinBankName" placeholder="e.g., First Bank"></div>
+                <div class="neco-form-group"><label>Account Name</label><input type="text" id="pinAccountName" placeholder="e.g., NECO"></div>
+                <div class="neco-form-group"><label>Account Number</label><input type="text" id="pinAccountNumber" placeholder="10 digits" maxlength="10"></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button>
-                <button class="btn-save" onclick="savePin()">Generate PIN</button>
-            </div>
+            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button><button class="btn-save" onclick="savePin()">Generate PIN</button></div>
         </div>
     </div>
 
@@ -1089,12 +1028,8 @@
                 { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
                 { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
             ],
-            "NCEE": [
-                { name: "Non-Validation", amount: 4000 }
-            ],
-            "Gifted": [
-                { name: "Non-Validation", amount: 4000 }
-            ],
+            "NCEE": [{ name: "Non-Validation", amount: 4000 }],
+            "Gifted": [{ name: "Non-Validation", amount: 4000 }],
             "Others": [
                 { name: "Reprint Of Certificate", amount: 50000 },
                 { name: "Change Of School Name", amount: 15000 },
@@ -1182,6 +1117,18 @@
             loadWhatsAppSettings();
         }
         
+        function toggleCategories() {
+            const container = document.getElementById('categoryListContainer');
+            const arrow = document.getElementById('categoryArrow');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                arrow.style.transform = 'rotate(180deg)';
+            } else {
+                container.style.display = 'none';
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
+        
         async function startPinExpiryChecker() {
             if (pinExpiryInterval) clearInterval(pinExpiryInterval);
             pinExpiryInterval = setInterval(() => {
@@ -1256,7 +1203,6 @@
                 
                 const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 currentPaymentPins = paymentPins || [];
-                
                 const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
                 currentPayments = payments || [];
                 
@@ -1275,14 +1221,14 @@
                 renderPins();
                 renderPayments();
                 loadHomePreview();
-                renderCategorySidebar();
+                renderCategoriesList();
                 if (currentCategories.length > 0 && !selectedCategoryId) {
                     selectCategory(currentCategories[0].name, currentCategories[0].id);
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
                 currentCategories = defaultCategories;
-                renderCategorySidebar();
+                renderCategoriesList();
                 updateDashboard();
             }
         }
@@ -1294,16 +1240,22 @@
             document.getElementById('totalPayments').innerText = currentPayments.length;
         }
         
-        function renderCategorySidebar() {
-            const container = document.getElementById('categoryList');
+        function renderCategoriesList() {
+            const container = document.getElementById('categoryListContainer');
             if (!container) return;
+            
+            if (!currentCategories || currentCategories.length === 0) {
+                container.innerHTML = '<div style="color: rgba(255,255,255,0.6); padding: 10px; text-align: center; font-size: 12px;">No categories yet.<br>Click "Add Category"</div>';
+                return;
+            }
+            
             let html = '';
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
                 const isActive = selectedCategoryId === cat.id;
                 const itemCount = currentPaymentItems.filter(item => item.category_id === cat.id).length;
                 html += `
-                    <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id})">
+                    <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name.replace(/'/g, "\\'")}', ${cat.id})">
                         <div class="category-color" style="background: ${cat.color};"></div>
                         <span class="category-name">${escapeHtml(cat.name)}</span>
                         <span class="category-count">${itemCount}</span>
@@ -1331,20 +1283,21 @@
         
         function selectCategory(categoryName, categoryId) {
             selectedCategoryId = categoryId;
-            renderCategorySidebar();
-            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
+            renderCategoriesList();
+            const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items (${itemCount} items)`;
             renderItemsForCategory();
         }
         
         function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
             if (!selectedCategoryId) {
-                container.innerHTML = '<p style="text-align:center;padding:40px;">Select a category</p>';
+                container.innerHTML = '<p style="text-align:center;padding:40px;">Select a category from the sidebar</p>';
                 return;
             }
             const items = currentPaymentItems.filter(item => item.category_id === selectedCategoryId);
             if (items.length === 0) {
-                container.innerHTML = '<p style="text-align:center;padding:40px;">No items. Click "+ Add Item"</p>';
+                container.innerHTML = '<p style="text-align:center;padding:40px;">No items in this category. Click "+ Add Item" to add one.</p>';
                 return;
             }
             let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
@@ -1470,7 +1423,7 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
                 const timeRemaining = getTimeRemaining(pin);
@@ -1481,7 +1434,6 @@
                     <td>${escapeHtml(pin.account_name)}</td>
                     <td>${escapeHtml(pin.account_number)}</td>
                     <td><span class="badge ${statusClass}">${pin.status}</span></td>
-                    <td><span class="${timeRemaining.class}">${timeRemaining.text}</span></td>
                     <td>${new Date(pin.created_at).toLocaleString()}</td>
                     <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
                 </tr>`;
@@ -1496,56 +1448,40 @@
             for (let i = 0; i < homeContent.steps.length; i++) {
                 const step = homeContent.steps[i];
                 stepsHtml += `
-                    <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]" style="background: #f8fff8; border-radius: 16px;">
-                        <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                            <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
+                    <div style="background:#f8fff8; border-radius:16px; padding:2rem; text-align:center; border:1px solid #e5e7eb;">
+                        <div style="background:#51b55f; width:50px; height:50px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+                            <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width:28px;">
                         </div>
-                        <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
-                        <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
+                        <p style="font-weight:600; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_title')">${escapeHtml(step.title)}</p>
+                        <p style="font-size:0.75rem; color:#666; margin-top:0.5rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_desc')">${escapeHtml(step.description)}</p>
                     </div>
                 `;
             }
             container.innerHTML = `
-                <div style="max-width: 1280px; margin: 0 auto;">
-                    <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                            <div style="flex: 1;">
-                                <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
-                                    <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
-                                    <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
-                                </div>
-                                <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
-                                <div style="margin-top: 1.75rem;">
-                                    <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
-                                </div>
+                <div style="max-width:1200px; margin:0 auto;">
+                    <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+                        <div style="flex:1;">
+                            <div style="display:inline-flex; background:#f5fbf5; border-radius:9999px; padding:0.5rem 1rem;">
+                                <span style="background:#009515; color:white; border-radius:9999px; padding:0.25rem 0.75rem; font-size:0.75rem;">Note</span>
+                                <span style="margin-left:0.5rem; font-size:0.75rem; color:#009515; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroNote')">${escapeHtml(homeContent.heroNote)}</span>
                             </div>
-                            <div>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; max-width: 500px;">
-                                    <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" alt="" style="background: #0ca60c; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" alt="" style="width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" alt="" style="background: #145596; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/boy-writing.e175dc8e.png" alt="" style="width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/child.58ead653.png" alt="" style="width: 100%; height: 100%; grid-column: span 2;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/girl.5dffe80d.png" alt="" style="background: #145596; width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/girl-school.14798cb1.png" alt="" style="background: #642d56; height: 100%; width: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Asterisk.96355d4c.svg" alt="" style="width: 100%; height: 100%; background: #1887eb; padding: 1.25rem;">
-                                    <img src="https://payments.neco.gov.ng/assets/Butterfly.758edbeb.svg" alt="" style="width: 100%; height: 100%; background: #642d56; padding: 1.25rem;">
-                                </div>
+                            <h1 style="font-size:2rem; font-family:'CircularStdBold'; margin:1.5rem 0; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroTitle')">${escapeHtml(homeContent.heroTitle)}</h1>
+                            <button style="background:#16a34a; color:white; padding:0.75rem 1.5rem; border-radius:0.5rem; border:none;">Make payment</button>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem;">
+                                <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" style="background:#0ca60c; padding:1rem;">
+                                <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" style="background:#f0f0f0; padding:1rem;">
+                                <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" style="background:#145596; padding:1rem;">
                             </div>
                         </div>
-                        <section style="padding: 2.5rem 0;">
-                            <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
-                                <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
-                            </div>
-                            <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
-                                ${stepsHtml}
-                            </div>
-                        </section>
+                    </div>
+                    <div style="margin-top:2rem;">
+                        <div style="background-image:url('https://payments.neco.gov.ng/assets/images/group.png'); height:5rem; background-size:contain; background-repeat:no-repeat; display:flex; align-items:center;">
+                            <h2 style="font-size:1.5rem; font-family:'CircularStdBold'; cursor:pointer;" class="editable-element" onclick="openTextEditor('howItWorksTitle')">${escapeHtml(homeContent.howItWorksTitle)}</h2>
+                        </div>
+                        <p style="font-size:0.7rem; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('footerNote')">${homeContent.footerNote}</p>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:1.5rem;">${stepsHtml}</div>
                     </div>
                 </div>
             `;
@@ -1627,34 +1563,24 @@
         function updateWhatsAppPreview() {
             const number = document.getElementById('whatsappNumber').value;
             const customLink = document.getElementById('whatsappTelegramLink').value;
-            
             if (customLink && customLink.trim() !== '') {
                 document.getElementById('previewLink').innerHTML = customLink;
-                document.getElementById('previewLink').style.color = '#059669';
             } else if (number && number.trim() !== '') {
                 document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
-                document.getElementById('previewLink').style.color = '#059669';
             } else {
                 document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
-                document.getElementById('previewLink').style.color = '#9ca3af';
             }
         }
         
         async function saveWhatsAppSettings() {
             const whatsapp = document.getElementById('whatsappNumber').value;
             const telegramLink = document.getElementById('whatsappTelegramLink').value;
-            
             if (!whatsapp && !telegramLink) {
                 alert('Please enter either a WhatsApp number or a custom link');
                 return;
             }
-            
             try {
-                await necoSupabase.from('settings').upsert({ 
-                    id: 1, 
-                    admin_whatsapp: whatsapp, 
-                    whatsapp_telegram_link: telegramLink 
-                });
+                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, whatsapp_telegram_link: telegramLink });
                 alert('✅ WhatsApp settings saved successfully!');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
@@ -1683,30 +1609,18 @@
         function triggerSync() { localStorage.setItem('neco_sync_timestamp', Date.now().toString()); }
         
         function initDashboard() {
-            renderCategorySidebar();
+            renderCategoriesList();
             renderItemsForCategory();
             document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
                 item.onclick = function(e) {
                     e.stopPropagation();
                     const tabId = this.getAttribute('data-tab');
                     const titleSpan = this.querySelector('span');
-                    document.querySelectorAll('.menu-item, .menu-category-header').forEach(i => i.classList.remove('active'));
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
                     this.classList.add('active');
                     showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
                 };
             });
-            const categoryHeader = document.querySelector('.menu-category-header');
-            if (categoryHeader) {
-                categoryHeader.onclick = function(e) {
-                    e.stopPropagation();
-                    const subMenu = document.getElementById('categorySubMenu');
-                    const arrow = document.getElementById('categoryArrow');
-                    if (subMenu.classList.contains('open')) { subMenu.classList.remove('open'); arrow.style.transform = 'rotate(0deg)'; }
-                    else { subMenu.classList.add('open'); arrow.style.transform = 'rotate(180deg)'; }
-                };
-            }
-            document.getElementById('categorySubMenu').classList.add('open');
-            document.getElementById('categoryArrow').style.transform = 'rotate(180deg)';
         }
         
         window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
