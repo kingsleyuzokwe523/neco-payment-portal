@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
-    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
@@ -16,7 +15,6 @@
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
         
-        /* Global container spacing fix */
         .container {
             width: 100%;
             margin-right: auto;
@@ -52,7 +50,6 @@
             }
         }
         
-        /* Payment Card Styles */
         .payment-card {
             border-radius: 0.75rem;
             overflow: hidden;
@@ -91,15 +88,15 @@
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
         }
-      .make-payment-btn {
-    font-size: 0.75rem;
-    border: 1px solid;
-    border-radius: 0.5rem;
-    padding: 0.7rem 1.2rem;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    background: transparent;
-}
+        .make-payment-btn {
+            font-size: 0.75rem;
+            border: 1px solid;
+            border-radius: 0.5rem;
+            padding: 0.7rem 1.2rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
         .make-payment-btn:hover {
             transform: scale(1.02);
         }
@@ -504,7 +501,6 @@
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
         
-        <!-- Hero Section -->
         <div class="container mt-20">
             <div class="flex items-center flex-col md:flex-row justify-between">
                 <div class="w-full md:w-3/5">
@@ -526,7 +522,6 @@
             </div>
         </div>
         
-        <!-- Category Filters -->
         <div class="container mt-10">
             <div class="flex gap-3 flex-wrap" id="categoryFilters">
                 <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
@@ -556,14 +551,12 @@
             </div>
         </div>
         
-        <!-- Payment Grid -->
         <div class="container mt-10">
             <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid"></div>
         </div>
     </div>
 </div>
 
-<!-- PAYMENT FORM MODAL -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 overflow-y-auto">
@@ -586,13 +579,12 @@
                                 <div class="mt-1 relative">
                                     <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                                <div id="codeError" class="error-text">❌ Invalid or already used PIN code</div>
-                                <div id="codeRequiredError" class="error-text">⚠️ PIN code is required</div>
-                                <div id="codeExpiredError" class="error-text">⏰ This PIN has expired. Please get a new one.</div>
+                                <div id="codeError" class="error-text">Invalid code</div>
+                                <div id="codeRequiredError" class="error-text">Required</div>
                             </div>
                         </div>
                         <div class="mt-5 flex justify-end">
-                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">📱 Click here to get payment code from admin</a>
+                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click to get payment code from admin</a>
                         </div>
                     </div>
                     
@@ -615,7 +607,7 @@
                                 <div class="mt-1 relative">
                                     <input id="phone" name="phone" placeholder="08000000000" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                                <div id="phoneError" class="error-text">Invalid phone number (11 digits)</div>
+                                <div id="phoneError" class="error-text">Invalid phone number</div>
                                 <div id="phoneRequiredError" class="error-text">Required</div>
                             </div>
                             <div class="w-full">
@@ -680,7 +672,6 @@
     </div>
 </div>
 
-<!-- INVOICE SUMMARY MODAL -->
 <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -716,7 +707,6 @@
     </div>
 </div>
 
-<!-- LOADING MODAL -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
         <div class="loader" style="margin: 0 auto;"></div>
@@ -725,7 +715,6 @@
     </div>
 </div>
 
-<!-- ACCOUNT MODAL -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -736,7 +725,7 @@
                 </div>
                 <div id="accountDetailsBox"></div>
                 <div class="warning-timer-row">
-                    <span class="warning-text-small">⚠️ Pay to this account within 30 minutes</span>
+                    <span class="warning-text-small">Pay to this account within 30 minutes</span>
                     <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
@@ -758,7 +747,6 @@
     </div>
 </div>
 
-<!-- COPY NOTIFICATION POPUP -->
 <div id="copyNotification" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 10000; display: none; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"></polyline>
@@ -767,12 +755,10 @@
 </div>
 
 <script>
-    // ============ SUPABASE CONFIGURATION ============
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // ============ DEFAULT PAYMENT DATA ============
     let paymentData = {
         "SSCE Internal": { color: "#0CA60C", items: [
             { name: "Four Figure Table", amount: 500 },
@@ -828,28 +814,20 @@
     let currentItem = null;
     let currentFormData = {};
     let isValidPin = false;
-    let isPinExpired = false;
     let currentPinDetails = null;
     let countdownInterval = null;
-    let settings = {
-        adminWhatsApp: '2348123456789',
-        pinExpiryMinutes: 30
-    };
+    let settings = { pinExpiryMinutes: 30, adminWhatsApp: '2348123456789' };
     
-    // ============ LOAD SETTINGS FROM DATABASE ============
     async function loadSettings() {
         try {
             const { data } = await supabaseClient.from('settings').select('*').maybeSingle();
             if (data) {
-                settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
                 settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
+                settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
             }
-        } catch (err) {
-            console.log('Using default settings');
-        }
+        } catch (err) {}
     }
     
-    // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
         return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
     }
@@ -862,7 +840,6 @@
         return quantity && parseInt(quantity) > 0;
     }
     
-    // ============ VALIDATE PIN WITH SUPABASE ============
     async function validatePinWithSupabase(pinCode) {
         try {
             const { data, error } = await supabaseClient
@@ -872,41 +849,23 @@
                 .maybeSingle();
             
             if (error || !data) {
-                return { valid: false, isExpired: false, accountDetails: null, status: null };
+                return { valid: false, accountDetails: null };
             }
             
-            // Check PIN status
             if (data.status === 'active') {
-                return { valid: true, isExpired: false, accountDetails: data, status: 'active' };
-            } else if (data.status === 'used') {
-                // Check if used PIN is expired (30 mins passed)
-                if (data.used_at) {
-                    const usedTime = new Date(data.used_at);
-                    const expiryTime = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
-                    const now = new Date();
-                    if (now >= expiryTime) {
-                        return { valid: false, isExpired: true, accountDetails: data, status: 'expired' };
-                    } else {
-                        return { valid: false, isExpired: false, accountDetails: data, status: 'used' };
-                    }
-                }
-                return { valid: false, isExpired: false, accountDetails: data, status: 'used' };
-            } else if (data.status === 'expired') {
-                return { valid: false, isExpired: true, accountDetails: data, status: 'expired' };
+                return { valid: true, accountDetails: data };
+            } else {
+                return { valid: false, accountDetails: null };
             }
-            
-            return { valid: false, isExpired: false, accountDetails: null, status: null };
         } catch (error) {
-            return { valid: false, isExpired: false, accountDetails: null, status: null };
+            return { valid: false, accountDetails: null };
         }
     }
     
-    // ============ MARK PIN AS USED (Called when user clicks "Proceed" from invoice) ============
     async function markPinAsUsedAndProceed() {
         const pinCode = currentFormData.paymentCode;
         
         try {
-            // IMPORTANT: Mark PIN as used IMMEDIATELY when user clicks Proceed
             const { error } = await supabaseClient
                 .from('payment_pins')
                 .update({ 
@@ -914,15 +873,13 @@
                     used_at: new Date().toISOString()
                 })
                 .eq('pin', pinCode)
-                .eq('status', 'active'); // Only update if still active
+                .eq('status', 'active');
             
             if (error) {
-                console.error('Error marking PIN as used:', error);
                 alert('Error processing PIN. Please try again.');
                 return;
             }
             
-            // Close invoice modal and show loading
             closeInvoiceModal();
             const loadingModal = document.getElementById('loadingModal');
             if (loadingModal) {
@@ -936,51 +893,32 @@
             }
             
         } catch (err) {
-            console.error('Error:', err);
             alert('Error processing payment. Please try again.');
         }
     }
     
-    // ============ CHECK FORM VALIDATION ============
     async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
         
         if (code && code.trim() !== '') {
             const result = await validatePinWithSupabase(code.trim());
             isValidPin = result.valid;
-            isPinExpired = result.isExpired;
             currentPinDetails = result.accountDetails;
             
-            // Show appropriate error message
             const codeError = document.getElementById('codeError');
             const codeRequiredError = document.getElementById('codeRequiredError');
-            const codeExpiredError = document.getElementById('codeExpiredError');
             
             codeError.style.display = 'none';
             codeRequiredError.style.display = 'none';
-            codeExpiredError.style.display = 'none';
             
-            if (!result.valid) {
-                if (result.status === 'used' && !result.isExpired) {
-                    codeError.style.display = 'block';
-                    codeError.innerText = '❌ This PIN is already being used for another transaction. Please get a new PIN.';
-                } else if (result.isExpired || result.status === 'expired') {
-                    codeExpiredError.style.display = 'block';
-                } else if (result.status === null) {
-                    codeError.style.display = 'block';
-                    codeError.innerText = '❌ Invalid PIN code';
-                } else {
-                    codeError.style.display = 'block';
-                    codeError.innerText = '❌ Invalid or already used PIN code';
-                }
+            if (!result.valid && code.trim() !== '') {
+                codeError.style.display = 'block';
             }
         } else {
             isValidPin = false;
-            isPinExpired = false;
             currentPinDetails = null;
             document.getElementById('codeRequiredError').style.display = 'block';
             document.getElementById('codeError').style.display = 'none';
-            document.getElementById('codeExpiredError').style.display = 'none';
         }
         
         const fullName = document.getElementById('fullName').value;
@@ -1047,7 +985,6 @@
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    // ============ OPEN PAYMENT MODAL ============
     function openPaymentModal(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
@@ -1060,7 +997,6 @@
             amountInput.readOnly = false; 
         }
         
-        // Update WhatsApp link with admin number
         const whatsappNumber = settings.adminWhatsApp || '2348123456789';
         document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         
@@ -1077,7 +1013,6 @@
         document.getElementById('emailError').style.display = 'none';
         document.getElementById('quantityError').style.display = 'none';
         document.getElementById('codeRequiredError').style.display = 'none';
-        document.getElementById('codeExpiredError').style.display = 'none';
         
         document.getElementById('proceedBtn').disabled = true;
         document.getElementById('paymentModal').classList.remove('hidden');
@@ -1104,7 +1039,6 @@
         document.getElementById('accountModal').classList.add('hidden'); 
     }
     
-    // ============ SUBMIT PAYMENT FORM (Shows Invoice) ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -1172,7 +1106,6 @@
     async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
         
-        // Get PIN details from database (should already be marked as 'used')
         const { data: pinData, error } = await supabaseClient
             .from('payment_pins')
             .select('*')
@@ -1185,11 +1118,9 @@
         }
         
         const account = pinData;
-        // Calculate expiry time from used_at (30 minutes from when Proceed was clicked)
         const usedTime = new Date(account.used_at);
         const expiryTime = usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000);
         
-        // Calculate total amount correctly
         const amount = parseFloat(currentFormData.amount) || 0;
         const serviceCharge = 50;
         const quantity = parseInt(currentFormData.quantity) || 1;
@@ -1225,7 +1156,6 @@
             </div>
         `;
         
-        // Reset file input
         const receiptInput = document.getElementById('receiptInput');
         const uploadedFileName = document.getElementById('uploadedFileName');
         
@@ -1280,7 +1210,6 @@
         
         if (countdownInterval) clearInterval(countdownInterval);
         
-        // Show loading indicator
         const loadingModal = document.getElementById('loadingModal');
         if (loadingModal) {
             loadingModal.style.display = 'flex';
@@ -1293,20 +1222,18 @@
         let receiptUrl = null;
         let receiptName = null;
         
-        // Upload receipt to Supabase Storage
         try {
             const fileExt = receiptFile.name.split('.').pop();
             const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
             const filePath = `receipts/${fileName}`;
             receiptName = receiptFile.name;
             
-            const { data: uploadData, error: uploadError } = await supabaseClient
+            const { error: uploadError } = await supabaseClient
                 .storage
                 .from('payment-receipts')
                 .upload(filePath, receiptFile);
             
             if (uploadError) {
-                console.error('Upload error:', uploadError);
                 alert('Failed to upload receipt. Please try again.');
                 if (loadingModal) loadingModal.style.display = 'none';
                 return;
@@ -1318,10 +1245,7 @@
                 .getPublicUrl(filePath);
             receiptUrl = urlData.publicUrl;
             
-            console.log('Receipt uploaded:', receiptUrl);
-            
         } catch (error) {
-            console.error('Receipt upload error:', error);
             alert('Error uploading receipt: ' + error.message);
             if (loadingModal) loadingModal.style.display = 'none';
             return;
@@ -1348,29 +1272,23 @@
             created_at: new Date().toISOString()
         };
         
-        console.log('Saving payment to database:', paymentData);
-        
         try {
-            const { data, error } = await supabaseClient
+            const { error } = await supabaseClient
                 .from('payments')
-                .insert([paymentData])
-                .select();
+                .insert([paymentData]);
             
             if (error) {
-                console.error('Save payment error:', error);
                 alert('Error saving payment: ' + error.message);
                 if (loadingModal) loadingModal.style.display = 'none';
                 return;
             }
-            
-            console.log('Payment saved successfully:', data);
             
             closeAccountModal();
             
             if (loadingModal) {
                 const mainText = loadingModal.querySelector('p:first-of-type');
                 const subText = loadingModal.querySelector('p:last-of-type');
-                if (mainText) mainText.innerHTML = '✅ Payment Successful!';
+                if (mainText) mainText.innerHTML = 'Payment Successful!';
                 if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
                 loadingModal.style.display = 'flex';
             }
@@ -1380,13 +1298,11 @@
             }, 3000);
             
         } catch (error) {
-            console.error('Error:', error);
             alert('Error saving payment. Please contact support.');
             if (loadingModal) loadingModal.style.display = 'none';
         }
     }
    
-    // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.category-btn').forEach(b => {
@@ -1400,7 +1316,6 @@
         });
     });
     
-    // ============ RENDER GRID ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
@@ -1428,10 +1343,8 @@
         }).join('');
     }
     
-    // Load default grid immediately
     renderGrid();
     
-    // ============ SEARCH INPUT ============
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const cat = paymentData[currentCategory];
@@ -1463,7 +1376,6 @@
         }).join('');
     });
     
-    // ============ SUPABASE SYNC FOR ITEMS ============
     async function syncPaymentItems() {
         try {
             const { data: categories } = await supabaseClient.from('categories').select('*');
@@ -1483,13 +1395,11 @@
         } catch (error) {}
     }
     
-    // Load settings and sync
     loadSettings();
     setTimeout(syncPaymentItems, 500);
     window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
 </script>
 
-<!-- Mobile Menu Script -->
 <script>
     var menuBtn = document.getElementById('mobileMenuBtn');
     var cancelBtn = document.getElementById('cancelMenuBtn');
