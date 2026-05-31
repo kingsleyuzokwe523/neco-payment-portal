@@ -170,53 +170,54 @@
             height: 20px;
         }
         
-        /* WhatsApp settings in sidebar */
-        .whatsapp-setting-item {
-            margin-top: 20px;
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding-top: 15px;
+        /* WhatsApp settings in sidebar - clean design */
+        .whatsapp-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
         }
         
-        .whatsapp-setting-item .whatsapp-label {
+        .whatsapp-section .label {
             font-size: 11px;
             opacity: 0.7;
             margin-bottom: 8px;
             display: block;
         }
         
-        .whatsapp-setting-item input {
+        .whatsapp-section input {
             width: 100%;
-            padding: 8px 12px;
+            padding: 10px 12px;
             border-radius: 8px;
             border: none;
             background: rgba(255,255,255,0.15);
             color: white;
-            font-size: 12px;
+            font-size: 13px;
         }
         
-        .whatsapp-setting-item input::placeholder {
+        .whatsapp-section input::placeholder {
             color: rgba(255,255,255,0.5);
         }
         
-        .whatsapp-setting-item input:focus {
+        .whatsapp-section input:focus {
             outline: none;
             background: rgba(255,255,255,0.25);
         }
         
-        .whatsapp-setting-item .save-wa-btn {
+        .whatsapp-section button {
             width: 100%;
-            margin-top: 8px;
-            padding: 6px;
+            margin-top: 10px;
+            padding: 8px;
             background: #25D366;
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 500;
         }
         
-        .whatsapp-setting-item .save-wa-btn:hover {
+        .whatsapp-section button:hover {
             background: #128C7E;
         }
         
@@ -228,7 +229,7 @@
             cursor: pointer;
             border-radius: 12px;
             margin-bottom: 4px;
-            margin-top: 15px;
+            margin-top: 10px;
         }
         
         .menu-category-header:hover {
@@ -757,7 +758,7 @@
             background: #4b5563;
         }
         
-        /* Homepage preview styles - matching index.html exactly */
+        /* Homepage preview styles */
         @font-face {
             font-family: 'CircularStd';
             src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
@@ -807,7 +808,7 @@
                 <h3>NECO Admin Panel</h3>
             </div>
             <div class="sidebar-menu">
-                <!-- Logout button at top -->
+                <!-- Logout button -->
                 <div class="menu-item" onclick="doLogout()" style="background: rgba(220,38,38,0.2); margin-bottom: 15px;">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
                     <span>Logout</span>
@@ -823,11 +824,11 @@
                     <span>Home Editor</span>
                 </div>
                 
-                <!-- WhatsApp Settings in Sidebar -->
-                <div class="whatsapp-setting-item">
-                    <span class="whatsapp-label">📱 Admin WhatsApp (for payment codes)</span>
+                <!-- WhatsApp Section - clean design -->
+                <div class="whatsapp-section">
+                    <span class="label">📱 Admin WhatsApp Number</span>
                     <input type="text" id="sidebarWhatsApp" placeholder="2348123456789">
-                    <button class="save-wa-btn" onclick="saveSidebarWhatsApp()">Save WhatsApp Number</button>
+                    <button onclick="saveSidebarWhatsApp()">Save WhatsApp</button>
                 </div>
                 
                 <div class="menu-category-header">
@@ -839,7 +840,7 @@
                     <div id="categoryList"></div>
                     <button class="add-category-btn" onclick="openAddCategoryModal()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
-                        Add New Category
+                        Add Category
                     </button>
                 </div>
                 
@@ -851,11 +852,6 @@
                 <div class="menu-item" data-tab="view-payments">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span>View Payments</span>
-                </div>
-                
-                <div class="menu-item" data-tab="settings">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    <span>Settings</span>
                 </div>
             </div>
         </div>
@@ -879,17 +875,17 @@
                 <div class="home-preview">
                     <div class="preview-header">
                         <h3>🏠 Live Home Page Editor</h3>
-                        <p style="font-size:12px; color:#666;">Click on any text to edit it directly - Changes affect the live homepage</p>
+                        <p style="font-size:12px; color:#666;">Click on any text to edit - Changes affect live homepage</p>
                     </div>
                     <div class="preview-frame" id="homePreview"></div>
-                    <button class="save-all-btn" onclick="saveHomeChanges()">💾 Save All Home Page Changes</button>
+                    <button class="save-all-btn" onclick="saveHomeChanges()">💾 Save All Changes</button>
                 </div>
             </div>
             
-            <div id="payment-editor" class="tab-content active">
+            <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
-                        <h3 id="selectedCategoryTitle">Select a category from the sidebar</h3>
+                        <h3 id="selectedCategoryTitle">Select a category from sidebar</h3>
                         <button class="add-item-btn" id="addItemBtn" onclick="openAddItemModal()">+ Add Item</button>
                     </div>
                     <div id="itemsListContainer"></div>
@@ -898,39 +894,21 @@
             
             <div id="pin-manager" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><h3>Payment PINs (One Time Use - Expires 30 mins after use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
+                    <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate PIN</button></div>
                     <table class="items-table">
-                        <thead>
-                            <tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Time Left</th><th>Created</th><th>Actions</th></tr>
-                        </thead>
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    \d
+                    </table>
                 </div>
             </div>
             
             <div id="view-payments" class="tab-content">
                 <div class="table-container">
-                    <div class="table-header"><h3>All Payments</h3></div>
+                    <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <table class="items-table">
-                        <thead><tr><th>Date</th><th>Item</th><th>Amount</th><th>Payment Code</th><th>Receipt</th></tr></thead>
+                        <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
                         <tbody id="paymentsTableBody"></tbody>
                     </table>
-                </div>
-            </div>
-            
-            <div id="settings" class="tab-content">
-                <div class="table-container">
-                    <div class="table-header"><h3>⚙️ System Settings</h3></div>
-                    <div class="neco-form-group">
-                        <label>PIN Expiry Time (minutes)</label>
-                        <input type="number" id="pinExpiryMinutes" placeholder="30" value="30" min="5" max="120">
-                        <small>How many minutes after "Proceed" click until PIN expires</small>
-                    </div>
-                    <div class="neco-form-group">
-                        <label>Default Bank Name</label>
-                        <input type="text" id="defaultBankName" placeholder="NECO Microfinance Bank">
-                    </div>
-                    <button class="add-btn" onclick="saveSettings()" style="width: 100%; margin-top: 20px;">💾 Save Settings</button>
                 </div>
             </div>
         </div>
@@ -1050,7 +1028,6 @@
                 loadAllData();
                 initDashboard();
                 startPinExpiryChecker();
-                loadSettings();
                 loadSidebarWhatsApp();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
@@ -1073,7 +1050,6 @@
             loadAllData();
             initDashboard();
             startPinExpiryChecker();
-            loadSettings();
             loadSidebarWhatsApp();
         }
         
@@ -1093,7 +1069,7 @@
                 const pin = currentPaymentPins[i];
                 if (pin.status === 'used' && pin.used_at) {
                     const usedTime = new Date(pin.used_at);
-                    const expiryFromUse = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
+                    const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
                     if (now >= expiryFromUse && pin.status !== 'expired') {
                         await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
                         updated = true;
@@ -1105,22 +1081,6 @@
                 if (data) currentPaymentPins = data;
                 updateDashboard();
             }
-        }
-        
-        function getTimeRemaining(pin) {
-            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
-            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
-            if (pin.status === 'used' && pin.used_at) {
-                const usedTime = new Date(pin.used_at);
-                const expiryFromUse = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
-                const now = new Date();
-                const remainingMs = expiryFromUse - now;
-                if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
-                const mins = Math.floor(remainingMs / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} remaining`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
-            }
-            return { text: 'Unknown', class: 'timer-expired' };
         }
         
         async function loadAllData() {
@@ -1149,7 +1109,7 @@
                 loadHomePreview();
                 renderCategorySidebar();
                 if (currentCategories.length > 0 && !selectedCategoryId) {
-                    selectCategory(currentCategories[0].name, currentCategories[0].id, false);
+                    selectCategory(currentCategories[0].name, currentCategories[0].id);
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1173,7 +1133,7 @@
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
                 const isActive = selectedCategoryId === cat.id;
-                html += `<li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, false, event)">
+                html += `<li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id})">
                     <span class="category-color-dot" style="background: ${cat.color};"></span>
                     <span class="category-name">${escapeHtml(cat.name)}</span>
                 </li>`;
@@ -1197,11 +1157,11 @@
             document.getElementById('addCategoryModal').style.display = 'flex';
         }
         
-        function selectCategory(categoryName, categoryId, fromClick, clickEvent) {
+        function selectCategory(categoryName, categoryId) {
             selectedCategoryId = categoryId;
             const listItems = document.querySelectorAll('#categoryList li');
             listItems.forEach(item => item.classList.remove('active'));
-            if (clickEvent && clickEvent.currentTarget) clickEvent.currentTarget.classList.add('active');
+            event.currentTarget.classList.add('active');
             document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items`;
             renderItemsForCategory();
         }
@@ -1311,6 +1271,7 @@
             closeModal('pinModal');
             loadAllData();
             triggerSync();
+            alert(`✅ PIN ${pin} generated!`);
         }
         
         async function deletePin(pinId) {
@@ -1321,19 +1282,30 @@
             }
         }
         
+        async function deletePayment(paymentId) {
+            if (confirm('Delete this payment record?')) {
+                await necoSupabase.from('payments').delete().eq('id', paymentId);
+                loadAllData();
+                triggerSync();
+            }
+        }
+        
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8">No PINs</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7">No PINs</td></tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
-                const timeRemaining = getTimeRemaining(pin);
                 let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
-                html += `<tr><td><code>${pin.pin}</code></td><td>${escapeHtml(pin.bank_name)}</td><td>${escapeHtml(pin.account_name)}</td>
-                <td>${escapeHtml(pin.account_number)}</td><td><span class="badge ${statusClass}">${pin.status}</span></td>
-                <td><span class="${timeRemaining.class}">${timeRemaining.text}</span></td>
-                <td>${new Date(pin.created_at).toLocaleString()}</td>
-                <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td></tr>`;
+                html += `<tr>
+                    <td><code>${pin.pin}</code></td>
+                    <td>${escapeHtml(pin.bank_name)}</td>
+                    <td>${escapeHtml(pin.account_name)}</td>
+                    <td>${escapeHtml(pin.account_number)}</td>
+                    <td><span class="badge ${statusClass}">${pin.status}</span></td>
+                    <td>${new Date(pin.created_at).toLocaleString()}</td>
+                    <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
+                </tr>`;
             }
             tbody.innerHTML = html;
         }
@@ -1345,56 +1317,40 @@
             for (let i = 0; i < homeContent.steps.length; i++) {
                 const step = homeContent.steps[i];
                 stepsHtml += `
-                    <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]" style="background: #f8fff8; border-radius: 16px;">
-                        <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                            <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
+                    <div style="background:#f8fff8; border-radius:16px; padding:2rem; text-align:center; border:1px solid #e5e7eb;">
+                        <div style="background:#51b55f; width:50px; height:50px; border-radius:50%; margin:0 auto; display:flex; align-items:center; justify-content:center;">
+                            <span style="color:white; font-weight:bold;">${i+1}</span>
                         </div>
-                        <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
-                        <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
+                        <p style="font-weight:600; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_title')">${escapeHtml(step.title)}</p>
+                        <p style="font-size:0.75rem; color:#666; margin-top:0.5rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('step_${i}_desc')">${escapeHtml(step.description)}</p>
                     </div>
                 `;
             }
             container.innerHTML = `
-                <div style="max-width: 1280px; margin: 0 auto;">
-                    <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                            <div style="flex: 1;">
-                                <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
-                                    <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
-                                    <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
-                                </div>
-                                <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
-                                <div style="margin-top: 1.75rem;">
-                                    <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
-                                </div>
+                <div style="max-width:1200px; margin:0 auto;">
+                    <div style="display:flex; gap:2rem; flex-wrap:wrap;">
+                        <div style="flex:1;">
+                            <div style="display:inline-flex; background:#f5fbf5; border-radius:9999px; padding:0.5rem 1rem;">
+                                <span style="background:#009515; color:white; border-radius:9999px; padding:0.25rem 0.75rem; font-size:0.75rem;">Note</span>
+                                <span style="margin-left:0.5rem; font-size:0.75rem; color:#009515; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroNote')">${escapeHtml(homeContent.heroNote)}</span>
                             </div>
-                            <div>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; max-width: 500px;">
-                                    <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" alt="" style="background: #0ca60c; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" alt="" style="width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" alt="" style="background: #145596; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/boy-writing.e175dc8e.png" alt="" style="width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/child.58ead653.png" alt="" style="width: 100%; height: 100%; grid-column: span 2;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/girl.5dffe80d.png" alt="" style="background: #145596; width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/girl-school.14798cb1.png" alt="" style="background: #642d56; height: 100%; width: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Asterisk.96355d4c.svg" alt="" style="width: 100%; height: 100%; background: #1887eb; padding: 1.25rem;">
-                                    <img src="https://payments.neco.gov.ng/assets/Butterfly.758edbeb.svg" alt="" style="width: 100%; height: 100%; background: #642d56; padding: 1.25rem;">
-                                </div>
+                            <h1 style="font-size:2rem; font-family:'CircularStdBold'; margin:1.5rem 0; cursor:pointer;" class="editable-element" onclick="openTextEditor('heroTitle')">${escapeHtml(homeContent.heroTitle)}</h1>
+                            <button style="background:#16a34a; color:white; padding:0.75rem 1.5rem; border-radius:0.5rem; border:none;">Make payment</button>
+                        </div>
+                        <div style="flex:1;">
+                            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem;">
+                                <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" style="background:#0ca60c; padding:1rem;">
+                                <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" style="background:#f0f0f0; padding:1rem;">
+                                <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" style="background:#145596; padding:1rem;">
                             </div>
                         </div>
-                        <section style="padding: 2.5rem 0;">
-                            <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
-                                <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
-                            </div>
-                            <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
-                                ${stepsHtml}
-                            </div>
-                        </section>
+                    </div>
+                    <div style="margin-top:2rem;">
+                        <div style="background-image:url('https://payments.neco.gov.ng/assets/images/group.png'); height:5rem; background-size:contain; background-repeat:no-repeat; display:flex; align-items:center;">
+                            <h2 style="font-size:1.5rem; font-family:'CircularStdBold'; cursor:pointer;" class="editable-element" onclick="openTextEditor('howItWorksTitle')">${escapeHtml(homeContent.howItWorksTitle)}</h2>
+                        </div>
+                        <p style="font-size:0.7rem; margin-top:1rem; cursor:pointer;" class="editable-element" onclick="openTextEditor('footerNote')">${homeContent.footerNote}</p>
+                        <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; margin-top:1.5rem;">${stepsHtml}</div>
                     </div>
                 </div>
             `;
@@ -1444,40 +1400,22 @@
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (!tbody) return;
-            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="5">No payments</td></tr>'; return; }
+            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="9">No payments</td></tr>'; return; }
             let html = '';
             for (let p of currentPayments) {
-                html += `<tr><td>${new Date(p.created_at).toLocaleDateString()}</td><td>${escapeHtml(p.item_name)}</td>
-                <td>₦${Number(p.amount).toLocaleString()}</td><td>${escapeHtml(p.payment_code)}</td>
-                <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank">View</a>` : 'No receipt'}</td></tr>`;
+                html += `<tr>
+                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
+                    <td>${escapeHtml(p.item_name)}</td>
+                    <td>₦${Number(p.amount).toLocaleString()}</td>
+                    <td><code>${escapeHtml(p.payment_code)}</code></td>
+                    <td>${escapeHtml(p.full_name)}</td>
+                    <td>${escapeHtml(p.phone)}</td>
+                    <td>${escapeHtml(p.email)}</td>
+                    <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank">View</a>` : 'No receipt'}</td>
+                    <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
+                </tr>`;
             }
             tbody.innerHTML = html;
-        }
-        
-        async function loadSettings() {
-            try {
-                const { data } = await necoSupabase.from('settings').select('*').maybeSingle();
-                if (data) {
-                    settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
-                    settings.defaultBankName = data.default_bank_name || 'NECO Microfinance Bank';
-                    settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
-                    document.getElementById('pinExpiryMinutes').value = settings.pinExpiryMinutes;
-                    document.getElementById('defaultBankName').value = settings.defaultBankName;
-                }
-            } catch (err) { console.log('Settings not available'); }
-        }
-        
-        async function saveSettings() {
-            const expiry = parseInt(document.getElementById('pinExpiryMinutes').value);
-            const bankName = document.getElementById('defaultBankName').value;
-            if (expiry < 5 || expiry > 120) { alert('Expiry must be between 5 and 120'); return; }
-            settings.pinExpiryMinutes = expiry;
-            settings.defaultBankName = bankName;
-            try {
-                await necoSupabase.from('settings').upsert({ id: 1, pin_expiry_minutes: expiry, default_bank_name: bankName, admin_whatsapp: settings.adminWhatsApp, updated_at: new Date().toISOString() });
-                alert('✅ Settings saved!');
-                triggerSync();
-            } catch (err) { alert('Error: ' + err.message); }
         }
         
         async function loadSidebarWhatsApp() {
@@ -1486,8 +1424,6 @@
                 if (data && data.admin_whatsapp) {
                     document.getElementById('sidebarWhatsApp').value = data.admin_whatsapp;
                     settings.adminWhatsApp = data.admin_whatsapp;
-                } else {
-                    document.getElementById('sidebarWhatsApp').value = '2348123456789';
                 }
             } catch (err) {}
         }
@@ -1497,7 +1433,7 @@
             if (!whatsapp) { alert('Enter WhatsApp number'); return; }
             settings.adminWhatsApp = whatsapp;
             try {
-                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, pin_expiry_minutes: settings.pinExpiryMinutes, default_bank_name: settings.defaultBankName, updated_at: new Date().toISOString() });
+                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, pin_expiry_minutes: 30, default_bank_name: 'NECO Microfinance Bank' });
                 alert('✅ WhatsApp number saved!');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
@@ -1544,6 +1480,8 @@
                     else { subMenu.classList.add('open'); arrow.style.transform = 'rotate(180deg)'; }
                 };
             }
+            // Set payment-editor as active initially
+            document.querySelector('.menu-item[data-tab="payment-editor"]').classList.add('active');
         }
         
         window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
