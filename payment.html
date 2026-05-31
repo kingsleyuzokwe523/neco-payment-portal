@@ -98,7 +98,7 @@
     padding: 0.7rem 1.2rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    background: transparent;  /* Changed from 'white' to 'transparent' */
+    background: transparent;
 }
         .make-payment-btn:hover {
             transform: scale(1.02);
@@ -586,12 +586,13 @@
                                 <div class="mt-1 relative">
                                     <input id="paymentCode" name="paymentCode" placeholder="Enter payment code" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                                <div id="codeError" class="error-text">Invalid code</div>
-                                <div id="codeRequiredError" class="error-text">Required</div>
+                                <div id="codeError" class="error-text">❌ Invalid or already used PIN code</div>
+                                <div id="codeRequiredError" class="error-text">⚠️ PIN code is required</div>
+                                <div id="codeExpiredError" class="error-text">⏰ This PIN has expired. Please get a new one.</div>
                             </div>
                         </div>
                         <div class="mt-5 flex justify-end">
-                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
+                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">📱 Click here to get payment code from admin</a>
                         </div>
                     </div>
                     
@@ -614,7 +615,7 @@
                                 <div class="mt-1 relative">
                                     <input id="phone" name="phone" placeholder="08000000000" maxlength="11" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-4 py-2.5 text-base">
                                 </div>
-                                <div id="phoneError" class="error-text">Invalid phone number</div>
+                                <div id="phoneError" class="error-text">Invalid phone number (11 digits)</div>
                                 <div id="phoneRequiredError" class="error-text">Required</div>
                             </div>
                             <div class="w-full">
@@ -708,7 +709,7 @@
                 </div>
                 <div class="invoice-buttons">
                     <button onclick="closeInvoiceModal()" class="btn-cancel">Cancel</button>
-                    <button onclick="showLoadingAndGenerateAccount()" class="btn-proceed">Proceed</button>
+                    <button onclick="markPinAsUsedAndProceed()" class="btn-proceed">Proceed</button>
                 </div>
             </div>
         </div>
@@ -735,7 +736,7 @@
                 </div>
                 <div id="accountDetailsBox"></div>
                 <div class="warning-timer-row">
-                    <span class="warning-text-small"> Pay to this account within 30 minutes</span>
+                    <span class="warning-text-small">⚠️ Pay to this account within 30 minutes</span>
                     <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
@@ -771,7 +772,7 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // ============ DEFAULT PAYMENT DATA (Shows Immediately with unique category colors) ============
+    // ============ DEFAULT PAYMENT DATA ============
     let paymentData = {
         "SSCE Internal": { color: "#0CA60C", items: [
             { name: "Four Figure Table", amount: 500 },
@@ -827,8 +828,26 @@
     let currentItem = null;
     let currentFormData = {};
     let isValidPin = false;
+    let isPinExpired = false;
     let currentPinDetails = null;
     let countdownInterval = null;
+    let settings = {
+        adminWhatsApp: '2348123456789',
+        pinExpiryMinutes: 30
+    };
+    
+    // ============ LOAD SETTINGS FROM DATABASE ============
+    async function loadSettings() {
+        try {
+            const { data } = await supabaseClient.from('settings').select('*').maybeSingle();
+            if (data) {
+                settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
+                settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
+            }
+        } catch (err) {
+            console.log('Using default settings');
+        }
+    }
     
     // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
@@ -836,7 +855,7 @@
     }
     
     function validateEmail(email) {
-        return email && email.toLowerCase().includes('@gmail.com');
+        return email && email.includes('@') && email.includes('.');
     }
     
     function validateQuantity(quantity) {
@@ -850,64 +869,77 @@
                 .from('payment_pins')
                 .select('*')
                 .eq('pin', pinCode)
-                .eq('status', 'active')
-                .single();
+                .maybeSingle();
             
             if (error || !data) {
-                return { valid: false, accountDetails: null };
+                return { valid: false, isExpired: false, accountDetails: null, status: null };
             }
-            return { valid: true, accountDetails: data };
+            
+            // Check PIN status
+            if (data.status === 'active') {
+                return { valid: true, isExpired: false, accountDetails: data, status: 'active' };
+            } else if (data.status === 'used') {
+                // Check if used PIN is expired (30 mins passed)
+                if (data.used_at) {
+                    const usedTime = new Date(data.used_at);
+                    const expiryTime = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
+                    const now = new Date();
+                    if (now >= expiryTime) {
+                        return { valid: false, isExpired: true, accountDetails: data, status: 'expired' };
+                    } else {
+                        return { valid: false, isExpired: false, accountDetails: data, status: 'used' };
+                    }
+                }
+                return { valid: false, isExpired: false, accountDetails: data, status: 'used' };
+            } else if (data.status === 'expired') {
+                return { valid: false, isExpired: true, accountDetails: data, status: 'expired' };
+            }
+            
+            return { valid: false, isExpired: false, accountDetails: null, status: null };
         } catch (error) {
-            return { valid: false, accountDetails: null };
+            return { valid: false, isExpired: false, accountDetails: null, status: null };
         }
     }
     
-    // ============ MARK PIN AS USED ============
-    async function markPinAsUsed(pinCode) {
-    const now = new Date();
-    
-    const { error } = await supabaseClient
-        .from('payment_pins')
-        .update({ 
-            status: 'used', 
-            used_at: now.toISOString()  // This starts the 30-minute timer
-        })
-        .eq('pin', pinCode)
-        .eq('status', 'active');
-    
-    if (error) throw error;
-}
-    
-    // ============ RENDER GRID - WITH COLORED TOP BAR ============
-    function renderGrid() {
-        const grid = document.getElementById('paymentGrid');
-        const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) return;
+    // ============ MARK PIN AS USED (Called when user clicks "Proceed" from invoice) ============
+    async function markPinAsUsedAndProceed() {
+        const pinCode = currentFormData.paymentCode;
         
-        grid.innerHTML = cat.items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-        }).join('');
+        try {
+            // IMPORTANT: Mark PIN as used IMMEDIATELY when user clicks Proceed
+            const { error } = await supabaseClient
+                .from('payment_pins')
+                .update({ 
+                    status: 'used', 
+                    used_at: new Date().toISOString()
+                })
+                .eq('pin', pinCode)
+                .eq('status', 'active'); // Only update if still active
+            
+            if (error) {
+                console.error('Error marking PIN as used:', error);
+                alert('Error processing PIN. Please try again.');
+                return;
+            }
+            
+            // Close invoice modal and show loading
+            closeInvoiceModal();
+            const loadingModal = document.getElementById('loadingModal');
+            if (loadingModal) {
+                loadingModal.style.display = 'flex';
+                setTimeout(() => {
+                    if (loadingModal) loadingModal.style.display = 'none';
+                    showAccountModal();
+                }, 2000);
+            } else {
+                showAccountModal();
+            }
+            
+        } catch (err) {
+            console.error('Error:', err);
+            alert('Error processing payment. Please try again.');
+        }
     }
-    
-    // Load default grid immediately
-    renderGrid();
     
     // ============ CHECK FORM VALIDATION ============
     async function checkFormValidation() {
@@ -916,10 +948,39 @@
         if (code && code.trim() !== '') {
             const result = await validatePinWithSupabase(code.trim());
             isValidPin = result.valid;
+            isPinExpired = result.isExpired;
             currentPinDetails = result.accountDetails;
+            
+            // Show appropriate error message
+            const codeError = document.getElementById('codeError');
+            const codeRequiredError = document.getElementById('codeRequiredError');
+            const codeExpiredError = document.getElementById('codeExpiredError');
+            
+            codeError.style.display = 'none';
+            codeRequiredError.style.display = 'none';
+            codeExpiredError.style.display = 'none';
+            
+            if (!result.valid) {
+                if (result.status === 'used' && !result.isExpired) {
+                    codeError.style.display = 'block';
+                    codeError.innerText = '❌ This PIN is already being used for another transaction. Please get a new PIN.';
+                } else if (result.isExpired || result.status === 'expired') {
+                    codeExpiredError.style.display = 'block';
+                } else if (result.status === null) {
+                    codeError.style.display = 'block';
+                    codeError.innerText = '❌ Invalid PIN code';
+                } else {
+                    codeError.style.display = 'block';
+                    codeError.innerText = '❌ Invalid or already used PIN code';
+                }
+            }
         } else {
             isValidPin = false;
+            isPinExpired = false;
             currentPinDetails = null;
+            document.getElementById('codeRequiredError').style.display = 'block';
+            document.getElementById('codeError').style.display = 'none';
+            document.getElementById('codeExpiredError').style.display = 'none';
         }
         
         const fullName = document.getElementById('fullName').value;
@@ -941,19 +1002,6 @@
         document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
         document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
         document.getElementById('amountError').style.display = !isAmountValid ? 'block' : 'none';
-        
-        const codeError = document.getElementById('codeError');
-        const codeRequiredError = document.getElementById('codeRequiredError');
-        if (!isCodeProvided) {
-            codeRequiredError.style.display = 'block';
-            codeError.style.display = 'none';
-        } else if (!isValidPin) {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'block';
-        } else {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'none';
-        }
         
         const phoneError = document.getElementById('phoneError');
         const phoneRequiredError = document.getElementById('phoneRequiredError');
@@ -1011,7 +1059,10 @@
             amountInput.value = ''; 
             amountInput.readOnly = false; 
         }
-        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        
+        // Update WhatsApp link with admin number
+        const whatsappNumber = settings.adminWhatsApp || '2348123456789';
+        document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         
         document.getElementById('paymentCode').value = ''; 
         document.getElementById('fullName').value = ''; 
@@ -1026,6 +1077,7 @@
         document.getElementById('emailError').style.display = 'none';
         document.getElementById('quantityError').style.display = 'none';
         document.getElementById('codeRequiredError').style.display = 'none';
+        document.getElementById('codeExpiredError').style.display = 'none';
         
         document.getElementById('proceedBtn').disabled = true;
         document.getElementById('paymentModal').classList.remove('hidden');
@@ -1052,7 +1104,7 @@
         document.getElementById('accountModal').classList.add('hidden'); 
     }
     
-    // ============ SUBMIT PAYMENT FORM ============
+    // ============ SUBMIT PAYMENT FORM (Shows Invoice) ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -1093,142 +1145,118 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    // ============ SHOW LOADING AND GENERATE ACCOUNT ============
-    function showLoadingAndGenerateAccount() {
-        closeInvoiceModal();
-        const loadingModal = document.getElementById('loadingModal');
+    function startCountdown(expiryTime) {
+        const timerElement = document.getElementById('countdownTimer');
+        if (countdownInterval) clearInterval(countdownInterval);
         
-        if (loadingModal) {
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Please wait...';
-            if (subText) subText.innerHTML = 'Account details are being generated';
+        function updateTimer() {
+            const now = new Date().getTime();
+            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
             
-            loadingModal.style.display = 'flex';
-            setTimeout(() => {
-                if (loadingModal) loadingModal.style.display = 'none';
-                showAccountModal();
-            }, 3000);
-        } else {
-            showAccountModal();
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                timerElement.textContent = "Expired";
+                timerElement.style.color = "#9ca3af";
+                return;
+            }
+            
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
+        
+        updateTimer();
+        countdownInterval = setInterval(updateTimer, 1000);
     }
     
-    function startCountdown(expiryTime) {
-    const timerElement = document.getElementById('countdownTimer');
-    if (countdownInterval) clearInterval(countdownInterval);
-    
-    function updateTimer() {
-        const now = new Date().getTime();
-        const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+    async function showAccountModal() {
+        const pinCode = currentFormData.paymentCode;
         
-        if (remaining <= 0) {
-            clearInterval(countdownInterval);
-            timerElement.textContent = "Expired";
-            timerElement.style.color = "#9ca3af";
+        // Get PIN details from database (should already be marked as 'used')
+        const { data: pinData, error } = await supabaseClient
+            .from('payment_pins')
+            .select('*')
+            .eq('pin', pinCode)
+            .single();
+        
+        if (error || !pinData) {
+            alert("Payment code not found. Please contact support.");
             return;
         }
         
-        const mins = Math.floor(remaining / 60);
-        const secs = remaining % 60;
-        timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-    
-    updateTimer();
-    countdownInterval = setInterval(updateTimer, 1000);
-}
-    
-   async function showAccountModal() {
-    const pinCode = currentFormData.paymentCode;
-    
-    // Get PIN details from database
-    const { data: pinData, error } = await supabaseClient
-        .from('payment_pins')
-        .select('*')
-        .eq('pin', pinCode)
-        .eq('status', 'active')
-        .single();
-    
-    if (error || !pinData) {
-        alert("This payment code is invalid or has already been used.");
-        return;
-    }
-    
-    const account = pinData;
-    // Set expiry to 30 minutes from NOW
-    const expiryTime = new Date().getTime() + (30 * 60 * 1000);
-    
-    // Calculate total amount correctly
-    const amount = parseFloat(currentFormData.amount) || 0;
-    const serviceCharge = 50;
-    const quantity = parseInt(currentFormData.quantity) || 1;
-    const totalAmount = (amount + serviceCharge) * quantity;
-    
-    document.getElementById('accountDetailsBox').innerHTML = `
-        <div class="details-row">
-            <span class="details-label">Bank</span>
-            <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Account Name</span>
-            <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
-        </div>
-        <div class="details-row-copy">
-            <span class="details-label-copy">Account Number</span>
-            <div class="details-value-copy">
-                <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
-                <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
-                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Amount</span>
-            <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
-        </div>
-        <div class="details-row">
-            <span class="details-label">Payment Code</span>
-            <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
-        </div>
-    `;
-    
-    // Reset file input
-    const receiptInput = document.getElementById('receiptInput');
-    const uploadedFileName = document.getElementById('uploadedFileName');
-    
-    if (receiptInput) {
-        const newInput = receiptInput.cloneNode(true);
-        receiptInput.parentNode.replaceChild(newInput, receiptInput);
-        newInput.id = 'receiptInput';
-        newInput.classList.add('hidden');
-        newInput.accept = '.pdf,.jpg,.jpeg,.png';
+        const account = pinData;
+        // Calculate expiry time from used_at (30 minutes from when Proceed was clicked)
+        const usedTime = new Date(account.used_at);
+        const expiryTime = usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000);
         
-        newInput.addEventListener('change', (e) => {
-            if (uploadedFileName) {
-                uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-            }
+        // Calculate total amount correctly
+        const amount = parseFloat(currentFormData.amount) || 0;
+        const serviceCharge = 50;
+        const quantity = parseInt(currentFormData.quantity) || 1;
+        const totalAmount = (amount + serviceCharge) * quantity;
+        
+        document.getElementById('accountDetailsBox').innerHTML = `
+            <div class="details-row">
+                <span class="details-label">Bank</span>
+                <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Name</span>
+                <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
+            </div>
+            <div class="details-row-copy">
+                <span class="details-label-copy">Account Number</span>
+                <div class="details-value-copy">
+                    <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Amount</span>
+                <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Payment Code</span>
+                <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
+            </div>
+        `;
+        
+        // Reset file input
+        const receiptInput = document.getElementById('receiptInput');
+        const uploadedFileName = document.getElementById('uploadedFileName');
+        
+        if (receiptInput) {
+            const newInput = receiptInput.cloneNode(true);
+            receiptInput.parentNode.replaceChild(newInput, receiptInput);
+            newInput.id = 'receiptInput';
+            newInput.classList.add('hidden');
+            newInput.accept = '.pdf,.jpg,.jpeg,.png';
+            
+            newInput.addEventListener('change', (e) => {
+                if (uploadedFileName) {
+                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+                }
+            });
+        }
+        if (uploadedFileName) uploadedFileName.innerHTML = '';
+        
+        document.getElementById('accountModal').classList.remove('hidden');
+        startCountdown(expiryTime);
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
         });
     }
-    if (uploadedFileName) uploadedFileName.innerHTML = '';
-    
-    document.getElementById('accountModal').classList.remove('hidden');
-    startCountdown(expiryTime);
-}
-
-// Helper function to escape HTML
-function escapeHtml(str) {
-    if (!str) return '';
-    return str.replace(/[&<>]/g, function(m) {
-        if (m === '&') return '&amp;';
-        if (m === '<') return '&lt;';
-        if (m === '>') return '&gt;';
-        return m;
-    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
-        return c;
-    });
-}
     
     function copyToClipboard(text) {
         navigator.clipboard.writeText(text).then(function() {
@@ -1241,141 +1269,122 @@ function escapeHtml(str) {
             }, 2000);
         }).catch(() => alert('Failed to copy. Please copy manually.'));
     }
-   async function confirmPayment() { 
-    const receiptFile = document.getElementById('receiptInput').files[0];
     
-    if(!receiptFile) { 
-        alert('Please upload your payment receipt'); 
-        return; 
-    } 
-    
-    if (countdownInterval) clearInterval(countdownInterval);
-    
-    // Show loading indicator
-    const loadingModal = document.getElementById('loadingModal');
-    if (loadingModal) {
-        loadingModal.style.display = 'flex';
-        const mainText = loadingModal.querySelector('p:first-of-type');
-        const subText = loadingModal.querySelector('p:last-of-type');
-        if (mainText) mainText.innerHTML = 'Processing your payment...';
-        if (subText) subText.innerHTML = 'Please wait while we save your payment';
-    }
-    
-    let receiptUrl = null;
-    let receiptName = null;
-    
-    // Upload receipt to Supabase Storage
-    try {
-        const fileExt = receiptFile.name.split('.').pop();
-        const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
-        const filePath = `receipts/${fileName}`;
-        receiptName = receiptFile.name;
+    async function confirmPayment() { 
+        const receiptFile = document.getElementById('receiptInput').files[0];
         
-        // Upload file
-        const { data: uploadData, error: uploadError } = await supabaseClient
-            .storage
-            .from('payment-receipts')
-            .upload(filePath, receiptFile);
+        if(!receiptFile) { 
+            alert('Please upload your payment receipt'); 
+            return; 
+        } 
         
-        if (uploadError) {
-            console.error('Upload error:', uploadError);
-            alert('Failed to upload receipt. Please try again.');
-            if (loadingModal) loadingModal.style.display = 'none';
-            return;
-        }
+        if (countdownInterval) clearInterval(countdownInterval);
         
-        // Get public URL
-        const { data: urlData } = await supabaseClient
-            .storage
-            .from('payment-receipts')
-            .getPublicUrl(filePath);
-        receiptUrl = urlData.publicUrl;
-        
-        console.log('Receipt uploaded:', receiptUrl);
-        
-    } catch (error) {
-        console.error('Receipt upload error:', error);
-        alert('Error uploading receipt: ' + error.message);
-        if (loadingModal) loadingModal.style.display = 'none';
-        return;
-    }
-    
-    // Calculate total amount correctly
-    const amount = parseFloat(currentFormData.amount) || 0;
-    const serviceCharge = 50;
-    const quantity = parseInt(currentFormData.quantity) || 1;
-    const totalAmount = (amount + serviceCharge) * quantity;
-    
-    // Prepare payment data - MATCH YOUR SUPABASE TABLE COLUMNS EXACTLY
-    const paymentData = {
-        payment_code: currentFormData.paymentCode,
-        full_name: currentFormData.fullName,
-        phone: currentFormData.phone,
-        email: currentFormData.email,
-        description: currentFormData.description || '',
-        item_name: currentItem.name,
-        amount: totalAmount,
-        currency: currentFormData.currency || 'NGN',
-        quantity: quantity,
-        receipt_url: receiptUrl,
-        receipt_name: receiptName,
-        status: 'pending',
-        created_at: new Date().toISOString()
-    };
-    
-    console.log('Saving payment to database:', paymentData);
-    
-    // Save payment record to Supabase
-    try {
-        const { data, error } = await supabaseClient
-            .from('payments')
-            .insert([paymentData])
-            .select();
-        
-        if (error) {
-            console.error('Save payment error:', error);
-            alert('Error saving payment: ' + error.message);
-            if (loadingModal) loadingModal.style.display = 'none';
-            return;
-        }
-        
-        console.log('Payment saved successfully:', data);
-        
-        // Mark PIN as used (only once!)
-        const { error: pinError } = await supabaseClient
-            .from('payment_pins')
-            .update({ 
-                status: 'used', 
-                used_at: new Date().toISOString()
-            })
-            .eq('pin', currentFormData.paymentCode);
-        
-        if (pinError) {
-            console.error('Error updating PIN status:', pinError);
-        }
-        
-        closeAccountModal();
-        
-        // Update loading modal with success message
+        // Show loading indicator
+        const loadingModal = document.getElementById('loadingModal');
         if (loadingModal) {
+            loadingModal.style.display = 'flex';
             const mainText = loadingModal.querySelector('p:first-of-type');
             const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Please wait while we Confirm your Payment!';
-            if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
-            loadingModal.style.display = 'flex';
+            if (mainText) mainText.innerHTML = 'Processing your payment...';
+            if (subText) subText.innerHTML = 'Please wait while we save your payment';
         }
         
-        // Redirect after delay
-        setTimeout(() => { 
-            window.location.href = 'index.html'; 
-        }, 3000);
+        let receiptUrl = null;
+        let receiptName = null;
         
-    } catch (error) {
-        console.error('Error:', error);
-        alert('Error saving payment. Please contact support.');
-        if (loadingModal) loadingModal.style.display = 'none';
+        // Upload receipt to Supabase Storage
+        try {
+            const fileExt = receiptFile.name.split('.').pop();
+            const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
+            const filePath = `receipts/${fileName}`;
+            receiptName = receiptFile.name;
+            
+            const { data: uploadData, error: uploadError } = await supabaseClient
+                .storage
+                .from('payment-receipts')
+                .upload(filePath, receiptFile);
+            
+            if (uploadError) {
+                console.error('Upload error:', uploadError);
+                alert('Failed to upload receipt. Please try again.');
+                if (loadingModal) loadingModal.style.display = 'none';
+                return;
+            }
+            
+            const { data: urlData } = await supabaseClient
+                .storage
+                .from('payment-receipts')
+                .getPublicUrl(filePath);
+            receiptUrl = urlData.publicUrl;
+            
+            console.log('Receipt uploaded:', receiptUrl);
+            
+        } catch (error) {
+            console.error('Receipt upload error:', error);
+            alert('Error uploading receipt: ' + error.message);
+            if (loadingModal) loadingModal.style.display = 'none';
+            return;
+        }
+        
+        const amount = parseFloat(currentFormData.amount) || 0;
+        const serviceCharge = 50;
+        const quantity = parseInt(currentFormData.quantity) || 1;
+        const totalAmount = (amount + serviceCharge) * quantity;
+        
+        const paymentData = {
+            payment_code: currentFormData.paymentCode,
+            full_name: currentFormData.fullName,
+            phone: currentFormData.phone,
+            email: currentFormData.email,
+            description: currentFormData.description || '',
+            item_name: currentItem.name,
+            amount: totalAmount,
+            currency: currentFormData.currency || 'NGN',
+            quantity: quantity,
+            receipt_url: receiptUrl,
+            receipt_name: receiptName,
+            status: 'completed',
+            created_at: new Date().toISOString()
+        };
+        
+        console.log('Saving payment to database:', paymentData);
+        
+        try {
+            const { data, error } = await supabaseClient
+                .from('payments')
+                .insert([paymentData])
+                .select();
+            
+            if (error) {
+                console.error('Save payment error:', error);
+                alert('Error saving payment: ' + error.message);
+                if (loadingModal) loadingModal.style.display = 'none';
+                return;
+            }
+            
+            console.log('Payment saved successfully:', data);
+            
+            closeAccountModal();
+            
+            if (loadingModal) {
+                const mainText = loadingModal.querySelector('p:first-of-type');
+                const subText = loadingModal.querySelector('p:last-of-type');
+                if (mainText) mainText.innerHTML = '✅ Payment Successful!';
+                if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
+                loadingModal.style.display = 'flex';
+            }
+            
+            setTimeout(() => { 
+                window.location.href = 'index.html'; 
+            }, 3000);
+            
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Error saving payment. Please contact support.');
+            if (loadingModal) loadingModal.style.display = 'none';
+        }
     }
-}
    
     // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
@@ -1390,6 +1399,37 @@ function escapeHtml(str) {
             document.getElementById('searchInput').value = '';
         });
     });
+    
+    // ============ RENDER GRID ============
+    function renderGrid() {
+        const grid = document.getElementById('paymentGrid');
+        const cat = paymentData[currentCategory];
+        if (!cat || !cat.items) return;
+        
+        grid.innerHTML = cat.items.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-footer">
+                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    }
+    
+    // Load default grid immediately
+    renderGrid();
     
     // ============ SEARCH INPUT ============
     document.getElementById('searchInput').addEventListener('input', (e) => {
@@ -1423,7 +1463,7 @@ function escapeHtml(str) {
         }).join('');
     });
     
-    // ============ SUPABASE SYNC FOR ITEMS (Background) ============
+    // ============ SUPABASE SYNC FOR ITEMS ============
     async function syncPaymentItems() {
         try {
             const { data: categories } = await supabaseClient.from('categories').select('*');
@@ -1443,8 +1483,10 @@ function escapeHtml(str) {
         } catch (error) {}
     }
     
+    // Load settings and sync
+    loadSettings();
     setTimeout(syncPaymentItems, 500);
-    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') syncPaymentItems(); });
+    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
 </script>
 
 <!-- Mobile Menu Script -->
