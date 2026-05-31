@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>NECO Admin Panel - Fixed PIN System</title>
+    <title>NECO Admin Panel</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -170,6 +170,56 @@
             height: 20px;
         }
         
+        /* WhatsApp settings in sidebar */
+        .whatsapp-setting-item {
+            margin-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding-top: 15px;
+        }
+        
+        .whatsapp-setting-item .whatsapp-label {
+            font-size: 11px;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .whatsapp-setting-item input {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,0.15);
+            color: white;
+            font-size: 12px;
+        }
+        
+        .whatsapp-setting-item input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        .whatsapp-setting-item input:focus {
+            outline: none;
+            background: rgba(255,255,255,0.25);
+        }
+        
+        .whatsapp-setting-item .save-wa-btn {
+            width: 100%;
+            margin-top: 8px;
+            padding: 6px;
+            background: #25D366;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        
+        .whatsapp-setting-item .save-wa-btn:hover {
+            background: #128C7E;
+        }
+        
         .menu-category-header {
             padding: 12px 16px;
             display: flex;
@@ -178,6 +228,7 @@
             cursor: pointer;
             border-radius: 12px;
             margin-bottom: 4px;
+            margin-top: 15px;
         }
         
         .menu-category-header:hover {
@@ -227,6 +278,27 @@
         .category-name {
             flex: 1;
             font-size: 13px;
+        }
+        
+        .add-category-btn {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
+            background: #0ca60c;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .add-category-btn:hover {
+            background: #089108;
         }
         
         .main-content {
@@ -649,13 +721,6 @@
             .preview-frame {
                 padding: 12px;
             }
-            .payments-actions-cell {
-                display: flex;
-                flex-direction: row;
-                gap: 6px;
-                align-items: center;
-                flex-wrap: wrap;
-            }
             .items-table {
                 display: block;
                 overflow-x: auto;
@@ -692,74 +757,23 @@
             background: #4b5563;
         }
         
-        .input-error {
-            border-color: #dc2626 !important;
-            background: #fef2f2 !important;
+        /* Homepage preview styles - matching index.html exactly */
+        @font-face {
+            font-family: 'CircularStd';
+            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
+        }
+        @font-face {
+            font-family: 'CircularStdBold';
+            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf');
         }
         
-        .receipt-link, .receipt-download, .receipt-view {
-            display: inline-block;
-            padding: 5px 12px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-size: 12px;
-            margin: 2px;
-        }
-        
-        .receipt-view {
-            background: #054c0f;
-            color: white;
-        }
-        
-        .receipt-download {
-            background: #3b82f6;
-            color: white;
-        }
-        
-        .receipt-view:hover, .receipt-download:hover {
-            opacity: 0.9;
-        }
-        
-        .delete-payment-btn {
-            background: #ef4444;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-        }
-        
-        .delete-payment-btn:hover {
-            background: #dc2626;
-        }
-        
-        .payments-actions-cell {
-            display: flex;
-            flex-direction: row;
-            gap: 8px;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        /* Timer column for PINs */
-        .timer-column {
-            font-family: monospace;
-            font-size: 12px;
-            font-weight: 600;
-        }
-        
-        .timer-expired {
-            color: #dc2626;
-        }
-        
-        .timer-active {
-            color: #065f46;
-        }
-        
-        .timer-warning {
-            color: #d97706;
-        }
+        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
+        .bg-primary-400 { background-color: #f5fbf5; }
+        .bg-primary-200 { background-color: #f8fff8; }
+        .bg-primary-600 { background-color: #009515; }
+        .text-primary-600 { color: #009515; }
+        .text-primary-500 { color: #378b3d; }
+        .bg-pattern { background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); background-size: contain; background-repeat: no-repeat; background-position: left center; }
     </style>
 </head>
 <body>
@@ -793,6 +807,12 @@
                 <h3>NECO Admin Panel</h3>
             </div>
             <div class="sidebar-menu">
+                <!-- Logout button at top -->
+                <div class="menu-item" onclick="doLogout()" style="background: rgba(220,38,38,0.2); margin-bottom: 15px;">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span>Logout</span>
+                </div>
+                
                 <div class="menu-item" data-tab="dashboard">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
                     <span>Dashboard</span>
@@ -803,6 +823,13 @@
                     <span>Home Editor</span>
                 </div>
                 
+                <!-- WhatsApp Settings in Sidebar -->
+                <div class="whatsapp-setting-item">
+                    <span class="whatsapp-label">📱 Admin WhatsApp (for payment codes)</span>
+                    <input type="text" id="sidebarWhatsApp" placeholder="2348123456789">
+                    <button class="save-wa-btn" onclick="saveSidebarWhatsApp()">Save WhatsApp Number</button>
+                </div>
+                
                 <div class="menu-category-header">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                     <span>Categories</span>
@@ -810,6 +837,10 @@
                 </div>
                 <div class="sub-menu" id="categorySubMenu">
                     <div id="categoryList"></div>
+                    <button class="add-category-btn" onclick="openAddCategoryModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
+                        Add New Category
+                    </button>
                 </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
@@ -822,7 +853,6 @@
                     <span>View Payments</span>
                 </div>
                 
-                <!-- New Settings Menu Item -->
                 <div class="menu-item" data-tab="settings">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
                     <span>Settings</span>
@@ -849,7 +879,7 @@
                 <div class="home-preview">
                     <div class="preview-header">
                         <h3>🏠 Live Home Page Editor</h3>
-                        <p style="font-size:12px; color:#666;">Click on any text to edit it directly</p>
+                        <p style="font-size:12px; color:#666;">Click on any text to edit it directly - Changes affect the live homepage</p>
                     </div>
                     <div class="preview-frame" id="homePreview"></div>
                     <button class="save-all-btn" onclick="saveHomeChanges()">💾 Save All Home Page Changes</button>
@@ -871,19 +901,10 @@
                     <div class="table-header"><h3>Payment PINs (One Time Use - Expires 30 mins after use)</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
                         <thead>
-                            <tr>
-                                <th>PIN</th>
-                                <th>Bank Name</th>
-                                <th>Account Name</th>
-                                <th>Account Number</th>
-                                <th>Status</th>
-                                <th>Time Left / Used At</th>
-                                <th>Created</th>
-                                <th>Actions</th>
-                            </tr>
+                            <tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Time Left</th><th>Created</th><th>Actions</th></tr>
                         </thead>
                         <tbody id="pinsTableBody"></tbody>
-                    </table>
+                    \d
                 </div>
             </div>
             
@@ -891,43 +912,39 @@
                 <div class="table-container">
                     <div class="table-header"><h3>All Payments</h3></div>
                     <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Item</th>
-                                <th>Amount</th>
-                                <th>Payment Code</th>
-                                <th>Receipt & Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="paymentsTableBody">
-                            <tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>
-                        </tbody>
+                        <thead><tr><th>Date</th><th>Item</th><th>Amount</th><th>Payment Code</th><th>Receipt</th></tr></thead>
+                        <tbody id="paymentsTableBody"></tbody>
                     </table>
                 </div>
             </div>
             
-            <!-- Settings Tab -->
             <div id="settings" class="tab-content">
                 <div class="table-container">
                     <div class="table-header"><h3>⚙️ System Settings</h3></div>
-                    <div class="neco-form-group">
-                        <label>Admin WhatsApp Number (for support)</label>
-                        <input type="text" id="adminWhatsApp" placeholder="e.g., 2348123456789">
-                        <small>Include country code without + sign. This number will receive payment inquiries.</small>
-                    </div>
                     <div class="neco-form-group">
                         <label>PIN Expiry Time (minutes)</label>
                         <input type="number" id="pinExpiryMinutes" placeholder="30" value="30" min="5" max="120">
                         <small>How many minutes after "Proceed" click until PIN expires</small>
                     </div>
                     <div class="neco-form-group">
-                        <label>Bank Name (Default)</label>
+                        <label>Default Bank Name</label>
                         <input type="text" id="defaultBankName" placeholder="NECO Microfinance Bank">
                     </div>
                     <button class="add-btn" onclick="saveSettings()" style="width: 100%; margin-top: 20px;">💾 Save Settings</button>
                 </div>
             </div>
+        </div>
+    </div>
+    
+    <!-- Add Category Modal -->
+    <div id="addCategoryModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header"><h3>Add New Category</h3><button onclick="closeModal('addCategoryModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="neco-form-group"><label>Category Name</label><input type="text" id="newCategoryName" placeholder="e.g., WASSCE"></div>
+                <div class="neco-form-group"><label>Category Color</label><input type="color" id="newCategoryColor" value="#0CA60C"></div>
+            </div>
+            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('addCategoryModal')">Cancel</button><button class="btn-save" onclick="addNewCategory()">Add Category</button></div>
         </div>
     </div>
     
@@ -955,34 +972,16 @@
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
             <div class="modal-body">
-                <div class="neco-form-group">
-                    <label>PIN Code (Numbers Only) <span style="color:red;">*</span></label>
-                    <input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <button type="button" class="generate-pin-btn" onclick="generateRandomPin()">🎲 Generate Random PIN</button>
-                </div>
-                <div class="neco-form-group">
-                    <label>Bank Name <span style="color:red;">*</span></label>
-                    <input type="text" id="pinBankName" placeholder="e.g., First Bank of Nigeria">
-                </div>
-                <div class="neco-form-group">
-                    <label>Account Name <span style="color:red;">*</span></label>
-                    <input type="text" id="pinAccountName" placeholder="e.g., NECO Correction Services">
-                </div>
-                <div class="neco-form-group">
-                    <label>Account Number (10 digits only) <span style="color:red;">*</span></label>
-                    <input type="text" id="pinAccountNumber" placeholder="e.g., 2024567890" maxlength="10" pattern="[0-9]+" inputmode="numeric" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                    <small>Only numbers allowed. Must be exactly 10 digits.</small>
-                </div>
+                <div class="neco-form-group"><label>PIN Code</label><input type="text" id="pinCode" placeholder="Enter 4-6 digit PIN"><button type="button" class="generate-pin-btn" onclick="generateRandomPin()">Generate Random PIN</button></div>
+                <div class="neco-form-group"><label>Bank Name</label><input type="text" id="pinBankName" placeholder="e.g., First Bank"></div>
+                <div class="neco-form-group"><label>Account Name</label><input type="text" id="pinAccountName" placeholder="e.g., NECO"></div>
+                <div class="neco-form-group"><label>Account Number</label><input type="text" id="pinAccountNumber" placeholder="10 digits" maxlength="10"></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button>
-                <button class="btn-save" onclick="savePin()">Generate PIN</button>
-            </div>
+            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button><button class="btn-save" onclick="savePin()">Generate PIN</button></div>
         </div>
     </div>
 
     <script>
-        // ============ SUPABASE CONFIGURATION ============
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         let necoSupabase = null;
@@ -992,7 +991,6 @@
         let currentPaymentPins = [];
         let currentPayments = [];
         let selectedCategoryId = null;
-        let selectedCategoryName = null;
         let currentEditingItemId = null;
         let currentEditingKey = null;
         let pinExpiryInterval = null;
@@ -1027,9 +1025,7 @@
         };
         
         function initSupabase() {
-            if (!necoSupabase) {
-                necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            }
+            if (!necoSupabase) necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             return necoSupabase;
         }
         
@@ -1046,7 +1042,6 @@
         function doLogin() {
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
-            
             if (username === 'admin' && password === 'admin123') {
                 localStorage.setItem('adminLoggedIn', 'true');
                 document.getElementById('loginOverlay').style.display = 'none';
@@ -1056,11 +1051,12 @@
                 initDashboard();
                 startPinExpiryChecker();
                 loadSettings();
+                loadSidebarWhatsApp();
             } else {
                 const errorMsg = document.getElementById('errorMsg');
                 errorMsg.textContent = 'Invalid username or password';
                 errorMsg.style.display = 'block';
-                setTimeout(() => { errorMsg.style.display = 'none'; }, 3000);
+                setTimeout(() => errorMsg.style.display = 'none', 3000);
             }
         }
         
@@ -1078,21 +1074,21 @@
             initDashboard();
             startPinExpiryChecker();
             loadSettings();
+            loadSidebarWhatsApp();
         }
         
         async function startPinExpiryChecker() {
             if (pinExpiryInterval) clearInterval(pinExpiryInterval);
             pinExpiryInterval = setInterval(() => {
                 checkAndExpirePins();
-                renderPins(); // Re-render to update timers
-            }, 1000); // Update every second for live countdown
+                renderPins();
+            }, 1000);
         }
         
         async function checkAndExpirePins() {
             if (!necoSupabase || currentPaymentPins.length === 0) return;
             const now = new Date();
             let updated = false;
-            
             for (let i = 0; i < currentPaymentPins.length; i++) {
                 const pin = currentPaymentPins[i];
                 if (pin.status === 'used' && pin.used_at) {
@@ -1104,7 +1100,6 @@
                     }
                 }
             }
-            
             if (updated) {
                 const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
                 if (data) currentPaymentPins = data;
@@ -1113,25 +1108,19 @@
         }
         
         function getTimeRemaining(pin) {
-            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active', remaining: null };
-            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired', remaining: 0 };
+            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
+            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
             if (pin.status === 'used' && pin.used_at) {
                 const usedTime = new Date(pin.used_at);
                 const expiryFromUse = new Date(usedTime.getTime() + (settings.pinExpiryMinutes * 60 * 1000));
                 const now = new Date();
                 const remainingMs = expiryFromUse - now;
-                
-                if (remainingMs <= 0) {
-                    return { text: 'Expired', class: 'timer-expired', remaining: 0 };
-                }
-                
+                if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
                 const mins = Math.floor(remainingMs / (1000 * 60));
                 const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                const timeStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-                const warningClass = mins < 5 ? 'timer-warning' : 'timer-active';
-                return { text: `${timeStr} remaining`, class: warningClass, remaining: remainingMs };
+                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} remaining`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
             }
-            return { text: 'Unknown', class: 'timer-expired', remaining: 0 };
+            return { text: 'Unknown', class: 'timer-expired' };
         }
         
         async function loadAllData() {
@@ -1144,28 +1133,23 @@
                 currentPaymentPins = paymentPins || [];
                 const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
                 currentPayments = payments || [];
-                
                 try {
                     const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
                     if (home) {
-                        homeContent = {
-                            heroTitle: home.hero_title || homeContent.heroTitle,
-                            heroNote: home.hero_note || homeContent.heroNote,
-                            howItWorksTitle: home.how_it_works_title || homeContent.howItWorksTitle,
-                            footerNote: home.footer_note || homeContent.footerNote,
-                            steps: home.steps || homeContent.steps
-                        };
+                        homeContent.heroTitle = home.hero_title || homeContent.heroTitle;
+                        homeContent.heroNote = home.hero_note || homeContent.heroNote;
+                        homeContent.howItWorksTitle = home.how_it_works_title || homeContent.howItWorksTitle;
+                        homeContent.footerNote = home.footer_note || homeContent.footerNote;
+                        homeContent.steps = home.steps || homeContent.steps;
                     }
                 } catch (err) {}
-                
                 updateDashboard();
                 renderPins();
                 renderPayments();
                 loadHomePreview();
                 renderCategorySidebar();
-                
                 if (currentCategories.length > 0 && !selectedCategoryId) {
-                    selectCategory(currentCategories[0].name, currentCategories[0].id, currentCategories[0].color, false);
+                    selectCategory(currentCategories[0].name, currentCategories[0].id, false);
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1178,8 +1162,7 @@
         function updateDashboard() {
             document.getElementById('totalCategories').innerText = currentCategories.length;
             document.getElementById('totalItems').innerText = currentPaymentItems.length;
-            const activePins = currentPaymentPins.filter(p => p.status === "active").length;
-            document.getElementById('totalActivePins').innerText = activePins;
+            document.getElementById('totalActivePins').innerText = currentPaymentPins.filter(p => p.status === "active").length;
             document.getElementById('totalPayments').innerText = currentPayments.length;
         }
         
@@ -1190,7 +1173,7 @@
             for (let i = 0; i < currentCategories.length; i++) {
                 const cat = currentCategories[i];
                 const isActive = selectedCategoryId === cat.id;
-                html += `<li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, '${cat.color}', true, event)">
+                html += `<li class="${isActive ? 'active' : ''}" onclick="selectCategory('${cat.name}', ${cat.id}, false, event)">
                     <span class="category-color-dot" style="background: ${cat.color};"></span>
                     <span class="category-name">${escapeHtml(cat.name)}</span>
                 </li>`;
@@ -1198,66 +1181,65 @@
             container.innerHTML = html;
         }
         
-        function selectCategory(categoryName, categoryId, color, fromClick = false, clickEvent = null) {
+        async function addNewCategory() {
+            const name = document.getElementById('newCategoryName').value;
+            const color = document.getElementById('newCategoryColor').value;
+            if (!name) { alert('Please enter category name'); return; }
+            await necoSupabase.from('categories').insert({ name, color });
+            closeModal('addCategoryModal');
+            loadAllData();
+            triggerSync();
+        }
+        
+        function openAddCategoryModal() {
+            document.getElementById('newCategoryName').value = '';
+            document.getElementById('newCategoryColor').value = '#0CA60C';
+            document.getElementById('addCategoryModal').style.display = 'flex';
+        }
+        
+        function selectCategory(categoryName, categoryId, fromClick, clickEvent) {
             selectedCategoryId = categoryId;
-            selectedCategoryName = categoryName;
             const listItems = document.querySelectorAll('#categoryList li');
             listItems.forEach(item => item.classList.remove('active'));
-            if (fromClick && clickEvent && clickEvent.currentTarget) {
-                clickEvent.currentTarget.classList.add('active');
-            } else {
-                for (let i = 0; i < listItems.length; i++) {
-                    const nameSpan = listItems[i].querySelector('.category-name');
-                    if (nameSpan && nameSpan.innerText === categoryName) {
-                        listItems[i].classList.add('active');
-                        break;
-                    }
-                }
-            }
-            const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
-            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items (${itemCount} items)`;
-            document.getElementById('addItemBtn').style.display = 'block';
+            if (clickEvent && clickEvent.currentTarget) clickEvent.currentTarget.classList.add('active');
+            document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(categoryName)} Items`;
             renderItemsForCategory();
         }
         
         function renderItemsForCategory() {
             const container = document.getElementById('itemsListContainer');
             if (!selectedCategoryId) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">Select a category to view items</p>';
+                container.innerHTML = '<p style="text-align:center;padding:40px;">Select a category</p>';
                 return;
             }
             const items = currentPaymentItems.filter(item => item.category_id === selectedCategoryId);
             if (items.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #666; padding: 40px;">No items in this category. Click "+ Add Item" to add one.</p>';
+                container.innerHTML = '<p style="text-align:center;padding:40px;">No items. Click "+ Add Item"</p>';
                 return;
             }
-            let tableHtml = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
-            for (let i = 0; i < items.length; i++) {
-                const item = items[i];
-                const amountDisplay = item.amount ? `₦${item.amount.toLocaleString()}` : 'Enter amount';
-                tableHtml += `<tr><td>${escapeHtml(item.name)}</td><td>${amountDisplay}</td><td><button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button><button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button></td></tr>`;
+            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount</th><th>Actions</th></tr></thead><tbody>';
+            for (let item of items) {
+                html += `<tr><td>${escapeHtml(item.name)}</td><td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom'}</td>
+                <td><button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button><button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button></td></tr>`;
             }
-            tableHtml += '</tbody></table>';
-            container.innerHTML = tableHtml;
+            html += '</tbody></table>';
+            container.innerHTML = html;
         }
         
         function openAddItemModal() {
-            if (!selectedCategoryId) { alert('Please select a category first'); return; }
+            if (!selectedCategoryId) { alert('Select a category first'); return; }
             currentEditingItemId = null;
             document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
             document.getElementById('itemName').value = '';
             document.getElementById('itemAmount').value = '';
-            const categorySelect = document.getElementById('itemCategory');
-            if (categorySelect) {
-                categorySelect.innerHTML = '';
-                for (let i = 0; i < currentCategories.length; i++) {
-                    const cat = currentCategories[i];
-                    const option = document.createElement('option');
-                    option.value = cat.id;
-                    option.text = cat.name;
-                    if (cat.id === selectedCategoryId) option.selected = true;
-                    categorySelect.appendChild(option);
-                }
+            const catSelect = document.getElementById('itemCategory');
+            catSelect.innerHTML = '';
+            for (let cat of currentCategories) {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.text = cat.name;
+                if (cat.id === selectedCategoryId) option.selected = true;
+                catSelect.appendChild(option);
             }
             document.getElementById('itemModal').style.display = 'flex';
         }
@@ -1269,17 +1251,14 @@
             document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
             document.getElementById('itemName').value = item.name;
             document.getElementById('itemAmount').value = item.amount || '';
-            const categorySelect = document.getElementById('itemCategory');
-            if (categorySelect) {
-                categorySelect.innerHTML = '';
-                for (let i = 0; i < currentCategories.length; i++) {
-                    const cat = currentCategories[i];
-                    const option = document.createElement('option');
-                    option.value = cat.id;
-                    option.text = cat.name;
-                    if (cat.id === item.category_id) option.selected = true;
-                    categorySelect.appendChild(option);
-                }
+            const catSelect = document.getElementById('itemCategory');
+            catSelect.innerHTML = '';
+            for (let cat of currentCategories) {
+                const option = document.createElement('option');
+                option.value = cat.id;
+                option.text = cat.name;
+                if (cat.id === item.category_id) option.selected = true;
+                catSelect.appendChild(option);
             }
             document.getElementById('itemModal').style.display = 'flex';
         }
@@ -1288,34 +1267,27 @@
             const name = document.getElementById('itemName').value;
             const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
             const categoryId = parseInt(document.getElementById('itemCategory').value);
-            if (!name) { alert('Please fill item name'); return; }
+            if (!name) { alert('Enter item name'); return; }
             if (currentEditingItemId) {
                 await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
             } else {
                 await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
             }
-            const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
-            if (updatedItems) currentPaymentItems = updatedItems;
             closeModal('itemModal');
-            renderItemsForCategory();
-            updateDashboard();
+            loadAllData();
             triggerSync();
         }
         
         async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
                 await necoSupabase.from('payment_items').delete().eq('id', itemId);
-                const { data: updatedItems } = await necoSupabase.from('payment_items').select('*').order('id');
-                if (updatedItems) currentPaymentItems = updatedItems;
-                renderItemsForCategory();
-                updateDashboard();
+                loadAllData();
                 triggerSync();
             }
         }
         
         function generateRandomPin() {
-            const random = Math.floor(1000 + Math.random() * 9000).toString();
-            document.getElementById('pinCode').value = random;
+            document.getElementById('pinCode').value = Math.floor(1000 + Math.random() * 9000).toString();
         }
         
         function openPinModal() {
@@ -1331,45 +1303,20 @@
             const bankName = document.getElementById('pinBankName').value;
             const accountName = document.getElementById('pinAccountName').value;
             let accountNumber = document.getElementById('pinAccountNumber').value;
-            if (!/^\d+$/.test(pin)) { alert('PIN Code must contain only numbers'); return; }
-            if (pin.length < 4 || pin.length > 6) { alert('PIN Code must be 4-6 digits'); return; }
+            if (!pin || pin.length < 4) { alert('PIN must be 4-6 digits'); return; }
             accountNumber = accountNumber.replace(/[^0-9]/g, '');
-            if (accountNumber.length !== 10) { alert('Account Number must be exactly 10 digits (numbers only)'); return; }
-            if (!bankName || !accountName) { alert('Please fill all required fields'); return; }
-            const now = new Date();
-            try {
-                const { error } = await necoSupabase.from('payment_pins').insert({
-                    pin: pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active', created_at: now.toISOString()
-                });
-                if (error) { if (error.code === '23505') { alert('PIN already exists!'); } else { alert('Error: ' + error.message); } return; }
-                const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (updatedPins) currentPaymentPins = updatedPins;
-                closeModal('pinModal');
-                renderPins();
-                updateDashboard();
-                triggerSync();
-                alert(`✅ PIN ${pin} generated successfully!`);
-            } catch (err) { alert('Error creating PIN: ' + err.message); }
+            if (accountNumber.length !== 10) { alert('Account number must be 10 digits'); return; }
+            if (!bankName || !accountName) { alert('Fill all fields'); return; }
+            await necoSupabase.from('payment_pins').insert({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active' });
+            closeModal('pinModal');
+            loadAllData();
+            triggerSync();
         }
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
                 await necoSupabase.from('payment_pins').delete().eq('id', pinId);
-                const { data: updatedPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (updatedPins) currentPaymentPins = updatedPins;
-                renderPins();
-                updateDashboard();
-                triggerSync();
-            }
-        }
-        
-        async function deletePayment(paymentId) {
-            if (confirm('Delete this payment record?')) {
-                await necoSupabase.from('payments').delete().eq('id', paymentId);
-                const { data: updatedPayments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
-                if (updatedPayments) currentPayments = updatedPayments;
-                renderPayments();
-                updateDashboard();
+                loadAllData();
                 triggerSync();
             }
         }
@@ -1377,38 +1324,18 @@
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
-            let pinsHtml = '';
-            for (let i = 0; i < currentPaymentPins.length; i++) {
-                const pin = currentPaymentPins[i];
-                let statusClass = "badge-active", statusText = "Active";
-                let timeLeftHtml = '<span class="timer-active">Not used yet</span>';
-                
-                if (pin.status === "used") {
-                    statusClass = "badge-used"; 
-                    statusText = "Used";
-                    const timeRemaining = getTimeRemaining(pin);
-                    statusClass = timeRemaining.remaining <= 0 ? "badge-expired" : "badge-used";
-                    statusText = timeRemaining.remaining <= 0 ? "Expired" : "Used";
-                    timeLeftHtml = `<span class="timer-column ${timeRemaining.class}">⏱️ ${timeRemaining.text}</span>`;
-                } else if (pin.status === "expired") { 
-                    statusClass = "badge-expired"; 
-                    statusText = "Expired";
-                    timeLeftHtml = '<span class="timer-expired">❌ Expired</span>';
-                }
-                
-                pinsHtml += `<tr>
-                    <td><code>${escapeHtml(pin.pin)}</code></td>
-                    <td>${escapeHtml(pin.bank_name)}</td>
-                    <td>${escapeHtml(pin.account_name)}</td>
-                    <td>${escapeHtml(pin.account_number)}</td>
-                    <td><span class="badge ${statusClass}">${statusText}</span></td>
-                    <td>${timeLeftHtml}</td>
-                    <td>${new Date(pin.created_at).toLocaleString()}</td>
-                    <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
-                </tr>`;
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8">No PINs</td></tr>'; return; }
+            let html = '';
+            for (let pin of currentPaymentPins) {
+                const timeRemaining = getTimeRemaining(pin);
+                let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
+                html += `<tr><td><code>${pin.pin}</code></td><td>${escapeHtml(pin.bank_name)}</td><td>${escapeHtml(pin.account_name)}</td>
+                <td>${escapeHtml(pin.account_number)}</td><td><span class="badge ${statusClass}">${pin.status}</span></td>
+                <td><span class="${timeRemaining.class}">${timeRemaining.text}</span></td>
+                <td>${new Date(pin.created_at).toLocaleString()}</td>
+                <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td></tr>`;
             }
-            tbody.innerHTML = pinsHtml;
+            tbody.innerHTML = html;
         }
         
         function loadHomePreview() {
@@ -1502,106 +1429,82 @@
                 if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
                 else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
             }
-            try {
-                await necoSupabase.from('home_content').upsert({ 
-                    id: 1, hero_title: homeContent.heroTitle, hero_note: homeContent.heroNote,
-                    how_it_works_title: homeContent.howItWorksTitle, footer_note: homeContent.footerNote, steps: homeContent.steps
-                });
-                alert('✅ Changes saved to database!');
-            } catch (err) { alert('⚠️ Changes saved locally only.'); }
             closeModal('editTextModal');
             loadHomePreview();
-            triggerSync();
         }
         
         async function saveHomeChanges() {
             try {
-                await necoSupabase.from('home_content').upsert({ 
-                    id: 1, hero_title: homeContent.heroTitle, hero_note: homeContent.heroNote,
-                    how_it_works_title: homeContent.howItWorksTitle, footer_note: homeContent.footerNote, steps: homeContent.steps
-                });
-                alert('✅ All home page changes saved to database!');
+                await necoSupabase.from('home_content').upsert({ id: 1, hero_title: homeContent.heroTitle, hero_note: homeContent.heroNote, how_it_works_title: homeContent.howItWorksTitle, footer_note: homeContent.footerNote, steps: homeContent.steps });
+                alert('✅ Home page changes saved!');
                 triggerSync();
-            } catch (err) { alert('⚠️ Error saving to database: ' + err.message); }
+            } catch (err) { alert('Error: ' + err.message); }
         }
         
         function renderPayments() {
             const tbody = document.getElementById('paymentsTableBody');
             if (!tbody) return;
-            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>'; return; }
-            let paymentsHtml = '';
-            for (let i = 0; i < currentPayments.length; i++) {
-                const payment = currentPayments[i];
-                const hasReceipt = payment.receipt_url && payment.receipt_url !== 'null' && payment.receipt_url !== '';
-                paymentsHtml += `<tr>
-                    <td>${new Date(payment.created_at).toLocaleDateString()}</td>
-                    <td>${escapeHtml(payment.item_name)}</td>
-                    <td>₦${Number(payment.amount).toLocaleString()}</td>
-                    <td>${escapeHtml(payment.payment_code)}</td>
-                    <td class="payments-actions-cell">
-                        ${hasReceipt ? `<a href="${payment.receipt_url}" target="_blank" class="receipt-view" style="background:#054c0f; color:white; padding:5px 12px; border-radius:6px; text-decoration:none; display:inline-block;">👁️ View</a>
-                         <a href="${payment.receipt_url}" download class="receipt-download" style="background:#3b82f6; color:white; padding:5px 12px; border-radius:6px; text-decoration:none; display:inline-block;">⬇️ Download</a>` : '<span style="color:#999;">No receipt</span>'}
-                        <button class="delete-payment-btn" onclick="deletePayment('${payment.id}')" style="background:#ef4444; color:white; border:none; padding:5px 12px; border-radius:6px; cursor:pointer;">🗑️ Delete</button>
-                    </td>
-                </tr>`;
+            if (currentPayments.length === 0) { tbody.innerHTML = '<tr><td colspan="5">No payments</td></tr>'; return; }
+            let html = '';
+            for (let p of currentPayments) {
+                html += `<tr><td>${new Date(p.created_at).toLocaleDateString()}</td><td>${escapeHtml(p.item_name)}</td>
+                <td>₦${Number(p.amount).toLocaleString()}</td><td>${escapeHtml(p.payment_code)}</td>
+                <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank">View</a>` : 'No receipt'}</td></tr>`;
             }
-            tbody.innerHTML = paymentsHtml;
+            tbody.innerHTML = html;
         }
         
-        // Settings functions
         async function loadSettings() {
             try {
                 const { data } = await necoSupabase.from('settings').select('*').maybeSingle();
                 if (data) {
-                    settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
                     settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
                     settings.defaultBankName = data.default_bank_name || 'NECO Microfinance Bank';
-                    
-                    document.getElementById('adminWhatsApp').value = settings.adminWhatsApp;
+                    settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
                     document.getElementById('pinExpiryMinutes').value = settings.pinExpiryMinutes;
                     document.getElementById('defaultBankName').value = settings.defaultBankName;
-                } else {
-                    // Create default settings
-                    await necoSupabase.from('settings').insert({
-                        admin_whatsapp: settings.adminWhatsApp,
-                        pin_expiry_minutes: settings.pinExpiryMinutes,
-                        default_bank_name: settings.defaultBankName
-                    });
                 }
-            } catch (err) {
-                console.log('Settings not available yet');
-            }
+            } catch (err) { console.log('Settings not available'); }
         }
         
         async function saveSettings() {
-            const whatsapp = document.getElementById('adminWhatsApp').value;
             const expiry = parseInt(document.getElementById('pinExpiryMinutes').value);
             const bankName = document.getElementById('defaultBankName').value;
-            
-            if (!whatsapp) { alert('Please enter WhatsApp number'); return; }
-            if (expiry < 5 || expiry > 120) { alert('Expiry time must be between 5 and 120 minutes'); return; }
-            
-            settings.adminWhatsApp = whatsapp;
+            if (expiry < 5 || expiry > 120) { alert('Expiry must be between 5 and 120'); return; }
             settings.pinExpiryMinutes = expiry;
             settings.defaultBankName = bankName;
-            
             try {
-                await necoSupabase.from('settings').upsert({
-                    id: 1,
-                    admin_whatsapp: whatsapp,
-                    pin_expiry_minutes: expiry,
-                    default_bank_name: bankName,
-                    updated_at: new Date().toISOString()
-                });
-                alert('✅ Settings saved successfully!');
+                await necoSupabase.from('settings').upsert({ id: 1, pin_expiry_minutes: expiry, default_bank_name: bankName, admin_whatsapp: settings.adminWhatsApp, updated_at: new Date().toISOString() });
+                alert('✅ Settings saved!');
                 triggerSync();
-            } catch (err) {
-                alert('Error saving settings: ' + err.message);
-            }
+            } catch (err) { alert('Error: ' + err.message); }
+        }
+        
+        async function loadSidebarWhatsApp() {
+            try {
+                const { data } = await necoSupabase.from('settings').select('admin_whatsapp').maybeSingle();
+                if (data && data.admin_whatsapp) {
+                    document.getElementById('sidebarWhatsApp').value = data.admin_whatsapp;
+                    settings.adminWhatsApp = data.admin_whatsapp;
+                } else {
+                    document.getElementById('sidebarWhatsApp').value = '2348123456789';
+                }
+            } catch (err) {}
+        }
+        
+        async function saveSidebarWhatsApp() {
+            const whatsapp = document.getElementById('sidebarWhatsApp').value;
+            if (!whatsapp) { alert('Enter WhatsApp number'); return; }
+            settings.adminWhatsApp = whatsapp;
+            try {
+                await necoSupabase.from('settings').upsert({ id: 1, admin_whatsapp: whatsapp, pin_expiry_minutes: settings.pinExpiryMinutes, default_bank_name: settings.defaultBankName, updated_at: new Date().toISOString() });
+                alert('✅ WhatsApp number saved!');
+                triggerSync();
+            } catch (err) { alert('Error: ' + err.message); }
         }
         
         function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); const overlay = document.getElementById('mobileOverlay'); sidebar.classList.toggle('open'); if (sidebar.classList.contains('open')) overlay.classList.add('active'); else overlay.classList.remove('active'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
         function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
         
         function showTab(tabId, title) {
@@ -1613,7 +1516,6 @@
             if (tabId === 'home-editor') loadHomePreview();
             if (tabId === 'dashboard') updateDashboard();
             if (tabId === 'payment-editor') renderItemsForCategory();
-            if (tabId === 'settings') loadSettings();
             closeSidebar();
         }
         
