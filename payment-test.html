@@ -65,186 +65,137 @@
 </div>
 
 <script>
-    // Supabase configuration
-    const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    
-    let categories = [];
-    let paymentItems = [];
-    let currentCategoryId = null;
-    
-    // Initialize the page
-    async function init() {
-        console.log('🚀 Initializing payment portal...');
-        await loadCategories();
-        await loadPaymentItems();
+    // Use an IIFE to avoid variable conflicts
+    (function() {
+        // Supabase configuration
+        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+        const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        if (categories.length > 0 && paymentItems.length > 0) {
-            renderCategories();
-            currentCategoryId = categories[0].id;
-            renderPaymentItems();
-            setupSearch();
-        }
-    }
-    
-    // Load categories from Supabase
-    async function loadCategories() {
-        try {
-            console.log('📁 Loading categories...');
-            const { data, error } = await supabase
-                .from('categories')
-                .select('*')
-                .order('id');
-            
-            if (error) throw error;
-            
-            categories = data || [];
-            console.log(`✅ Loaded ${categories.length} categories:`, categories.map(c => c.name));
-            
-            if (categories.length === 0) {
-                document.getElementById('categoriesContainer').innerHTML = 
-                    '<div class="error">⚠️ No categories found. Please check database.</div>';
-            }
-        } catch (error) {
-            console.error('❌ Error loading categories:', error);
-            document.getElementById('categoriesContainer').innerHTML = 
-                `<div class="error">Error: ${error.message}</div>`;
-        }
-    }
-    
-    // Load payment items from Supabase
-    async function loadPaymentItems() {
-        try {
-            console.log('📦 Loading payment items...');
-            const { data, error } = await supabase
-                .from('payment_items')
-                .select('*')
-                .order('id');
-            
-            if (error) throw error;
-            
-            paymentItems = data || [];
-            console.log(`✅ Loaded ${paymentItems.length} payment items`);
-            
-            if (paymentItems.length === 0) {
-                document.getElementById('paymentGrid').innerHTML = 
-                    '<div class="error">⚠️ No payment items found. Please check database.</div>';
-            }
-        } catch (error) {
-            console.error('❌ Error loading payment items:', error);
-            document.getElementById('paymentGrid').innerHTML = 
-                `<div class="error">Error: ${error.message}</div>`;
-        }
-    }
-    
-    // Render category buttons
-    function renderCategories() {
-        const container = document.getElementById('categoriesContainer');
+        let categories = [];
+        let paymentItems = [];
+        let currentCategoryId = null;
         
-        container.innerHTML = categories.map(cat => `
-            <button class="category-btn" data-id="${cat.id}" data-color="${cat.color}">
-                <span class="category-color" style="background: ${cat.color};"></span>
-                ${escapeHtml(cat.name)}
-            </button>
-        `).join('');
-        
-        // Add click event listeners
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                // Update active state
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                
-                // Update current category
-                currentCategoryId = parseInt(btn.dataset.id);
+        // Initialize the page
+        async function init() {
+            console.log('🚀 Initializing payment portal...');
+            await loadCategories();
+            await loadPaymentItems();
+            
+            if (categories.length > 0 && paymentItems.length > 0) {
+                renderCategories();
+                currentCategoryId = categories[0].id;
                 renderPaymentItems();
+                setupSearch();
+            }
+        }
+        
+        // Load categories from Supabase
+        async function loadCategories() {
+            try {
+                console.log('📁 Loading categories...');
+                const { data, error } = await _supabase
+                    .from('categories')
+                    .select('*')
+                    .order('id');
                 
-                // Clear search
-                document.getElementById('searchInput').value = '';
+                if (error) throw error;
+                
+                categories = data || [];
+                console.log(`✅ Loaded ${categories.length} categories:`, categories.map(c => c.name));
+                
+                if (categories.length === 0) {
+                    document.getElementById('categoriesContainer').innerHTML = 
+                        '<div class="error">⚠️ No categories found. Please check database.</div>';
+                }
+            } catch (error) {
+                console.error('❌ Error loading categories:', error);
+                document.getElementById('categoriesContainer').innerHTML = 
+                    `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Load payment items from Supabase
+        async function loadPaymentItems() {
+            try {
+                console.log('📦 Loading payment items...');
+                const { data, error } = await _supabase
+                    .from('payment_items')
+                    .select('*')
+                    .order('id');
+                
+                if (error) throw error;
+                
+                paymentItems = data || [];
+                console.log(`✅ Loaded ${paymentItems.length} payment items`);
+                
+                if (paymentItems.length === 0) {
+                    document.getElementById('paymentGrid').innerHTML = 
+                        '<div class="error">⚠️ No payment items found. Please check database.</div>';
+                }
+            } catch (error) {
+                console.error('❌ Error loading payment items:', error);
+                document.getElementById('paymentGrid').innerHTML = 
+                    `<div class="error">Error: ${error.message}</div>`;
+            }
+        }
+        
+        // Render category buttons
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            
+            container.innerHTML = categories.map(cat => `
+                <button class="category-btn" data-id="${cat.id}" data-color="${cat.color}">
+                    <span class="category-color" style="background: ${cat.color};"></span>
+                    ${escapeHtml(cat.name)}
+                </button>
+            `).join('');
+            
+            // Add click event listeners
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    // Update active state
+                    document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    
+                    // Update current category
+                    currentCategoryId = parseInt(btn.dataset.id);
+                    renderPaymentItems();
+                    
+                    // Clear search
+                    document.getElementById('searchInput').value = '';
+                });
             });
-        });
-        
-        // Activate first category
-        if (categories.length > 0) {
-            const firstBtn = document.querySelector('.category-btn');
-            if (firstBtn) firstBtn.classList.add('active');
-        }
-    }
-    
-    // Render payment items for selected category
-    function renderPaymentItems() {
-        const grid = document.getElementById('paymentGrid');
-        
-        if (!currentCategoryId) {
-            grid.innerHTML = '<div class="error">Please select a category</div>';
-            return;
-        }
-        
-        const currentCategory = categories.find(c => c.id === currentCategoryId);
-        if (!currentCategory) return;
-        
-        const items = paymentItems.filter(item => item.category_id === currentCategoryId);
-        
-        console.log(`🖼️ Rendering ${items.length} items for category: ${currentCategory.name}`);
-        
-        if (items.length === 0) {
-            grid.innerHTML = `<div class="error">No payment items found in ${escapeHtml(currentCategory.name)} category</div>`;
-            return;
-        }
-        
-        grid.innerHTML = items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
             
-            return `
-                <div class="payment-card">
-                    <div class="card-top" style="background: ${currentCategory.color};"></div>
-                    <div class="card-body">
-                        <div class="card-title">${escapeHtml(item.name)}</div>
-                        <div class="card-footer">
-                            <button class="pay-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
-                                    onclick="makePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
-                                Make payment
-                            </button>
-                            <div style="text-align: right;">
-                                <div class="amount-label">${amountLabel}</div>
-                                <div class="amount-value">${amountDisplay}</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }).join('');
-    }
-    
-    // Search functionality
-    function setupSearch() {
-        const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
+            // Activate first category
+            if (categories.length > 0) {
+                const firstBtn = document.querySelector('.category-btn');
+                if (firstBtn) firstBtn.classList.add('active');
+            }
+        }
+        
+        // Render payment items for selected category
+        function renderPaymentItems() {
+            const grid = document.getElementById('paymentGrid');
             
-            if (!currentCategoryId) return;
+            if (!currentCategoryId) {
+                grid.innerHTML = '<div class="error">Please select a category</div>';
+                return;
+            }
             
             const currentCategory = categories.find(c => c.id === currentCategoryId);
             if (!currentCategory) return;
             
-            let filteredItems = paymentItems.filter(item => item.category_id === currentCategoryId);
+            const items = paymentItems.filter(item => item.category_id === currentCategoryId);
             
-            if (searchTerm) {
-                filteredItems = filteredItems.filter(item => 
-                    item.name.toLowerCase().includes(searchTerm)
-                );
-            }
+            console.log(`🖼️ Rendering ${items.length} items for category: ${currentCategory.name}`);
             
-            const grid = document.getElementById('paymentGrid');
-            
-            if (filteredItems.length === 0) {
-                grid.innerHTML = `<div class="error">No matching payment items found in ${escapeHtml(currentCategory.name)}</div>`;
+            if (items.length === 0) {
+                grid.innerHTML = `<div class="error">No payment items found in ${escapeHtml(currentCategory.name)} category</div>`;
                 return;
             }
             
-            grid.innerHTML = filteredItems.map(item => {
+            grid.innerHTML = items.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
                 
@@ -255,7 +206,7 @@
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
                                 <button class="pay-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
-                                        onclick="makePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
+                                        onclick="window.handlePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
                                     Make payment
                                 </button>
                                 <div style="text-align: right;">
@@ -267,27 +218,79 @@
                     </div>
                 `;
             }).join('');
-        });
-    }
-    
-    // Payment handler
-    window.makePayment = function(item, color) {
-        alert(`🔵 Payment for: ${item.name}\n💰 Amount: ${item.amount ? 'NGN ' + item.amount.toLocaleString() : 'Custom amount'}\n\nFull payment integration will be added here.`);
-    }
-    
-    // Helper function
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-    
-    // Start the app
-    init();
+        }
+        
+        // Search functionality
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', (e) => {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                if (!currentCategoryId) return;
+                
+                const currentCategory = categories.find(c => c.id === currentCategoryId);
+                if (!currentCategory) return;
+                
+                let filteredItems = paymentItems.filter(item => item.category_id === currentCategoryId);
+                
+                if (searchTerm) {
+                    filteredItems = filteredItems.filter(item => 
+                        item.name.toLowerCase().includes(searchTerm)
+                    );
+                }
+                
+                const grid = document.getElementById('paymentGrid');
+                
+                if (filteredItems.length === 0) {
+                    grid.innerHTML = `<div class="error">No matching payment items found in ${escapeHtml(currentCategory.name)}</div>`;
+                    return;
+                }
+                
+                grid.innerHTML = filteredItems.map(item => {
+                    const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+                    const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+                    
+                    return `
+                        <div class="payment-card">
+                            <div class="card-top" style="background: ${currentCategory.color};"></div>
+                            <div class="card-body">
+                                <div class="card-title">${escapeHtml(item.name)}</div>
+                                <div class="card-footer">
+                                    <button class="pay-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
+                                            onclick="window.handlePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
+                                        Make payment
+                                    </button>
+                                    <div style="text-align: right;">
+                                        <div class="amount-label">${amountLabel}</div>
+                                        <div class="amount-value">${amountDisplay}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            });
+        }
+        
+        // Global payment handler
+        window.handlePayment = function(item, color) {
+            alert(`🔵 Payment for: ${item.name}\n💰 Amount: ${item.amount ? 'NGN ' + item.amount.toLocaleString() : 'Custom amount'}\n\nFull payment integration will be added here.`);
+        }
+        
+        // Helper function
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str).replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+        
+        // Start the app
+        init();
+    })();
 </script>
 </body>
 </html>
