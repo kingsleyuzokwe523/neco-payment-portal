@@ -44,15 +44,16 @@
             overflow: hidden;
             box-shadow: 0 1px 3px rgba(0,0,0,0.1);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            background: white;
         }
         .payment-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .card-top-bar { height: 3px; width: 100%; }
+        .card-top-bar { height: 4px; width: 100%; }
         .card-content {
             background: #ECFAF3;
-            padding: 1.5rem 1.25rem;
+            padding: 1.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -60,7 +61,7 @@
         }
         .card-title {
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             color: #111827;
             margin-bottom: 1rem;
             line-height: 1.4;
@@ -78,26 +79,214 @@
             font-size: 0.75rem;
             border: 1px solid;
             border-radius: 0.5rem;
-            padding: 0.7rem 1.2rem;
-            font-weight: 500;
+            padding: 0.5rem 1rem;
+            font-weight: 600;
             transition: all 0.2s ease;
             background: transparent;
             cursor: pointer;
         }
-        .make-payment-btn:hover { transform: scale(1.02); }
+        .make-payment-btn:hover { transform: scale(1.02); background: rgba(0,0,0,0.03); }
         .fixed-amount-label { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.25rem; }
-        .fixed-amount-value { font-size: 0.875rem; font-weight: 600; color: #222222; }
+        .fixed-amount-value { font-size: 0.875rem; font-weight: 700; color: #054c0f; }
         
-        #accountModal .account-box {
-            max-width: 400px;
-            width: 100%;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            height: auto;
-            max-height: 500px;
-            overflow-y: auto;
+        .category-btn {
+            transition: all 0.2s ease;
+            cursor: pointer;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            background-color: #EBEBEB;
+            color: #747474;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
         }
+        .category-btn.active {
+            background-color: white !important;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            color: #054c0f;
+        }
+        
+        /* Modal Styles */
+        .modal { position: fixed; inset: 0; z-index: 50; display: none; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .modal-container { position: fixed; inset: 0; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content { background: white; border-radius: 0.75rem; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        
+        /* Account Modal */
+        .account-box { max-width: 400px; width: 100%; background: white; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .account-inner { padding: 20px 24px; }
+        .logo-row { text-align: center; margin-bottom: 20px; }
+        .logo-row img { height: 50px; display: inline-block; }
+        .details-row { display: flex; align-items: baseline; padding: 12px 0; gap: 16px; }
+        .details-label { font-size: 16px; color: #6b7280; font-weight: 500; min-width: 115px; }
+        .details-value { font-size: 16px; color: #111827; font-weight: 600; flex: 1; word-break: break-word; }
+        .details-row-copy { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; gap: 16px; }
+        .details-label-copy { font-size: 14px; color: #6b7280; font-weight: 500; min-width: 115px; }
+        .details-value-copy { font-size: 14px; color: #111827; font-weight: 600; flex: 1; display: flex; align-items: center; gap: 8px; }
+        .warning-timer-row { display: flex; justify-content: space-between; align-items: center; margin: 20px 0 16px 0; gap: 15px; }
+        .warning-text-small { color: #dc2626; font-size: 15px; font-weight: 500; }
+        .timer-box-small { background: white; border: 1.5px solid #16a34a; border-radius: 4px; padding: 2px 8px; display: inline-flex; align-items: center; justify-content: center; }
+        .timer-small { font-size: 11px; font-weight: 600; color: #dc2626; font-family: monospace; }
+        .upload-area-small { background: #f9fafb; border: 1.5px dashed #d1d5db; border-radius: 8px; padding: 10px 12px; text-align: center; cursor: pointer; margin: 16px 0 12px 0; }
+        .upload-area-small:hover { background: #f3f4f6; border-color: #16a34a; }
+        .upload-icon-small { width: 20px; height: 22px; margin: 0 auto 4px; color: #9ca3af; }
+        .upload-text-small { font-size: 12px; color: #6b7280; font-weight: 500; }
+        .file-name-small { font-size: 11px; color: #16a34a; text-align: center; margin-top: 6px; }
+        .button-group { display: flex; gap: 16px; margin-top: 20px; justify-content: center; }
+        .btn-cancel-account { background: white; border: 1px solid #054c0f; color: #054c0f; padding: 10px 28px; font-size: 14px; font-weight: 500; border-radius: 8px; cursor: pointer; }
+        .btn-cancel-account:hover { background: #f0fdf4; }
+        .btn-confirm { background: #054c0f; border: none; color: white; padding: 10px 28px; font-size: 14px; font-weight: 600; border-radius: 8px; cursor: pointer; }
+        .btn-confirm:hover { background: #009515; }
+        
+        /* Invoice Modal */
+        .invoice-box { max-width: 400px; width: 100%; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .invoice-inner { padding: 24px; }
+        .invoice-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
+        .invoice-buttons { display: flex; gap: 12px; margin-top: 24px; }
+        .invoice-buttons button { flex: 1; padding: 10px 0; font-size: 14px; border-radius: 6px; font-weight: 500; cursor: pointer; }
+        .btn-cancel { background-color: white; border: 1px solid #d1d5db; color: #374151; }
+        .btn-cancel:hover { background-color: #f9fafb; }
+        .btn-proceed { background-color: #054c0f; border: none; color: white; }
+        .btn-proceed:hover { background-color: #009515; }
+        
+        /* Loading Modal */
+        .loader { width: 50px; height: 50px; border: 4px solid #e5e7eb; border-top: 4px solid #16a34a; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .error-text { color: #dc2626; font-size: 12px; margin-top: 4px; display: none; }
+        .copy-btn { background: none; border: none; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; padding: 4px; border-radius: 4px; }
+        .copy-btn:hover { background: #e5e7eb; }
+        .copy-btn svg { width: 16px; height: 16px; color: #6b7280; }
+        .copy-btn:hover svg { color: #054c0f; }
+        
+        .copy-notification-show { animation: slideUpFade 2s ease forwards; }
+        @keyframes slideUpFade {
+            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
+        }
+        
+        .fixed { position: fixed; }
+        .absolute { position: absolute; }
+        .relative { position: relative; }
+        .sticky { position: sticky; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        .top-0 { top: 0; }
+        .right-0 { right: 0; }
+        .z-10 { z-index: 10; }
+        .z-30 { z-index: 30; }
+        .z-50 { z-index: 50; }
+        .mt-20 { margin-top: 5rem; }
+        .mt-10 { margin-top: 2.5rem; }
+        .mt-5 { margin-top: 1.25rem; }
+        .mt-2 { margin-top: .5rem; }
+        .mt-1 { margin-top: .25rem; }
+        .mt-4 { margin-top: 1rem; }
+        .block { display: block; }
+        .flex { display: flex; }
+        .grid { display: grid; }
+        .hidden { display: none; }
+        .inline-flex { display: inline-flex; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .justify-center { justify-content: center; }
+        .justify-end { justify-content: flex-end; }
+        .gap-3 { gap: .75rem; }
+        .gap-5 { gap: 1.25rem; }
+        .gap-2 { gap: .5rem; }
+        .rounded { border-radius: .25rem; }
+        .rounded-md { border-radius: .375rem; }
+        .rounded-full { border-radius: 9999px; }
+        .bg-white { background-color: #fff; }
+        .bg-\[\#EBEBEB\] { background-color: #ebebeb; }
+        .bg-\[\#F2F2F2\] { background-color: #f2f2f2; }
+        .bg-primary-700 { background-color: #054c0f; }
+        .bg-black\/50 { background-color: rgba(0,0,0,0.5); }
+        .backdrop-blur-sm { backdrop-filter: blur(4px); }
+        .p-3 { padding: .75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-3 { padding-left: .75rem; padding-right: .75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+        .py-2\.5 { padding-top: .625rem; padding-bottom: .625rem; }
+        .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
+        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
+        .pl-6 { padding-left: 1.5rem; }
+        .pr-3 { padding-right: .75rem; }
+        .w-full { width: 100%; }
+        .w-2 { width: .5rem; }
+        .w-5 { width: 1.25rem; }
+        .w-6 { width: 1.5rem; }
+        .w-8 { width: 2rem; }
+        .w-14 { width: 3.5rem; }
+        .h-2 { height: .5rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-14 { height: 3.5rem; }
+        .max-w-xl { max-width: 36rem; }
+        .cursor-pointer { cursor: pointer; }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .col-span-2 { grid-column: span 2 / span 2; }
+        .flex-col { flex-direction: column; }
+        .flex-wrap { flex-wrap: wrap; }
+        .text-left { text-align: left; }
+        .text-center { text-align: center; }
+        .text-sm { font-size: .875rem; line-height: 1.25rem; }
+        .text-base { font-size: 1rem; line-height: 1.5rem; }
+        .text-xs { font-size: .75rem; line-height: 1rem; }
+        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+        .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
+        .tracking-tight { letter-spacing: -.025em; }
+        .text-white { color: #fff; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-red-600 { color: #dc2626; }
+        .text-primary-600 { color: #009515; }
+        .text-text-subtitle { color: #8f8f8f; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
+        .hover\:bg-primary-600:hover { background-color: #009515; }
+        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
+        .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
+        .disabled\:opacity-50:disabled { opacity: 0.5; }
+        .pointer-events-none { pointer-events: none; }
+        
+        @media (min-width: 768px) {
+            .md\:mt-0 { margin-top: 0; }
+            .md\:w-3\/5 { width: 60%; }
+            .md\:w-1\/3 { width: 33.333333%; }
+            .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; }
+            .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+            .md\:leading-tight { line-height: 1.25; }
+        }
+        @media (min-width: 1024px) {
+            .lg\:flex { display: flex; }
+            .lg\:hidden { display: none; }
+            .lg\:items-center { align-items: center; }
+            .lg\:gap-8 { gap: 2rem; }
+            .lg\:text-xs { font-size: .75rem; }
+            .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        }
+        @media (min-width: 1280px) {
+            .xl\:text-sm { font-size: .875rem; }
+            .xl\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+        }
+        @font-face { font-family: 'CircularStd'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf'); }
+        @font-face { font-family: 'CircularStdBold'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf'); }
+        body { font-family: 'CircularStd', system-ui, sans-serif; }
+        .modal-scroll-content { max-height: 90vh; overflow-y: auto; }
+        
         #mobileMenu {
             position: fixed;
             top: 70px;
@@ -118,413 +307,68 @@
             text-align: center;
         }
         #mobileMenu a:hover { background-color: #f0fdf4; color: #054c0f; }
-        #accountModal .account-inner { padding: 20px 24px; }
-        #accountModal .logo-row { text-align: center; margin-bottom: 20px; }
-        #accountModal .logo-row img { height: 50px; display: inline-block; }
-        #accountModal .details-row {
-            display: flex;
-            align-items: baseline;
-            padding: 12px 0;
-            gap: 16px;
-        }
-        #accountModal .details-label {
-            font-size: 16px;
-            color: #6b7280;
-            font-weight: 500;
-            min-width: 115px;
-        }
-        #accountModal .details-value {
-            font-size: 16px;
-            color: #111827;
-            font-weight: 600;
-            flex: 1;
-            word-break: break-word;
-        }
-        #accountModal .warning-timer-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 20px 0 16px 0;
-            gap: 15px;
-        }
-        #accountModal .warning-text-small {
-            color: #dc2626;
-            font-size: 15px;
-            font-weight: 500;
-        }
-        #accountModal .timer-box-small {
-            background: white;
-            border: 1.5px solid #16a34a;
-            border-radius: 4px;
-            padding: 2px 8px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #accountModal .timer-small {
-            font-size: 11px;
-            font-weight: 600;
-            color: #dc2626;
-            font-family: monospace;
-        }
-        #accountModal .upload-area-small {
-            background: #f9fafb;
-            border: 1.5px dashed #d1d5db;
-            border-radius: 8px;
-            padding: 10px 12px;
-            text-align: center;
-            cursor: pointer;
-            margin: 16px 0 12px 0;
-        }
-        #accountModal .upload-area-small:hover { background: #f3f4f6; border-color: #16a34a; }
-        #accountModal .upload-icon-small { width: 20px; height: 22px; margin: 0 auto 4px; color: #9ca3af; }
-        #accountModal .upload-text-small { font-size: 12px; color: #6b7280; font-weight: 500; }
-        #accountModal .file-name-small { font-size: 11px; color: #16a34a; text-align: center; margin-top: 6px; }
-        #accountModal .button-group { display: flex; gap: 16px; margin-top: 20px; justify-content: center; }
-        #accountModal .btn-cancel-account {
-            background: white;
-            border: 1px solid #054c0f;
-            color: #054c0f;
-            padding: 10px 28px;
-            font-size: 14px;
-            font-weight: 500;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        #accountModal .btn-cancel-account:hover { background: #f0fdf4; }
-        #accountModal .btn-confirm {
-            background: #054c0f;
-            border: none;
-            color: white;
-            padding: 10px 28px;
-            font-size: 14px;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        #accountModal .btn-confirm:hover { background: #009515; }
-        
-        .fixed { position: fixed; }
-        .absolute { position: absolute; }
-        .relative { position: relative; }
-        .sticky { position: sticky; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .top-0 { top: 0; }
-        .z-10 { z-index: 10; }
-        .z-30 { z-index: 30; }
-        .z-40 { z-index: 40; }
-        .z-50 { z-index: 50; }
-        .mt-20 { margin-top: 5rem; }
-        .mt-10 { margin-top: 2.5rem; }
-        .mt-5 { margin-top: 1.25rem; }
-        .mt-2 { margin-top: .5rem; }
-        .mt-1 { margin-top: .25rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-8 { margin-top: 2rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .block { display: block; }
-        .flex { display: flex; }
-        .grid { display: grid; }
-        .hidden { display: none; }
-        .inline-flex { display: inline-flex; }
-        .h-full { height: 100%; }
-        .h-14 { height: 3.5rem; }
-        .h-8 { height: 2rem; }
-        .h-5 { height: 1.25rem; }
-        .h-4 { height: 1rem; }
-        .w-full { width: 100%; }
-        .w-14 { width: 3.5rem; }
-        .w-8 { width: 2rem; }
-        .w-5 { width: 1.25rem; }
-        .w-6 { width: 1.5rem; }
-        .max-w-xl { max-width: 36rem; }
-        .cursor-pointer { cursor: pointer; }
-        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .col-span-2 { grid-column: span 2 / span 2; }
-        .flex-col { flex-direction: column; }
-        .flex-wrap { flex-wrap: wrap; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-center { justify-content: center; }
-        .justify-end { justify-content: flex-end; }
-        .gap-10 { gap: 2.5rem; }
-        .gap-3 { gap: .75rem; }
-        .gap-2 { gap: .5rem; }
-        .gap-5 { gap: 1.25rem; }
-        .rounded { border-radius: .25rem; }
-        .rounded-md { border-radius: .375rem; }
-        .rounded-full { border-radius: 9999px; }
-        .border { border-width: 1px; }
-        .border-b-2 { border-bottom-width: 2px; }
-        .border-dashed { border-style: dashed; }
-        .border-gray-300 { border-color: #d1d5db; }
-        .bg-white { background-color: #fff; }
-        .bg-\[\#0CA60C\] { background-color: #0ca60c; }
-        .bg-\[\#145596\] { background-color: #145596; }
-        .bg-\[\#642D56\] { background-color: #642d56; }
-        .bg-\[\#1887EB\] { background-color: #1887eb; }
-        .bg-\[\#24809C\] { background-color: #24809c; }
-        .bg-\[\#36454F\] { background-color: #36454f; }
-        .bg-\[\#EBEBEB\] { background-color: #ebebeb; }
-        .bg-\[\#F2F2F2\] { background-color: #f2f2f2; }
-        .bg-\[\#ECFAF3\] { background-color: #ecfaf3; }
-        .bg-gray-200 { background-color: #e5e7eb; }
-        .bg-gray-100 { background-color: #f3f4f6; }
-        .bg-black { background-color: #000; }
-        .bg-black\/50 { background-color: rgba(0,0,0,0.5); }
-        .bg-green-600 { background-color: #16a34a; }
-        .bg-primary-700 { background-color: #054c0f; }
-        .bg-opacity-25 { background-color: rgba(0,0,0,0.25); }
-        .backdrop-blur-sm { backdrop-filter: blur(4px); }
-        .p-6 { padding: 1.5rem; }
-        .p-3 { padding: .75rem; }
-        .p-5 { padding: 1.25rem; }
-        .p-4 { padding: 1rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .px-3 { padding-left: .75rem; padding-right: .75rem; }
-        .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
-        .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
-        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-        .py-2\.5 { padding-top: .625rem; padding-bottom: .625rem; }
-        .pr-9 { padding-right: 2.25rem; }
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
-        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-        .text-base { font-size: 1rem; line-height: 1.5rem; }
-        .text-xs { font-size: .75rem; line-height: 1rem; }
-        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-        .text-sm { font-size: .875rem; line-height: 1.25rem; }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .font-medium { font-weight: 500; }
-        .tracking-tight { letter-spacing: -.025em; }
-        .text-white { color: #fff; }
-        .text-\[\#747474\] { color: #747474; }
-        .text-\[\#222222\] { color: #222; }
-        .text-black { color: #000; }
-        .text-gray-400 { color: #9ca3af; }
-        .text-gray-600 { color: #4b5563; }
-        .text-gray-700 { color: #374151; }
-        .text-primary-600 { color: #009515; }
-        .text-text-subtitle { color: #8f8f8f; }
-        .text-red-600 { color: #dc2626; }
-        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
-        .transition-all { transition-property: all; transition-duration: .15s; }
-        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
-        .hover\:bg-primary-600:hover { background-color: #009515; }
-        .hover\:bg-green-500:hover { background-color: #22c55e; }
-        .focus\:border-primary-500:focus { border-color: #378b3d; }
-        .focus\:ring-1:focus { box-shadow: 0 0 0 1px #378b3d; }
-        .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
-        .disabled\:opacity-50:disabled { opacity: 0.5; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
-        
-        #invoiceModal .invoice-box {
-            max-width: 400px;
-            width: 100%;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        #invoiceModal .invoice-inner { padding: 24px; }
-        #invoiceModal .invoice-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        #invoiceModal .invoice-buttons { display: flex; gap: 12px; margin-top: 24px; }
-        #invoiceModal .invoice-buttons button {
-            flex: 1;
-            padding: 10px 0;
-            font-size: 14px;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        #invoiceModal .btn-cancel {
-            background-color: white;
-            border: 1px solid #d1d5db;
-            color: #374151;
-        }
-        #invoiceModal .btn-cancel:hover { background-color: #f9fafb; }
-        #invoiceModal .btn-proceed {
-            background-color: #054c0f;
-            border: none;
-            color: white;
-        }
-        #invoiceModal .btn-proceed:hover { background-color: #009515; }
-        
-        .loader {
-            width: 50px;
-            height: 50px;
-            border: 4px solid #e5e7eb;
-            border-top: 4px solid #16a34a;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .error-text { color: #dc2626; font-size: 12px; margin-top: 4px; display: none; }
-        
-        .copy-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-left: 8px;
-            padding: 4px;
-            border-radius: 4px;
-        }
-        .copy-btn:hover { background: #e5e7eb; }
-        .copy-btn svg { width: 16px; height: 16px; color: #6b7280; }
-        .copy-btn:hover svg { color: #054c0f; }
-        
-        #accountModal .details-row-copy {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 0;
-            gap: 16px;
-        }
-        #accountModal .details-label-copy {
-            font-size: 14px;
-            color: #6b7280;
-            font-weight: 500;
-            min-width: 115px;
-        }
-        #accountModal .details-value-copy {
-            font-size: 14px;
-            color: #111827;
-            font-weight: 600;
-            flex: 1;
-            word-break: break-word;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .copy-notification-show { animation: slideUpFade 2s ease forwards; }
-        @keyframes slideUpFade {
-            0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
-            10% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            90% { opacity: 1; transform: translateX(-50%) translateY(0); }
-            100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
-        }
-        
-        @media (min-width:768px){
-            .md\:mt-0 { margin-top: 0; }
-            .md\:w-3\/5 { width: 60%; }
-            .md\:w-1\/3 { width: 33.333333%; }
-            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .md\:flex-row { flex-direction: row; }
-            .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; }
-            .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-            .md\:leading-tight { line-height: 1.25; }
-        }
-        @media (min-width:1024px){
-            .lg\:flex { display: flex; }
-            .lg\:hidden { display: none; }
-            .lg\:items-center { align-items: center; }
-            .lg\:gap-8 { gap: 2rem; }
-            .lg\:text-xs { font-size: .75rem; }
-            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        }
-        @media (min-width:1280px){
-            .xl\:text-sm { font-size: .875rem; }
-            .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-        }
-        @font-face {
-            font-family: 'CircularStd';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
-        }
-        @font-face {
-            font-family: 'CircularStdBold';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf');
-        }
-        body { font-family: 'CircularStd', system-ui, sans-serif; }
-        .modal-scroll-content { max-height: 90vh; overflow-y: auto; }
-        
-        .category-btn.active {
-            background-color: white !important;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
-        }
     </style>
 </head>
 <body>
 <div id="app">
-    <div class="router">
-        <div class="shadow-md bg-white sticky w-full z-10 top-0">
-            <div class="container py-2 relative">
-                <nav class="flex justify-between items-center">
-                    <div class="h-14 w-14">
-                        <a href="index.html">
-                            <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
-                        </a>
-                    </div>
-                    <div>
-                        <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                            <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
-                        </ul>
-                    </div>
-                    <div class="flex items-center gap-2 lg:hidden">
-                        <button type="button" id="cancelMenuBtn" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <button type="button" id="mobileMenuBtn">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
-            <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
-        </div>
-        
-        <div class="container mt-20">
-            <div class="flex items-center flex-col md:flex-row justify-between">
-                <div class="w-full md:w-3/5">
-                    <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
-                    <p class="mt-2">You can search for a payment item or select from the list</p>
+    <div class="shadow-md bg-white sticky w-full z-10 top-0">
+        <div class="container py-2">
+            <nav class="flex justify-between items-center">
+                <div class="h-14 w-14">
+                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
                 </div>
-                <div class="md:w-1/3 mt-5 md:mt-0 w-full">
-                    <div class="w-full">
-                        <div class="mt-1 relative">
-                            <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
-                            <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
-                                </svg>
-                            </div>
-                        </div>
+                <ul class="hidden lg:flex lg:items-center lg:gap-8">
+                    <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
+                </ul>
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button type="button" id="mobileMenuBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+        </div>
+    </div>
+    
+    <div id="mobileMenu" style="display: none;">
+        <a href="index.html">Back to Home</a>
+    </div>
+    
+    <div class="container mt-20">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-5">
+            <div class="w-full md:w-3/5">
+                <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
+                <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
+            </div>
+            <div class="w-full md:w-1/3">
+                <div class="relative">
+                    <input id="searchInput" placeholder="What do you want to pay for?" 
+                           class="w-full rounded-md border border-gray-300 bg-[#F2F2F2] pl-6 py-3 text-base pr-10 focus:outline-none focus:ring-2 focus:ring-green-600">
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
+                        </svg>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <div class="container mt-10">
-            <div class="flex gap-3 flex-wrap" id="categoryFilters">
-                <div class="loader"></div>
-            </div>
+    </div>
+    
+    <div class="container mt-10">
+        <div class="flex gap-3 flex-wrap" id="categoryFilters">
+            <div class="loader"></div>
         </div>
-        
-        <div class="container mt-10">
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid">
-                <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
-            </div>
+    </div>
+    
+    <div class="container mt-10">
+        <div id="paymentGrid" class="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
         </div>
     </div>
 </div>
 
+<!-- PAYMENT MODAL -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 overflow-y-auto">
@@ -538,7 +382,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 9.75l4.5 4.5m0-4.5l-4.5 4.5M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
-                        <p id="modalItemName" class="mt-2 font-CircularStdBold">FOUR FIGURE TABLE</p>
+                        <p id="modalItemName" class="mt-2 font-CircularStdBold">Loading...</p>
                         <p class="text-xs mt-5 text-text-subtitle">Complete the form below with all necessary information</p>
                         
                         <div class="mt-5">
@@ -630,8 +474,8 @@
                             </div>
                         </div>
                         <div class="grid grid-cols-3 mt-8 gap-5">
-                            <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
-                            <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm disabled:cursor-not-allowed focus:outline-none focus:ring-0 focus:ring-transparent focus:ring-offset-0 bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:cursor-not-allowed disabled:opacity-50">Proceed</button>
+                            <button type="button" onclick="closePaymentModal()" class="items-center mx-auto w-full font-medium border shadow-sm bg-white hover:bg-gray-50 text-primary-700 border-primary-700 px-4 py-3 text-base rounded-md">Cancel</button>
+                            <button type="submit" id="proceedBtn" disabled class="items-center mx-auto w-full font-medium border shadow-sm bg-primary-700 hover:bg-primary-600 text-white border-transparent px-4 py-3 text-base rounded-md col-span-2 disabled:opacity-50 disabled:cursor-not-allowed">Proceed</button>
                         </div>
                     </div>
                 </form>
@@ -640,6 +484,7 @@
     </div>
 </div>
 
+<!-- INVOICE MODAL -->
 <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -647,24 +492,24 @@
             <div class="invoice-inner">
                 <p class="text-lg font-semibold mb-4">Invoice Summary</p>
                 <div class="invoice-row">
-                    <span class="text-lg text-gray-500">Item</span>
-                    <span class="text-lg text-gray-500">Amount</span>
+                    <span class="text-gray-500">Item</span>
+                    <span class="text-gray-500">Amount</span>
                 </div>
                 <div class="invoice-row">
-                    <span id="invoiceItemName" class="text-lg">FOUR FIGURE TABLE</span>
-                    <span id="invoiceItemAmount" class="text-lg">NGN 500</span>
+                    <span id="invoiceItemName" class="font-medium">Loading...</span>
+                    <span id="invoiceItemAmount" class="font-medium">NGN 0</span>
                 </div>
                 <div class="invoice-row">
-                    <span class="text-lg">SERVICE CHARGE</span>
-                    <span id="serviceCharge" class="text-lg">NGN 50</span>
+                    <span>SERVICE CHARGE</span>
+                    <span id="serviceCharge">NGN 50</span>
                 </div>
                 <div class="invoice-row">
-                    <span class="text-lg">Quantity</span>
-                    <span id="invoiceQuantity" class="text-lg">1</span>
+                    <span>Quantity</span>
+                    <span id="invoiceQuantity">1</span>
                 </div>
-                <div class="invoice-row font-semibold mt-2 pt-2">
-                    <span class="text-lg">Total</span>
-                    <span id="invoiceTotal" class="text-lg">NGN 550</span>
+                <div class="invoice-row font-semibold mt-2 pt-2 border-t border-gray-200">
+                    <span>Total</span>
+                    <span id="invoiceTotal">NGN 0</span>
                 </div>
                 <div class="invoice-buttons">
                     <button onclick="closeInvoiceModal()" class="btn-cancel">Cancel</button>
@@ -675,14 +520,16 @@
     </div>
 </div>
 
+<!-- LOADING MODAL -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-        <div class="loader" style="margin: 0 auto;"></div>
+        <div class="loader"></div>
         <p style="margin-top: 16px; font-size: 16px; color: black; font-weight: 500;">Please wait...</p>
-        <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Account details are being generated</p>
+        <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">Processing your request</p>
     </div>
 </div>
 
+<!-- ACCOUNT MODAL -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -726,10 +573,10 @@
 (function() {
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    let currentCategories = [];
-    let currentPaymentItems = [];
+    // ============ DATA STORES ============
+    let paymentData = {};
     let currentCategory = null;
     let currentItem = null;
     let currentFormData = {};
@@ -738,81 +585,12 @@
     let countdownInterval = null;
     let settings = { adminWhatsApp: '2348123456789', pinExpiryMinutes: 30 };
     
-    // ============ LOAD DATA FROM SUPABASE ============
-    async function loadCategoriesAndItems() {
-        console.log('📁 Loading categories and payment items...');
-        
-        try {
-            // Load categories
-            const { data: categories, error: catError } = await supabaseClient
-                .from('categories')
-                .select('*')
-                .order('id');
-            
-            if (catError) {
-                console.error('Categories error:', catError);
-                document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600 p-3">Error loading categories. Please refresh.</div>';
-                return;
-            }
-            
-            if (categories && categories.length > 0) {
-                currentCategories = categories;
-                console.log(`✅ Loaded ${currentCategories.length} categories:`, currentCategories.map(c => c.name));
-            } else {
-                console.log('No categories found, using defaults');
-                currentCategories = [
-                    { id: 1, name: "SSCE Internal", color: "#0CA60C" },
-                    { id: 2, name: "SSCE External", color: "#145596" },
-                    { id: 3, name: "BECE", color: "#642D56" },
-                    { id: 4, name: "NCEE", color: "#1887EB" },
-                    { id: 5, name: "Gifted", color: "#24809C" },
-                    { id: 6, name: "Others", color: "#36454F" }
-                ];
-            }
-            
-            // Load payment items
-            const { data: items, error: itemError } = await supabaseClient
-                .from('payment_items')
-                .select('*')
-                .order('id');
-            
-            if (itemError) {
-                console.error('Payment items error:', itemError);
-            }
-            
-            if (items && items.length > 0) {
-                currentPaymentItems = items;
-                console.log(`✅ Loaded ${currentPaymentItems.length} payment items`);
-            } else {
-                console.log('No payment items found in database');
-                currentPaymentItems = [];
-            }
-            
-            // Render everything
-            renderCategoryFilters();
-            
-            // Set default category
-            if (currentCategories.length > 0) {
-                currentCategory = currentCategories[0];
-                renderPaymentGrid();
-            }
-            
-        } catch (error) {
-            console.error('Error loading data:', error);
-            document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600 p-3">Error connecting to database. Please refresh.</div>';
-        }
-    }
-    
-    // ============ LOAD SETTINGS FROM SUPABASE ============
+    // ============ LOAD SETTINGS ============
     async function loadSettings() {
         try {
-            const { data } = await supabaseClient
-                .from('settings')
-                .select('admin_whatsapp, pin_expiry_minutes, whatsapp_telegram_link')
-                .maybeSingle();
-            
+            const { data } = await supabase.from('settings').select('*').maybeSingle();
             if (data) {
-                settings.adminWhatsApp = data.whatsapp_telegram_link || data.admin_whatsapp || '2348123456789';
+                settings.adminWhatsApp = data.admin_whatsapp || data.whatsapp_telegram_link || '2348123456789';
                 settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
                 console.log('✅ Settings loaded:', settings);
             }
@@ -821,27 +599,70 @@
         }
     }
     
-    // ============ RENDER CATEGORY FILTERS ============
-    function renderCategoryFilters() {
+    // ============ LOAD DATA FROM SUPABASE ============
+    async function loadData() {
+        console.log('🚀 Loading payment data from Supabase...');
+        
+        try {
+            const { data: categories, error: catErr } = await supabase
+                .from('categories')
+                .select('*')
+                .order('id');
+            
+            if (catErr) throw catErr;
+            
+            const { data: items, error: itemErr } = await supabase
+                .from('payment_items')
+                .select('*')
+                .order('id');
+            
+            if (itemErr) throw itemErr;
+            
+            if (categories && categories.length > 0 && items && items.length > 0) {
+                for (const cat of categories) {
+                    paymentData[cat.name] = {
+                        id: cat.id,
+                        color: cat.color,
+                        items: items.filter(item => item.category_id === cat.id)
+                    };
+                }
+                console.log('✅ Loaded:', Object.keys(paymentData).length, 'categories');
+                
+                // Set default category
+                if (Object.keys(paymentData).length > 0) {
+                    currentCategory = Object.keys(paymentData)[0];
+                    renderCategories();
+                    renderPaymentGrid();
+                }
+            }
+        } catch (error) {
+            console.error('Error loading data:', error);
+        }
+    }
+    
+    // ============ RENDER CATEGORIES ============
+    function renderCategories() {
         const container = document.getElementById('categoryFilters');
         if (!container) return;
         
-        let html = '';
-        for (let i = 0; i < currentCategories.length; i++) {
-            const cat = currentCategories[i];
-            const isActive = currentCategory && currentCategory.id === cat.id;
-            html += `
-                <div data-category-id="${cat.id}" data-category-name="${cat.name}" data-color="${cat.color}" 
-                     class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer ${isActive ? 'active' : ''}"
-                     style="${isActive ? 'background-color: white;' : 'background-color: #EBEBEB;'}">
-                    <div class="w-2 rounded-full h-2" style="background-color: ${cat.color};"></div>
-                    <div>${escapeHtml(cat.name)}</div>
+        const categories = Object.keys(paymentData);
+        if (categories.length === 0) {
+            container.innerHTML = '<div class="text-red-600 p-3">No categories loaded</div>';
+            return;
+        }
+        
+        container.innerHTML = categories.map(catName => {
+            const cat = paymentData[catName];
+            const isActive = currentCategory === catName;
+            return `
+                <div class="category-btn ${isActive ? 'active' : ''}" data-category="${catName}" style="${!isActive ? 'background-color: #EBEBEB;' : ''}">
+                    <div class="w-2 h-2 rounded-full" style="background-color: ${cat.color};"></div>
+                    <span>${escapeHtml(catName)}</span>
                 </div>
             `;
-        }
-        container.innerHTML = html;
+        }).join('');
         
-        // Add click event listeners
+        // Add click handlers
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => {
@@ -850,15 +671,9 @@
                 });
                 btn.classList.add('active');
                 btn.style.backgroundColor = 'white';
-                
-                const categoryId = parseInt(btn.getAttribute('data-category-id'));
-                const categoryName = btn.getAttribute('data-category-name');
-                const color = btn.getAttribute('data-color');
-                
-                currentCategory = { id: categoryId, name: categoryName, color: color };
+                currentCategory = btn.getAttribute('data-category');
                 renderPaymentGrid();
-                const searchInput = document.getElementById('searchInput');
-                if (searchInput) searchInput.value = '';
+                document.getElementById('searchInput').value = '';
             });
         });
     }
@@ -868,30 +683,27 @@
         const grid = document.getElementById('paymentGrid');
         if (!grid || !currentCategory) return;
         
-        const items = currentPaymentItems.filter(item => item.category_id === currentCategory.id);
-        
-        console.log(`📋 Rendering ${items.length} items for ${currentCategory.name}`);
-        
-        if (items.length === 0) {
-            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found in this category</div>';
+        const cat = paymentData[currentCategory];
+        if (!cat || !cat.items) {
+            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No items found</div>';
             return;
         }
         
-        grid.innerHTML = items.map(item => {
+        console.log(`📋 Rendering ${cat.items.length} items for ${currentCategory}`);
+        
+        grid.innerHTML = cat.items.map(item => {
             const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
             return `
                 <div class="payment-card">
-                    <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
+                    <div class="card-top-bar" style="background: ${cat.color};"></div>
                     <div class="card-content">
                         <div class="card-title">${escapeHtml(item.name)}</div>
                         <div class="card-footer">
-                            <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                    class="make-payment-btn"
-                                    style="border-color: ${currentCategory.color}; color: ${currentCategory.color};">
+                            <button class="make-payment-btn" style="border-color: ${cat.color}; color: ${cat.color};" onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&#39;")})'>
                                 Make payment
                             </button>
                             <div class="text-right">
-                                <div class="fixed-amount-label">Fixed Amount</div>
+                                <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
                                 <div class="fixed-amount-value">${amountDisplay}</div>
                             </div>
                         </div>
@@ -910,32 +722,30 @@
             const term = e.target.value.toLowerCase();
             if (!currentCategory) return;
             
-            const items = currentPaymentItems.filter(item => 
-                item.category_id === currentCategory.id && 
-                item.name.toLowerCase().includes(term)
-            );
+            const cat = paymentData[currentCategory];
+            if (!cat) return;
             
+            const filtered = cat.items.filter(item => item.name.toLowerCase().includes(term));
             const grid = document.getElementById('paymentGrid');
-            if (items.length === 0) {
+            
+            if (filtered.length === 0) {
                 grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>';
                 return;
             }
             
-            grid.innerHTML = items.map(item => {
+            grid.innerHTML = filtered.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
                 return `
                     <div class="payment-card">
-                        <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${currentCategory.color}; color: ${currentCategory.color};">
+                                <button class="make-payment-btn" style="border-color: ${cat.color}; color: ${cat.color};" onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&#39;")})'>
                                     Make payment
                                 </button>
                                 <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
                                     <div class="fixed-amount-value">${amountDisplay}</div>
                                 </div>
                             </div>
@@ -959,66 +769,19 @@
         return quantity && parseInt(quantity) > 0;
     }
     
-    // ============ VALIDATE PIN WITH SUPABASE ============
     async function validatePinWithSupabase(pinCode) {
         try {
-            const { data, error } = await supabaseClient
+            const { data, error } = await supabase
                 .from('payment_pins')
                 .select('*')
                 .eq('pin', pinCode)
                 .maybeSingle();
             
-            if (error || !data) {
-                return { valid: false };
-            }
-            
-            if (data.status === 'active') {
-                return { valid: true, accountDetails: data };
-            }
-            
+            if (error || !data) return { valid: false };
+            if (data.status === 'active') return { valid: true, accountDetails: data };
             return { valid: false };
-            
         } catch (error) {
             return { valid: false };
-        }
-    }
-    
-    // ============ MARK PIN AS USED ============
-    async function markPinAsUsedAndProceed() {
-        const pinCode = currentFormData.paymentCode;
-        
-        try {
-            const { error } = await supabaseClient
-                .from('payment_pins')
-                .update({ 
-                    status: 'used', 
-                    used_at: new Date().toISOString()
-                })
-                .eq('pin', pinCode)
-                .eq('status', 'active');
-            
-            if (error) {
-                console.error('Error marking PIN as used:', error);
-                alert('Error processing PIN. Please try again.');
-                return;
-            }
-            
-            closeInvoiceModal();
-            
-            const loadingModal = document.getElementById('loadingModal');
-            if (loadingModal) {
-                loadingModal.style.display = 'flex';
-                setTimeout(() => {
-                    if (loadingModal) loadingModal.style.display = 'none';
-                    showAccountModal();
-                }, 1500);
-            } else {
-                showAccountModal();
-            }
-            
-        } catch (err) {
-            console.error('Error:', err);
-            alert('Error processing payment. Please try again.');
         }
     }
     
@@ -1031,22 +794,12 @@
             isValidPin = result.valid;
             currentPinDetails = result.accountDetails;
             
-            const codeError = document.getElementById('codeError');
-            const codeRequiredError = document.getElementById('codeRequiredError');
-            
-            if (codeError) codeError.style.display = 'none';
-            if (codeRequiredError) codeRequiredError.style.display = 'none';
-            
-            if (!result.valid && code.trim() !== '') {
-                if (codeError) codeError.style.display = 'block';
-            }
+            document.getElementById('codeError').style.display = (!result.valid && code.trim() !== '') ? 'block' : 'none';
+            document.getElementById('codeRequiredError').style.display = 'none';
         } else {
             isValidPin = false;
-            currentPinDetails = null;
-            const codeRequiredError = document.getElementById('codeRequiredError');
-            if (codeRequiredError) codeRequiredError.style.display = 'block';
-            const codeError = document.getElementById('codeError');
-            if (codeError) codeError.style.display = 'none';
+            document.getElementById('codeRequiredError').style.display = 'block';
+            document.getElementById('codeError').style.display = 'none';
         }
         
         const fullName = document.getElementById('fullName').value;
@@ -1056,63 +809,57 @@
         const quantity = document.getElementById('quantity').value;
         const amount = document.getElementById('amount').value;
         
-        let isPhoneValid = validatePhone(phone);
-        let isEmailValid = validateEmail(email);
-        let isQuantityValid = validateQuantity(quantity);
+        const isFullNameValid = fullName && fullName.trim() !== '';
+        const isPhoneValid = validatePhone(phone);
+        const isEmailValid = validateEmail(email);
+        const isDescriptionValid = description && description.trim() !== '';
+        const isQuantityValid = validateQuantity(quantity);
+        const isAmountValid = amount && parseFloat(amount) > 0;
         
-        let isFullNameValid = fullName && fullName.trim() !== '';
-        let isDescriptionValid = description && description.trim() !== '';
-        let isAmountValid = amount && parseFloat(amount) > 0;
-        let isCodeProvided = code && code.trim() !== '';
-        
-        const fullNameError = document.getElementById('fullNameError');
-        const descriptionError = document.getElementById('descriptionError');
-        const amountError = document.getElementById('amountError');
-        
-        if (fullNameError) fullNameError.style.display = !isFullNameValid ? 'block' : 'none';
-        if (descriptionError) descriptionError.style.display = !isDescriptionValid ? 'block' : 'none';
-        if (amountError) amountError.style.display = !isAmountValid ? 'block' : 'none';
+        document.getElementById('fullNameError').style.display = isFullNameValid ? 'none' : 'block';
+        document.getElementById('descriptionError').style.display = isDescriptionValid ? 'none' : 'block';
+        document.getElementById('amountError').style.display = isAmountValid ? 'none' : 'block';
         
         const phoneError = document.getElementById('phoneError');
         const phoneRequiredError = document.getElementById('phoneRequiredError');
         if (!phone) {
-            if (phoneRequiredError) phoneRequiredError.style.display = 'block';
-            if (phoneError) phoneError.style.display = 'none';
+            phoneRequiredError.style.display = 'block';
+            phoneError.style.display = 'none';
         } else if (!isPhoneValid) {
-            if (phoneRequiredError) phoneRequiredError.style.display = 'none';
-            if (phoneError) phoneError.style.display = 'block';
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'block';
         } else {
-            if (phoneRequiredError) phoneRequiredError.style.display = 'none';
-            if (phoneError) phoneError.style.display = 'none';
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'none';
         }
         
         const emailError = document.getElementById('emailError');
         const emailRequiredError = document.getElementById('emailRequiredError');
         if (!email) {
-            if (emailRequiredError) emailRequiredError.style.display = 'block';
-            if (emailError) emailError.style.display = 'none';
+            emailRequiredError.style.display = 'block';
+            emailError.style.display = 'none';
         } else if (!isEmailValid) {
-            if (emailRequiredError) emailRequiredError.style.display = 'none';
-            if (emailError) emailError.style.display = 'block';
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'block';
         } else {
-            if (emailRequiredError) emailRequiredError.style.display = 'none';
-            if (emailError) emailError.style.display = 'none';
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'none';
         }
         
         const quantityError = document.getElementById('quantityError');
         const quantityRequiredError = document.getElementById('quantityRequiredError');
         if (!quantity) {
-            if (quantityRequiredError) quantityRequiredError.style.display = 'block';
-            if (quantityError) quantityError.style.display = 'none';
+            quantityRequiredError.style.display = 'block';
+            quantityError.style.display = 'none';
         } else if (!isQuantityValid) {
-            if (quantityRequiredError) quantityRequiredError.style.display = 'none';
-            if (quantityError) quantityError.style.display = 'block';
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'block';
         } else {
-            if (quantityRequiredError) quantityRequiredError.style.display = 'none';
-            if (quantityError) quantityError.style.display = 'none';
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'none';
         }
         
-        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid;
         const proceedBtn = document.getElementById('proceedBtn');
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
@@ -1120,165 +867,136 @@
     // ============ OPEN PAYMENT MODAL ============
     window.openPaymentModal = function(item) {
         currentItem = item;
-        const modalItemName = document.getElementById('modalItemName');
-        if (modalItemName) modalItemName.innerText = item.name;
+        document.getElementById('modalItemName').innerText = item.name;
         
         const amountInput = document.getElementById('amount');
-        if (item.amount) { 
-            amountInput.value = item.amount; 
-            amountInput.readOnly = true; 
-        } else { 
-            amountInput.value = ''; 
-            amountInput.readOnly = false; 
+        if (item.amount) {
+            amountInput.value = item.amount;
+            amountInput.readOnly = true;
+        } else {
+            amountInput.value = '';
+            amountInput.readOnly = false;
         }
         
-        let whatsappNumber = settings.adminWhatsApp || '2348123456789';
-        whatsappNumber = whatsappNumber.replace(/\+/g, '');
-        const whatsappLink = document.getElementById('whatsappLink');
-        if (whatsappLink) {
-            whatsappLink.href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        const whatsappNumber = settings.adminWhatsApp.replace(/\+/g, '');
+        document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        
+        // Reset form
+        document.getElementById('paymentCode').value = '';
+        document.getElementById('fullName').value = '';
+        document.getElementById('phone').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('paymentDescription').value = '';
+        document.getElementById('quantity').value = '1';
+        document.getElementById('currency').value = 'NGN';
+        
+        // Hide errors
+        document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+        
+        document.getElementById('proceedBtn').disabled = true;
+        document.getElementById('paymentModal').classList.remove('hidden');
+        
+        // Add input listeners
+        ['paymentCode', 'fullName', 'phone', 'email', 'amount', 'quantity', 'paymentDescription'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.removeEventListener('input', checkFormValidation);
+                el.addEventListener('input', checkFormValidation);
+            }
+        });
+    };
+    
+    window.closePaymentModal = function() {
+        document.getElementById('paymentModal').classList.add('hidden');
+    };
+    
+    window.closeInvoiceModal = function() {
+        document.getElementById('invoiceModal').style.display = 'none';
+    };
+    
+    window.closeAccountModal = function() {
+        if (countdownInterval) clearInterval(countdownInterval);
+        document.getElementById('accountModal').classList.add('hidden');
+    };
+    
+    // ============ SUBMIT FORM ============
+    document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        if (!isValidPin) {
+            alert('Please enter a valid payment code');
+            return;
         }
         
-        const paymentCode = document.getElementById('paymentCode');
-        const fullName = document.getElementById('fullName');
-        const phone = document.getElementById('phone');
-        const email = document.getElementById('email');
-        const paymentDescription = document.getElementById('paymentDescription');
-        const quantity = document.getElementById('quantity');
-        const currency = document.getElementById('currency');
+        const fullName = document.getElementById('fullName').value;
+        const phone = document.getElementById('phone').value;
+        const email = document.getElementById('email').value;
+        const description = document.getElementById('paymentDescription').value;
+        const quantity = parseInt(document.getElementById('quantity').value);
+        const currency = document.getElementById('currency').value;
+        let amount = parseFloat(document.getElementById('amount').value);
         
-        if (paymentCode) paymentCode.value = '';
-        if (fullName) fullName.value = '';
-        if (phone) phone.value = '';
-        if (email) email.value = '';
-        if (paymentDescription) paymentDescription.value = '';
-        if (quantity) quantity.value = '';
-        if (currency) currency.value = 'NGN';
+        if (!fullName) { alert('Please enter full name'); return; }
+        if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
+        if (!validateEmail(email)) { alert('Invalid email address'); return; }
+        if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
+        if (!amount || amount <= 0) {
+            amount = currentItem.amount || 0;
+            if (amount <= 0) { alert('Enter valid amount'); return; }
+        }
         
-        const codeError = document.getElementById('codeError');
-        const phoneError = document.getElementById('phoneError');
-        const emailError = document.getElementById('emailError');
-        const quantityError = document.getElementById('quantityError');
-        const codeRequiredError = document.getElementById('codeRequiredError');
+        const serviceCharge = 50;
+        const totalAmount = (amount + serviceCharge) * quantity;
         
-        if (codeError) codeError.style.display = 'none';
-        if (phoneError) phoneError.style.display = 'none';
-        if (emailError) emailError.style.display = 'none';
-        if (quantityError) quantityError.style.display = 'none';
-        if (codeRequiredError) codeRequiredError.style.display = 'none';
+        currentFormData = {
+            paymentCode: document.getElementById('paymentCode').value,
+            fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount
+        };
         
-        const proceedBtn = document.getElementById('proceedBtn');
-        if (proceedBtn) proceedBtn.disabled = true;
+        document.getElementById('invoiceItemName').innerText = currentItem.name;
+        document.getElementById('invoiceItemAmount').innerText = `${currency} ${amount.toLocaleString()}`;
+        document.getElementById('serviceCharge').innerText = `${currency} ${serviceCharge.toLocaleString()}`;
+        document.getElementById('invoiceQuantity').innerText = quantity;
+        document.getElementById('invoiceTotal').innerText = `${currency} ${totalAmount.toLocaleString()}`;
         
-        const paymentModal = document.getElementById('paymentModal');
-        if (paymentModal) paymentModal.classList.remove('hidden');
-        
-        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.removeEventListener('input', checkFormValidation);
-                element.addEventListener('input', checkFormValidation);
-            }
-        });
-    }
+        closePaymentModal();
+        document.getElementById('invoiceModal').style.display = 'block';
+    });
     
-    window.closePaymentModal = function() { 
-        const paymentModal = document.getElementById('paymentModal');
-        if (paymentModal) paymentModal.classList.add('hidden'); 
-    }
-    
-    window.closeInvoiceModal = function() { 
-        const invoiceModal = document.getElementById('invoiceModal');
-        if (invoiceModal) invoiceModal.style.display = 'none'; 
-    }
-    
-    window.closeAccountModal = function() { 
-        if (countdownInterval) clearInterval(countdownInterval);
-        const accountModal = document.getElementById('accountModal');
-        if (accountModal) accountModal.classList.add('hidden'); 
-    }
-    
-    // ============ SUBMIT PAYMENT FORM ============
-    const paymentForm = document.getElementById('paymentFormModal');
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            if (!isValidPin) { 
-                alert('Please enter a valid payment code'); 
-                return; 
-            }
-            
-            const fullName = document.getElementById('fullName').value;
-            const phone = document.getElementById('phone').value;
-            const email = document.getElementById('email').value;
-            const description = document.getElementById('paymentDescription').value;
-            const quantity = parseInt(document.getElementById('quantity').value);
-            const currency = document.getElementById('currency').value;
-            let amount = parseFloat(document.getElementById('amount').value);
-            
-            if (!fullName) { alert('Please fill all payer details'); return; }
-            if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
-            if (!validateEmail(email)) { alert('Invalid email address'); return; }
-            if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
-            if (!amount || amount <= 0) { amount = currentItem.amount || 0; if (amount <= 0) { alert('Enter valid amount'); return; } }
-            
-            const serviceCharge = 50;
-            const totalAmount = (amount + serviceCharge) * quantity;
-            
-            currentFormData = { 
-                paymentCode: document.getElementById('paymentCode').value, 
-                fullName, phone, email, description, quantity, currency, amount, serviceCharge, totalAmount 
-            };
-            
-            const invoiceItemName = document.getElementById('invoiceItemName');
-            const invoiceItemAmount = document.getElementById('invoiceItemAmount');
-            const serviceChargeSpan = document.getElementById('serviceCharge');
-            const invoiceQuantity = document.getElementById('invoiceQuantity');
-            const invoiceTotal = document.getElementById('invoiceTotal');
-            
-            if (invoiceItemName) invoiceItemName.innerText = currentItem.name;
-            if (invoiceItemAmount) invoiceItemAmount.innerText = `${currency} ${amount.toLocaleString()}`;
-            if (serviceChargeSpan) serviceChargeSpan.innerText = `${currency} ${serviceCharge.toLocaleString()}`;
-            if (invoiceQuantity) invoiceQuantity.innerText = quantity;
-            if (invoiceTotal) invoiceTotal.innerText = `${currency} ${totalAmount.toLocaleString()}`;
-            
-            closePaymentModal();
-            const invoiceModal = document.getElementById('invoiceModal');
-            if (invoiceModal) invoiceModal.style.display = 'block';
-        });
-    }
-    
-    function startCountdown(expiryTime) {
-        const timerElement = document.getElementById('countdownTimer');
-        if (countdownInterval) clearInterval(countdownInterval);
+    // ============ MARK PIN AS USED ============
+    window.markPinAsUsedAndProceed = async function() {
+        const pinCode = currentFormData.paymentCode;
         
-        function updateTimer() {
-            const now = new Date().getTime();
-            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+        try {
+            const { error } = await supabase
+                .from('payment_pins')
+                .update({ status: 'used', used_at: new Date().toISOString() })
+                .eq('pin', pinCode)
+                .eq('status', 'active');
             
-            if (remaining <= 0) {
-                clearInterval(countdownInterval);
-                if (timerElement) {
-                    timerElement.textContent = "Expired";
-                    timerElement.style.color = "#9ca3af";
-                }
+            if (error) {
+                alert('Error processing PIN. Please try again.');
                 return;
             }
             
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
-            if (timerElement) timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            closeInvoiceModal();
+            const loadingModal = document.getElementById('loadingModal');
+            loadingModal.style.display = 'flex';
+            
+            setTimeout(() => {
+                loadingModal.style.display = 'none';
+                showAccountModal();
+            }, 1500);
+        } catch (err) {
+            alert('Error processing payment. Please try again.');
         }
-        
-        updateTimer();
-        countdownInterval = setInterval(updateTimer, 1000);
-    }
+    };
     
+    // ============ SHOW ACCOUNT MODAL ============
     async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
         
-        const { data: pinData, error } = await supabaseClient
+        const { data: pinData, error } = await supabase
             .from('payment_pins')
             .select('*')
             .eq('pin', pinCode)
@@ -1286,34 +1004,21 @@
         
         if (error || !pinData) {
             alert("Payment code not found. Please contact support.");
-            window.location.href = 'index.html';
             return;
         }
         
-        const account = pinData;
-        
-        if (account.status !== 'used') {
+        if (pinData.status !== 'used') {
             alert("Invalid payment session. Please start over.");
             window.location.href = 'index.html';
             return;
         }
         
-        if (!account.used_at) {
-            alert("Invalid payment session. Please start over.");
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        const usedTime = new Date(account.used_at);
+        const usedTime = new Date(pinData.used_at);
         const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
         
-        const now = new Date().getTime();
-        if (now >= expiryTime) {
-            alert("Your payment session has expired. Please start over with a new PIN.");
-            await supabaseClient
-                .from('payment_pins')
-                .update({ status: 'expired' })
-                .eq('pin', pinCode);
+        if (Date.now() >= expiryTime) {
+            alert("Your payment session has expired. Please start over.");
+            await supabase.from('payment_pins').update({ status: 'expired' }).eq('pin', pinCode);
             window.location.href = 'index.html';
             return;
         }
@@ -1323,38 +1028,35 @@
         const quantity = parseInt(currentFormData.quantity) || 1;
         const totalAmount = (amount + serviceCharge) * quantity;
         
-        const accountDetailsBox = document.getElementById('accountDetailsBox');
-        if (accountDetailsBox) {
-            accountDetailsBox.innerHTML = `
-                <div class="details-row">
-                    <span class="details-label">Bank</span>
-                    <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
+        document.getElementById('accountDetailsBox').innerHTML = `
+            <div class="details-row">
+                <span class="details-label">Bank</span>
+                <span class="details-value">${escapeHtml(pinData.bank_name || 'NECO Microfinance Bank')}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Name</span>
+                <span class="details-value">${escapeHtml(pinData.account_name || 'National Examinations Council')}</span>
+            </div>
+            <div class="details-row-copy">
+                <span class="details-label-copy">Account Number</span>
+                <div class="details-value-copy">
+                    <span>${escapeHtml(pinData.account_number || '0000000000')}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${pinData.account_number}')">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                    </button>
                 </div>
-                <div class="details-row">
-                    <span class="details-label">Account Name</span>
-                    <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
-                </div>
-                <div class="details-row-copy">
-                    <span class="details-label-copy">Account Number</span>
-                    <div class="details-value-copy">
-                        <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
-                        <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
-                            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="details-row">
-                    <span class="details-label">Amount</span>
-                    <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
-                </div>
-                <div class="details-row">
-                    <span class="details-label">Payment Code</span>
-                    <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
-                </div>
-            `;
-        }
+            </div>
+            <div class="details-row">
+                <span class="details-label">Amount</span>
+                <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Payment Code</span>
+                <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
+            </div>
+        `;
         
         const receiptInput = document.getElementById('receiptInput');
         const uploadedFileName = document.getElementById('uploadedFileName');
@@ -1365,92 +1067,81 @@
             newInput.id = 'receiptInput';
             newInput.classList.add('hidden');
             newInput.accept = '.pdf,.jpg,.jpeg,.png';
-            
             newInput.addEventListener('change', (e) => {
-                if (uploadedFileName) {
-                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
+                if (uploadedFileName && e.target.files[0]) {
+                    uploadedFileName.innerHTML = `✅ ${e.target.files[0].name}`;
                 }
             });
         }
         if (uploadedFileName) uploadedFileName.innerHTML = '';
         
-        const accountModal = document.getElementById('accountModal');
-        if (accountModal) accountModal.classList.remove('hidden');
+        document.getElementById('accountModal').classList.remove('hidden');
         startCountdown(expiryTime);
     }
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
+    function startCountdown(expiryTime) {
+        const timerEl = document.getElementById('countdownTimer');
+        if (!timerEl) return;
+        if (countdownInterval) clearInterval(countdownInterval);
+        
+        function update() {
+            const remaining = Math.max(0, Math.floor((expiryTime - Date.now()) / 1000));
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                timerEl.textContent = "Expired";
+                timerEl.style.color = "#9ca3af";
+                return;
+            }
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            timerEl.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        update();
+        countdownInterval = setInterval(update, 1000);
     }
     
     window.copyToClipboard = function(text) {
-        navigator.clipboard.writeText(text).then(function() {
+        navigator.clipboard.writeText(text).then(() => {
             const notification = document.getElementById('copyNotification');
-            if (notification) {
-                notification.style.display = 'flex';
-                notification.classList.add('copy-notification-show');
-                setTimeout(() => {
-                    notification.classList.remove('copy-notification-show');
-                    notification.style.display = 'none';
-                }, 2000);
-            }
-        }).catch(() => alert('Failed to copy. Please copy manually.'));
-    }
+            notification.style.display = 'flex';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 2000);
+        }).catch(() => alert('Failed to copy'));
+    };
     
-    window.confirmPayment = async function() { 
+    window.confirmPayment = async function() {
         const receiptFile = document.getElementById('receiptInput').files[0];
-        
-        if(!receiptFile) { 
-            alert('Please upload your payment receipt'); 
-            return; 
-        } 
+        if (!receiptFile) {
+            alert('Please upload your payment receipt');
+            return;
+        }
         
         if (countdownInterval) clearInterval(countdownInterval);
         
         const loadingModal = document.getElementById('loadingModal');
-        if (loadingModal) {
-            loadingModal.style.display = 'flex';
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Processing your payment...';
-            if (subText) subText.innerHTML = 'Please wait while we save your payment';
-        }
+        loadingModal.style.display = 'flex';
         
         let receiptUrl = null;
-        let receiptName = null;
-        
         try {
             const fileExt = receiptFile.name.split('.').pop();
             const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
             const filePath = `receipts/${fileName}`;
-            receiptName = receiptFile.name;
             
-            const { error: uploadError } = await supabaseClient
-                .storage
+            const { error: uploadError } = await supabase.storage
                 .from('payment-receipts')
                 .upload(filePath, receiptFile);
             
-            if (uploadError) {
-                alert('Failed to upload receipt. Please try again.');
-                if (loadingModal) loadingModal.style.display = 'none';
-                return;
-            }
+            if (uploadError) throw uploadError;
             
-            const { data: urlData } = await supabaseClient
-                .storage
+            const { data: urlData } = await supabase.storage
                 .from('payment-receipts')
                 .getPublicUrl(filePath);
             receiptUrl = urlData.publicUrl;
             
         } catch (error) {
-            alert('Error uploading receipt: ' + error.message);
-            if (loadingModal) loadingModal.style.display = 'none';
+            alert('Failed to upload receipt: ' + error.message);
+            loadingModal.style.display = 'none';
             return;
         }
         
@@ -1459,7 +1150,7 @@
         const quantity = parseInt(currentFormData.quantity) || 1;
         const totalAmount = (amount + serviceCharge) * quantity;
         
-        const paymentData = {
+        const paymentRecord = {
             payment_code: currentFormData.paymentCode,
             full_name: currentFormData.fullName,
             phone: currentFormData.phone,
@@ -1470,89 +1161,64 @@
             currency: currentFormData.currency || 'NGN',
             quantity: quantity,
             receipt_url: receiptUrl,
-            receipt_name: receiptName,
+            receipt_name: receiptFile.name,
             status: 'completed',
             created_at: new Date().toISOString()
         };
         
         try {
-            const { error } = await supabaseClient
-                .from('payments')
-                .insert([paymentData]);
-            
-            if (error) {
-                alert('Error saving payment: ' + error.message);
-                if (loadingModal) loadingModal.style.display = 'none';
-                return;
-            }
+            const { error } = await supabase.from('payments').insert([paymentRecord]);
+            if (error) throw error;
             
             closeAccountModal();
             
-            if (loadingModal) {
-                const mainText = loadingModal.querySelector('p:first-of-type');
-                const subText = loadingModal.querySelector('p:last-of-type');
-                if (mainText) mainText.innerHTML = 'Payment Successful!';
-                if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
-                loadingModal.style.display = 'flex';
-            }
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Payment Successful!';
+            if (subText) subText.innerHTML = 'Thank you. Redirecting...';
             
-            setTimeout(() => { 
-                window.location.href = 'index.html'; 
+            setTimeout(() => {
+                window.location.href = 'index.html';
             }, 3000);
             
         } catch (error) {
-            alert('Error saving payment. Please contact support.');
-            if (loadingModal) loadingModal.style.display = 'none';
+            alert('Error saving payment: ' + error.message);
+            loadingModal.style.display = 'none';
         }
+    };
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, m => {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
     
-    // ============ INITIALIZE PAGE ============
-    async function init() {
-        console.log('🚀 Initializing payment portal...');
-        await loadSettings();
-        await loadCategoriesAndItems();
-        setupSearch();
-        
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'neco_sync_timestamp') {
-                loadCategoriesAndItems();
-                loadSettings();
+    // ============ MOBILE MENU ============
+    const menuBtn = document.getElementById('mobileMenuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    if (menuBtn && mobileMenu) {
+        menuBtn.onclick = () => {
+            mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block';
+        };
+        document.addEventListener('click', (e) => {
+            if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.style.display = 'none';
             }
         });
     }
     
-    init();
-    
-    // ============ MOBILE MENU ============
-    const menuBtn = document.getElementById('mobileMenuBtn');
-    const cancelBtn = document.getElementById('cancelMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    
-    if (menuBtn) {
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            if (mobileMenu) mobileMenu.style.display = 'block';
-            if (menuBtn) menuBtn.style.display = 'none';
-            if (cancelBtn) cancelBtn.style.display = 'block';
-        };
-        if (cancelBtn) {
-            cancelBtn.onclick = function(e) {
-                e.stopPropagation();
-                if (mobileMenu) mobileMenu.style.display = 'none';
-                if (cancelBtn) cancelBtn.style.display = 'none';
-                if (menuBtn) menuBtn.style.display = 'block';
-            };
-        }
-        document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    if (cancelBtn) cancelBtn.style.display = 'none';
-                    if (menuBtn) menuBtn.style.display = 'block';
-                }
-            }
-        };
+    // ============ INITIALIZE ============
+    async function init() {
+        await loadSettings();
+        await loadData();
+        setupSearch();
     }
+    
+    init();
 })();
 </script>
 </body>
