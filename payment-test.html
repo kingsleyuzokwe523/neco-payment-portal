@@ -2,353 +2,292 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>NECO Payment Portal - Make Payment</title>
-    <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NECO Payment Portal</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'CircularStd', system-ui, sans-serif; background: #f0f2f5; }
-        .container { width: 100%; margin: 0 auto; padding: 0 1rem; }
-        @media (min-width: 640px) { .container { max-width: 640px; } }
-        @media (min-width: 768px) { .container { max-width: 768px; } }
-        @media (min-width: 1024px) { .container { max-width: 1024px; } }
-        @media (min-width: 1280px) { .container { max-width: 1280px; } }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; }
         
-        .payment-card { border-radius: 0.75rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease; background: white; }
-        .payment-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-        .card-top-bar { height: 4px; width: 100%; }
-        .card-content { background: #ECFAF3; padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
-        .card-title { font-size: 1rem; font-weight: 600; color: #111827; margin-bottom: 1rem; min-height: 3rem; line-height: 1.4; }
-        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #d1d5db; }
-        .make-payment-btn { font-size: 0.75rem; border: 1px solid; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 600; background: transparent; cursor: pointer; transition: all 0.2s; }
-        .make-payment-btn:hover { transform: scale(1.05); background: rgba(0,0,0,0.05); }
-        .fixed-amount-label { font-size: 0.7rem; color: #6b7280; }
-        .fixed-amount-value { font-size: 0.875rem; font-weight: 700; color: #054c0f; }
+        .header { background: white; padding: 15px 20px; border-radius: 8px; margin-bottom: 30px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .logo { height: 50px; }
         
-        .category-btn { transition: all 0.2s; cursor: pointer; padding: 0.75rem; border-radius: 0.25rem; background-color: #EBEBEB; color: #747474; display: inline-flex; align-items: center; gap: 0.5rem; }
-        .category-btn:hover { transform: translateY(-2px); opacity: 0.9; }
-        .category-btn.active { background-color: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { font-size: 28px; margin-bottom: 10px; }
+        .subtitle { color: #666; margin-bottom: 20px; }
         
-        .loader-spinner { border: 3px solid #e5e7eb; border-top: 3px solid #054c0f; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .search-box { width: 100%; padding: 12px 16px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 30px; }
         
-        @font-face { font-family: 'CircularStd'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf'); }
-        @font-face { font-family: 'CircularStdBold'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf'); }
+        .categories { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 30px; }
+        .category-btn { padding: 10px 20px; background: #e5e7eb; border: none; border-radius: 8px; cursor: pointer; font-size: 14px; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .category-btn.active { background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.1); font-weight: 600; }
+        .category-color { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
         
-        .grid-cols-1 { display: grid; grid-template-columns: repeat(1, 1fr); gap: 1.25rem; }
-        @media (min-width: 768px) { .md\:grid-cols-2 { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
-        @media (min-width: 1024px) { .lg\:grid-cols-3 { grid-template-columns: repeat(3, 1fr); gap: 2rem; } }
-        @media (min-width: 1280px) { .xl\:grid-cols-4 { grid-template-columns: repeat(4, 1fr); gap: 2rem; } }
+        .payment-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+        .payment-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: transform 0.2s; }
+        .payment-card:hover { transform: translateY(-3px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .card-top { height: 4px; }
+        .card-body { padding: 20px; background: #ECFAF3; }
+        .card-title { font-size: 16px; font-weight: 600; color: #111; margin-bottom: 15px; line-height: 1.4; min-height: 48px; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid #d1d5db; margin-top: 5px; }
+        .pay-btn { padding: 8px 20px; border: 1.5px solid; border-radius: 8px; background: transparent; cursor: pointer; font-weight: 600; font-size: 13px; transition: all 0.2s; }
+        .pay-btn:hover { transform: scale(1.02); background: rgba(0,0,0,0.03); }
+        .amount-label { font-size: 11px; color: #666; margin-bottom: 3px; }
+        .amount-value { font-size: 14px; font-weight: 700; color: #054c0f; }
         
-        .flex { display: flex; }
-        .flex-wrap { flex-wrap: wrap; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .gap-2 { gap: 0.5rem; }
-        .gap-3 { gap: 0.75rem; }
-        .mt-1 { margin-top: 0.25rem; }
-        .mt-2 { margin-top: 0.5rem; }
-        .mt-5 { margin-top: 1.25rem; }
-        .mt-10 { margin-top: 2.5rem; }
-        .mt-20 { margin-top: 5rem; }
-        .w-full { width: 100%; }
-        .w-2 { width: 0.5rem; }
-        .h-2 { height: 0.5rem; }
-        .text-center { text-align: center; }
-        .text-gray-500 { color: #6b7280; }
-        .text-gray-600 { color: #4b5563; }
-        .text-red-600 { color: #dc2626; }
-        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-        .col-span-full { grid-column: 1 / -1; }
-        .hidden { display: none; }
-        .bg-white { background-color: white; }
-        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .sticky { position: sticky; }
-        .top-0 { top: 0; }
-        .z-10 { z-index: 10; }
-        .cursor-pointer { cursor: pointer; }
+        .loader { text-align: center; padding: 50px; color: #666; }
+        .error { text-align: center; padding: 50px; color: #dc2626; background: #fee; border-radius: 8px; }
+        
+        @media (max-width: 768px) {
+            .payment-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 24px; }
+        }
     </style>
 </head>
 <body>
-<div id="app">
-    <div class="shadow-md bg-white sticky w-full z-10 top-0">
-        <div class="container py-2">
-            <nav class="flex justify-between items-center">
-                <div class="h-14 w-14">
-                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
-                </div>
-                <ul class="hidden lg:flex lg:items-center lg:gap-8">
-                    <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
-                </ul>
-                <div class="flex items-center gap-2 lg:hidden">
-                    <button type="button" id="mobileMenuBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 2rem; height: 2rem;">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                        </svg>
-                    </button>
-                </div>
-            </nav>
-        </div>
+<div class="container">
+    <div class="header">
+        <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" class="logo">
     </div>
     
-    <div class="container mt-20">
-        <div class="flex flex-col md:flex-row justify-between items-center gap-5">
-            <div class="w-full md:w-3/5">
-                <h1 style="font-size: 1.875rem; font-weight: 700; letter-spacing: -0.025em;">Make Payment</h1>
-                <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
-            </div>
-            <div class="w-full md:w-1/3">
-                <input id="searchInput" placeholder="What do you want to pay for?" 
-                       class="w-full rounded-md border border-gray-300 bg-[#F2F2F2] px-6 py-3 text-base" 
-                       style="outline: none;">
-            </div>
-        </div>
+    <h1>Make Payment</h1>
+    <p class="subtitle">You can search for a payment item or select from the list</p>
+    
+    <input type="text" id="searchInput" class="search-box" placeholder="What do you want to pay for?">
+    
+    <div id="categoriesContainer" class="categories">
+        <div class="loader">Loading categories...</div>
     </div>
     
-    <div class="container mt-10">
-        <div class="flex gap-3 flex-wrap" id="categoryFilters">
-            <div class="loader-spinner"></div>
-        </div>
-    </div>
-    
-    <div class="container mt-10">
-        <div id="paymentGrid" class="grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
-        </div>
+    <div id="paymentGrid" class="payment-grid">
+        <div class="loader">Loading payment items...</div>
     </div>
 </div>
 
 <script>
-    (function() {
-        // Supabase configuration
-        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Supabase configuration
+    const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    
+    let categories = [];
+    let paymentItems = [];
+    let currentCategoryId = null;
+    
+    // Initialize the page
+    async function init() {
+        console.log('🚀 Initializing payment portal...');
+        await loadCategories();
+        await loadPaymentItems();
         
-        let currentCategories = [];
-        let currentPaymentItems = [];
-        let currentCategory = null;
-        
-        // Load data from Supabase
-        async function loadData() {
-            console.log('Loading data from Supabase...');
+        if (categories.length > 0 && paymentItems.length > 0) {
+            renderCategories();
+            currentCategoryId = categories[0].id;
+            renderPaymentItems();
+            setupSearch();
+        }
+    }
+    
+    // Load categories from Supabase
+    async function loadCategories() {
+        try {
+            console.log('📁 Loading categories...');
+            const { data, error } = await supabase
+                .from('categories')
+                .select('*')
+                .order('id');
             
-            try {
-                // Load categories
-                const { data: categories, error: catErr } = await supabase
-                    .from('categories')
-                    .select('*')
-                    .order('id');
+            if (error) throw error;
+            
+            categories = data || [];
+            console.log(`✅ Loaded ${categories.length} categories:`, categories.map(c => c.name));
+            
+            if (categories.length === 0) {
+                document.getElementById('categoriesContainer').innerHTML = 
+                    '<div class="error">⚠️ No categories found. Please check database.</div>';
+            }
+        } catch (error) {
+            console.error('❌ Error loading categories:', error);
+            document.getElementById('categoriesContainer').innerHTML = 
+                `<div class="error">Error: ${error.message}</div>`;
+        }
+    }
+    
+    // Load payment items from Supabase
+    async function loadPaymentItems() {
+        try {
+            console.log('📦 Loading payment items...');
+            const { data, error } = await supabase
+                .from('payment_items')
+                .select('*')
+                .order('id');
+            
+            if (error) throw error;
+            
+            paymentItems = data || [];
+            console.log(`✅ Loaded ${paymentItems.length} payment items`);
+            
+            if (paymentItems.length === 0) {
+                document.getElementById('paymentGrid').innerHTML = 
+                    '<div class="error">⚠️ No payment items found. Please check database.</div>';
+            }
+        } catch (error) {
+            console.error('❌ Error loading payment items:', error);
+            document.getElementById('paymentGrid').innerHTML = 
+                `<div class="error">Error: ${error.message}</div>`;
+        }
+    }
+    
+    // Render category buttons
+    function renderCategories() {
+        const container = document.getElementById('categoriesContainer');
+        
+        container.innerHTML = categories.map(cat => `
+            <button class="category-btn" data-id="${cat.id}" data-color="${cat.color}">
+                <span class="category-color" style="background: ${cat.color};"></span>
+                ${escapeHtml(cat.name)}
+            </button>
+        `).join('');
+        
+        // Add click event listeners
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active state
+                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
                 
-                if (catErr) throw catErr;
-                
-                console.log('✅ Categories loaded:', categories?.length || 0);
-                currentCategories = categories || [];
-                
-                if (currentCategories.length === 0) {
-                    document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">No categories found. Please run SQL setup.</div>';
-                    return;
-                }
-                
-                // Load payment items
-                const { data: items, error: itemErr } = await supabase
-                    .from('payment_items')
-                    .select('*')
-                    .order('id');
-                
-                if (itemErr) throw itemErr;
-                
-                console.log('✅ Payment items loaded:', items?.length || 0);
-                currentPaymentItems = items || [];
-                
-                if (currentPaymentItems.length === 0) {
-                    document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-600">No payment items found. Please run SQL setup.</div>';
-                    return;
-                }
-                
-                // Render everything
-                renderCategories();
-                
-                // Set default category
-                currentCategory = currentCategories[0];
+                // Update current category
+                currentCategoryId = parseInt(btn.dataset.id);
                 renderPaymentItems();
                 
-            } catch (error) {
-                console.error('❌ Error loading data:', error);
-                document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">Error connecting to database. Please refresh.</div>';
-            }
-        }
-        
-        // Render category buttons
-        function renderCategories() {
-            const container = document.getElementById('categoryFilters');
-            if (!container) return;
-            
-            container.innerHTML = currentCategories.map(cat => `
-                <div class="category-btn" data-id="${cat.id}" data-name="${cat.name}" data-color="${cat.color}">
-                    <div style="width: 0.5rem; height: 0.5rem; border-radius: 9999px; background-color: ${cat.color};"></div>
-                    <span>${escapeHtml(cat.name)}</span>
-                </div>
-            `).join('');
-            
-            // Add click handlers
-            document.querySelectorAll('.category-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // Update active state
-                    document.querySelectorAll('.category-btn').forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    btn.classList.add('active');
-                    
-                    // Set current category
-                    currentCategory = {
-                        id: parseInt(btn.dataset.id),
-                        name: btn.dataset.name,
-                        color: btn.dataset.color
-                    };
-                    
-                    // Re-render items
-                    renderPaymentItems();
-                    
-                    // Clear search
-                    const searchInput = document.getElementById('searchInput');
-                    if (searchInput) searchInput.value = '';
-                });
+                // Clear search
+                document.getElementById('searchInput').value = '';
             });
-            
-            // Activate first category
+        });
+        
+        // Activate first category
+        if (categories.length > 0) {
             const firstBtn = document.querySelector('.category-btn');
             if (firstBtn) firstBtn.classList.add('active');
         }
+    }
+    
+    // Render payment items for selected category
+    function renderPaymentItems() {
+        const grid = document.getElementById('paymentGrid');
         
-        // Render payment items
-        function renderPaymentItems() {
+        if (!currentCategoryId) {
+            grid.innerHTML = '<div class="error">Please select a category</div>';
+            return;
+        }
+        
+        const currentCategory = categories.find(c => c.id === currentCategoryId);
+        if (!currentCategory) return;
+        
+        const items = paymentItems.filter(item => item.category_id === currentCategoryId);
+        
+        console.log(`🖼️ Rendering ${items.length} items for category: ${currentCategory.name}`);
+        
+        if (items.length === 0) {
+            grid.innerHTML = `<div class="error">No payment items found in ${escapeHtml(currentCategory.name)} category</div>`;
+            return;
+        }
+        
+        grid.innerHTML = items.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+            
+            return `
+                <div class="payment-card">
+                    <div class="card-top" style="background: ${currentCategory.color};"></div>
+                    <div class="card-body">
+                        <div class="card-title">${escapeHtml(item.name)}</div>
+                        <div class="card-footer">
+                            <button class="pay-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
+                                    onclick="makePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
+                                Make payment
+                            </button>
+                            <div style="text-align: right;">
+                                <div class="amount-label">${amountLabel}</div>
+                                <div class="amount-value">${amountDisplay}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    // Search functionality
+    function setupSearch() {
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            
+            if (!currentCategoryId) return;
+            
+            const currentCategory = categories.find(c => c.id === currentCategoryId);
+            if (!currentCategory) return;
+            
+            let filteredItems = paymentItems.filter(item => item.category_id === currentCategoryId);
+            
+            if (searchTerm) {
+                filteredItems = filteredItems.filter(item => 
+                    item.name.toLowerCase().includes(searchTerm)
+                );
+            }
+            
             const grid = document.getElementById('paymentGrid');
-            if (!grid || !currentCategory) return;
             
-            const items = currentPaymentItems.filter(item => item.category_id === currentCategory.id);
-            
-            console.log(`Rendering ${items.length} items for ${currentCategory.name}`);
-            
-            if (items.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500">No payment items found in ${escapeHtml(currentCategory.name)} category</div>`;
+            if (filteredItems.length === 0) {
+                grid.innerHTML = `<div class="error">No matching payment items found in ${escapeHtml(currentCategory.name)}</div>`;
                 return;
             }
             
-            grid.innerHTML = items.map(item => {
+            grid.innerHTML = filteredItems.map(item => {
                 const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+                const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+                
                 return `
                     <div class="payment-card">
-                        <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
-                        <div class="card-content">
+                        <div class="card-top" style="background: ${currentCategory.color};"></div>
+                        <div class="card-body">
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
-                                <button class="make-payment-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
-                                        onclick="handlePayment(${JSON.stringify(item).replace(/'/g, '&#39;')})">
+                                <button class="pay-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
+                                        onclick="makePayment(${JSON.stringify(item).replace(/'/g, '&#39;')}, '${currentCategory.color}')">
                                     Make payment
                                 </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                <div style="text-align: right;">
+                                    <div class="amount-label">${amountLabel}</div>
+                                    <div class="amount-value">${amountDisplay}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
-        }
-        
-        // Search functionality
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            if (!searchInput) return;
-            
-            searchInput.addEventListener('input', (e) => {
-                const term = e.target.value.toLowerCase();
-                if (!currentCategory) return;
-                
-                const items = currentPaymentItems.filter(item => 
-                    item.category_id === currentCategory.id && 
-                    item.name.toLowerCase().includes(term)
-                );
-                
-                const grid = document.getElementById('paymentGrid');
-                if (items.length === 0) {
-                    grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>';
-                    return;
-                }
-                
-                grid.innerHTML = items.map(item => {
-                    const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                    return `
-                        <div class="payment-card">
-                            <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
-                            <div class="card-content">
-                                <div class="card-title">${escapeHtml(item.name)}</div>
-                                <div class="card-footer">
-                                    <button class="make-payment-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
-                                            onclick="handlePayment(${JSON.stringify(item).replace(/'/g, '&#39;')})">
-                                        Make payment
-                                    </button>
-                                    <div class="text-right">
-                                        <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
-                                        <div class="fixed-amount-value">${amountDisplay}</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            });
-        }
-        
-        // Handle payment button click
-        window.handlePayment = function(item) {
-            alert(`🔵 Payment for: ${item.name}\n💰 Amount: ${item.amount ? 'NGN ' + item.amount.toLocaleString() : 'Custom amount'}\n\nFull payment integration coming soon!`);
-        }
-        
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
-        }
-        
-        // Mobile menu
-        function initMobileMenu() {
-            const menuBtn = document.getElementById('mobileMenuBtn');
-            let mobileMenu = document.getElementById('mobileMenu');
-            
-            if (!mobileMenu) {
-                mobileMenu = document.createElement('div');
-                mobileMenu.id = 'mobileMenu';
-                mobileMenu.style.cssText = 'display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;';
-                mobileMenu.innerHTML = '<a href="index.html" style="display: block; padding: 16px; text-align: center; color: #4b5563; text-decoration: none;">Back to Home</a>';
-                document.body.appendChild(mobileMenu);
-            }
-            
-            if (menuBtn) {
-                menuBtn.onclick = () => {
-                    mobileMenu.style.display = 'block';
-                };
-                
-                document.addEventListener('click', (e) => {
-                    if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-                        mobileMenu.style.display = 'none';
-                    }
-                });
-            }
-        }
-        
-        // Initialize
-        loadData();
-        setupSearch();
-        initMobileMenu();
-    })();
+        });
+    }
+    
+    // Payment handler
+    window.makePayment = function(item, color) {
+        alert(`🔵 Payment for: ${item.name}\n💰 Amount: ${item.amount ? 'NGN ' + item.amount.toLocaleString() : 'Custom amount'}\n\nFull payment integration will be added here.`);
+    }
+    
+    // Helper function
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    // Start the app
+    init();
 </script>
 </body>
 </html>
