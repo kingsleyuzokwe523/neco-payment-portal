@@ -7,294 +7,171 @@
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'CircularStd', system-ui, sans-serif; background: #f0f2f5; }
+        .container { width: 100%; margin: 0 auto; padding: 0 1rem; }
+        @media (min-width: 640px) { .container { max-width: 640px; padding: 0 1.5rem; } }
+        @media (min-width: 768px) { .container { max-width: 768px; } }
+        @media (min-width: 1024px) { .container { max-width: 1024px; padding: 0 2rem; } }
+        @media (min-width: 1280px) { .container { max-width: 1280px; } }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f2f5;
-        }
+        .payment-card { border-radius: 0.75rem; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); transition: all 0.2s ease; background: white; }
+        .payment-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+        .card-top-bar { height: 4px; width: 100%; }
+        .card-content { background: #ECFAF3; padding: 1.5rem; display: flex; flex-direction: column; height: 100%; }
+        .card-title { font-size: 1rem; font-weight: 600; color: #111827; margin-bottom: 1rem; min-height: 3rem; }
+        .card-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #d1d5db; }
+        .make-payment-btn { font-size: 0.75rem; border: 1px solid; border-radius: 0.5rem; padding: 0.5rem 1rem; font-weight: 600; background: transparent; cursor: pointer; transition: all 0.2s; }
+        .make-payment-btn:hover { transform: scale(1.05); background: rgba(0,0,0,0.05); }
+        .fixed-amount-label { font-size: 0.7rem; color: #6b7280; }
+        .fixed-amount-value { font-size: 0.875rem; font-weight: 700; color: #054c0f; }
         
-        .container {
-            width: 100%;
-            margin-right: auto;
-            margin-left: auto;
-            padding-right: 1rem;
-            padding-left: 1rem;
-        }
+        .category-btn { transition: all 0.2s; cursor: pointer; }
+        .category-btn:hover { transform: translateY(-2px); opacity: 0.9; }
         
-        @media (min-width: 640px) {
-            .container { max-width: 640px; padding-right: 1.5rem; padding-left: 1.5rem; }
-        }
+        .loader-spinner { border: 3px solid #e5e7eb; border-top: 3px solid #054c0f; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .modal { position: fixed; inset: 0; z-index: 50; display: none; }
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); }
+        .modal-container { position: fixed; inset: 0; overflow-y: auto; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+        .modal-content { background: white; border-radius: 0.75rem; max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; }
+        
+        @font-face { font-family: 'CircularStd'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf'); }
+        @font-face { font-family: 'CircularStdBold'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf'); }
+        
+        .error-text { color: #dc2626; font-size: 12px; margin-top: 4px; display: none; }
+        input.error, select.error { border-color: #dc2626; }
+        
         @media (min-width: 768px) {
-            .container { max-width: 768px; }
+            .md\:grid-cols-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .md\:flex-row { flex-direction: row; }
+            .md\:w-3\/5 { width: 60%; }
+            .md\:w-1\/3 { width: 33.333%; }
         }
         @media (min-width: 1024px) {
-            .container { max-width: 1024px; padding-right: 2rem; padding-left: 2rem; }
-        }
-        @media (min-width: 1280px) {
-            .container { max-width: 1280px; padding-right: 2rem; padding-left: 2rem; }
-        }
-        
-        .payment-card {
-            border-radius: 0.75rem;
-            overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-        }
-        .payment-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        .card-top-bar { height: 3px; width: 100%; }
-        .card-content {
-            background: #ECFAF3;
-            padding: 1.5rem 1.25rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-        }
-        .card-title {
-            font-size: 1rem;
-            font-weight: 500;
-            color: #111827;
-            margin-bottom: 1rem;
-            line-height: 1.4;
-            min-height: 3rem;
-        }
-        .card-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid #e5e7eb;
-        }
-        .make-payment-btn {
-            font-size: 0.75rem;
-            border: 1px solid;
-            border-radius: 0.5rem;
-            padding: 0.7rem 1.2rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            background: transparent;
-        }
-        .make-payment-btn:hover { transform: scale(1.02); }
-        .fixed-amount-label { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.25rem; }
-        .fixed-amount-value { font-size: 0.875rem; font-weight: 600; color: #222222; }
-        
-        #mobileMenu {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 9999;
-        }
-        #mobileMenu a {
-            display: block;
-            padding: 16px 20px;
-            color: #4b5563;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-        }
-        #mobileMenu a:hover { background-color: #f0fdf4; color: #054c0f; }
-        
-        .category-btn {
-            transition: all 0.2s ease;
-        }
-        .category-btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .loader-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #054c0f;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (min-width:768px){
-            .md\:mt-0 { margin-top: 0; }
-            .md\:w-3\/5 { width: 60%; }
-            .md\:w-1\/3 { width: 33.333333%; }
-            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .md\:flex-row { flex-direction: row; }
-            .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; }
-            .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-            .md\:leading-tight { line-height: 1.25; }
-        }
-        @media (min-width:1024px){
+            .lg\:grid-cols-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
             .lg\:flex { display: flex; }
             .lg\:hidden { display: none; }
-            .lg\:items-center { align-items: center; }
-            .lg\:gap-8 { gap: 2rem; }
-            .lg\:text-xs { font-size: .75rem; }
-            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
         }
-        @media (min-width:1280px){
-            .xl\:text-sm { font-size: .875rem; }
-            .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        @media (min-width: 1280px) {
+            .xl\:grid-cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
         }
-        @font-face {
-            font-family: 'CircularStd';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
-        }
-        @font-face {
-            font-family: 'CircularStdBold';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf');
-        }
-        body { font-family: 'CircularStd', system-ui, sans-serif; }
-        .fixed { position: fixed; }
-        .absolute { position: absolute; }
-        .relative { position: relative; }
-        .sticky { position: sticky; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .top-0 { top: 0; }
-        .z-10 { z-index: 10; }
-        .z-30 { z-index: 30; }
-        .z-50 { z-index: 50; }
-        .mt-20 { margin-top: 5rem; }
-        .mt-10 { margin-top: 2.5rem; }
-        .mt-5 { margin-top: 1.25rem; }
-        .mt-2 { margin-top: .5rem; }
-        .mt-1 { margin-top: .25rem; }
+        
+        .bg-\[\#EBEBEB\] { background-color: #EBEBEB; }
+        .bg-white { background-color: white; }
+        .bg-\[\#F2F2F2\] { background-color: #F2F2F2; }
+        .bg-primary-700 { background-color: #054c0f; }
+        .hover\:bg-primary-600:hover { background-color: #009515; }
+        .text-primary-600 { color: #009515; }
+        .text-red-600 { color: #dc2626; }
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .drop-shadow-md { filter: drop-shadow(0 4px 3px rgba(0,0,0,0.07)); }
+        .rounded { border-radius: 0.25rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        .rounded-full { border-radius: 9999px; }
+        .cursor-pointer { cursor: pointer; }
+        .hidden { display: none; }
         .block { display: block; }
         .flex { display: flex; }
         .grid { display: grid; }
-        .hidden { display: none; }
         .items-center { align-items: center; }
         .justify-between { justify-content: space-between; }
         .justify-center { justify-content: center; }
-        .gap-3 { gap: .75rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-3 { gap: 0.75rem; }
         .gap-5 { gap: 1.25rem; }
-        .rounded { border-radius: .25rem; }
-        .rounded-full { border-radius: 9999px; }
-        .bg-\[\#EBEBEB\] { background-color: #ebebeb; }
-        .bg-white { background-color: #fff; }
-        .text-\[\#747474\] { color: #747474; }
-        .text-gray-500 { color: #6b7280; }
-        .w-2 { width: .5rem; }
-        .h-2 { height: .5rem; }
-        .p-3 { padding: .75rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
-        .pr-9 { padding-right: 2.25rem; }
-        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .drop-shadow-md { filter: drop-shadow(0 4px 3px rgba(0,0,0,0.07)); }
-        .cursor-pointer { cursor: pointer; }
-        .text-sm { font-size: .875rem; line-height: 1.25rem; }
-        .text-base { font-size: 1rem; line-height: 1.5rem; }
-        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
-        .tracking-tight { letter-spacing: -.025em; }
-        .text-gray-600 { color: #4b5563; }
-        .hover\:text-gray-900:hover { color: #111827; }
-        .w-full { width: 100%; }
-        .h-14 { height: 3.5rem; }
-        .w-14 { width: 3.5rem; }
-        .h-8 { width: 2rem; height: 2rem; }
-        .bg-\[\#F2F2F2\] { background-color: #f2f2f2; }
-        .border { border-width: 1px; }
-        .border-\[\#F2F2F2\] { border-color: #f2f2f2; }
-        .focus\:border-primary-500:focus { border-color: #378b3d; }
-        .focus\:ring-1:focus { box-shadow: 0 0 0 1px #378b3d; }
-        .text-gray-400 { color: #9ca3af; }
-        .w-5 { width: 1.25rem; }
-        .h-5 { height: 1.25rem; }
-        .inline-flex { display: inline-flex; }
-        .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mt-5 { margin-top: 1.25rem; }
+        .mt-10 { margin-top: 2.5rem; }
+        .mt-20 { margin-top: 5rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
         .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .bg-green-600 { background-color: #16a34a; }
-        .text-white { color: #fff; }
-        .hover\:bg-green-500:hover { background-color: #22c55e; }
-        .rounded-md { border-radius: .375rem; }
-        .lg\:hidden { display: none; }
-        @media (min-width: 1024px) { .lg\:flex { display: flex; } .lg\:hidden { display: none; } }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-2\.5 { padding-top: 0.625rem; padding-bottom: 0.625rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
+        .w-full { width: 100%; }
+        .w-2 { width: 0.5rem; }
+        .w-5 { width: 1.25rem; }
+        .w-6 { width: 1.5rem; }
+        .w-8 { width: 2rem; }
+        .w-14 { width: 3.5rem; }
+        .h-2 { height: 0.5rem; }
+        .h-5 { height: 1.25rem; }
+        .h-8 { height: 2rem; }
+        .h-14 { height: 3.5rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-white { color: white; }
+        .border { border-width: 1px; }
+        .border-gray-300 { border-color: #d1d5db; }
+        .sticky { position: sticky; }
+        .top-0 { top: 0; }
+        .z-10 { z-index: 10; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; }
     </style>
 </head>
 <body>
 <div id="app">
-    <div class="router">
-        <div class="shadow-md bg-white sticky w-full z-10 top-0">
-            <div class="container py-2 relative">
-                <nav class="flex justify-between items-center">
-                    <div class="h-14 w-14">
-                        <a href="index.html">
-                            <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
-                        </a>
-                    </div>
-                    <div>
-                        <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                            <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
-                        </ul>
-                    </div>
-                    <div class="flex items-center gap-2 lg:hidden">
-                        <button type="button" id="cancelMenuBtn" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <button type="button" id="mobileMenuBtn">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </nav>
-            </div>
-        </div>
-        <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
-            <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
-        </div>
-        
-        <div class="container mt-20">
-            <div class="flex items-center flex-col md:flex-row justify-between">
-                <div class="w-full md:w-3/5">
-                    <h1 class="text-3xl md:text-4xl font-CircularStdBold md:leading-tight tracking-tight">Make Payment</h1>
-                    <p class="mt-2">You can search for a payment item or select from the list</p>
+    <div class="shadow-md bg-white sticky w-full z-10 top-0">
+        <div class="container py-2">
+            <nav class="flex justify-between items-center">
+                <div class="h-14 w-14">
+                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
                 </div>
-                <div class="md:w-1/3 mt-5 md:mt-0 w-full">
-                    <div class="w-full">
-                        <div class="mt-1 relative">
-                            <input id="searchInput" placeholder="What do you want to pay for?" class="block w-full rounded-md border bg-[#F2F2F2] shadow-sm sm:text-sm focus:border-primary-500 focus:ring-1 focus:ring-primary-500 border-[#F2F2F2] px-6 py-3 text-base pr-9">
-                            <div class="absolute inset-y-0 right-0 inline-flex justify-center items-center pr-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-400">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
+                <ul class="hidden lg:flex lg:items-center lg:gap-8">
+                    <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
+                </ul>
+                <div class="flex items-center gap-2 lg:hidden">
+                    <button type="button" id="mobileMenuBtn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                        </svg>
+                    </button>
                 </div>
+            </nav>
+        </div>
+    </div>
+    
+    <div class="container mt-20">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-5">
+            <div class="w-full md:w-3/5">
+                <h1 class="text-3xl font-bold tracking-tight">Make Payment</h1>
+                <p class="mt-2 text-gray-600">You can search for a payment item or select from the list</p>
+            </div>
+            <div class="w-full md:w-1/3">
+                <input id="searchInput" placeholder="What do you want to pay for?" 
+                       class="w-full rounded-md border border-gray-300 bg-[#F2F2F2] px-6 py-3 text-base focus:outline-none focus:ring-2 focus:ring-green-600">
             </div>
         </div>
-        
-        <div class="container mt-10">
-            <div class="flex gap-3 flex-wrap" id="categoryFilters">
-                <div class="loader-spinner"></div>
-            </div>
+    </div>
+    
+    <div class="container mt-10">
+        <div class="flex gap-3 flex-wrap" id="categoryFilters">
+            <div class="loader-spinner"></div>
         </div>
-        
-        <div class="container mt-10">
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid">
-                <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
-            </div>
+    </div>
+    
+    <div class="container mt-10">
+        <div id="paymentGrid" class="grid gap-5 md:gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
         </div>
     </div>
 </div>
@@ -302,155 +179,147 @@
 <script>
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
     let currentCategories = [];
     let currentPaymentItems = [];
     let currentCategory = null;
+    let selectedItem = null;
     
-    // ============ LOAD DATA FROM SUPABASE ============
-    async function loadCategoriesAndItems() {
-        console.log('Loading categories and items...');
+    // Load data
+    async function loadData() {
+        console.log('Loading data from Supabase...');
         
         try {
             // Load categories
-            const { data: categories, error: catError } = await supabaseClient
+            const { data: categories, error: catErr } = await supabase
                 .from('categories')
                 .select('*')
                 .order('id');
             
-            if (catError) {
-                console.error('Error loading categories:', catError);
-                document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">Error loading categories. Please refresh.</div>';
-                return;
-            }
+            if (catErr) throw catErr;
             
-            console.log('Categories loaded:', categories);
+            console.log('Categories:', categories);
+            currentCategories = categories || [];
             
-            if (categories && categories.length > 0) {
-                currentCategories = categories;
-            } else {
-                console.log('No categories found in database!');
-                document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">No categories found. Please run the SQL setup.</div>';
+            if (currentCategories.length === 0) {
+                document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">No categories found. Please run SQL setup.</div>';
                 return;
             }
             
             // Load payment items
-            const { data: items, error: itemError } = await supabaseClient
+            const { data: items, error: itemErr } = await supabase
                 .from('payment_items')
                 .select('*')
                 .order('id');
             
-            if (itemError) {
-                console.error('Error loading items:', itemError);
+            if (itemErr) throw itemErr;
+            
+            console.log('Payment items:', items?.length);
+            currentPaymentItems = items || [];
+            
+            if (currentPaymentItems.length === 0) {
+                document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-600">No payment items found. Please run SQL setup.</div>';
                 return;
             }
             
-            console.log('Payment items loaded:', items ? items.length : 0);
+            // Render categories
+            renderCategories();
             
-            if (items && items.length > 0) {
-                currentPaymentItems = items;
-            } else {
-                console.log('No payment items found in database!');
-                document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-red-600">No payment items found. Please run the SQL setup.</div>';
-                return;
-            }
-            
-            // Render category filters
-            renderCategoryFilters();
-            
-            // Set default category to first one
-            if (currentCategories.length > 0) {
-                currentCategory = currentCategories[0];
-                renderPaymentGrid();
-            }
+            // Set default category and render items
+            currentCategory = currentCategories[0];
+            renderPaymentItems();
             
         } catch (error) {
-            console.error('Error in loadCategoriesAndItems:', error);
-            document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">Error connecting to database. Please check your connection.</div>';
+            console.error('Error loading data:', error);
+            document.getElementById('categoryFilters').innerHTML = '<div class="text-red-600">Error connecting to database. Please refresh.</div>';
         }
     }
     
-    // ============ RENDER CATEGORY FILTERS ============
-    function renderCategoryFilters() {
+    // Render category buttons
+    function renderCategories() {
         const container = document.getElementById('categoryFilters');
         if (!container) return;
         
-        let html = '';
-        for (let i = 0; i < currentCategories.length; i++) {
-            const cat = currentCategories[i];
-            const isActive = currentCategory && currentCategory.id === cat.id;
-            html += `
-                <div data-category-id="${cat.id}" data-category-name="${cat.name}" data-color="${cat.color}" 
-                     class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer ${isActive ? '!bg-white drop-shadow-md' : ''}"
-                     style="${isActive ? 'background-color: white;' : 'background-color: #EBEBEB;'}">
-                    <div class="w-2 rounded-full h-2" style="background-color: ${cat.color};"></div>
-                    <div>${escapeHtml(cat.name)}</div>
-                </div>
-            `;
-        }
-        container.innerHTML = html;
+        container.innerHTML = currentCategories.map(cat => `
+            <div class="category-btn bg-[#EBEBEB] rounded p-3 text-gray-600 flex items-center gap-2" 
+                 data-id="${cat.id}" data-name="${cat.name}" data-color="${cat.color}">
+                <div class="w-2 h-2 rounded-full" style="background-color: ${cat.color};"></div>
+                <span>${escapeHtml(cat.name)}</span>
+            </div>
+        `).join('');
         
-        // Add click event listeners
+        // Add click handlers
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
+                // Update active state
                 document.querySelectorAll('.category-btn').forEach(b => {
-                    b.classList.remove('!bg-white', 'drop-shadow-md');
+                    b.classList.remove('bg-white', 'drop-shadow-md');
                     b.style.backgroundColor = '#EBEBEB';
                 });
-                btn.classList.add('!bg-white', 'drop-shadow-md');
+                btn.classList.add('bg-white', 'drop-shadow-md');
                 btn.style.backgroundColor = 'white';
                 
-                const categoryId = parseInt(btn.getAttribute('data-category-id'));
-                const categoryName = btn.getAttribute('data-category-name');
-                const color = btn.getAttribute('data-color');
+                // Set current category
+                currentCategory = {
+                    id: parseInt(btn.dataset.id),
+                    name: btn.dataset.name,
+                    color: btn.dataset.color
+                };
                 
-                currentCategory = { id: categoryId, name: categoryName, color: color };
-                renderPaymentGrid();
+                // Re-render items
+                renderPaymentItems();
+                
+                // Clear search
                 document.getElementById('searchInput').value = '';
             });
         });
+        
+        // Activate first category by default
+        if (currentCategories.length > 0) {
+            const firstBtn = document.querySelector('.category-btn');
+            if (firstBtn) {
+                firstBtn.classList.add('bg-white', 'drop-shadow-md');
+                firstBtn.style.backgroundColor = 'white';
+            }
+        }
     }
     
-    // ============ RENDER PAYMENT GRID ============
-    function renderPaymentGrid() {
+    // Render payment items for current category
+    function renderPaymentItems() {
         const grid = document.getElementById('paymentGrid');
         if (!grid || !currentCategory) return;
         
         const items = currentPaymentItems.filter(item => item.category_id === currentCategory.id);
         
-        console.log(`Rendering ${items.length} items for category ${currentCategory.name}`);
+        console.log(`Rendering ${items.length} items for ${currentCategory.name}`);
         
         if (items.length === 0) {
             grid.innerHTML = `<div class="col-span-full text-center py-10 text-gray-500">No payment items found in ${escapeHtml(currentCategory.name)} category</div>`;
             return;
         }
         
-        grid.innerHTML = items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `
-                <div class="payment-card">
-                    <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
-                    <div class="card-content">
-                        <div class="card-title">${escapeHtml(item.name)}</div>
-                        <div class="card-footer">
-                            <button onclick='alert("Payment form would open for: ${escapeHtml(item.name)}. Full payment integration coming soon.")' 
-                                    class="make-payment-btn"
-                                    style="border-color: ${currentCategory.color}; color: ${currentCategory.color};">
-                                Make payment
-                            </button>
-                            <div class="text-right">
-                                <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
-                                <div class="fixed-amount-value">${amountDisplay}</div>
-                            </div>
+        grid.innerHTML = items.map(item => `
+            <div class="payment-card">
+                <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
+                <div class="card-content">
+                    <div class="card-title">${escapeHtml(item.name)}</div>
+                    <div class="card-footer">
+                        <button class="make-payment-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
+                                onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&#39;")})'>
+                            Make payment
+                        </button>
+                        <div class="text-right">
+                            <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
+                            <div class="fixed-amount-value">${item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount'}</div>
                         </div>
                     </div>
                 </div>
-            `;
-        }).join('');
+            </div>
+        `).join('');
     }
     
-    // ============ SEARCH FUNCTION ============
+    // Search functionality
     function setupSearch() {
         const searchInput = document.getElementById('searchInput');
         if (!searchInput) return;
@@ -470,29 +339,31 @@
                 return;
             }
             
-            grid.innerHTML = items.map(item => {
-                const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-                return `
-                    <div class="payment-card">
-                        <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer">
-                                <button onclick='alert("Payment form would open for: ${escapeHtml(item.name)}. Full payment integration coming soon.")' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${currentCategory.color}; color: ${currentCategory.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
+            grid.innerHTML = items.map(item => `
+                <div class="payment-card">
+                    <div class="card-top-bar" style="background: ${currentCategory.color};"></div>
+                    <div class="card-content">
+                        <div class="card-title">${escapeHtml(item.name)}</div>
+                        <div class="card-footer">
+                            <button class="make-payment-btn" style="border-color: ${currentCategory.color}; color: ${currentCategory.color};"
+                                    onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&#39;")})'>
+                                Make payment
+                            </button>
+                            <div class="text-right">
+                                <div class="fixed-amount-label">${item.amount ? 'Fixed Amount' : 'Custom Amount'}</div>
+                                <div class="fixed-amount-value">${item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount'}</div>
                             </div>
                         </div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
         });
+    }
+    
+    // Open payment modal (simplified for testing)
+    function openPaymentModal(item) {
+        selectedItem = item;
+        alert(`Payment for: ${item.name}\nAmount: ${item.amount ? 'NGN ' + item.amount : 'Custom amount'}\n\nFull payment integration will be added here.`);
     }
     
     function escapeHtml(str) {
@@ -505,51 +376,48 @@
         });
     }
     
-    // ============ INITIALIZE PAGE ============
+    // Mobile menu
+    function initMobileMenu() {
+        const menuBtn = document.getElementById('mobileMenuBtn');
+        let mobileMenu = document.getElementById('mobileMenu');
+        
+        if (!mobileMenu) {
+            mobileMenu = document.createElement('div');
+            mobileMenu.id = 'mobileMenu';
+            mobileMenu.style.display = 'none';
+            mobileMenu.style.position = 'fixed';
+            mobileMenu.style.top = '70px';
+            mobileMenu.style.left = '0';
+            mobileMenu.style.right = '0';
+            mobileMenu.style.background = 'white';
+            mobileMenu.style.boxShadow = '0 4px 20px rgba(0,0,0,0.15)';
+            mobileMenu.style.zIndex = '9999';
+            mobileMenu.innerHTML = '<a href="index.html" style="display: block; padding: 16px; text-align: center; color: #4b5563; text-decoration: none;">Back to Home</a>';
+            document.body.appendChild(mobileMenu);
+        }
+        
+        if (menuBtn) {
+            menuBtn.onclick = () => {
+                mobileMenu.style.display = 'block';
+            };
+            
+            document.addEventListener('click', (e) => {
+                if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.style.display = 'none';
+                }
+            });
+        }
+    }
+    
+    // Initialize
     async function init() {
         console.log('Initializing payment page...');
-        await loadCategoriesAndItems();
+        await loadData();
         setupSearch();
-        
-        // Listen for real-time sync from admin panel
-        window.addEventListener('storage', function(e) {
-            if (e.key === 'neco_sync_timestamp') {
-                console.log('Sync triggered by admin panel');
-                loadCategoriesAndItems();
-            }
-        });
+        initMobileMenu();
     }
     
     init();
-    
-    // ============ MOBILE MENU ============
-    var menuBtn = document.getElementById('mobileMenuBtn');
-    var cancelBtn = document.getElementById('cancelMenuBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
-    
-    if (menuBtn) {
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'block';
-            menuBtn.style.display = 'none';
-            cancelBtn.style.display = 'block';
-        };
-        cancelBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            menuBtn.style.display = 'block';
-        };
-        document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                    menuBtn.style.display = 'block';
-                }
-            }
-        };
-    }
 </script>
 </body>
 </html>
