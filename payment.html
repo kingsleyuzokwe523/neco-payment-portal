@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>NECO Payment Portal - Make Payment</title>
     <link rel="icon" type="image/png" href="https://i.imgur.com/cNVlGBu.jpeg">
+    <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
+        html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
+        body{margin:0;line-height:inherit;background:#fff}
+        a{color:inherit;text-decoration:inherit}
+        button,input,optgroup,select,textarea{font-family:inherit;font-size:100%;margin:0;padding:0}
+        button{background-color:transparent;cursor:pointer}
+        img,svg{display:block;vertical-align:middle}
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f2f5;
-        }
-        
+        /* Global container spacing fix */
         .container {
             width: 100%;
             margin-right: auto;
@@ -27,18 +26,33 @@
         }
         
         @media (min-width: 640px) {
-            .container { max-width: 640px; padding-right: 1.5rem; padding-left: 1.5rem; }
+            .container {
+                max-width: 640px;
+                padding-right: 1.5rem;
+                padding-left: 1.5rem;
+            }
         }
         @media (min-width: 768px) {
-            .container { max-width: 768px; }
+            .container {
+                max-width: 768px;
+            }
         }
         @media (min-width: 1024px) {
-            .container { max-width: 1024px; padding-right: 2rem; padding-left: 2rem; }
+            .container {
+                max-width: 1024px;
+                padding-right: 2rem;
+                padding-left: 2rem;
+            }
         }
         @media (min-width: 1280px) {
-            .container { max-width: 1280px; padding-right: 2rem; padding-left: 2rem; }
+            .container {
+                max-width: 1280px;
+                padding-right: 2rem;
+                padding-left: 2rem;
+            }
         }
         
+        /* Payment Card Styles */
         .payment-card {
             border-radius: 0.75rem;
             overflow: hidden;
@@ -49,7 +63,10 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .card-top-bar { height: 3px; width: 100%; }
+        .card-top-bar {
+            height: 3px;
+            width: 100%;
+        }
         .card-content {
             background: #ECFAF3;
             padding: 1.5rem 1.25rem;
@@ -74,19 +91,28 @@
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
         }
-        .make-payment-btn {
-            font-size: 0.75rem;
-            border: 1px solid;
-            border-radius: 0.5rem;
-            padding: 0.7rem 1.2rem;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            background: transparent;
-            cursor: pointer;
+      .make-payment-btn {
+    font-size: 0.75rem;
+    border: 1px solid;
+    border-radius: 0.5rem;
+    padding: 0.7rem 1.2rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    background: transparent;
+}
+        .make-payment-btn:hover {
+            transform: scale(1.02);
         }
-        .make-payment-btn:hover { transform: scale(1.02); }
-        .fixed-amount-label { font-size: 0.7rem; color: #6b7280; margin-bottom: 0.25rem; }
-        .fixed-amount-value { font-size: 0.875rem; font-weight: 600; color: #222222; }
+        .fixed-amount-label {
+            font-size: 0.7rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+        .fixed-amount-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #222222;
+        }
         
         #accountModal .account-box {
             max-width: 400px;
@@ -116,11 +142,23 @@
             font-size: 16px;
             font-weight: 500;
             text-align: center;
+            transition: all 0.2s ease;
         }
-        #mobileMenu a:hover { background-color: #f0fdf4; color: #054c0f; }
-        #accountModal .account-inner { padding: 20px 24px; }
-        #accountModal .logo-row { text-align: center; margin-bottom: 20px; }
-        #accountModal .logo-row img { height: 50px; display: inline-block; }
+        #mobileMenu a:hover {
+            background-color: #f0fdf4;
+            color: #054c0f;
+        }
+        #accountModal .account-inner {
+            padding: 20px 24px;
+        }
+        #accountModal .logo-row {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        #accountModal .logo-row img {
+            height: 50px;
+            display: inline-block;
+        }
         #accountModal .details-row {
             display: flex;
             align-items: baseline;
@@ -131,12 +169,14 @@
             font-size: 16px;
             color: #6b7280;
             font-weight: 500;
+            text-align: left;
             min-width: 115px;
         }
         #accountModal .details-value {
             font-size: 16px;
             color: #111827;
             font-weight: 600;
+            text-align: left;
             flex: 1;
             word-break: break-word;
         }
@@ -151,6 +191,9 @@
             color: #dc2626;
             font-size: 15px;
             font-weight: 500;
+            background: transparent;
+            padding: 0;
+            white-space: nowrap;
         }
         #accountModal .timer-box-small {
             background: white;
@@ -160,12 +203,15 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
+            flex-shrink: 0;
         }
         #accountModal .timer-small {
             font-size: 11px;
             font-weight: 600;
             color: #dc2626;
             font-family: monospace;
+            text-align: center;
+            letter-spacing: 0.5px;
         }
         #accountModal .upload-area-small {
             background: #f9fafb;
@@ -176,11 +222,34 @@
             cursor: pointer;
             margin: 16px 0 12px 0;
         }
-        #accountModal .upload-area-small:hover { background: #f3f4f6; border-color: #16a34a; }
-        #accountModal .upload-icon-small { width: 20px; height: 22px; margin: 0 auto 4px; color: #9ca3af; }
-        #accountModal .upload-text-small { font-size: 12px; color: #6b7280; font-weight: 500; }
-        #accountModal .file-name-small { font-size: 11px; color: #16a34a; text-align: center; margin-top: 6px; }
-        #accountModal .button-group { display: flex; gap: 16px; margin-top: 20px; justify-content: center; }
+        #accountModal .upload-area-small:hover {
+            background: #f3f4f6;
+            border-color: #16a34a;
+        }
+        #accountModal .upload-icon-small {
+            width: 20px;
+            height: 22px;
+            margin: 0 auto 4px;
+            color: #9ca3af;
+        }
+        #accountModal .upload-text-small {
+            font-size: 12px;
+            color: #6b7280;
+            margin: 0;
+            font-weight: 500;
+        }
+        #accountModal .file-name-small {
+            font-size: 11px;
+            color: #16a34a;
+            text-align: center;
+            margin-top: 6px;
+        }
+        #accountModal .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+            justify-content: center;
+        }
         #accountModal .btn-cancel-account {
             background: white;
             border: 1px solid #054c0f;
@@ -191,7 +260,9 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        #accountModal .btn-cancel-account:hover { background: #f0fdf4; }
+        #accountModal .btn-cancel-account:hover {
+            background: #f0fdf4;
+        }
         #accountModal .btn-confirm {
             background: #054c0f;
             border: none;
@@ -202,127 +273,56 @@
             border-radius: 8px;
             cursor: pointer;
         }
-        #accountModal .btn-confirm:hover { background: #009515; }
+        #accountModal .btn-confirm:hover {
+            background: #009515;
+        }
         
-        .fixed { position: fixed; }
-        .absolute { position: absolute; }
-        .relative { position: relative; }
-        .sticky { position: sticky; }
-        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
-        .top-0 { top: 0; }
-        .z-10 { z-index: 10; }
-        .z-30 { z-index: 30; }
-        .z-40 { z-index: 40; }
-        .z-50 { z-index: 50; }
-        .mt-20 { margin-top: 5rem; }
-        .mt-10 { margin-top: 2.5rem; }
-        .mt-5 { margin-top: 1.25rem; }
-        .mt-2 { margin-top: .5rem; }
-        .mt-1 { margin-top: .25rem; }
-        .mt-4 { margin-top: 1rem; }
-        .mt-8 { margin-top: 2rem; }
-        .mb-4 { margin-bottom: 1rem; }
-        .block { display: block; }
-        .flex { display: flex; }
-        .grid { display: grid; }
-        .hidden { display: none; }
-        .inline-flex { display: inline-flex; }
-        .h-full { height: 100%; }
-        .h-14 { height: 3.5rem; }
-        .h-8 { height: 2rem; }
-        .h-5 { height: 1.25rem; }
-        .h-4 { height: 1rem; }
-        .w-full { width: 100%; }
-        .w-14 { width: 3.5rem; }
-        .w-8 { width: 2rem; }
-        .w-5 { width: 1.25rem; }
-        .w-6 { width: 1.5rem; }
-        .max-w-xl { max-width: 36rem; }
-        .cursor-pointer { cursor: pointer; }
-        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-        .col-span-2 { grid-column: span 2 / span 2; }
-        .flex-col { flex-direction: column; }
-        .flex-wrap { flex-wrap: wrap; }
-        .items-center { align-items: center; }
-        .justify-between { justify-content: space-between; }
-        .justify-center { justify-content: center; }
-        .justify-end { justify-content: flex-end; }
-        .gap-10 { gap: 2.5rem; }
-        .gap-3 { gap: .75rem; }
-        .gap-2 { gap: .5rem; }
-        .gap-5 { gap: 1.25rem; }
-        .rounded { border-radius: .25rem; }
-        .rounded-md { border-radius: .375rem; }
-        .rounded-full { border-radius: 9999px; }
-        .border { border-width: 1px; }
-        .border-b-2 { border-bottom-width: 2px; }
-        .border-dashed { border-style: dashed; }
-        .border-gray-300 { border-color: #d1d5db; }
-        .bg-white { background-color: #fff; }
-        .bg-\[\#0CA60C\] { background-color: #0ca60c; }
-        .bg-\[\#145596\] { background-color: #145596; }
-        .bg-\[\#642D56\] { background-color: #642d56; }
-        .bg-\[\#1887EB\] { background-color: #1887eb; }
-        .bg-\[\#24809C\] { background-color: #24809c; }
-        .bg-\[\#36454F\] { background-color: #36454f; }
-        .bg-\[\#EBEBEB\] { background-color: #ebebeb; }
-        .bg-\[\#F2F2F2\] { background-color: #f2f2f2; }
-        .bg-\[\#ECFAF3\] { background-color: #ecfaf3; }
-        .bg-gray-200 { background-color: #e5e7eb; }
-        .bg-gray-100 { background-color: #f3f4f6; }
-        .bg-black { background-color: #000; }
-        .bg-black\/50 { background-color: rgba(0,0,0,0.5); }
-        .bg-green-600 { background-color: #16a34a; }
-        .bg-primary-700 { background-color: #054c0f; }
-        .bg-opacity-25 { background-color: rgba(0,0,0,0.25); }
-        .backdrop-blur-sm { backdrop-filter: blur(4px); }
-        .p-6 { padding: 1.5rem; }
-        .p-3 { padding: .75rem; }
-        .p-5 { padding: 1.25rem; }
-        .p-4 { padding: 1rem; }
-        .px-4 { padding-left: 1rem; padding-right: 1rem; }
-        .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-        .px-3 { padding-left: .75rem; padding-right: .75rem; }
-        .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
-        .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
-        .py-8 { padding-top: 2rem; padding-bottom: 2rem; }
-        .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-        .py-2.5 { padding-top: .625rem; padding-bottom: .625rem; }
-        .pr-9 { padding-right: 2.25rem; }
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .font-CircularStdBold { font-family: 'CircularStdBold', sans-serif; }
-        .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
-        .text-base { font-size: 1rem; line-height: 1.5rem; }
-        .text-xs { font-size: .75rem; line-height: 1rem; }
-        .text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
-        .text-sm { font-size: .875rem; line-height: 1.25rem; }
-        .font-bold { font-weight: 700; }
-        .font-semibold { font-weight: 600; }
-        .font-medium { font-weight: 500; }
-        .tracking-tight { letter-spacing: -.025em; }
-        .text-white { color: #fff; }
-        .text-\[\#747474\] { color: #747474; }
-        .text-\[\#222222\] { color: #222; }
-        .text-black { color: #000; }
-        .text-gray-400 { color: #9ca3af; }
-        .text-gray-600 { color: #4b5563; }
-        .text-gray-700 { color: #374151; }
-        .text-primary-600 { color: #009515; }
-        .text-text-subtitle { color: #8f8f8f; }
-        .text-red-600 { color: #dc2626; }
-        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
-        .shadow-xl { box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
-        .transition-all { transition-property: all; transition-duration: .15s; }
-        .hover\:bg-gray-50:hover { background-color: #f9fafb; }
-        .hover\:bg-primary-600:hover { background-color: #009515; }
-        .hover\:bg-green-500:hover { background-color: #22c55e; }
-        .focus\:border-primary-500:focus { border-color: #378b3d; }
-        .focus\:ring-1:focus { box-shadow: 0 0 0 1px #378b3d; }
-        .disabled\:cursor-not-allowed:disabled { cursor: not-allowed; }
-        .disabled\:opacity-50:disabled { opacity: 0.5; }
-        .mx-auto { margin-left: auto; margin-right: auto; }
+        .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+        .fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.sticky{position:sticky}
+        .inset-0{top:0;right:0;bottom:0;left:0}.top-0{top:0}.right-0{right:0}.inset-y-0{top:0;bottom:0}
+        .z-10{z-index:10}.z-30{z-index:30}.z-40{z-index:40}.z-50{z-index:50}
+        .mt-20{margin-top:5rem}.mt-10{margin-top:2.5rem}.mt-5{margin-top:1.25rem}.mt-2{margin-top:.5rem}.mt-1{margin-top:.25rem}.mt-4{margin-top:1rem}.mt-8{margin-top:2rem}
+        .mb-4{margin-bottom:1rem}
+        .block{display:block}.flex{display:flex}.grid{display:grid}.hidden{display:none}.inline-flex{display:inline-flex}
+        .h-full{height:100%}.h-14{height:3.5rem}.h-8{height:2rem}.h-5{height:1.25rem}.h-2{height:.5rem}.h-\[1px\]{height:1px}.h-4{height:1rem}
+        .w-full{width:100%}.w-14{width:3.5rem}.w-8{width:2rem}.w-5{width:1.25rem}.w-2{width:.5rem}.w-6{width:1.5rem}
+        .max-w-xl{max-width:36rem}.max-w-md{max-width:28rem}
+        .cursor-pointer{cursor:pointer}
+        .grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+        .col-span-2{grid-column:span 2 / span 2}
+        .flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}
+        .items-center{align-items:center}.justify-between{justify-content:space-between}.justify-center{justify-content:center}.justify-end{justify-content:flex-end}
+        .gap-10{gap:2.5rem}.gap-3{gap:.75rem}.gap-2{gap:.5rem}.gap-5{gap:1.25rem}
+        .rounded{border-radius:.25rem}.rounded-md{border-radius:.375rem}.rounded-full{border-radius:9999px}
+        .border{border-width:1px}.border-b-2{border-bottom-width:2px}.border-dashed{border-style:dashed}.border-gray-300{border-color:#d1d5db}
+        .bg-white{background-color:#fff}
+        .bg-\[\#0CA60C\]{background-color:#0ca60c}.bg-\[\#145596\]{background-color:#145596}.bg-\[\#642D56\]{background-color:#642d56}.bg-\[\#1887EB\]{background-color:#1887eb}
+        .bg-\[\#24809C\]{background-color:#24809c}.bg-\[\#36454F\]{background-color:#36454f}.bg-\[\#EBEBEB\]{background-color:#ebebeb}
+        .bg-\[\#F2F2F2\]{background-color:#f2f2f2}.bg-\[\#ECFAF3\]{background-color:#ecfaf3}.bg-gray-200{background-color:#e5e7eb}.bg-gray-100{background-color:#f3f4f6}
+        .bg-black{background-color:#000}.bg-black\/50{background-color:rgba(0,0,0,0.5)}.bg-green-600{background-color:#16a34a}
+        .bg-primary-700{background-color:#054c0f}.bg-opacity-25{background-color:rgba(0,0,0,0.25)}
+        .backdrop-blur-sm{backdrop-filter:blur(4px)}
+        .p-6{padding:1.5rem}.p-3{padding:.75rem}.p-5{padding:1.25rem}.p-4{padding:1rem}
+        .px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}
+        .px-3{padding-left:.75rem;padding-right:.75rem}.py-2{padding-top:.5rem;padding-bottom:.5rem}.py-3{padding-top:.75rem;padding-bottom:.75rem}
+        .py-8{padding-top:2rem;padding-bottom:2rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
+        .pr-9{padding-right:2.25rem}.pr-2{padding-right:.5rem}
+        .text-left{text-align:left}.text-center{text-align:center}
+        .font-CircularStdBold{font-family:'CircularStdBold',sans-serif}
+        .text-xl{font-size:1.25rem;line-height:1.75rem}.text-base{font-size:1rem;line-height:1.5rem}.text-xs{font-size:.75rem;line-height:1rem}
+        .text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:.875rem;line-height:1.25rem}
+        .font-bold{font-weight:700}.font-semibold{font-weight:600}.font-medium{font-weight:500}
+        .tracking-tight{letter-spacing:-.025em}
+        .text-white{color:#fff}.text-\[\#747474\]{color:#747474}.text-\[\#222222\]{color:#222}.text-black{color:#000}
+        .text-gray-400{color:#9ca3af}.text-gray-600{color:#4b5563}.text-gray-700{color:#374151}.text-primary-600{color:#009515}
+        .text-text-subtitle{color:#8f8f8f}.text-red-600{color:#dc2626}.text-green-600{color:#16a34a}
+        .shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,0.1)}.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,0.1),0 8px 10px -6px rgba(0,0,0,0.1)}.drop-shadow-md{filter:drop-shadow(0 4px 3px rgba(0,0,0,0.07))}
+        .transition-all{transition-property:all;transition-duration:.15s}
+        .hover\:bg-gray-50:hover{background-color:#f9fafb}.hover\:bg-primary-600:hover{background-color:#009515}.hover\:bg-green-500:hover{background-color:#22c55e}
+        .hover\:text-gray-900:hover{color:#111827}
+        .focus\:border-primary-500:focus{border-color:#378b3d}.focus\:ring-1:focus{box-shadow:0 0 0 1px #378b3d}
+        .disabled\:cursor-not-allowed:disabled{cursor:not-allowed}.disabled\:opacity-50:disabled{opacity:0.5}
+        .mx-auto{margin-left:auto;margin-right:auto}
         
         #invoiceModal .invoice-box {
             max-width: 400px;
@@ -330,10 +330,23 @@
             background: white;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-        #invoiceModal .invoice-inner { padding: 24px; }
-        #invoiceModal .invoice-row { display: flex; justify-content: space-between; margin-bottom: 12px; }
-        #invoiceModal .invoice-buttons { display: flex; gap: 12px; margin-top: 24px; }
+        #invoiceModal .invoice-inner {
+            padding: 24px;
+        }
+        #invoiceModal .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+        #invoiceModal .invoice-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
         #invoiceModal .invoice-buttons button {
             flex: 1;
             padding: 10px 0;
@@ -341,20 +354,25 @@
             border-radius: 6px;
             font-weight: 500;
             cursor: pointer;
+            transition: all 0.2s ease;
         }
         #invoiceModal .btn-cancel {
             background-color: white;
             border: 1px solid #d1d5db;
             color: #374151;
         }
-        #invoiceModal .btn-cancel:hover { background-color: #f9fafb; }
+        #invoiceModal .btn-cancel:hover {
+            background-color: #f9fafb;
+        }
         #invoiceModal .btn-proceed {
             background-color: #054c0f;
             border: none;
             color: white;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-        #invoiceModal .btn-proceed:hover { background-color: #009515; }
-        
+        #invoiceModal .btn-proceed:hover {
+            background-color: #009515;
+        }
         .loader {
             width: 50px;
             height: 50px;
@@ -364,10 +382,16 @@
             animation: spin 1s linear infinite;
             margin: 20px auto;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        
-        .error-text { color: #dc2626; font-size: 12px; margin-top: 4px; display: none; }
-        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .error-text {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
         .copy-btn {
             background: none;
             border: none;
@@ -378,11 +402,19 @@
             margin-left: 8px;
             padding: 4px;
             border-radius: 4px;
+            transition: all 0.2s ease;
         }
-        .copy-btn:hover { background: #e5e7eb; }
-        .copy-btn svg { width: 16px; height: 16px; color: #6b7280; }
-        .copy-btn:hover svg { color: #054c0f; }
-        
+        .copy-btn:hover {
+            background: #e5e7eb;
+        }
+        .copy-btn svg {
+            width: 16px;
+            height: 16px;
+            color: #6b7280;
+        }
+        .copy-btn:hover svg {
+            color: #054c0f;
+        }
         #accountModal .details-row-copy {
             display: flex;
             align-items: center;
@@ -406,51 +438,33 @@
             align-items: center;
             gap: 8px;
         }
-        
-        .copy-notification-show { animation: slideUpFade 2s ease forwards; }
         @keyframes slideUpFade {
             0% { opacity: 0; transform: translateX(-50%) translateY(20px); }
             10% { opacity: 1; transform: translateX(-50%) translateY(0); }
             90% { opacity: 1; transform: translateX(-50%) translateY(0); }
             100% { opacity: 0; transform: translateX(-50%) translateY(-20px); }
         }
+        .copy-notification-show {
+            animation: slideUpFade 2s ease forwards;
+        }
         
         @media (min-width:768px){
-            .md\:mt-0 { margin-top: 0; }
-            .md\:w-3\/5 { width: 60%; }
-            .md\:w-1\/3 { width: 33.333333%; }
-            .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .md\:flex-row { flex-direction: row; }
-            .md\:px-10 { padding-left: 2.5rem; padding-right: 2.5rem; }
-            .md\:text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
-            .md\:leading-tight { line-height: 1.25; }
+            .md\:mt-0{margin-top:0}.md\:w-3\/5{width:60%}.md\:w-1\/3{width:33.333333%}.md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+            .md\:flex-row{flex-direction:row}.md\:px-10{padding-left:2.5rem;padding-right:2.5rem}.md\:text-4xl{font-size:2.25rem;line-height:2.5rem}.md\:leading-tight{line-height:1.25}
         }
         @media (min-width:1024px){
-            .lg\:flex { display: flex; }
-            .lg\:hidden { display: none; }
-            .lg\:items-center { align-items: center; }
-            .lg\:gap-8 { gap: 2rem; }
-            .lg\:text-xs { font-size: .75rem; }
-            .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\:flex{display:flex}.lg\:hidden{display:none}.lg\:items-center{align-items:center}.lg\:gap-8{gap:2rem}.lg\:text-xs{font-size:.75rem}.lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
         }
         @media (min-width:1280px){
-            .xl\:text-sm { font-size: .875rem; }
-            .xl\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+            .xl\:text-sm{font-size:.875rem}.xl\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
         }
-        @font-face {
-            font-family: 'CircularStd';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf');
-        }
-        @font-face {
-            font-family: 'CircularStdBold';
-            src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf');
-        }
-        body { font-family: 'CircularStd', system-ui, sans-serif; }
-        .modal-scroll-content { max-height: 90vh; overflow-y: auto; }
+        @font-face{font-family:'CircularStd';src:url('https://payments.neco.gov.ng/assets/CircularStd-Book.e03caec8.otf')}
+        @font-face{font-family:'CircularStdBold';src:url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf')}
+        body{font-family:'CircularStd',system-ui,sans-serif}
         
-        .category-btn.active {
-            background-color: white !important;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        .modal-scroll-content {
+            max-height: 90vh;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -490,6 +504,7 @@
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
         
+        <!-- Hero Section -->
         <div class="container mt-20">
             <div class="flex items-center flex-col md:flex-row justify-between">
                 <div class="w-full md:w-3/5">
@@ -511,21 +526,44 @@
             </div>
         </div>
         
+        <!-- Category Filters -->
         <div class="container mt-10">
             <div class="flex gap-3 flex-wrap" id="categoryFilters">
-                <!-- Categories will be inserted here directly without loader -->
+                <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
+                    <div class="w-2 rounded-full h-2" style="background-color: #0CA60C;"></div>
+                    <div>SSCE Internal</div>
+                </div>
+                <div data-category="SSCE External" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #145596;"></div>
+                    <div>SSCE External</div>
+                </div>
+                <div data-category="BECE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #642D56;"></div>
+                    <div>BECE</div>
+                </div>
+                <div data-category="NCEE" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #1887EB;"></div>
+                    <div>NCEE</div>
+                </div>
+                <div data-category="Gifted" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #24809C;"></div>
+                    <div>Gifted</div>
+                </div>
+                <div data-category="Others" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer">
+                    <div class="w-2 rounded-full h-2" style="background-color: #36454F;"></div>
+                    <div>Others</div>
+                </div>
             </div>
         </div>
         
+        <!-- Payment Grid -->
         <div class="container mt-10">
-            <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid">
-                <!-- Payment items will be inserted here directly -->
-            </div>
+            <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid"></div>
         </div>
     </div>
 </div>
 
-<!-- ALL MODALS - Same as your original working code -->
+<!-- PAYMENT FORM MODAL -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 overflow-y-auto">
@@ -553,7 +591,7 @@
                             </div>
                         </div>
                         <div class="mt-5 flex justify-end">
-                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click to get payment code from admin</a>
+                            <a id="whatsappLink" class="text-sm text-primary-600" href="#" target="_blank">Click here to get payment code from admin</a>
                         </div>
                     </div>
                     
@@ -641,6 +679,7 @@
     </div>
 </div>
 
+<!-- INVOICE SUMMARY MODAL -->
 <div id="invoiceModal" class="fixed inset-0 z-30" style="display: none;">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -669,13 +708,14 @@
                 </div>
                 <div class="invoice-buttons">
                     <button onclick="closeInvoiceModal()" class="btn-cancel">Cancel</button>
-                    <button onclick="markPinAsUsedAndProceed()" class="btn-proceed">Proceed</button>
+                    <button onclick="markPinAndProceed()" class="btn-proceed">Proceed</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- LOADING MODAL -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
         <div class="loader" style="margin: 0 auto;"></div>
@@ -684,6 +724,7 @@
     </div>
 </div>
 
+<!-- ACCOUNT MODAL -->
 <div id="accountModal" class="fixed inset-0 z-50 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 flex items-center justify-center p-4">
@@ -694,7 +735,7 @@
                 </div>
                 <div id="accountDetailsBox"></div>
                 <div class="warning-timer-row">
-                    <span class="warning-text-small">Pay to this account within 30 minutes</span>
+                    <span class="warning-text-small"> Pay to this account within 30 minutes</span>
                     <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
@@ -716,6 +757,7 @@
     </div>
 </div>
 
+<!-- COPY NOTIFICATION POPUP -->
 <div id="copyNotification" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); background: #16a34a; color: white; padding: 8px 20px; border-radius: 50px; font-size: 14px; font-weight: 500; z-index: 10000; display: none; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="20 6 9 17 4 12"></polyline>
@@ -724,11 +766,12 @@
 </div>
 
 <script>
-(function() {
+    // ============ SUPABASE CONFIGURATION ============
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
+    // ============ DEFAULT PAYMENT DATA (Shows Immediately with unique category colors) ============
     let paymentData = {
         "SSCE Internal": { color: "#0CA60C", items: [
             { name: "Four Figure Table", amount: 500 },
@@ -786,138 +829,6 @@
     let isValidPin = false;
     let currentPinDetails = null;
     let countdownInterval = null;
-    let settings = { pinExpiryMinutes: 30, adminWhatsApp: '2348123456789' };
-    
-    // ============ RENDER CATEGORIES AND ITEMS IMMEDIATELY ============
-    function renderCategories() {
-        const container = document.getElementById('categoryFilters');
-        if (!container) return;
-        
-        const categories = Object.keys(paymentData);
-        container.innerHTML = categories.map(catName => {
-            const cat = paymentData[catName];
-            const isActive = currentCategory === catName;
-            return `
-                <div class="category-btn ${isActive ? 'active' : ''}" data-category="${catName}" style="${!isActive ? 'background-color: #EBEBEB;' : ''}">
-                    <div class="w-2 rounded-full h-2" style="background-color: ${cat.color};"></div>
-                    <div>${escapeHtml(catName)}</div>
-                </div>
-            `;
-        }).join('');
-        
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => {
-                    b.classList.remove('active');
-                    b.style.backgroundColor = '#EBEBEB';
-                });
-                btn.classList.add('active');
-                btn.style.backgroundColor = 'white';
-                currentCategory = btn.getAttribute('data-category');
-                renderPaymentGrid();
-                document.getElementById('searchInput').value = '';
-            });
-        });
-    }
-    
-    function renderPaymentGrid() {
-        const grid = document.getElementById('paymentGrid');
-        if (!grid || !currentCategory) return;
-        
-        const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) {
-            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No items found</div>';
-            return;
-        }
-        
-        grid.innerHTML = cat.items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-        }).join('');
-    }
-    
-    // ============ SEARCH FUNCTION ============
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const cat = paymentData[currentCategory];
-        if(!cat || !cat.items) return;
-        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-        const grid = document.getElementById('paymentGrid');
-        if(filtered.length === 0) { 
-            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
-            return; 
-        }
-        grid.innerHTML = filtered.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-        }).join('');
-    });
-    
-    // ============ LOAD SETTINGS FROM SUPABASE (Background) ============
-    async function loadSettings() {
-        try {
-            const { data } = await supabaseClient.from('settings').select('*').maybeSingle();
-            if (data) {
-                settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
-                settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
-            }
-        } catch (err) {}
-    }
-    
-    // ============ SYNC WITH SUPABASE (Background - updates if admin changes) ============
-    async function syncPaymentItems() {
-        try {
-            const { data: categories } = await supabaseClient.from('categories').select('*');
-            const { data: items } = await supabaseClient.from('payment_items').select('*');
-            
-            if (categories && categories.length > 0 && items && items.length > 0) {
-                const newPaymentData = {};
-                for (const category of categories) {
-                    newPaymentData[category.name] = {
-                        color: category.color,
-                        items: items.filter(item => item.category_id === category.id)
-                    };
-                }
-                if (Object.keys(newPaymentData).length > 0) {
-                    Object.assign(paymentData, newPaymentData);
-                    renderCategories();
-                    renderPaymentGrid();
-                }
-            }
-        } catch (error) {}
-    }
     
     // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
@@ -925,56 +836,80 @@
     }
     
     function validateEmail(email) {
-        return email && email.includes('@') && email.includes('.');
+        return email && email.toLowerCase().includes('@gmail.com');
     }
     
     function validateQuantity(quantity) {
         return quantity && parseInt(quantity) > 0;
     }
     
+    // ============ VALIDATE PIN WITH SUPABASE ============
     async function validatePinWithSupabase(pinCode) {
         try {
             const { data, error } = await supabaseClient
                 .from('payment_pins')
                 .select('*')
                 .eq('pin', pinCode)
-                .maybeSingle();
+                .eq('status', 'active')
+                .single();
             
-            if (error || !data) return { valid: false };
-            if (data.status === 'active') return { valid: true, accountDetails: data };
-            return { valid: false };
-        } catch (error) {
-            return { valid: false };
-        }
-    }
-    
-    async function markPinAsUsedAndProceed() {
-        const pinCode = currentFormData.paymentCode;
-        try {
-            const { error } = await supabaseClient
-                .from('payment_pins')
-                .update({ status: 'used', used_at: new Date().toISOString() })
-                .eq('pin', pinCode)
-                .eq('status', 'active');
-            
-            if (error) { alert('Error processing PIN.'); return; }
-            
-            closeInvoiceModal();
-            const loadingModal = document.getElementById('loadingModal');
-            if (loadingModal) {
-                loadingModal.style.display = 'flex';
-                setTimeout(() => {
-                    loadingModal.style.display = 'none';
-                    showAccountModal();
-                }, 1500);
-            } else {
-                showAccountModal();
+            if (error || !data) {
+                return { valid: false, accountDetails: null };
             }
-        } catch (err) {
-            alert('Error processing payment.');
+            return { valid: true, accountDetails: data };
+        } catch (error) {
+            return { valid: false, accountDetails: null };
         }
     }
     
+    // ============ MARK PIN AS USED IMMEDIATELY ============
+    async function markPinAsUsed(pinCode) {
+        const now = new Date();
+        
+        const { error } = await supabaseClient
+            .from('payment_pins')
+            .update({ 
+                status: 'used', 
+                used_at: now.toISOString()
+            })
+            .eq('pin', pinCode)
+            .eq('status', 'active');
+        
+        if (error) throw error;
+    }
+    
+    // ============ RENDER GRID - WITH COLORED TOP BAR ============
+    function renderGrid() {
+        const grid = document.getElementById('paymentGrid');
+        const cat = paymentData[currentCategory];
+        if (!cat || !cat.items) return;
+        
+        grid.innerHTML = cat.items.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-footer">
+                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    }
+    
+    // Load default grid immediately
+    renderGrid();
+    
+    // ============ CHECK FORM VALIDATION ============
     async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
         
@@ -982,12 +917,9 @@
             const result = await validatePinWithSupabase(code.trim());
             isValidPin = result.valid;
             currentPinDetails = result.accountDetails;
-            document.getElementById('codeError').style.display = (!result.valid && code.trim() !== '') ? 'block' : 'none';
-            document.getElementById('codeRequiredError').style.display = 'none';
         } else {
             isValidPin = false;
-            document.getElementById('codeRequiredError').style.display = 'block';
-            document.getElementById('codeError').style.display = 'none';
+            currentPinDetails = null;
         }
         
         const fullName = document.getElementById('fullName').value;
@@ -997,81 +929,137 @@
         const quantity = document.getElementById('quantity').value;
         const amount = document.getElementById('amount').value;
         
-        const isFullNameValid = fullName && fullName.trim() !== '';
-        const isPhoneValid = validatePhone(phone);
-        const isEmailValid = validateEmail(email);
-        const isDescriptionValid = description && description.trim() !== '';
-        const isQuantityValid = validateQuantity(quantity);
-        const isAmountValid = amount && parseFloat(amount) > 0;
+        let isPhoneValid = validatePhone(phone);
+        let isEmailValid = validateEmail(email);
+        let isQuantityValid = validateQuantity(quantity);
         
-        document.getElementById('fullNameError').style.display = isFullNameValid ? 'none' : 'block';
-        document.getElementById('descriptionError').style.display = isDescriptionValid ? 'none' : 'block';
-        document.getElementById('amountError').style.display = isAmountValid ? 'none' : 'block';
+        let isFullNameValid = fullName && fullName.trim() !== '';
+        let isDescriptionValid = description && description.trim() !== '';
+        let isAmountValid = amount && parseFloat(amount) > 0;
+        let isCodeProvided = code && code.trim() !== '';
+        
+        document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
+        document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
+        document.getElementById('amountError').style.display = !isAmountValid ? 'block' : 'none';
+        
+        const codeError = document.getElementById('codeError');
+        const codeRequiredError = document.getElementById('codeRequiredError');
+        if (!isCodeProvided) {
+            codeRequiredError.style.display = 'block';
+            codeError.style.display = 'none';
+        } else if (!isValidPin) {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'block';
+        } else {
+            codeRequiredError.style.display = 'none';
+            codeError.style.display = 'none';
+        }
         
         const phoneError = document.getElementById('phoneError');
         const phoneRequiredError = document.getElementById('phoneRequiredError');
-        if (!phone) { phoneRequiredError.style.display = 'block'; phoneError.style.display = 'none'; }
-        else if (!isPhoneValid) { phoneRequiredError.style.display = 'none'; phoneError.style.display = 'block'; }
-        else { phoneRequiredError.style.display = 'none'; phoneError.style.display = 'none'; }
+        if (!phone) {
+            phoneRequiredError.style.display = 'block';
+            phoneError.style.display = 'none';
+        } else if (!isPhoneValid) {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'block';
+        } else {
+            phoneRequiredError.style.display = 'none';
+            phoneError.style.display = 'none';
+        }
         
         const emailError = document.getElementById('emailError');
         const emailRequiredError = document.getElementById('emailRequiredError');
-        if (!email) { emailRequiredError.style.display = 'block'; emailError.style.display = 'none'; }
-        else if (!isEmailValid) { emailRequiredError.style.display = 'none'; emailError.style.display = 'block'; }
-        else { emailRequiredError.style.display = 'none'; emailError.style.display = 'none'; }
+        if (!email) {
+            emailRequiredError.style.display = 'block';
+            emailError.style.display = 'none';
+        } else if (!isEmailValid) {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'block';
+        } else {
+            emailRequiredError.style.display = 'none';
+            emailError.style.display = 'none';
+        }
         
         const quantityError = document.getElementById('quantityError');
         const quantityRequiredError = document.getElementById('quantityRequiredError');
-        if (!quantity) { quantityRequiredError.style.display = 'block'; quantityError.style.display = 'none'; }
-        else if (!isQuantityValid) { quantityRequiredError.style.display = 'none'; quantityError.style.display = 'block'; }
-        else { quantityRequiredError.style.display = 'none'; quantityError.style.display = 'none'; }
+        if (!quantity) {
+            quantityRequiredError.style.display = 'block';
+            quantityError.style.display = 'none';
+        } else if (!isQuantityValid) {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'block';
+        } else {
+            quantityRequiredError.style.display = 'none';
+            quantityError.style.display = 'none';
+        }
         
-        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid;
+        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
         const proceedBtn = document.getElementById('proceedBtn');
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    window.openPaymentModal = function(item) {
+    // ============ OPEN PAYMENT MODAL ============
+    function openPaymentModal(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
         const amountInput = document.getElementById('amount');
-        if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
-        else { amountInput.value = ''; amountInput.readOnly = false; }
-        
-        const whatsappNumber = settings.adminWhatsApp || '2348123456789';
-        document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        if (item.amount) { 
+            amountInput.value = item.amount; 
+            amountInput.readOnly = true; 
+        } else { 
+            amountInput.value = ''; 
+            amountInput.readOnly = false; 
+        }
+        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         
         document.getElementById('paymentCode').value = ''; 
         document.getElementById('fullName').value = ''; 
         document.getElementById('phone').value = ''; 
         document.getElementById('email').value = '';
         document.getElementById('paymentDescription').value = ''; 
-        document.getElementById('quantity').value = '1';
+        document.getElementById('quantity').value = '';
         document.getElementById('currency').value = 'NGN';
         
-        document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+        document.getElementById('codeError').style.display = 'none';
+        document.getElementById('phoneError').style.display = 'none';
+        document.getElementById('emailError').style.display = 'none';
+        document.getElementById('quantityError').style.display = 'none';
+        document.getElementById('codeRequiredError').style.display = 'none';
+        
         document.getElementById('proceedBtn').disabled = true;
         document.getElementById('paymentModal').classList.remove('hidden');
         
         ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) {
-                el.removeEventListener('input', checkFormValidation);
-                el.addEventListener('input', checkFormValidation);
+            const element = document.getElementById(id);
+            if (element) {
+                element.removeEventListener('input', checkFormValidation);
+                element.addEventListener('input', checkFormValidation);
             }
         });
-    };
+    }
     
-    window.closePaymentModal = function() { document.getElementById('paymentModal').classList.add('hidden'); };
-    window.closeInvoiceModal = function() { document.getElementById('invoiceModal').style.display = 'none'; };
-    window.closeAccountModal = function() { 
+    function closePaymentModal() { 
+        document.getElementById('paymentModal').classList.add('hidden'); 
+    }
+    
+    function closeInvoiceModal() { 
+        document.getElementById('invoiceModal').style.display = 'none'; 
+    }
+    
+    function closeAccountModal() { 
         if (countdownInterval) clearInterval(countdownInterval);
         document.getElementById('accountModal').classList.add('hidden'); 
-    };
+    }
     
+    // ============ SUBMIT PAYMENT FORM ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
-        if (!isValidPin) { alert('Please enter a valid payment code'); return; }
+        
+        if (!isValidPin) { 
+            alert('Please enter a valid payment code'); 
+            return; 
+        }
         
         const fullName = document.getElementById('fullName').value;
         const phone = document.getElementById('phone').value;
@@ -1081,7 +1069,7 @@
         const currency = document.getElementById('currency').value;
         let amount = parseFloat(document.getElementById('amount').value);
         
-        if (!fullName) { alert('Please enter full name'); return; }
+        if (!fullName) { alert('Please fill all payer details'); return; }
         if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
         if (!validateEmail(email)) { alert('Invalid email address'); return; }
         if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
@@ -1105,29 +1093,99 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    function startCountdown(expiryTime) {
-        const timerElement = document.getElementById('countdownTimer');
-        if (!timerElement) return;
-        if (countdownInterval) clearInterval(countdownInterval);
-        function updateTimer() {
-            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
-            if (remaining <= 0) { clearInterval(countdownInterval); timerElement.textContent = "Expired"; timerElement.style.color = "#9ca3af"; return; }
-            const mins = Math.floor(remaining / 60); const secs = remaining % 60;
-            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    // ============ MARK PIN AND PROCEED (Called when Proceed button on invoice is clicked) ============
+    async function markPinAndProceed() {
+        const pinCode = currentFormData.paymentCode;
+        
+        try {
+            // Mark PIN as used IMMEDIATELY when Proceed is clicked
+            await markPinAsUsed(pinCode);
+            
+            // Close invoice modal
+            closeInvoiceModal();
+            
+            // Show loading modal
+            const loadingModal = document.getElementById('loadingModal');
+            if (loadingModal) {
+                const mainText = loadingModal.querySelector('p:first-of-type');
+                const subText = loadingModal.querySelector('p:last-of-type');
+                if (mainText) mainText.innerHTML = 'Please wait...';
+                if (subText) subText.innerHTML = 'Account details are being generated';
+                
+                loadingModal.style.display = 'flex';
+                setTimeout(() => {
+                    if (loadingModal) loadingModal.style.display = 'none';
+                    showAccountModal();
+                }, 3000);
+            } else {
+                showAccountModal();
+            }
+            
+        } catch (error) {
+            alert('Error processing PIN. Please try again.');
+            console.error('Error marking PIN as used:', error);
         }
-        updateTimer();
-        countdownInterval = setInterval(updateTimer, 1000);
     }
     
+    // ============ START COUNTDOWN TIMER ============
+    function startCountdown(expiryTime) {
+        const timerElement = document.getElementById('countdownTimer');
+        if (countdownInterval) clearInterval(countdownInterval);
+        
+        countdownInterval = setInterval(() => {
+            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
+            const mins = Math.floor(remaining / 60);
+            const secs = remaining % 60;
+            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            if (remaining <= 0) {
+                clearInterval(countdownInterval);
+                timerElement.textContent = "Expired";
+            }
+        }, 1000);
+    }
+    
+    // ============ SHOW ACCOUNT MODAL WITH BANK DETAILS ============
     async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
-        const { data: pinData, error } = await supabaseClient.from('payment_pins').select('*').eq('pin', pinCode).single();
-        if (error || !pinData) { alert("Payment code not found."); return; }
-        if (pinData.status !== 'used') { alert("Invalid payment session."); window.location.href = 'index.html'; return; }
+        
+        // Get PIN details from database (now status should be 'used')
+        const { data: pinData, error } = await supabaseClient
+            .from('payment_pins')
+            .select('*')
+            .eq('pin', pinCode)
+            .single();
+        
+        if (error || !pinData) {
+            alert("Payment code not found. Please contact support.");
+            return;
+        }
+        
+        // Check if PIN is marked as used (should be from the markPinAndProceed call)
+        if (pinData.status !== 'used') {
+            alert("This payment code is invalid or has already been used.");
+            window.location.href = 'index.html';
+            return;
+        }
+        
+        if (!pinData.used_at) {
+            alert("Invalid payment session. Please start over.");
+            window.location.href = 'index.html';
+            return;
+        }
         
         const usedTime = new Date(pinData.used_at);
-        const expiryTime = usedTime.getTime() + 1800000;
-        if (new Date().getTime() >= expiryTime) { alert("Session expired."); await supabaseClient.from('payment_pins').update({ status: 'expired' }).eq('pin', pinCode); window.location.href = 'index.html'; return; }
+        const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+        
+        const now = new Date().getTime();
+        if (now >= expiryTime) {
+            alert("Your payment session has expired. Please start over with a new PIN.");
+            await supabaseClient
+                .from('payment_pins')
+                .update({ status: 'expired' })
+                .eq('pin', pinCode);
+            window.location.href = 'index.html';
+            return;
+        }
         
         const amount = parseFloat(currentFormData.amount) || 0;
         const serviceCharge = 50;
@@ -1135,97 +1193,271 @@
         const totalAmount = (amount + serviceCharge) * quantity;
         
         document.getElementById('accountDetailsBox').innerHTML = `
-            <div class="details-row"><span class="details-label">Bank</span><span class="details-value">${escapeHtml(pinData.bank_name || 'NECO Microfinance Bank')}</span></div>
-            <div class="details-row"><span class="details-label">Account Name</span><span class="details-value">${escapeHtml(pinData.account_name || 'National Examinations Council')}</span></div>
-            <div class="details-row-copy"><span class="details-label-copy">Account Number</span><div class="details-value-copy"><span>${escapeHtml(pinData.account_number || '0000000000')}</span><button class="copy-btn" onclick="copyToClipboard('${pinData.account_number}')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg></button></div></div>
-            <div class="details-row"><span class="details-label">Amount</span><span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span></div>
-            <div class="details-row"><span class="details-label">Payment Code</span><span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span></div>
+            <div class="details-row">
+                <span class="details-label">Bank</span>
+                <span class="details-value">${pinData.bank_name || 'NECO Microfinance Bank'}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Account Name</span>
+                <span class="details-value">${pinData.account_name || 'National Examinations Council'}</span>
+            </div>
+            <div class="details-row-copy">
+                <span class="details-label-copy">Account Number</span>
+                <div class="details-value-copy">
+                    <span id="accountNumberText">${pinData.account_number || '0000000000'}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${pinData.account_number}')" title="Copy account number">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Amount</span>
+                <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
+            </div>
+            <div class="details-row">
+                <span class="details-label">Payment Code</span>
+                <span class="details-value">${currentFormData.paymentCode}</span>
+            </div>
         `;
         
         const receiptInput = document.getElementById('receiptInput');
         const uploadedFileName = document.getElementById('uploadedFileName');
+        
         if (receiptInput) {
             const newInput = receiptInput.cloneNode(true);
             receiptInput.parentNode.replaceChild(newInput, receiptInput);
             newInput.id = 'receiptInput';
             newInput.classList.add('hidden');
-            newInput.addEventListener('change', (e) => { if (uploadedFileName && e.target.files[0]) { uploadedFileName.innerHTML = `✅ ${e.target.files[0].name}`; } });
+            newInput.accept = '.pdf,.jpg,.jpeg,.png';
+            newInput.addEventListener('change', (e) => {
+                if (uploadedFileName && e.target.files[0]) {
+                    uploadedFileName.innerHTML = `✅ ${e.target.files[0].name}`;
+                }
+            });
         }
         if (uploadedFileName) uploadedFileName.innerHTML = '';
+        
         document.getElementById('accountModal').classList.remove('hidden');
         startCountdown(expiryTime);
     }
     
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
-    
-    window.copyToClipboard = function(text) {
-        navigator.clipboard.writeText(text).then(() => {
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(function() {
             const notification = document.getElementById('copyNotification');
             notification.style.display = 'flex';
-            setTimeout(() => { notification.style.display = 'none'; }, 2000);
-        });
-    };
+            notification.classList.add('copy-notification-show');
+            setTimeout(() => {
+                notification.classList.remove('copy-notification-show');
+                notification.style.display = 'none';
+            }, 2000);
+        }).catch(() => alert('Failed to copy. Please copy manually.'));
+    }
     
-    window.confirmPayment = async function() {
+    // ============ CONFIRM PAYMENT ============
+    async function confirmPayment() { 
         const receiptFile = document.getElementById('receiptInput').files[0];
-        if (!receiptFile) { alert('Please upload your payment receipt'); return; }
+        
+        if(!receiptFile) { 
+            alert('Please upload your payment receipt'); 
+            return; 
+        } 
+        
         if (countdownInterval) clearInterval(countdownInterval);
+        
         const loadingModal = document.getElementById('loadingModal');
-        loadingModal.style.display = 'flex';
+        if (loadingModal) {
+            loadingModal.style.display = 'flex';
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Processing your payment...';
+            if (subText) subText.innerHTML = 'Please wait while we save your payment';
+        }
         
         let receiptUrl = null;
+        let receiptName = null;
+        
         try {
             const fileExt = receiptFile.name.split('.').pop();
             const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
-            const { error: uploadError } = await supabaseClient.storage.from('payment-receipts').upload(`receipts/${fileName}`, receiptFile);
-            if (uploadError) throw uploadError;
-            const { data: urlData } = await supabaseClient.storage.from('payment-receipts').getPublicUrl(`receipts/${fileName}`);
+            const filePath = `receipts/${fileName}`;
+            receiptName = receiptFile.name;
+            
+            const { error: uploadError } = await supabaseClient
+                .storage
+                .from('payment-receipts')
+                .upload(filePath, receiptFile);
+            
+            if (uploadError) {
+                alert('Failed to upload receipt. Please try again.');
+                if (loadingModal) loadingModal.style.display = 'none';
+                return;
+            }
+            
+            const { data: urlData } = await supabaseClient
+                .storage
+                .from('payment-receipts')
+                .getPublicUrl(filePath);
             receiptUrl = urlData.publicUrl;
-        } catch (error) { alert('Failed to upload receipt: ' + error.message); loadingModal.style.display = 'none'; return; }
+            
+        } catch (error) {
+            alert('Error uploading receipt: ' + error.message);
+            if (loadingModal) loadingModal.style.display = 'none';
+            return;
+        }
         
         const amount = parseFloat(currentFormData.amount) || 0;
         const serviceCharge = 50;
         const quantity = parseInt(currentFormData.quantity) || 1;
         const totalAmount = (amount + serviceCharge) * quantity;
         
-        const paymentRecord = {
-            payment_code: currentFormData.paymentCode, full_name: currentFormData.fullName, phone: currentFormData.phone,
-            email: currentFormData.email, description: currentFormData.description || '', item_name: currentItem.name,
-            amount: totalAmount, currency: currentFormData.currency || 'NGN', quantity: quantity,
-            receipt_url: receiptUrl, receipt_name: receiptFile.name, status: 'completed', created_at: new Date().toISOString()
+        const paymentData = {
+            payment_code: currentFormData.paymentCode,
+            full_name: currentFormData.fullName,
+            phone: currentFormData.phone,
+            email: currentFormData.email,
+            description: currentFormData.description || '',
+            item_name: currentItem.name,
+            amount: totalAmount,
+            currency: currentFormData.currency || 'NGN',
+            quantity: quantity,
+            receipt_url: receiptUrl,
+            receipt_name: receiptName,
+            status: 'completed',
+            created_at: new Date().toISOString()
         };
         
         try {
-            const { error } = await supabaseClient.from('payments').insert([paymentRecord]);
-            if (error) throw error;
+            const { error } = await supabaseClient
+                .from('payments')
+                .insert([paymentData]);
+            
+            if (error) {
+                alert('Error saving payment: ' + error.message);
+                if (loadingModal) loadingModal.style.display = 'none';
+                return;
+            }
+            
             closeAccountModal();
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Payment Successful!';
-            if (subText) subText.innerHTML = 'Thank you. Redirecting...';
-            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
-        } catch (error) { alert('Error saving payment: ' + error.message); loadingModal.style.display = 'none'; }
-    };
+            
+            if (loadingModal) {
+                const mainText = loadingModal.querySelector('p:first-of-type');
+                const subText = loadingModal.querySelector('p:last-of-type');
+                if (mainText) mainText.innerHTML = 'Payment Successful!';
+                if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
+                loadingModal.style.display = 'flex';
+            }
+            
+            setTimeout(() => { 
+                window.location.href = 'index.html'; 
+            }, 3000);
+            
+        } catch (error) {
+            alert('Error saving payment. Please contact support.');
+            if (loadingModal) loadingModal.style.display = 'none';
+        }
+    }
     
-    // ============ MOBILE MENU ============
+    // ============ CATEGORY FILTERS ============
+    document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('!bg-white', 'drop-shadow-md');
+                b.style.backgroundColor = '#EBEBEB';
+            });
+            btn.classList.add('!bg-white', 'drop-shadow-md');
+            currentCategory = btn.getAttribute('data-category');
+            renderGrid();
+            document.getElementById('searchInput').value = '';
+        });
+    });
+    
+    // ============ SEARCH INPUT ============
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const cat = paymentData[currentCategory];
+        if(!cat || !cat.items) return;
+        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
+        if(filtered.length === 0) { 
+            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
+            return; 
+        }
+        document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content">
+                            <div class="card-title">${item.name}</div>
+                            <div class="card-footer">
+                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    });
+    
+    // ============ SUPABASE SYNC FOR ITEMS (Background) ============
+    async function syncPaymentItems() {
+        try {
+            const { data: categories } = await supabaseClient.from('categories').select('*');
+            const { data: items } = await supabaseClient.from('payment_items').select('*');
+            
+            if (categories && categories.length > 0 && items) {
+                const newPaymentData = {};
+                for (const category of categories) {
+                    newPaymentData[category.name] = {
+                        color: category.color,
+                        items: items.filter(item => item.category_id === category.id)
+                    };
+                }
+                Object.assign(paymentData, newPaymentData);
+                renderGrid();
+            }
+        } catch (error) {}
+    }
+    
+    setTimeout(syncPaymentItems, 500);
+    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') syncPaymentItems(); });
+</script>
+
+<!-- Mobile Menu Script -->
+<script>
     var menuBtn = document.getElementById('mobileMenuBtn');
     var cancelBtn = document.getElementById('cancelMenuBtn');
     var mobileMenu = document.getElementById('mobileMenu');
+    
     if (menuBtn) {
-        menuBtn.onclick = function(e) { e.stopPropagation(); mobileMenu.style.display = 'block'; menuBtn.style.display = 'none'; cancelBtn.style.display = 'block'; };
-        cancelBtn.onclick = function(e) { e.stopPropagation(); mobileMenu.style.display = 'none'; cancelBtn.style.display = 'none'; menuBtn.style.display = 'block'; };
-        document.onclick = function(e) { if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !cancelBtn.contains(e.target) && !mobileMenu.contains(e.target)) { mobileMenu.style.display = 'none'; cancelBtn.style.display = 'none'; menuBtn.style.display = 'block'; } };
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'block';
+            menuBtn.style.display = 'none';
+            cancelBtn.style.display = 'block';
+        };
+        cancelBtn.onclick = function(e) {
+            e.stopPropagation();
+            mobileMenu.style.display = 'none';
+            cancelBtn.style.display = 'none';
+            menuBtn.style.display = 'block';
+        };
+        document.onclick = function(e) {
+            if (mobileMenu && mobileMenu.style.display === 'block') {
+                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
+                    mobileMenu.style.display = 'none';
+                    cancelBtn.style.display = 'none';
+                    menuBtn.style.display = 'block';
+                }
+            }
+        };
     }
-    
-    // ============ INITIALIZE - RENDER IMMEDIATELY ============
-    renderCategories();
-    renderPaymentGrid();
-    
-    // Background tasks that don't block the page
-    loadSettings();
-    setTimeout(syncPaymentItems, 500);
-    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
-})();
 </script>
 </body>
 </html>
