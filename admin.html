@@ -761,6 +761,11 @@
         .text-primary-600 { color: #009515; }
         .text-primary-500 { color: #378b3d; }
         .bg-pattern { background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); background-size: contain; background-repeat: no-repeat; background-position: left center; }
+        
+        /* Payment Items Editor specific styles */
+        #itemsListContainer {
+            min-height: 200px;
+        }
     </style>
 </head>
 <body>
@@ -809,20 +814,9 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
-                <!-- CATEGORIES SECTION -->
-                <div class="category-section">
-                    <div class="category-header" onclick="toggleCategories()">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                        <span>Categories</span>
-                        <svg id="categoryArrow" fill="none" stroke="currentColor" viewBox="0 0 24 24" width="14" height="14" style="margin-left: auto; transition: transform 0.3s;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                    <div id="categoryListContainer" class="category-list" style="display: block;">
-                        <!-- Categories will be loaded here -->
-                    </div>
-                    <button class="add-category-btn" onclick="openAddCategoryModal()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
-                        Add New Category
-                    </button>
+                <div class="menu-item" data-tab="payment-editor">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <span>Payment Items</span>
                 </div>
                 
                 <div class="menu-item" data-tab="pin-manager">
@@ -910,7 +904,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
                     </table>
                 </div>
@@ -1129,36 +1123,6 @@
             }
         }
         
-        async function startPinExpiryChecker() {
-            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
-            pinExpiryInterval = setInterval(() => {
-                checkAndExpirePins();
-                renderPins();
-            }, 1000);
-        }
-        
-        async function checkAndExpirePins() {
-            if (!necoSupabase || currentPaymentPins.length === 0) return;
-            const now = new Date();
-            let updated = false;
-            for (let i = 0; i < currentPaymentPins.length; i++) {
-                const pin = currentPaymentPins[i];
-                if (pin.status === 'used' && pin.used_at) {
-                    const usedTime = new Date(pin.used_at);
-                    const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
-                    if (now >= expiryFromUse && pin.status !== 'expired') {
-                        await necoSupabase.from('payment_pins').update({ status: 'expired' }).eq('id', pin.id);
-                        updated = true;
-                    }
-                }
-            }
-            if (updated) {
-                const { data } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                if (data) currentPaymentPins = data;
-                updateDashboard();
-            }
-        }
-        
         function getTimeRemaining(pin) {
             if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
             if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
@@ -1170,7 +1134,7 @@
                 if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
                 const mins = Math.floor(remainingMs / (1000 * 60));
                 const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')} remaining`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
+                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
             }
             return { text: 'Unknown', class: 'timer-expired' };
         }
@@ -1230,11 +1194,15 @@
                 loadHomePreview();
                 renderCategoriesList();
                 
+                // Set default selected category
                 if (currentCategories.length > 0 && !selectedCategoryId) {
                     selectedCategoryId = currentCategories[0].id;
                     renderCategoriesList();
                     renderItemsForCategory();
-                    document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(currentCategories[0].name)} Items (${currentPaymentItems.filter(i => i.category_id === currentCategories[0].id).length} items)`;
+                    const selectedCat = currentCategories.find(c => c.id === selectedCategoryId);
+                    if (selectedCat) {
+                        document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length} items)`;
+                    }
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
@@ -1435,10 +1403,17 @@
             }
         }
         
+        function startPinExpiryChecker() {
+            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
+            pinExpiryInterval = setInterval(() => {
+                renderPins();
+            }, 1000);
+        }
+        
         function renderPins() {
             const tbody = document.getElementById('pinsTableBody');
             if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center">No PINs generated yet</td></tr>'; return; }
+            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
             let html = '';
             for (let pin of currentPaymentPins) {
                 const timeRemaining = getTimeRemaining(pin);
@@ -1450,7 +1425,32 @@
                     <td>${escapeHtml(pin.account_number)}</td>
                     <td><span class="badge ${statusClass}">${pin.status}</span></td>
                     <td>${new Date(pin.created_at).toLocaleString()}</td>
+                    <td>${timeRemaining.text}</td>
                     <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
+                </tr>`;
+            }
+            tbody.innerHTML = html;
+        }
+        
+        function renderPayments() {
+            const tbody = document.getElementById('paymentsTableBody');
+            if (!tbody) return;
+            if (currentPayments.length === 0) { 
+                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; 
+                return; 
+            }
+            let html = '';
+            for (let p of currentPayments) {
+                html += `<tr>
+                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
+                    <td>${escapeHtml(p.item_name)}</td>
+                    <td>₦${Number(p.amount).toLocaleString()}</td>
+                    <td><code>${escapeHtml(p.payment_code)}</code></td>
+                    <td>${escapeHtml(p.full_name)}</td>
+                    <td>${escapeHtml(p.phone)}</td>
+                    <td>${escapeHtml(p.email)}</td>
+                    <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
+                    <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
                 </tr>`;
             }
             tbody.innerHTML = html;
@@ -1568,109 +1568,87 @@
             } catch (err) { alert('Error: ' + err.message); }
         }
         
-        function renderPayments() {
-    const tbody = document.getElementById('paymentsTableBody');
-    if (!tbody) return;
-    if (currentPayments.length === 0) { 
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; 
-        return; 
-    }
-    let html = '';
-    for (let p of currentPayments) {
-        html += `<tr>
-            <td>${new Date(p.created_at).toLocaleDateString()}</td>
-            <td>${escapeHtml(p.item_name)}</td>
-            <td>₦${Number(p.amount).toLocaleString()}</td>
-            <td><code>${escapeHtml(p.payment_code)}</code></td>
-            <td>${escapeHtml(p.full_name)}</td>
-            <td>${escapeHtml(p.phone)}</td>
-            <td>${escapeHtml(p.email)}</td>
-            <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
-            <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
-        </tr>`;
-    }
-    tbody.innerHTML = html;
-}
-
-async function loadWhatsAppSettings() {
-    try {
-        const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
-        if (data) {
-            if (data.admin_whatsapp) document.getElementById('whatsappNumber').value = data.admin_whatsapp;
-            if (data.whatsapp_telegram_link) document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link;
+        async function loadWhatsAppSettings() {
+            try {
+                const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
+                if (data) {
+                    if (data.admin_whatsapp) document.getElementById('whatsappNumber').value = data.admin_whatsapp;
+                    if (data.whatsapp_telegram_link) document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link;
+                }
+                updateWhatsAppPreview();
+            } catch (err) {}
         }
-        updateWhatsAppPreview();
-    } catch (err) {}
-}
-
-function updateWhatsAppPreview() {
-    const number = document.getElementById('whatsappNumber').value;
-    const customLink = document.getElementById('whatsappTelegramLink').value;
-    if (customLink && customLink.trim() !== '') {
-        document.getElementById('previewLink').innerHTML = customLink;
-    } else if (number && number.trim() !== '') {
-        document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
-    } else {
-        document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
-    }
-}
-
-async function saveWhatsAppSettings() {
-    const whatsapp = document.getElementById('whatsappNumber').value;
-    const telegramLink = document.getElementById('whatsappTelegramLink').value;
-    if (!whatsapp && !telegramLink) {
-        alert('Please enter either a WhatsApp number or a custom link');
-        return;
-    }
-    try {
-        await necoSupabase.from('settings').upsert({ 
-            id: 1, 
-            admin_whatsapp: whatsapp, 
-            whatsapp_telegram_link: telegramLink 
-        });
-        alert('✅ WhatsApp settings saved successfully!');
-        triggerSync();
-    } catch (err) { alert('Error: ' + err.message); }
-}
-
-document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
-document.getElementById('whatsappTelegramLink')?.addEventListener('input', updateWhatsAppPreview);
-
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
-function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
-
-function showTab(tabId, title) {
-    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-    document.getElementById(tabId).classList.add('active');
-    document.getElementById('pageTitle').innerHTML = title;
-    if (tabId === 'pin-manager') renderPins();
-    if (tabId === 'view-payments') renderPayments();
-    if (tabId === 'home-editor') loadHomePreview();
-    if (tabId === 'dashboard') updateDashboard();
-    if (tabId === 'payment-editor') renderItemsForCategory();
-    if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
-    closeSidebar();
-}
-
-function triggerSync() { localStorage.setItem('neco_sync_timestamp', Date.now().toString()); }
-
-function initDashboard() {
-    renderCategoriesList();
-    renderItemsForCategory();
-    document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
-        item.onclick = function(e) {
-            e.stopPropagation();
-            const tabId = this.getAttribute('data-tab');
-            const titleSpan = this.querySelector('span');
-            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
-            showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
-        };
-    });
-}
-
-window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
-</script>
+        
+        function updateWhatsAppPreview() {
+            const number = document.getElementById('whatsappNumber').value;
+            const customLink = document.getElementById('whatsappTelegramLink').value;
+            if (customLink && customLink.trim() !== '') {
+                document.getElementById('previewLink').innerHTML = customLink;
+            } else if (number && number.trim() !== '') {
+                document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
+            } else {
+                document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
+            }
+        }
+        
+        async function saveWhatsAppSettings() {
+            const whatsapp = document.getElementById('whatsappNumber').value;
+            const telegramLink = document.getElementById('whatsappTelegramLink').value;
+            if (!whatsapp && !telegramLink) {
+                alert('Please enter either a WhatsApp number or a custom link');
+                return;
+            }
+            try {
+                await necoSupabase.from('settings').upsert({ 
+                    id: 1, 
+                    admin_whatsapp: whatsapp, 
+                    whatsapp_telegram_link: telegramLink 
+                });
+                alert('✅ WhatsApp settings saved successfully!');
+                triggerSync();
+            } catch (err) { alert('Error: ' + err.message); }
+        }
+        
+        document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
+        document.getElementById('whatsappTelegramLink')?.addEventListener('input', updateWhatsAppPreview);
+        
+        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
+        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
+        
+        function showTab(tabId, title) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('pageTitle').innerHTML = title;
+            if (tabId === 'pin-manager') renderPins();
+            if (tabId === 'view-payments') renderPayments();
+            if (tabId === 'home-editor') loadHomePreview();
+            if (tabId === 'dashboard') updateDashboard();
+            if (tabId === 'payment-editor') renderItemsForCategory();
+            if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
+            closeSidebar();
+        }
+        
+        function triggerSync() { 
+            localStorage.setItem('neco_sync_timestamp', Date.now().toString()); 
+        }
+        
+        function initDashboard() {
+            renderCategoriesList();
+            renderItemsForCategory();
+            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
+                item.onclick = function(e) {
+                    e.stopPropagation();
+                    const tabId = this.getAttribute('data-tab');
+                    const titleSpan = this.querySelector('span');
+                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
+                };
+            });
+        }
+        
+        window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+    </script>
 </body>
 </html>
