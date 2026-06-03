@@ -284,6 +284,9 @@
             syncHomeContent();
         });
         
+        // ============ PERIODIC SYNC EVERY 30 SECONDS (Optional) ============
+        setInterval(syncHomeContent, 30000);
+        
         console.log('✅ Home page loaded - will sync with Supabase in background');
     </script>
 </body>
