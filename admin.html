@@ -183,37 +183,26 @@
             background: rgba(220,38,38,0.4);
         }
         
-        /* Category styles */
-        .category-section {
-            margin-top: 15px;
-        }
-        
-        .category-header {
+        /* Category section in sidebar */
+        .category-section-title {
             padding: 12px 16px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            cursor: pointer;
-            border-radius: 12px;
-            margin-bottom: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.7;
+            margin-top: 15px;
+            margin-bottom: 5px;
         }
         
-        .category-header:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        
-        .category-list {
-            padding-left: 0px;
-            margin: 8px 0;
-        }
-        
-        .category-list.open {
-            display: block;
+        .category-list-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 10px;
         }
         
         .category-item {
             padding: 10px 12px;
-            margin: 5px 0;
+            margin: 3px 0;
             border-radius: 10px;
             cursor: pointer;
             display: flex;
@@ -761,11 +750,6 @@
         .text-primary-600 { color: #009515; }
         .text-primary-500 { color: #378b3d; }
         .bg-pattern { background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); background-size: contain; background-repeat: no-repeat; background-position: left center; }
-        
-        /* Payment Items Editor specific styles */
-        #itemsListContainer {
-            min-height: 200px;
-        }
     </style>
 </head>
 <body>
@@ -814,10 +798,15 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
-                <div class="menu-item" data-tab="payment-editor">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
-                    <span>Payment Items</span>
+                <!-- CATEGORIES SECTION IN SIDEBAR -->
+                <div class="category-section-title">📁 CATEGORIES</div>
+                <div id="categoryListContainer" class="category-list-container">
+                    <!-- Categories will be loaded here dynamically -->
                 </div>
+                <button class="add-category-btn" onclick="openAddCategoryModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
+                    Add New Category
+                </button>
                 
                 <div class="menu-item" data-tab="pin-manager">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
@@ -890,6 +879,7 @@
                 </div>
             </div>
             
+            <!-- Payment Items Display Area -->
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -922,6 +912,7 @@
         </div>
     </div>
     
+    <!-- MODALS -->
     <div id="addCategoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Add New Category</h3><button onclick="closeModal('addCategoryModal')">&times;</button></div>
@@ -970,71 +961,6 @@
         const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
         let necoSupabase = null;
-        
-        // Default categories with all 57+ items
-        const defaultCategories = [
-            { id: 1, name: "SSCE Internal", color: "#0CA60C" },
-            { id: 2, name: "SSCE External", color: "#145596" },
-            { id: 3, name: "BECE", color: "#642D56" },
-            { id: 4, name: "NCEE", color: "#1887EB" },
-            { id: 5, name: "Gifted", color: "#24809C" },
-            { id: 6, name: "Others", color: "#36454F" }
-        ];
-        
-        const defaultItems = {
-            "SSCE Internal": [
-                { name: "Four Figure Table", amount: 500 },
-                { name: "Non-Validation", amount: 10000 },
-                { name: "Syllabus", amount: 2000 },
-                { name: "Photo Album", amount: 2700 },
-                { name: "Late Ca3 Upload", amount: 40000 },
-                { name: "Remarking Ssce (i)", amount: 20000 },
-                { name: "Unviable Centre Fee", amount: 70000 },
-                { name: "Late Registration Fee", amount: 5000 },
-                { name: "Ssce Fresh Accreditation (public Schools)", amount: 200000 },
-                { name: "Ssce Re-accreditation (public Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (private Schools)", amount: 200000 },
-                { name: "Ssce Re-accreditation (private Schools)", amount: 150000 },
-                { name: "Ssce Fresh Accreditation (foreign Schools)", amount: 2000000 },
-                { name: "Ssce Re-accreditation (foreign Schools)", amount: 1500000 },
-                { name: "Chief Examiners Report Fee (per Copy)", amount: 2500 }
-            ],
-            "SSCE External": [
-                { name: "Four Figure Table", amount: 500 },
-                { name: "Walk-in", amount: 43000 },
-                { name: "Syllabus", amount: 2000 },
-                { name: "Result Slips", amount: 1600 },
-                { name: "Remarking Ssce Ext", amount: 20000 },
-                { name: "Collection Of Certificate", amount: 500 },
-                { name: "Non-Validation", amount: 10000 }
-            ],
-            "BECE": [
-                { name: "Remarking Bece", amount: 15000 },
-                { name: "Non-Validation", amount: 10000 },
-                { name: "Bece Fresh Accreditation (public Schools)", amount: 170000 },
-                { name: "Bece Re-accreditation (public Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (private Schools)", amount: 170000 },
-                { name: "Bece Re-accreditation (private Schools)", amount: 140000 },
-                { name: "Bece Fresh Accreditation (foreign Schools)", amount: 1500000 },
-                { name: "Bece Re-accreditation (foreign Schools)", amount: 1000000 }
-            ],
-            "NCEE": [
-                { name: "Non-Validation", amount: 4000 }
-            ],
-            "Gifted": [
-                { name: "Non-Validation", amount: 4000 }
-            ],
-            "Others": [
-                { name: "Reprint Of Certificate", amount: 50000 },
-                { name: "Change Of School Name", amount: 15000 },
-                { name: "Reprint Of School Results Per Candidate", amount: 400 },
-                { name: "Staff Identity Card", amount: 1000 },
-                { name: "Result Checker (token)", amount: 1000 },
-                { name: "Examination Bag", amount: 15000 },
-                { name: "Confirmation Of Result", amount: 10000 },
-                { name: "E-verification Of Result", amount: 5000 }
-            ]
-        };
         
         let currentCategories = [];
         let currentPaymentItems = [];
@@ -1111,18 +1037,6 @@
             loadWhatsAppSettings();
         }
         
-        function toggleCategories() {
-            const container = document.getElementById('categoryListContainer');
-            const arrow = document.getElementById('categoryArrow');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                arrow.style.transform = 'rotate(180deg)';
-            } else {
-                container.style.display = 'none';
-                arrow.style.transform = 'rotate(0deg)';
-            }
-        }
-        
         function getTimeRemaining(pin) {
             if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
             if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
@@ -1146,8 +1060,16 @@
                 if (categories && categories.length > 0) {
                     currentCategories = categories;
                 } else {
-                    currentCategories = defaultCategories;
-                    for (let cat of defaultCategories) {
+                    // Default categories
+                    currentCategories = [
+                        { id: 1, name: "SSCE Internal", color: "#0CA60C" },
+                        { id: 2, name: "SSCE External", color: "#145596" },
+                        { id: 3, name: "BECE", color: "#642D56" },
+                        { id: 4, name: "NCEE", color: "#1887EB" },
+                        { id: 5, name: "Gifted", color: "#24809C" },
+                        { id: 6, name: "Others", color: "#36454F" }
+                    ];
+                    for (let cat of currentCategories) {
                         await necoSupabase.from('categories').upsert({ id: cat.id, name: cat.name, color: cat.color });
                     }
                 }
@@ -1156,16 +1078,6 @@
                 const { data: paymentItems } = await necoSupabase.from('payment_items').select('*').order('id');
                 if (paymentItems && paymentItems.length > 0) {
                     currentPaymentItems = paymentItems;
-                } else {
-                    // Insert default items
-                    for (let cat of defaultCategories) {
-                        const items = defaultItems[cat.name] || [];
-                        for (let item of items) {
-                            await necoSupabase.from('payment_items').insert({ name: item.name, amount: item.amount, category_id: cat.id });
-                        }
-                    }
-                    const { data: freshItems } = await necoSupabase.from('payment_items').select('*').order('id');
-                    currentPaymentItems = freshItems || [];
                 }
                 
                 // Load PINs
@@ -1206,9 +1118,6 @@
                 }
             } catch (error) {
                 console.error('Error loading data:', error);
-                currentCategories = defaultCategories;
-                renderCategoriesList();
-                updateDashboard();
             }
         }
         
@@ -1246,9 +1155,11 @@
         
         function selectCategory(categoryId) {
             selectedCategoryId = categoryId;
-            const selectedCat = currentCategories.find(c => c.id === categoryId);
             renderCategoriesList();
             renderItemsForCategory();
+            // Also switch to payment-editor tab
+            showTab('payment-editor', 'Payment Items');
+            const selectedCat = currentCategories.find(c => c.id === categoryId);
             if (selectedCat) {
                 document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
             }
@@ -1618,7 +1529,8 @@
         
         function showTab(tabId, title) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
+            const targetTab = document.getElementById(tabId);
+            if (targetTab) targetTab.classList.add('active');
             document.getElementById('pageTitle').innerHTML = title;
             if (tabId === 'pin-manager') renderPins();
             if (tabId === 'view-payments') renderPayments();
@@ -1646,6 +1558,9 @@
                     showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
                 };
             });
+            // Activate dashboard by default
+            const dashboardMenuItem = document.querySelector('.menu-item[data-tab="dashboard"]');
+            if (dashboardMenuItem) dashboardMenuItem.classList.add('active');
         }
         
         window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
