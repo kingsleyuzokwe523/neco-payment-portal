@@ -513,18 +513,19 @@
         
         <div class="container mt-10">
             <div class="flex gap-3 flex-wrap" id="categoryFilters">
-                <div class="loader"></div>
+                <!-- Categories will be inserted here directly without loader -->
             </div>
         </div>
         
         <div class="container mt-10">
             <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid">
-                <div class="col-span-full text-center py-10 text-gray-500">Loading payment items...</div>
+                <!-- Payment items will be inserted here directly -->
             </div>
         </div>
     </div>
 </div>
 
+<!-- ALL MODALS - Same as your original working code -->
 <div id="paymentModal" class="fixed inset-0 z-30 hidden">
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
     <div class="fixed inset-0 overflow-y-auto">
@@ -787,19 +788,138 @@
     let countdownInterval = null;
     let settings = { pinExpiryMinutes: 30, adminWhatsApp: '2348123456789' };
     
+    // ============ RENDER CATEGORIES AND ITEMS IMMEDIATELY ============
+    function renderCategories() {
+        const container = document.getElementById('categoryFilters');
+        if (!container) return;
+        
+        const categories = Object.keys(paymentData);
+        container.innerHTML = categories.map(catName => {
+            const cat = paymentData[catName];
+            const isActive = currentCategory === catName;
+            return `
+                <div class="category-btn ${isActive ? 'active' : ''}" data-category="${catName}" style="${!isActive ? 'background-color: #EBEBEB;' : ''}">
+                    <div class="w-2 rounded-full h-2" style="background-color: ${cat.color};"></div>
+                    <div>${escapeHtml(catName)}</div>
+                </div>
+            `;
+        }).join('');
+        
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.backgroundColor = '#EBEBEB';
+                });
+                btn.classList.add('active');
+                btn.style.backgroundColor = 'white';
+                currentCategory = btn.getAttribute('data-category');
+                renderPaymentGrid();
+                document.getElementById('searchInput').value = '';
+            });
+        });
+    }
+    
+    function renderPaymentGrid() {
+        const grid = document.getElementById('paymentGrid');
+        if (!grid || !currentCategory) return;
+        
+        const cat = paymentData[currentCategory];
+        if (!cat || !cat.items) {
+            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No items found</div>';
+            return;
+        }
+        
+        grid.innerHTML = cat.items.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content">
+                            <div class="card-title">${escapeHtml(item.name)}</div>
+                            <div class="card-footer">
+                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    }
+    
+    // ============ SEARCH FUNCTION ============
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+        const term = e.target.value.toLowerCase();
+        const cat = paymentData[currentCategory];
+        if(!cat || !cat.items) return;
+        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
+        const grid = document.getElementById('paymentGrid');
+        if(filtered.length === 0) { 
+            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
+            return; 
+        }
+        grid.innerHTML = filtered.map(item => {
+            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content">
+                            <div class="card-title">${escapeHtml(item.name)}</div>
+                            <div class="card-footer">
+                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }).join('');
+    });
+    
+    // ============ LOAD SETTINGS FROM SUPABASE (Background) ============
     async function loadSettings() {
         try {
             const { data } = await supabaseClient.from('settings').select('*').maybeSingle();
             if (data) {
                 settings.pinExpiryMinutes = data.pin_expiry_minutes || 30;
                 settings.adminWhatsApp = data.admin_whatsapp || '2348123456789';
-                console.log('✅ Settings loaded:', settings);
             }
-        } catch (err) {
-            console.log('Using default settings');
-        }
+        } catch (err) {}
     }
     
+    // ============ SYNC WITH SUPABASE (Background - updates if admin changes) ============
+    async function syncPaymentItems() {
+        try {
+            const { data: categories } = await supabaseClient.from('categories').select('*');
+            const { data: items } = await supabaseClient.from('payment_items').select('*');
+            
+            if (categories && categories.length > 0 && items && items.length > 0) {
+                const newPaymentData = {};
+                for (const category of categories) {
+                    newPaymentData[category.name] = {
+                        color: category.color,
+                        items: items.filter(item => item.category_id === category.id)
+                    };
+                }
+                if (Object.keys(newPaymentData).length > 0) {
+                    Object.assign(paymentData, newPaymentData);
+                    renderCategories();
+                    renderPaymentGrid();
+                }
+            }
+        } catch (error) {}
+    }
+    
+    // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
         return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
     }
@@ -820,52 +940,38 @@
                 .eq('pin', pinCode)
                 .maybeSingle();
             
-            if (error || !data) {
-                return { valid: false, accountDetails: null };
-            }
-            
-            if (data.status === 'active') {
-                return { valid: true, accountDetails: data };
-            } else {
-                return { valid: false, accountDetails: null };
-            }
+            if (error || !data) return { valid: false };
+            if (data.status === 'active') return { valid: true, accountDetails: data };
+            return { valid: false };
         } catch (error) {
-            return { valid: false, accountDetails: null };
+            return { valid: false };
         }
     }
     
     async function markPinAsUsedAndProceed() {
         const pinCode = currentFormData.paymentCode;
-        
         try {
             const { error } = await supabaseClient
                 .from('payment_pins')
-                .update({ 
-                    status: 'used', 
-                    used_at: new Date().toISOString()
-                })
+                .update({ status: 'used', used_at: new Date().toISOString() })
                 .eq('pin', pinCode)
                 .eq('status', 'active');
             
-            if (error) {
-                alert('Error processing PIN. Please try again.');
-                return;
-            }
+            if (error) { alert('Error processing PIN.'); return; }
             
             closeInvoiceModal();
             const loadingModal = document.getElementById('loadingModal');
             if (loadingModal) {
                 loadingModal.style.display = 'flex';
                 setTimeout(() => {
-                    if (loadingModal) loadingModal.style.display = 'none';
+                    loadingModal.style.display = 'none';
                     showAccountModal();
-                }, 2000);
+                }, 1500);
             } else {
                 showAccountModal();
             }
-            
         } catch (err) {
-            alert('Error processing payment. Please try again.');
+            alert('Error processing payment.');
         }
     }
     
@@ -876,19 +982,10 @@
             const result = await validatePinWithSupabase(code.trim());
             isValidPin = result.valid;
             currentPinDetails = result.accountDetails;
-            
-            const codeError = document.getElementById('codeError');
-            const codeRequiredError = document.getElementById('codeRequiredError');
-            
-            codeError.style.display = 'none';
-            codeRequiredError.style.display = 'none';
-            
-            if (!result.valid && code.trim() !== '') {
-                codeError.style.display = 'block';
-            }
+            document.getElementById('codeError').style.display = (!result.valid && code.trim() !== '') ? 'block' : 'none';
+            document.getElementById('codeRequiredError').style.display = 'none';
         } else {
             isValidPin = false;
-            currentPinDetails = null;
             document.getElementById('codeRequiredError').style.display = 'block';
             document.getElementById('codeError').style.display = 'none';
         }
@@ -900,74 +997,46 @@
         const quantity = document.getElementById('quantity').value;
         const amount = document.getElementById('amount').value;
         
-        let isPhoneValid = validatePhone(phone);
-        let isEmailValid = validateEmail(email);
-        let isQuantityValid = validateQuantity(quantity);
+        const isFullNameValid = fullName && fullName.trim() !== '';
+        const isPhoneValid = validatePhone(phone);
+        const isEmailValid = validateEmail(email);
+        const isDescriptionValid = description && description.trim() !== '';
+        const isQuantityValid = validateQuantity(quantity);
+        const isAmountValid = amount && parseFloat(amount) > 0;
         
-        let isFullNameValid = fullName && fullName.trim() !== '';
-        let isDescriptionValid = description && description.trim() !== '';
-        let isAmountValid = amount && parseFloat(amount) > 0;
-        let isCodeProvided = code && code.trim() !== '';
-        
-        document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
-        document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
-        document.getElementById('amountError').style.display = !isAmountValid ? 'block' : 'none';
+        document.getElementById('fullNameError').style.display = isFullNameValid ? 'none' : 'block';
+        document.getElementById('descriptionError').style.display = isDescriptionValid ? 'none' : 'block';
+        document.getElementById('amountError').style.display = isAmountValid ? 'none' : 'block';
         
         const phoneError = document.getElementById('phoneError');
         const phoneRequiredError = document.getElementById('phoneRequiredError');
-        if (!phone) {
-            phoneRequiredError.style.display = 'block';
-            phoneError.style.display = 'none';
-        } else if (!isPhoneValid) {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'block';
-        } else {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'none';
-        }
+        if (!phone) { phoneRequiredError.style.display = 'block'; phoneError.style.display = 'none'; }
+        else if (!isPhoneValid) { phoneRequiredError.style.display = 'none'; phoneError.style.display = 'block'; }
+        else { phoneRequiredError.style.display = 'none'; phoneError.style.display = 'none'; }
         
         const emailError = document.getElementById('emailError');
         const emailRequiredError = document.getElementById('emailRequiredError');
-        if (!email) {
-            emailRequiredError.style.display = 'block';
-            emailError.style.display = 'none';
-        } else if (!isEmailValid) {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'block';
-        } else {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'none';
-        }
+        if (!email) { emailRequiredError.style.display = 'block'; emailError.style.display = 'none'; }
+        else if (!isEmailValid) { emailRequiredError.style.display = 'none'; emailError.style.display = 'block'; }
+        else { emailRequiredError.style.display = 'none'; emailError.style.display = 'none'; }
         
         const quantityError = document.getElementById('quantityError');
         const quantityRequiredError = document.getElementById('quantityRequiredError');
-        if (!quantity) {
-            quantityRequiredError.style.display = 'block';
-            quantityError.style.display = 'none';
-        } else if (!isQuantityValid) {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'block';
-        } else {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'none';
-        }
+        if (!quantity) { quantityRequiredError.style.display = 'block'; quantityError.style.display = 'none'; }
+        else if (!isQuantityValid) { quantityRequiredError.style.display = 'none'; quantityError.style.display = 'block'; }
+        else { quantityRequiredError.style.display = 'none'; quantityError.style.display = 'none'; }
         
-        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid;
         const proceedBtn = document.getElementById('proceedBtn');
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    function openPaymentModal(item) {
+    window.openPaymentModal = function(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
         const amountInput = document.getElementById('amount');
-        if (item.amount) { 
-            amountInput.value = item.amount; 
-            amountInput.readOnly = true; 
-        } else { 
-            amountInput.value = ''; 
-            amountInput.readOnly = false; 
-        }
+        if (item.amount) { amountInput.value = item.amount; amountInput.readOnly = true; } 
+        else { amountInput.value = ''; amountInput.readOnly = false; }
         
         const whatsappNumber = settings.adminWhatsApp || '2348123456789';
         document.getElementById('whatsappLink').href = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
@@ -977,47 +1046,32 @@
         document.getElementById('phone').value = ''; 
         document.getElementById('email').value = '';
         document.getElementById('paymentDescription').value = ''; 
-        document.getElementById('quantity').value = '';
+        document.getElementById('quantity').value = '1';
         document.getElementById('currency').value = 'NGN';
         
-        document.getElementById('codeError').style.display = 'none';
-        document.getElementById('phoneError').style.display = 'none';
-        document.getElementById('emailError').style.display = 'none';
-        document.getElementById('quantityError').style.display = 'none';
-        document.getElementById('codeRequiredError').style.display = 'none';
-        
+        document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
         document.getElementById('proceedBtn').disabled = true;
         document.getElementById('paymentModal').classList.remove('hidden');
         
         ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.removeEventListener('input', checkFormValidation);
-                element.addEventListener('input', checkFormValidation);
+            const el = document.getElementById(id);
+            if (el) {
+                el.removeEventListener('input', checkFormValidation);
+                el.addEventListener('input', checkFormValidation);
             }
         });
-    }
+    };
     
-    function closePaymentModal() { 
-        document.getElementById('paymentModal').classList.add('hidden'); 
-    }
-    
-    function closeInvoiceModal() { 
-        document.getElementById('invoiceModal').style.display = 'none'; 
-    }
-    
-    function closeAccountModal() { 
+    window.closePaymentModal = function() { document.getElementById('paymentModal').classList.add('hidden'); };
+    window.closeInvoiceModal = function() { document.getElementById('invoiceModal').style.display = 'none'; };
+    window.closeAccountModal = function() { 
         if (countdownInterval) clearInterval(countdownInterval);
         document.getElementById('accountModal').classList.add('hidden'); 
-    }
+    };
     
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
-        if (!isValidPin) { 
-            alert('Please enter a valid payment code'); 
-            return; 
-        }
+        if (!isValidPin) { alert('Please enter a valid payment code'); return; }
         
         const fullName = document.getElementById('fullName').value;
         const phone = document.getElementById('phone').value;
@@ -1027,7 +1081,7 @@
         const currency = document.getElementById('currency').value;
         let amount = parseFloat(document.getElementById('amount').value);
         
-        if (!fullName) { alert('Please fill all payer details'); return; }
+        if (!fullName) { alert('Please enter full name'); return; }
         if (!validatePhone(phone)) { alert('Invalid phone number'); return; }
         if (!validateEmail(email)) { alert('Invalid email address'); return; }
         if (!validateQuantity(quantity)) { alert('Invalid quantity'); return; }
@@ -1055,69 +1109,25 @@
         const timerElement = document.getElementById('countdownTimer');
         if (!timerElement) return;
         if (countdownInterval) clearInterval(countdownInterval);
-        
         function updateTimer() {
-            const now = new Date().getTime();
-            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
-            
-            if (remaining <= 0) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = "Expired";
-                timerElement.style.color = "#9ca3af";
-                return;
-            }
-            
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
+            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
+            if (remaining <= 0) { clearInterval(countdownInterval); timerElement.textContent = "Expired"; timerElement.style.color = "#9ca3af"; return; }
+            const mins = Math.floor(remaining / 60); const secs = remaining % 60;
             timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            timerElement.style.color = "#dc2626";
         }
-        
         updateTimer();
         countdownInterval = setInterval(updateTimer, 1000);
     }
     
     async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
+        const { data: pinData, error } = await supabaseClient.from('payment_pins').select('*').eq('pin', pinCode).single();
+        if (error || !pinData) { alert("Payment code not found."); return; }
+        if (pinData.status !== 'used') { alert("Invalid payment session."); window.location.href = 'index.html'; return; }
         
-        const { data: pinData, error } = await supabaseClient
-            .from('payment_pins')
-            .select('*')
-            .eq('pin', pinCode)
-            .single();
-        
-        if (error || !pinData) {
-            alert("Payment code not found. Please contact support.");
-            return;
-        }
-        
-        const account = pinData;
-        
-        if (account.status !== 'used') {
-            alert("This payment code is invalid or has already been used.");
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        if (!account.used_at) {
-            alert("Invalid payment session. Please start over.");
-            window.location.href = 'index.html';
-            return;
-        }
-        
-        const usedTime = new Date(account.used_at);
+        const usedTime = new Date(pinData.used_at);
         const expiryTime = usedTime.getTime() + 1800000;
-        
-        const now = new Date().getTime();
-        if (now >= expiryTime) {
-            alert("Your payment session has expired. Please start over.");
-            await supabaseClient
-                .from('payment_pins')
-                .update({ status: 'expired' })
-                .eq('pin', pinCode);
-            window.location.href = 'index.html';
-            return;
-        }
+        if (new Date().getTime() >= expiryTime) { alert("Session expired."); await supabaseClient.from('payment_pins').update({ status: 'expired' }).eq('pin', pinCode); window.location.href = 'index.html'; return; }
         
         const amount = parseFloat(currentFormData.amount) || 0;
         const serviceCharge = 50;
@@ -1125,309 +1135,96 @@
         const totalAmount = (amount + serviceCharge) * quantity;
         
         document.getElementById('accountDetailsBox').innerHTML = `
-            <div class="details-row">
-                <span class="details-label">Bank</span>
-                <span class="details-value">${escapeHtml(account.bank_name || 'NECO Microfinance Bank')}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Account Name</span>
-                <span class="details-value">${escapeHtml(account.account_name || 'National Examinations Council')}</span>
-            </div>
-            <div class="details-row-copy">
-                <span class="details-label-copy">Account Number</span>
-                <div class="details-value-copy">
-                    <span id="accountNumberText">${escapeHtml(account.account_number || '0000000000')}</span>
-                    <button class="copy-btn" onclick="copyToClipboard('${account.account_number}')" title="Copy account number">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
-                        </svg>
-                    </button>
-                </div>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Amount</span>
-                <span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span>
-            </div>
-            <div class="details-row">
-                <span class="details-label">Payment Code</span>
-                <span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span>
-            </div>
+            <div class="details-row"><span class="details-label">Bank</span><span class="details-value">${escapeHtml(pinData.bank_name || 'NECO Microfinance Bank')}</span></div>
+            <div class="details-row"><span class="details-label">Account Name</span><span class="details-value">${escapeHtml(pinData.account_name || 'National Examinations Council')}</span></div>
+            <div class="details-row-copy"><span class="details-label-copy">Account Number</span><div class="details-value-copy"><span>${escapeHtml(pinData.account_number || '0000000000')}</span><button class="copy-btn" onclick="copyToClipboard('${pinData.account_number}')"><svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path></svg></button></div></div>
+            <div class="details-row"><span class="details-label">Amount</span><span class="details-value">${currentFormData.currency} ${totalAmount.toLocaleString()}</span></div>
+            <div class="details-row"><span class="details-label">Payment Code</span><span class="details-value">${escapeHtml(currentFormData.paymentCode)}</span></div>
         `;
         
         const receiptInput = document.getElementById('receiptInput');
         const uploadedFileName = document.getElementById('uploadedFileName');
-        
         if (receiptInput) {
             const newInput = receiptInput.cloneNode(true);
             receiptInput.parentNode.replaceChild(newInput, receiptInput);
             newInput.id = 'receiptInput';
             newInput.classList.add('hidden');
-            newInput.accept = '.pdf,.jpg,.jpeg,.png';
-            
-            newInput.addEventListener('change', (e) => {
-                if (uploadedFileName) {
-                    uploadedFileName.innerHTML = e.target.files[0] ? `✅ ${e.target.files[0].name}` : '';
-                }
-            });
+            newInput.addEventListener('change', (e) => { if (uploadedFileName && e.target.files[0]) { uploadedFileName.innerHTML = `✅ ${e.target.files[0].name}`; } });
         }
         if (uploadedFileName) uploadedFileName.innerHTML = '';
-        
         document.getElementById('accountModal').classList.remove('hidden');
         startCountdown(expiryTime);
     }
     
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
     
-    function copyToClipboard(text) {
-        navigator.clipboard.writeText(text).then(function() {
+    window.copyToClipboard = function(text) {
+        navigator.clipboard.writeText(text).then(() => {
             const notification = document.getElementById('copyNotification');
             notification.style.display = 'flex';
-            notification.classList.add('copy-notification-show');
-            setTimeout(() => {
-                notification.classList.remove('copy-notification-show');
-                notification.style.display = 'none';
-            }, 2000);
-        }).catch(() => alert('Failed to copy. Please copy manually.'));
-    }
+            setTimeout(() => { notification.style.display = 'none'; }, 2000);
+        });
+    };
     
-    async function confirmPayment() { 
+    window.confirmPayment = async function() {
         const receiptFile = document.getElementById('receiptInput').files[0];
-        
-        if(!receiptFile) { 
-            alert('Please upload your payment receipt'); 
-            return; 
-        } 
-        
+        if (!receiptFile) { alert('Please upload your payment receipt'); return; }
         if (countdownInterval) clearInterval(countdownInterval);
-        
         const loadingModal = document.getElementById('loadingModal');
-        if (loadingModal) {
-            loadingModal.style.display = 'flex';
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Processing your payment...';
-            if (subText) subText.innerHTML = 'Please wait while we save your payment';
-        }
+        loadingModal.style.display = 'flex';
         
         let receiptUrl = null;
-        let receiptName = null;
-        
         try {
             const fileExt = receiptFile.name.split('.').pop();
             const fileName = `${Date.now()}_${currentFormData.paymentCode}.${fileExt}`;
-            const filePath = `receipts/${fileName}`;
-            receiptName = receiptFile.name;
-            
-            const { error: uploadError } = await supabaseClient
-                .storage
-                .from('payment-receipts')
-                .upload(filePath, receiptFile);
-            
-            if (uploadError) {
-                alert('Failed to upload receipt. Please try again.');
-                if (loadingModal) loadingModal.style.display = 'none';
-                return;
-            }
-            
-            const { data: urlData } = await supabaseClient
-                .storage
-                .from('payment-receipts')
-                .getPublicUrl(filePath);
+            const { error: uploadError } = await supabaseClient.storage.from('payment-receipts').upload(`receipts/${fileName}`, receiptFile);
+            if (uploadError) throw uploadError;
+            const { data: urlData } = await supabaseClient.storage.from('payment-receipts').getPublicUrl(`receipts/${fileName}`);
             receiptUrl = urlData.publicUrl;
-            
-        } catch (error) {
-            alert('Error uploading receipt: ' + error.message);
-            if (loadingModal) loadingModal.style.display = 'none';
-            return;
-        }
+        } catch (error) { alert('Failed to upload receipt: ' + error.message); loadingModal.style.display = 'none'; return; }
         
         const amount = parseFloat(currentFormData.amount) || 0;
         const serviceCharge = 50;
         const quantity = parseInt(currentFormData.quantity) || 1;
         const totalAmount = (amount + serviceCharge) * quantity;
         
-        const paymentData = {
-            payment_code: currentFormData.paymentCode,
-            full_name: currentFormData.fullName,
-            phone: currentFormData.phone,
-            email: currentFormData.email,
-            description: currentFormData.description || '',
-            item_name: currentItem.name,
-            amount: totalAmount,
-            currency: currentFormData.currency || 'NGN',
-            quantity: quantity,
-            receipt_url: receiptUrl,
-            receipt_name: receiptName,
-            status: 'completed',
-            created_at: new Date().toISOString()
+        const paymentRecord = {
+            payment_code: currentFormData.paymentCode, full_name: currentFormData.fullName, phone: currentFormData.phone,
+            email: currentFormData.email, description: currentFormData.description || '', item_name: currentItem.name,
+            amount: totalAmount, currency: currentFormData.currency || 'NGN', quantity: quantity,
+            receipt_url: receiptUrl, receipt_name: receiptFile.name, status: 'completed', created_at: new Date().toISOString()
         };
         
         try {
-            const { error } = await supabaseClient
-                .from('payments')
-                .insert([paymentData]);
-            
-            if (error) {
-                alert('Error saving payment: ' + error.message);
-                if (loadingModal) loadingModal.style.display = 'none';
-                return;
-            }
-            
+            const { error } = await supabaseClient.from('payments').insert([paymentRecord]);
+            if (error) throw error;
             closeAccountModal();
-            
-            if (loadingModal) {
-                const mainText = loadingModal.querySelector('p:first-of-type');
-                const subText = loadingModal.querySelector('p:last-of-type');
-                if (mainText) mainText.innerHTML = 'Payment Successful!';
-                if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
-                loadingModal.style.display = 'flex';
-            }
-            
-            setTimeout(() => { 
-                window.location.href = 'index.html'; 
-            }, 3000);
-            
-        } catch (error) {
-            alert('Error saving payment. Please contact support.');
-            if (loadingModal) loadingModal.style.display = 'none';
-        }
-    }
-   
-    document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.category-btn').forEach(b => {
-                b.classList.remove('!bg-white', 'drop-shadow-md');
-                b.style.backgroundColor = '#EBEBEB';
-            });
-            btn.classList.add('!bg-white', 'drop-shadow-md');
-            currentCategory = btn.getAttribute('data-category');
-            renderGrid();
-            document.getElementById('searchInput').value = '';
-        });
-    });
+            const mainText = loadingModal.querySelector('p:first-of-type');
+            const subText = loadingModal.querySelector('p:last-of-type');
+            if (mainText) mainText.innerHTML = 'Payment Successful!';
+            if (subText) subText.innerHTML = 'Thank you. Redirecting...';
+            setTimeout(() => { window.location.href = 'index.html'; }, 3000);
+        } catch (error) { alert('Error saving payment: ' + error.message); loadingModal.style.display = 'none'; }
+    };
     
-    function renderGrid() {
-        const grid = document.getElementById('paymentGrid');
-        const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) return;
-        
-        grid.innerHTML = cat.items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-        }).join('');
-    }
-    
-    renderGrid();
-    
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const cat = paymentData[currentCategory];
-        if(!cat || !cat.items) return;
-        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-        if(filtered.length === 0) { 
-            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
-            return; 
-        }
-        document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>`;
-        }).join('');
-    });
-    
-    async function syncPaymentItems() {
-        try {
-            const { data: categories } = await supabaseClient.from('categories').select('*');
-            const { data: items } = await supabaseClient.from('payment_items').select('*');
-            
-            if (categories && categories.length > 0 && items) {
-                const newPaymentData = {};
-                for (const category of categories) {
-                    newPaymentData[category.name] = {
-                        color: category.color,
-                        items: items.filter(item => item.category_id === category.id)
-                    };
-                }
-                Object.assign(paymentData, newPaymentData);
-                renderGrid();
-                console.log('✅ Synced with Supabase - admin changes applied');
-            }
-        } catch (error) {
-            console.log('Using local data');
-        }
-    }
-    
-    loadSettings();
-    setTimeout(syncPaymentItems, 500);
-    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
-    
-    // Mobile menu
+    // ============ MOBILE MENU ============
     var menuBtn = document.getElementById('mobileMenuBtn');
     var cancelBtn = document.getElementById('cancelMenuBtn');
     var mobileMenu = document.getElementById('mobileMenu');
-    
     if (menuBtn) {
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'block';
-            menuBtn.style.display = 'none';
-            cancelBtn.style.display = 'block';
-        };
-        cancelBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            menuBtn.style.display = 'block';
-        };
-        document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                    menuBtn.style.display = 'block';
-                }
-            }
-        };
+        menuBtn.onclick = function(e) { e.stopPropagation(); mobileMenu.style.display = 'block'; menuBtn.style.display = 'none'; cancelBtn.style.display = 'block'; };
+        cancelBtn.onclick = function(e) { e.stopPropagation(); mobileMenu.style.display = 'none'; cancelBtn.style.display = 'none'; menuBtn.style.display = 'block'; };
+        document.onclick = function(e) { if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !cancelBtn.contains(e.target) && !mobileMenu.contains(e.target)) { mobileMenu.style.display = 'none'; cancelBtn.style.display = 'none'; menuBtn.style.display = 'block'; } };
     }
+    
+    // ============ INITIALIZE - RENDER IMMEDIATELY ============
+    renderCategories();
+    renderPaymentGrid();
+    
+    // Background tasks that don't block the page
+    loadSettings();
+    setTimeout(syncPaymentItems, 500);
+    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
 })();
 </script>
 </body>
