@@ -183,7 +183,6 @@
             background: rgba(220,38,38,0.4);
         }
         
-        /* Category section in sidebar */
         .category-section-title {
             padding: 12px 16px;
             font-size: 12px;
@@ -418,6 +417,8 @@
             margin-bottom: 20px;
             padding-bottom: 16px;
             border-bottom: 2px solid #e5e7eb;
+            flex-wrap: wrap;
+            gap: 15px;
         }
         
         .category-items-header h3 {
@@ -452,6 +453,11 @@
             color: #374151;
         }
         
+        /* Fixed: Better spacing for action buttons on mobile */
+        .items-table td:last-child {
+            white-space: nowrap;
+        }
+        
         .edit-btn, .delete-btn {
             padding: 6px 14px;
             border-radius: 8px;
@@ -459,6 +465,7 @@
             margin: 0 4px;
             border: none;
             font-weight: 500;
+            display: inline-block;
         }
         
         .edit-btn {
@@ -469,6 +476,26 @@
         .delete-btn {
             background: #ef4444;
             color: white;
+        }
+        
+        /* Mobile responsive fixes */
+        @media (max-width: 768px) {
+            .items-table td:last-child {
+                display: flex;
+                gap: 8px;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+                padding: 12px;
+            }
+            .edit-btn, .delete-btn {
+                margin: 2px;
+                padding: 4px 12px;
+                font-size: 12px;
+            }
+            .category-items-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
         
         .modal {
@@ -798,11 +825,8 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
-                <!-- CATEGORIES SECTION IN SIDEBAR -->
                 <div class="category-section-title">📁 CATEGORIES</div>
-                <div id="categoryListContainer" class="category-list-container">
-                    <!-- Categories will be loaded here dynamically -->
-                </div>
+                <div id="categoryListContainer" class="category-list-container"></div>
                 <button class="add-category-btn" onclick="openAddCategoryModal()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v16M4 12h16"/></svg>
                     Add New Category
@@ -879,7 +903,6 @@
                 </div>
             </div>
             
-            <!-- Payment Items Display Area -->
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -896,7 +919,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    </table>
+                    追赶
                 </div>
             </div>
             
@@ -1060,7 +1083,6 @@
                 if (categories && categories.length > 0) {
                     currentCategories = categories;
                 } else {
-                    // Default categories
                     currentCategories = [
                         { id: 1, name: "SSCE Internal", color: "#0CA60C" },
                         { id: 2, name: "SSCE External", color: "#145596" },
@@ -1088,17 +1110,31 @@
                 const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
                 currentPayments = payments || [];
                 
-                // Load home content
+                // Load home content from Supabase (PERSISTS AFTER RELOAD)
                 try {
                     const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
-                    if (home) {
+                    if (home && home.id) {
                         homeContent.heroTitle = home.hero_title || homeContent.heroTitle;
                         homeContent.heroNote = home.hero_note || homeContent.heroNote;
                         homeContent.howItWorksTitle = home.how_it_works_title || homeContent.howItWorksTitle;
                         homeContent.footerNote = home.footer_note || homeContent.footerNote;
                         homeContent.steps = home.steps || homeContent.steps;
+                        console.log('✅ Home content loaded from Supabase');
+                    } else {
+                        // If no home_content exists, create it
+                        await necoSupabase.from('home_content').insert({
+                            id: 1,
+                            hero_title: homeContent.heroTitle,
+                            hero_note: homeContent.heroNote,
+                            how_it_works_title: homeContent.howItWorksTitle,
+                            footer_note: homeContent.footerNote,
+                            steps: homeContent.steps
+                        });
+                        console.log('✅ Created default home_content in Supabase');
                     }
-                } catch (err) {}
+                } catch (err) {
+                    console.log('Error loading home content:', err);
+                }
                 
                 updateDashboard();
                 renderPins();
@@ -1106,7 +1142,6 @@
                 loadHomePreview();
                 renderCategoriesList();
                 
-                // Set default selected category
                 if (currentCategories.length > 0 && !selectedCategoryId) {
                     selectedCategoryId = currentCategories[0].id;
                     renderCategoriesList();
@@ -1157,8 +1192,6 @@
             selectedCategoryId = categoryId;
             renderCategoriesList();
             renderItemsForCategory();
-            // Also switch to payment-editor tab
-            showTab('payment-editor', 'Payment Items');
             const selectedCat = currentCategories.find(c => c.id === categoryId);
             if (selectedCat) {
                 document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
@@ -1183,7 +1216,7 @@
                 html += `<tr>
                     <td style="font-weight:500;">${escapeHtml(item.name)}</td>
                     <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
-                    <td>
+                    <td style="white-space: nowrap;">
                         <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
                         <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
                     </td>
@@ -1466,6 +1499,7 @@
         
         async function saveHomeChanges() {
             try {
+                // Save to Supabase - THIS PERSISTS AFTER RELOAD
                 await necoSupabase.from('home_content').upsert({ 
                     id: 1, 
                     hero_title: homeContent.heroTitle, 
@@ -1474,7 +1508,7 @@
                     footer_note: homeContent.footerNote, 
                     steps: homeContent.steps 
                 });
-                alert('✅ Home page changes saved!');
+                alert('✅ Home page changes saved to database! They will persist after reload.');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
         }
@@ -1558,7 +1592,6 @@
                     showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
                 };
             });
-            // Activate dashboard by default
             const dashboardMenuItem = document.querySelector('.menu-item[data-tab="dashboard"]');
             if (dashboardMenuItem) dashboardMenuItem.classList.add('active');
         }
