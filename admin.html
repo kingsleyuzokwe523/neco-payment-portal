@@ -453,7 +453,6 @@
             color: #374151;
         }
         
-        /* Fixed: Better spacing for action buttons on mobile */
         .items-table td:last-child {
             white-space: nowrap;
         }
@@ -478,7 +477,6 @@
             color: white;
         }
         
-        /* Mobile responsive fixes */
         @media (max-width: 768px) {
             .items-table td:last-child {
                 display: flex;
@@ -832,6 +830,11 @@
                     Add New Category
                 </button>
                 
+                <div class="menu-item" data-tab="payment-editor">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
+                    <span>Payment Items</span>
+                </div>
+                
                 <div class="menu-item" data-tab="pin-manager">
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path></svg>
                     <span>PIN Manager</span>
@@ -919,7 +922,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    追赶
+                    赶
                 </div>
             </div>
             
@@ -929,7 +932,7 @@
                     <table class="items-table">
                         <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
                         <tbody id="paymentsTableBody"></tbody>
-                    </table>
+                    \dash
                 </div>
             </div>
         </div>
@@ -1007,6 +1010,11 @@
                 { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed" },
                 { title: "Get Confirmation", description: "Your correction will be processed and you will receive confirmation" }
             ]
+        };
+        
+        let whatsappSettings = {
+            admin_whatsapp: "2348123456789",
+            whatsapp_telegram_link: ""
         };
         
         function initSupabase() {
@@ -1196,6 +1204,8 @@
             if (selectedCat) {
                 document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
             }
+            // Also switch to payment-editor tab
+            showTab('payment-editor', 'Payment Items');
         }
         
         function renderItemsForCategory() {
@@ -1499,7 +1509,6 @@
         
         async function saveHomeChanges() {
             try {
-                // Save to Supabase - THIS PERSISTS AFTER RELOAD
                 await necoSupabase.from('home_content').upsert({ 
                     id: 1, 
                     hero_title: homeContent.heroTitle, 
@@ -1517,8 +1526,10 @@
             try {
                 const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
                 if (data) {
-                    if (data.admin_whatsapp) document.getElementById('whatsappNumber').value = data.admin_whatsapp;
-                    if (data.whatsapp_telegram_link) document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link;
+                    whatsappSettings.admin_whatsapp = data.admin_whatsapp || "2348123456789";
+                    whatsappSettings.whatsapp_telegram_link = data.whatsapp_telegram_link || "";
+                    document.getElementById('whatsappNumber').value = whatsappSettings.admin_whatsapp;
+                    document.getElementById('whatsappTelegramLink').value = whatsappSettings.whatsapp_telegram_link;
                 }
                 updateWhatsAppPreview();
             } catch (err) {}
@@ -1549,7 +1560,9 @@
                     admin_whatsapp: whatsapp, 
                     whatsapp_telegram_link: telegramLink 
                 });
-                alert('✅ WhatsApp settings saved successfully!');
+                whatsappSettings.admin_whatsapp = whatsapp;
+                whatsappSettings.whatsapp_telegram_link = telegramLink;
+                alert('✅ WhatsApp settings saved to database! They will persist after reload.');
                 triggerSync();
             } catch (err) { alert('Error: ' + err.message); }
         }
