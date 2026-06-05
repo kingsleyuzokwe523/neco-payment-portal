@@ -659,6 +659,30 @@
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
+    // ============ SETTINGS FROM SUPABASE ============
+    let settings = { adminWhatsapp: '2348123456789', whatsappTelegramLink: '' };
+    
+    async function loadSettings() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('settings')
+                .select('admin_whatsapp, whatsapp_telegram_link')
+                .maybeSingle();
+            
+            if (error) console.error('Error loading settings:', error);
+            if (data) {
+                settings.adminWhatsapp = data.admin_whatsapp || '2348123456789';
+                settings.whatsappTelegramLink = data.whatsapp_telegram_link || '';
+                console.log('✅ WhatsApp settings loaded:', settings);
+            }
+        } catch (err) {
+            console.log('Using default WhatsApp number');
+        }
+    }
+    
+    // Load settings immediately
+    loadSettings();
+    
     // ============ DEFAULT PAYMENT DATA (Shows Immediately with unique category colors) ============
     let paymentData = {
         "SSCE Internal": { color: "#0CA60C", items: [
@@ -887,7 +911,7 @@
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    // ============ OPEN PAYMENT MODAL ============
+    // ============ OPEN PAYMENT MODAL (FIXED - Uses admin settings) ============
     function openPaymentModal(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
@@ -899,7 +923,21 @@
             amountInput.value = ''; 
             amountInput.readOnly = false; 
         }
-        document.getElementById('whatsappLink').href = `https://wa.me/2348021234567?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        
+        // USE SETTINGS FROM SUPABASE DATABASE
+        let whatsappNumber = settings.adminWhatsapp || '2348123456789';
+        let whatsappLink = '';
+        
+        // Check if custom link is provided
+        if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
+            whatsappLink = settings.whatsappTelegramLink;
+        } else {
+            // Remove any + sign and create WhatsApp link
+            whatsappNumber = whatsappNumber.replace(/\+/g, '');
+            whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+        }
+        
+        document.getElementById('whatsappLink').href = whatsappLink;
         
         document.getElementById('paymentCode').value = ''; 
         document.getElementById('fullName').value = ''; 
