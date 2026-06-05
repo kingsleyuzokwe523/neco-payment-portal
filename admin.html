@@ -453,6 +453,7 @@
             color: #374151;
         }
         
+        /* Fixed: Better spacing for action buttons on mobile */
         .items-table td:last-child {
             white-space: nowrap;
         }
@@ -477,22 +478,24 @@
             color: white;
         }
         
+        /* Mobile responsive fixes for buttons */
         @media (max-width: 768px) {
             .items-table td:last-child {
-                display: flex;
-                gap: 8px;
-                justify-content: flex-start;
-                flex-wrap: wrap;
-                padding: 12px;
+                white-space: normal;
+                padding: 12px 8px;
             }
             .edit-btn, .delete-btn {
                 margin: 2px;
-                padding: 4px 12px;
-                font-size: 12px;
+                padding: 6px 10px;
+                font-size: 11px;
+                min-width: 60px;
             }
             .category-items-header {
                 flex-direction: column;
                 align-items: flex-start;
+            }
+            .items-table th, .items-table td {
+                padding: 10px 8px;
             }
         }
         
@@ -920,9 +923,9 @@
                 <div class="table-container">
                     <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
+                        <thead>汽<th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    赶
+                    </table>
                 </div>
             </div>
             
@@ -930,9 +933,9 @@
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <table class="items-table">
-                        <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
+                        <thead>汽<th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></thead>
                         <tbody id="paymentsTableBody"></tbody>
-                    \dash
+                    </table>
                 </div>
             </div>
         </div>
@@ -1012,11 +1015,6 @@
             ]
         };
         
-        let whatsappSettings = {
-            admin_whatsapp: "2348123456789",
-            whatsapp_telegram_link: ""
-        };
-        
         function initSupabase() {
             if (!necoSupabase) necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             return necoSupabase;
@@ -1087,7 +1085,8 @@
         async function loadAllData() {
             try {
                 // Load categories
-                const { data: categories } = await necoSupabase.from('categories').select('*').order('id');
+                const { data: categories, error: catError } = await necoSupabase.from('categories').select('*').order('id');
+                if (catError) console.error('Categories error:', catError);
                 if (categories && categories.length > 0) {
                     currentCategories = categories;
                 } else {
@@ -1105,7 +1104,8 @@
                 }
                 
                 // Load payment items
-                const { data: paymentItems } = await necoSupabase.from('payment_items').select('*').order('id');
+                const { data: paymentItems, error: itemError } = await necoSupabase.from('payment_items').select('*').order('id');
+                if (itemError) console.error('Items error:', itemError);
                 if (paymentItems && paymentItems.length > 0) {
                     currentPaymentItems = paymentItems;
                 }
@@ -1118,7 +1118,7 @@
                 const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
                 currentPayments = payments || [];
                 
-                // Load home content from Supabase (PERSISTS AFTER RELOAD)
+                // Load home content from Supabase
                 try {
                     const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
                     if (home && home.id) {
@@ -1126,11 +1126,13 @@
                         homeContent.heroNote = home.hero_note || homeContent.heroNote;
                         homeContent.howItWorksTitle = home.how_it_works_title || homeContent.howItWorksTitle;
                         homeContent.footerNote = home.footer_note || homeContent.footerNote;
-                        homeContent.steps = home.steps || homeContent.steps;
+                        if (home.steps && Array.isArray(home.steps) && home.steps.length > 0) {
+                            homeContent.steps = home.steps;
+                        }
                         console.log('✅ Home content loaded from Supabase');
                     } else {
-                        // If no home_content exists, create it
-                        await necoSupabase.from('home_content').insert({
+                        // Create default home_content
+                        const { error: insertError } = await necoSupabase.from('home_content').insert({
                             id: 1,
                             hero_title: homeContent.heroTitle,
                             hero_note: homeContent.heroNote,
@@ -1138,7 +1140,8 @@
                             footer_note: homeContent.footerNote,
                             steps: homeContent.steps
                         });
-                        console.log('✅ Created default home_content in Supabase');
+                        if (insertError) console.error('Insert home error:', insertError);
+                        else console.log('✅ Created default home_content');
                     }
                 } catch (err) {
                     console.log('Error loading home content:', err);
@@ -1156,7 +1159,8 @@
                     renderItemsForCategory();
                     const selectedCat = currentCategories.find(c => c.id === selectedCategoryId);
                     if (selectedCat) {
-                        document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length} items)`;
+                        const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
+                        document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
                     }
                 }
             } catch (error) {
@@ -1202,9 +1206,10 @@
             renderItemsForCategory();
             const selectedCat = currentCategories.find(c => c.id === categoryId);
             if (selectedCat) {
-                document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${currentPaymentItems.filter(i => i.category_id === categoryId).length} items)`;
+                const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+                document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
             }
-            // Also switch to payment-editor tab
+            // Switch to payment-editor tab
             showTab('payment-editor', 'Payment Items');
         }
         
@@ -1221,7 +1226,7 @@
                 return;
             }
             
-            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
+            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></thead><tbody>';
             for (let item of items) {
                 html += `<tr>
                     <td style="font-weight:500;">${escapeHtml(item.name)}</td>
@@ -1240,10 +1245,14 @@
             const name = document.getElementById('newCategoryName').value;
             const color = document.getElementById('newCategoryColor').value;
             if (!name) { alert('Please enter category name'); return; }
-            await necoSupabase.from('categories').insert({ name, color });
-            closeModal('addCategoryModal');
-            loadAllData();
-            triggerSync();
+            const { error } = await necoSupabase.from('categories').insert({ name, color });
+            if (error) alert('Error: ' + error.message);
+            else {
+                closeModal('addCategoryModal');
+                loadAllData();
+                triggerSync();
+                alert('✅ Category added successfully!');
+            }
         }
         
         function openAddCategoryModal() {
@@ -1294,21 +1303,32 @@
             const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
             const categoryId = parseInt(document.getElementById('itemCategory').value);
             if (!name) { alert('Enter item name'); return; }
+            let error;
             if (currentEditingItemId) {
-                await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+                const { error: updateError } = await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+                error = updateError;
             } else {
-                await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+                const { error: insertError } = await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+                error = insertError;
             }
-            closeModal('itemModal');
-            loadAllData();
-            triggerSync();
+            if (error) alert('Error: ' + error.message);
+            else {
+                closeModal('itemModal');
+                loadAllData();
+                triggerSync();
+                alert('✅ Item saved successfully!');
+            }
         }
         
         async function deleteItem(itemId) {
             if (confirm('Delete this item?')) {
-                await necoSupabase.from('payment_items').delete().eq('id', itemId);
-                loadAllData();
-                triggerSync();
+                const { error } = await necoSupabase.from('payment_items').delete().eq('id', itemId);
+                if (error) alert('Error: ' + error.message);
+                else {
+                    loadAllData();
+                    triggerSync();
+                    alert('✅ Item deleted successfully!');
+                }
             }
         }
         
@@ -1334,26 +1354,35 @@
             accountNumber = accountNumber.replace(/[^0-9]/g, '');
             if (accountNumber.length !== 10) { alert('Account number must be 10 digits'); return; }
             if (!bankName || !accountName) { alert('Fill all fields'); return; }
-            await necoSupabase.from('payment_pins').insert({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active' });
-            closeModal('pinModal');
-            loadAllData();
-            triggerSync();
-            alert(`✅ PIN ${pin} generated successfully!`);
+            const { error } = await necoSupabase.from('payment_pins').insert({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active' });
+            if (error) alert('Error: ' + error.message);
+            else {
+                closeModal('pinModal');
+                loadAllData();
+                triggerSync();
+                alert(`✅ PIN ${pin} generated successfully!`);
+            }
         }
         
         async function deletePin(pinId) {
             if (confirm('Delete this PIN?')) {
-                await necoSupabase.from('payment_pins').delete().eq('id', pinId);
-                loadAllData();
-                triggerSync();
+                const { error } = await necoSupabase.from('payment_pins').delete().eq('id', pinId);
+                if (error) alert('Error: ' + error.message);
+                else {
+                    loadAllData();
+                    triggerSync();
+                }
             }
         }
         
         async function deletePayment(paymentId) {
             if (confirm('Delete this payment record?')) {
-                await necoSupabase.from('payments').delete().eq('id', paymentId);
-                loadAllData();
-                triggerSync();
+                const { error } = await necoSupabase.from('payments').delete().eq('id', paymentId);
+                if (error) alert('Error: ' + error.message);
+                else {
+                    loadAllData();
+                    triggerSync();
+                }
             }
         }
         
@@ -1509,7 +1538,7 @@
         
         async function saveHomeChanges() {
             try {
-                await necoSupabase.from('home_content').upsert({ 
+                const { error } = await necoSupabase.from('home_content').upsert({ 
                     id: 1, 
                     hero_title: homeContent.heroTitle, 
                     hero_note: homeContent.heroNote, 
@@ -1517,22 +1546,37 @@
                     footer_note: homeContent.footerNote, 
                     steps: homeContent.steps 
                 });
+                if (error) throw error;
                 alert('✅ Home page changes saved to database! They will persist after reload.');
                 triggerSync();
-            } catch (err) { alert('Error: ' + err.message); }
+            } catch (err) { 
+                alert('Error: ' + err.message);
+                console.error('Save home error:', err);
+            }
         }
         
         async function loadWhatsAppSettings() {
             try {
-                const { data } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
+                const { data, error } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
+                if (error) console.error('Load settings error:', error);
                 if (data) {
-                    whatsappSettings.admin_whatsapp = data.admin_whatsapp || "2348123456789";
-                    whatsappSettings.whatsapp_telegram_link = data.whatsapp_telegram_link || "";
-                    document.getElementById('whatsappNumber').value = whatsappSettings.admin_whatsapp;
-                    document.getElementById('whatsappTelegramLink').value = whatsappSettings.whatsapp_telegram_link;
+                    document.getElementById('whatsappNumber').value = data.admin_whatsapp || "2348123456789";
+                    document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link || "";
+                } else {
+                    // Create default settings
+                    await necoSupabase.from('settings').insert({
+                        id: 1,
+                        admin_whatsapp: "2348123456789",
+                        whatsapp_telegram_link: "",
+                        pin_expiry_minutes: 30
+                    });
+                    document.getElementById('whatsappNumber').value = "2348123456789";
+                    document.getElementById('whatsappTelegramLink').value = "";
                 }
                 updateWhatsAppPreview();
-            } catch (err) {}
+            } catch (err) {
+                console.log('Error loading WhatsApp settings:', err);
+            }
         }
         
         function updateWhatsAppPreview() {
@@ -1555,16 +1599,19 @@
                 return;
             }
             try {
-                await necoSupabase.from('settings').upsert({ 
+                const { error } = await necoSupabase.from('settings').upsert({ 
                     id: 1, 
                     admin_whatsapp: whatsapp, 
-                    whatsapp_telegram_link: telegramLink 
+                    whatsapp_telegram_link: telegramLink,
+                    pin_expiry_minutes: 30
                 });
-                whatsappSettings.admin_whatsapp = whatsapp;
-                whatsappSettings.whatsapp_telegram_link = telegramLink;
+                if (error) throw error;
                 alert('✅ WhatsApp settings saved to database! They will persist after reload.');
                 triggerSync();
-            } catch (err) { alert('Error: ' + err.message); }
+            } catch (err) { 
+                alert('Error: ' + err.message);
+                console.error('Save settings error:', err);
+            }
         }
         
         document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
