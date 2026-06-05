@@ -860,7 +860,7 @@
                 <h2 id="pageTitle">Dashboard</h2>
             </div>
             
-            <div id="dashboard" class="tab-content">
+            <div id="dashboard" class="tab-content active">
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-info"><h4>Total Categories</h4><div class="number" id="totalCategories">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg></div></div>
                     <div class="stat-card"><div class="stat-info"><h4>Total Items</h4><div class="number" id="totalItems">0</div></div><div class="stat-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#054c0f" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div></div>
@@ -923,7 +923,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>🔐 Payment PINs</h3><button class="add-btn" onclick="openPinModal()">+ Generate New PIN</button></div>
                     <table class="items-table">
-                        <thead>汽<th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></thead>
+                        <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
                     </table>
                 </div>
@@ -933,8 +933,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <table class="items-table">
-                        <thead>汽<th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></thead>
-                        <tbody id="paymentsTableBody"></tbody>
+                       <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
                     </table>
                 </div>
             </div>
@@ -987,676 +986,668 @@
     </div>
 
     <script>
-        const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
-        let necoSupabase = null;
-        
-        let currentCategories = [];
-        let currentPaymentItems = [];
-        let currentPaymentPins = [];
-        let currentPayments = [];
-        let selectedCategoryId = null;
-        let currentEditingItemId = null;
-        let currentEditingKey = null;
-        let pinExpiryInterval = null;
-        
-        let homeContent = {
-            heroTitle: "NECO Corrections Just Got Faster and Simpler.",
-            heroNote: "You do not need an account to make payment",
-            howItWorksTitle: "How it works",
-            footerNote: "NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class='text-primary-500'>(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.",
-            steps: [
-                { title: "Select Correction Type", description: "Select or search for the correction type you want i.e Correction of Name, Date of Birth, Subject Entry etc" },
-                { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website www.neco.gov.ng. Ensure to verify your payment before proceeding to Pay." },
-                { title: "Fill the Correction Form", description: "Fill the correction form with your details and proceed to payment" },
-                { title: "Select Mode of Payment", description: "Select mode of payment i.e Card payment, Bank Transfer or USSD" },
-                { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed" },
-                { title: "Get Confirmation", description: "Your correction will be processed and you will receive confirmation" }
-            ]
-        };
-        
-        function initSupabase() {
-            if (!necoSupabase) necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            return necoSupabase;
+const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
+let necoSupabase = null;
+
+let currentCategories = [];
+let currentPaymentItems = [];
+let currentPaymentPins = [];
+let currentPayments = [];
+let selectedCategoryId = null;
+let currentEditingItemId = null;
+let currentEditingKey = null;
+let pinExpiryInterval = null;
+
+let homeContent = {
+    heroTitle: "NECO Corrections Just Got Faster and Simpler.",
+    heroNote: "You do not need an account to make payment",
+    howItWorksTitle: "How it works",
+    footerNote: "NOTE: Payment item code is required for any NECO payment, this item code can be gotten from the NECO website <span class='text-primary-500'>(www.neco.gov.ng)</span>. Ensure to verify your payment before proceeding to pay and note that refunds are not applicable once payment is completed.",
+    steps: [
+        { title: "Select Correction Type", description: "Select or search for the correction type you want i.e Correction of Name, Date of Birth, Subject Entry etc" },
+        { title: "Get Payment Item Code", description: "Payment item code is required for any NECO payment, this item code can be gotten from the NECO website www.neco.gov.ng. Ensure to verify your payment before proceeding to Pay." },
+        { title: "Fill the Correction Form", description: "Fill the correction form with your details and proceed to payment" },
+        { title: "Select Mode of Payment", description: "Select mode of payment i.e Card payment, Bank Transfer or USSD" },
+        { title: "Confirm Your Payment", description: "Go through the transaction breakdown, read and accept the disclaimer then click the confirm button to proceed" },
+        { title: "Get Confirmation", description: "Your correction will be processed and you will receive confirmation" }
+    ]
+};
+
+function initSupabase() {
+    if (!necoSupabase) necoSupabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    return necoSupabase;
+}
+
+function escapeHtml(str) {
+    if (!str) return '';
+    return String(str).replace(/[&<>]/g, function(m) {
+        if (m === '&') return '&amp;';
+        if (m === '<') return '&lt;';
+        if (m === '>') return '&gt;';
+        return m;
+    });
+}
+
+function doLogin() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    if (username === 'admin' && password === 'admin123') {
+        localStorage.setItem('adminLoggedIn', 'true');
+        document.getElementById('loginOverlay').style.display = 'none';
+        document.getElementById('dashboardContainer').style.display = 'block';
+        initSupabase();
+        loadAllData();
+        initDashboard();
+        startPinExpiryChecker();
+        loadWhatsAppSettings();
+    } else {
+        const errorMsg = document.getElementById('errorMsg');
+        errorMsg.textContent = 'Invalid username or password';
+        errorMsg.style.display = 'block';
+        setTimeout(() => errorMsg.style.display = 'none', 3000);
+    }
+}
+
+function doLogout() {
+    if (pinExpiryInterval) clearInterval(pinExpiryInterval);
+    localStorage.removeItem('adminLoggedIn');
+    location.reload();
+}
+
+if (localStorage.getItem('adminLoggedIn') === 'true') {
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('dashboardContainer').style.display = 'block';
+    initSupabase();
+    loadAllData();
+    initDashboard();
+    startPinExpiryChecker();
+    loadWhatsAppSettings();
+}
+
+function getTimeRemaining(pin) {
+    if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
+    if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
+    if (pin.status === 'used' && pin.used_at) {
+        const usedTime = new Date(pin.used_at);
+        const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
+        const now = new Date();
+        const remainingMs = expiryFromUse - now;
+        if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
+        const mins = Math.floor(remainingMs / (1000 * 60));
+        const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
+        return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
+    }
+    return { text: 'Unknown', class: 'timer-expired' };
+}
+
+async function loadAllData() {
+    try {
+        const { data: categories, error: catError } = await necoSupabase.from('categories').select('*').order('id');
+        if (catError) console.error('Categories error:', catError);
+        if (categories && categories.length > 0) {
+            currentCategories = categories;
+        } else {
+            currentCategories = [
+                { id: 1, name: "SSCE Internal", color: "#0CA60C" },
+                { id: 2, name: "SSCE External", color: "#145596" },
+                { id: 3, name: "BECE", color: "#642D56" },
+                { id: 4, name: "NCEE", color: "#1887EB" },
+                { id: 5, name: "Gifted", color: "#24809C" },
+                { id: 6, name: "Others", color: "#36454F" }
+            ];
+            for (let cat of currentCategories) {
+                await necoSupabase.from('categories').upsert({ id: cat.id, name: cat.name, color: cat.color });
+            }
         }
         
-        function escapeHtml(str) {
-            if (!str) return '';
-            return String(str).replace(/[&<>]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                return m;
-            });
+        const { data: paymentItems, error: itemError } = await necoSupabase.from('payment_items').select('*').order('id');
+        if (itemError) console.error('Items error:', itemError);
+        if (paymentItems && paymentItems.length > 0) {
+            currentPaymentItems = paymentItems;
         }
         
-        function doLogin() {
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            if (username === 'admin' && password === 'admin123') {
-                localStorage.setItem('adminLoggedIn', 'true');
-                document.getElementById('loginOverlay').style.display = 'none';
-                document.getElementById('dashboardContainer').style.display = 'block';
-                initSupabase();
-                loadAllData();
-                initDashboard();
-                startPinExpiryChecker();
-                loadWhatsAppSettings();
+        const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
+        currentPaymentPins = paymentPins || [];
+        
+        const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
+        currentPayments = payments || [];
+        
+        try {
+            const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
+            if (home && home.id) {
+                homeContent.heroTitle = home.hero_title || homeContent.heroTitle;
+                homeContent.heroNote = home.hero_note || homeContent.heroNote;
+                homeContent.howItWorksTitle = home.how_it_works_title || homeContent.howItWorksTitle;
+                homeContent.footerNote = home.footer_note || homeContent.footerNote;
+                if (home.steps && Array.isArray(home.steps) && home.steps.length > 0) {
+                    homeContent.steps = home.steps;
+                }
+                console.log('✅ Home content loaded from Supabase');
             } else {
-                const errorMsg = document.getElementById('errorMsg');
-                errorMsg.textContent = 'Invalid username or password';
-                errorMsg.style.display = 'block';
-                setTimeout(() => errorMsg.style.display = 'none', 3000);
+                const { error: insertError } = await necoSupabase.from('home_content').insert({
+                    id: 1,
+                    hero_title: homeContent.heroTitle,
+                    hero_note: homeContent.heroNote,
+                    how_it_works_title: homeContent.howItWorksTitle,
+                    footer_note: homeContent.footerNote,
+                    steps: homeContent.steps
+                });
+                if (insertError) console.error('Insert home error:', insertError);
+                else console.log('✅ Created default home_content');
             }
+        } catch (err) {
+            console.log('Error loading home content:', err);
         }
         
-        function doLogout() {
-            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
-            localStorage.removeItem('adminLoggedIn');
-            location.reload();
-        }
+        updateDashboard();
+        renderPins();
+        renderPayments();
+        loadHomePreview();
+        renderCategoriesList();
         
-        if (localStorage.getItem('adminLoggedIn') === 'true') {
-            document.getElementById('loginOverlay').style.display = 'none';
-            document.getElementById('dashboardContainer').style.display = 'block';
-            initSupabase();
-            loadAllData();
-            initDashboard();
-            startPinExpiryChecker();
-            loadWhatsAppSettings();
-        }
-        
-        function getTimeRemaining(pin) {
-            if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
-            if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
-            if (pin.status === 'used' && pin.used_at) {
-                const usedTime = new Date(pin.used_at);
-                const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
-                const now = new Date();
-                const remainingMs = expiryFromUse - now;
-                if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
-                const mins = Math.floor(remainingMs / (1000 * 60));
-                const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-                return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
-            }
-            return { text: 'Unknown', class: 'timer-expired' };
-        }
-        
-        async function loadAllData() {
-            try {
-                // Load categories
-                const { data: categories, error: catError } = await necoSupabase.from('categories').select('*').order('id');
-                if (catError) console.error('Categories error:', catError);
-                if (categories && categories.length > 0) {
-                    currentCategories = categories;
-                } else {
-                    currentCategories = [
-                        { id: 1, name: "SSCE Internal", color: "#0CA60C" },
-                        { id: 2, name: "SSCE External", color: "#145596" },
-                        { id: 3, name: "BECE", color: "#642D56" },
-                        { id: 4, name: "NCEE", color: "#1887EB" },
-                        { id: 5, name: "Gifted", color: "#24809C" },
-                        { id: 6, name: "Others", color: "#36454F" }
-                    ];
-                    for (let cat of currentCategories) {
-                        await necoSupabase.from('categories').upsert({ id: cat.id, name: cat.name, color: cat.color });
-                    }
-                }
-                
-                // Load payment items
-                const { data: paymentItems, error: itemError } = await necoSupabase.from('payment_items').select('*').order('id');
-                if (itemError) console.error('Items error:', itemError);
-                if (paymentItems && paymentItems.length > 0) {
-                    currentPaymentItems = paymentItems;
-                }
-                
-                // Load PINs
-                const { data: paymentPins } = await necoSupabase.from('payment_pins').select('*').order('created_at', { ascending: false });
-                currentPaymentPins = paymentPins || [];
-                
-                // Load payments
-                const { data: payments } = await necoSupabase.from('payments').select('*').order('created_at', { ascending: false });
-                currentPayments = payments || [];
-                
-                // Load home content from Supabase
-                try {
-                    const { data: home } = await necoSupabase.from('home_content').select('*').limit(1).maybeSingle();
-                    if (home && home.id) {
-                        homeContent.heroTitle = home.hero_title || homeContent.heroTitle;
-                        homeContent.heroNote = home.hero_note || homeContent.heroNote;
-                        homeContent.howItWorksTitle = home.how_it_works_title || homeContent.howItWorksTitle;
-                        homeContent.footerNote = home.footer_note || homeContent.footerNote;
-                        if (home.steps && Array.isArray(home.steps) && home.steps.length > 0) {
-                            homeContent.steps = home.steps;
-                        }
-                        console.log('✅ Home content loaded from Supabase');
-                    } else {
-                        // Create default home_content
-                        const { error: insertError } = await necoSupabase.from('home_content').insert({
-                            id: 1,
-                            hero_title: homeContent.heroTitle,
-                            hero_note: homeContent.heroNote,
-                            how_it_works_title: homeContent.howItWorksTitle,
-                            footer_note: homeContent.footerNote,
-                            steps: homeContent.steps
-                        });
-                        if (insertError) console.error('Insert home error:', insertError);
-                        else console.log('✅ Created default home_content');
-                    }
-                } catch (err) {
-                    console.log('Error loading home content:', err);
-                }
-                
-                updateDashboard();
-                renderPins();
-                renderPayments();
-                loadHomePreview();
-                renderCategoriesList();
-                
-                if (currentCategories.length > 0 && !selectedCategoryId) {
-                    selectedCategoryId = currentCategories[0].id;
-                    renderCategoriesList();
-                    renderItemsForCategory();
-                    const selectedCat = currentCategories.find(c => c.id === selectedCategoryId);
-                    if (selectedCat) {
-                        const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
-                        document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
-                    }
-                }
-            } catch (error) {
-                console.error('Error loading data:', error);
-            }
-        }
-        
-        function updateDashboard() {
-            document.getElementById('totalCategories').innerText = currentCategories.length;
-            document.getElementById('totalItems').innerText = currentPaymentItems.length;
-            document.getElementById('totalActivePins').innerText = currentPaymentPins.filter(p => p.status === "active").length;
-            document.getElementById('totalPayments').innerText = currentPayments.length;
-        }
-        
-        function renderCategoriesList() {
-            const container = document.getElementById('categoryListContainer');
-            if (!container) return;
-            
-            if (!currentCategories || currentCategories.length === 0) {
-                container.innerHTML = '<div style="color: rgba(255,255,255,0.6); padding: 10px; text-align: center; font-size: 12px;">No categories yet.<br>Click "Add Category"</div>';
-                return;
-            }
-            
-            let html = '';
-            for (let i = 0; i < currentCategories.length; i++) {
-                const cat = currentCategories[i];
-                const isActive = selectedCategoryId === cat.id;
-                const itemCount = currentPaymentItems.filter(item => item.category_id === cat.id).length;
-                html += `
-                    <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory(${cat.id})">
-                        <div class="category-color" style="background: ${cat.color};"></div>
-                        <span class="category-name">${escapeHtml(cat.name)}</span>
-                        <span class="category-count">${itemCount}</span>
-                    </div>
-                `;
-            }
-            container.innerHTML = html;
-        }
-        
-        function selectCategory(categoryId) {
-            selectedCategoryId = categoryId;
+        if (currentCategories.length > 0 && !selectedCategoryId) {
+            selectedCategoryId = currentCategories[0].id;
             renderCategoriesList();
             renderItemsForCategory();
-            const selectedCat = currentCategories.find(c => c.id === categoryId);
+            const selectedCat = currentCategories.find(c => c.id === selectedCategoryId);
             if (selectedCat) {
-                const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+                const itemCount = currentPaymentItems.filter(i => i.category_id === selectedCategoryId).length;
                 document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
             }
-            // Switch to payment-editor tab
-            showTab('payment-editor', 'Payment Items');
         }
-        
-        function renderItemsForCategory() {
-            const container = document.getElementById('itemsListContainer');
-            if (!selectedCategoryId) {
-                container.innerHTML = '<p style="text-align:center;padding:40px;">Select a category from the sidebar</p>';
-                return;
-            }
-            
-            const items = currentPaymentItems.filter(item => item.category_id === selectedCategoryId);
-            if (items.length === 0) {
-                container.innerHTML = '<p style="text-align:center;padding:40px;">No items in this category. Click "+ Add Item" to add one.</p>';
-                return;
-            }
-            
-            let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></thead><tbody>';
-            for (let item of items) {
-                html += `<tr>
-                    <td style="font-weight:500;">${escapeHtml(item.name)}</td>
-                    <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
-                    <td style="white-space: nowrap;">
-                        <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
-                        <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
-                    </td>
-                </tr>`;
-            }
-            html += '</tbody></table>';
-            container.innerHTML = html;
+    } catch (error) {
+        console.error('Error loading data:', error);
+    }
+}
+
+function updateDashboard() {
+    document.getElementById('totalCategories').innerText = currentCategories.length;
+    document.getElementById('totalItems').innerText = currentPaymentItems.length;
+    document.getElementById('totalActivePins').innerText = currentPaymentPins.filter(p => p.status === "active").length;
+    document.getElementById('totalPayments').innerText = currentPayments.length;
+}
+
+function renderCategoriesList() {
+    const container = document.getElementById('categoryListContainer');
+    if (!container) return;
+    
+    if (!currentCategories || currentCategories.length === 0) {
+        container.innerHTML = '<div style="color: rgba(255,255,255,0.6); padding: 10px; text-align: center; font-size: 12px;">No categories yet.<br>Click "Add Category"</div>';
+        return;
+    }
+    
+    let html = '';
+    for (let i = 0; i < currentCategories.length; i++) {
+        const cat = currentCategories[i];
+        const isActive = selectedCategoryId === cat.id;
+        const itemCount = currentPaymentItems.filter(item => item.category_id === cat.id).length;
+        html += `
+            <div class="category-item ${isActive ? 'active' : ''}" onclick="selectCategory(${cat.id})">
+                <div class="category-color" style="background: ${cat.color};"></div>
+                <span class="category-name">${escapeHtml(cat.name)}</span>
+                <span class="category-count">${itemCount}</span>
+            </div>
+        `;
+    }
+    container.innerHTML = html;
+}
+
+function selectCategory(categoryId) {
+    selectedCategoryId = categoryId;
+    renderCategoriesList();
+    renderItemsForCategory();
+    const selectedCat = currentCategories.find(c => c.id === categoryId);
+    if (selectedCat) {
+        const itemCount = currentPaymentItems.filter(i => i.category_id === categoryId).length;
+        document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
+    }
+    showTab('payment-editor', 'Payment Items');
+}
+
+function renderItemsForCategory() {
+    const container = document.getElementById('itemsListContainer');
+    if (!selectedCategoryId) {
+        container.innerHTML = '<p style="text-align:center;padding:40px;">Select a category from the sidebar</p>';
+        return;
+    }
+    
+    const items = currentPaymentItems.filter(item => item.category_id === selectedCategoryId);
+    if (items.length === 0) {
+        container.innerHTML = '<p style="text-align:center;padding:40px;">No items in this category. Click "+ Add Item" to add one.</p>';
+        return;
+    }
+    
+    let html = '<table class="items-table"><thead><tr><th>Item Name</th><th>Amount (₦)</th><th>Actions</th></tr></thead><tbody>';
+    for (let item of items) {
+        html += `<tr>
+            <td style="font-weight:500;">${escapeHtml(item.name)}</td>
+            <td>${item.amount ? `₦${item.amount.toLocaleString()}` : 'Custom amount'}</td>
+            <td style="white-space: nowrap;">
+                <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
+                <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
+            </td>
+        </tr>`;
+    }
+    html += '</tbody></table>';
+    container.innerHTML = html;
+}
+
+async function addNewCategory() {
+    const name = document.getElementById('newCategoryName').value;
+    const color = document.getElementById('newCategoryColor').value;
+    if (!name) { alert('Please enter category name'); return; }
+    const { error } = await necoSupabase.from('categories').insert({ name, color });
+    if (error) alert('Error: ' + error.message);
+    else {
+        closeModal('addCategoryModal');
+        loadAllData();
+        triggerSync();
+        alert('✅ Category added successfully!');
+    }
+}
+
+function openAddCategoryModal() {
+    document.getElementById('newCategoryName').value = '';
+    document.getElementById('newCategoryColor').value = '#0CA60C';
+    document.getElementById('addCategoryModal').style.display = 'flex';
+}
+
+function openAddItemModal() {
+    if (!selectedCategoryId) { alert('Select a category first'); return; }
+    currentEditingItemId = null;
+    document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
+    document.getElementById('itemName').value = '';
+    document.getElementById('itemAmount').value = '';
+    const catSelect = document.getElementById('itemCategory');
+    catSelect.innerHTML = '';
+    for (let cat of currentCategories) {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.text = cat.name;
+        if (cat.id === selectedCategoryId) option.selected = true;
+        catSelect.appendChild(option);
+    }
+    document.getElementById('itemModal').style.display = 'flex';
+}
+
+function openEditItemModal(itemId) {
+    const item = currentPaymentItems.find(i => i.id === itemId);
+    if (!item) return;
+    currentEditingItemId = itemId;
+    document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
+    document.getElementById('itemName').value = item.name;
+    document.getElementById('itemAmount').value = item.amount || '';
+    const catSelect = document.getElementById('itemCategory');
+    catSelect.innerHTML = '';
+    for (let cat of currentCategories) {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.text = cat.name;
+        if (cat.id === item.category_id) option.selected = true;
+        catSelect.appendChild(option);
+    }
+    document.getElementById('itemModal').style.display = 'flex';
+}
+
+async function saveItem() {
+    const name = document.getElementById('itemName').value;
+    const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
+    const categoryId = parseInt(document.getElementById('itemCategory').value);
+    if (!name) { alert('Enter item name'); return; }
+    let error;
+    if (currentEditingItemId) {
+        const { error: updateError } = await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+        error = updateError;
+    } else {
+        const { error: insertError } = await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+        error = insertError;
+    }
+    if (error) alert('Error: ' + error.message);
+    else {
+        closeModal('itemModal');
+        loadAllData();
+        triggerSync();
+        alert('✅ Item saved successfully!');
+    }
+}
+
+async function deleteItem(itemId) {
+    if (confirm('Delete this item?')) {
+        const { error } = await necoSupabase.from('payment_items').delete().eq('id', itemId);
+        if (error) alert('Error: ' + error.message);
+        else {
+            loadAllData();
+            triggerSync();
+            alert('✅ Item deleted successfully!');
         }
-        
-        async function addNewCategory() {
-            const name = document.getElementById('newCategoryName').value;
-            const color = document.getElementById('newCategoryColor').value;
-            if (!name) { alert('Please enter category name'); return; }
-            const { error } = await necoSupabase.from('categories').insert({ name, color });
-            if (error) alert('Error: ' + error.message);
-            else {
-                closeModal('addCategoryModal');
-                loadAllData();
-                triggerSync();
-                alert('✅ Category added successfully!');
-            }
+    }
+}
+
+function generateRandomPin() {
+    const random = Math.floor(1000 + Math.random() * 9000).toString();
+    document.getElementById('pinCode').value = random;
+}
+
+function openPinModal() {
+    document.getElementById('pinCode').value = '';
+    document.getElementById('pinBankName').value = '';
+    document.getElementById('pinAccountName').value = '';
+    document.getElementById('pinAccountNumber').value = '';
+    document.getElementById('pinModal').style.display = 'flex';
+}
+
+async function savePin() {
+    const pin = document.getElementById('pinCode').value;
+    const bankName = document.getElementById('pinBankName').value;
+    const accountName = document.getElementById('pinAccountName').value;
+    let accountNumber = document.getElementById('pinAccountNumber').value;
+    if (!pin || pin.length < 4) { alert('PIN must be 4-6 digits'); return; }
+    accountNumber = accountNumber.replace(/[^0-9]/g, '');
+    if (accountNumber.length !== 10) { alert('Account number must be 10 digits'); return; }
+    if (!bankName || !accountName) { alert('Fill all fields'); return; }
+    const { error } = await necoSupabase.from('payment_pins').insert({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active' });
+    if (error) alert('Error: ' + error.message);
+    else {
+        closeModal('pinModal');
+        loadAllData();
+        triggerSync();
+        alert(`✅ PIN ${pin} generated successfully!`);
+    }
+}
+
+async function deletePin(pinId) {
+    if (confirm('Delete this PIN?')) {
+        const { error } = await necoSupabase.from('payment_pins').delete().eq('id', pinId);
+        if (error) alert('Error: ' + error.message);
+        else {
+            loadAllData();
+            triggerSync();
         }
-        
-        function openAddCategoryModal() {
-            document.getElementById('newCategoryName').value = '';
-            document.getElementById('newCategoryColor').value = '#0CA60C';
-            document.getElementById('addCategoryModal').style.display = 'flex';
+    }
+}
+
+async function deletePayment(paymentId) {
+    if (confirm('Delete this payment record?')) {
+        const { error } = await necoSupabase.from('payments').delete().eq('id', paymentId);
+        if (error) alert('Error: ' + error.message);
+        else {
+            loadAllData();
+            triggerSync();
         }
-        
-        function openAddItemModal() {
-            if (!selectedCategoryId) { alert('Select a category first'); return; }
-            currentEditingItemId = null;
-            document.getElementById('itemModalTitle').innerText = 'Add Payment Item';
-            document.getElementById('itemName').value = '';
-            document.getElementById('itemAmount').value = '';
-            const catSelect = document.getElementById('itemCategory');
-            catSelect.innerHTML = '';
-            for (let cat of currentCategories) {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.text = cat.name;
-                if (cat.id === selectedCategoryId) option.selected = true;
-                catSelect.appendChild(option);
-            }
-            document.getElementById('itemModal').style.display = 'flex';
-        }
-        
-        function openEditItemModal(itemId) {
-            const item = currentPaymentItems.find(i => i.id === itemId);
-            if (!item) return;
-            currentEditingItemId = itemId;
-            document.getElementById('itemModalTitle').innerText = 'Edit Payment Item';
-            document.getElementById('itemName').value = item.name;
-            document.getElementById('itemAmount').value = item.amount || '';
-            const catSelect = document.getElementById('itemCategory');
-            catSelect.innerHTML = '';
-            for (let cat of currentCategories) {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.text = cat.name;
-                if (cat.id === item.category_id) option.selected = true;
-                catSelect.appendChild(option);
-            }
-            document.getElementById('itemModal').style.display = 'flex';
-        }
-        
-        async function saveItem() {
-            const name = document.getElementById('itemName').value;
-            const amount = document.getElementById('itemAmount').value ? parseInt(document.getElementById('itemAmount').value) : null;
-            const categoryId = parseInt(document.getElementById('itemCategory').value);
-            if (!name) { alert('Enter item name'); return; }
-            let error;
-            if (currentEditingItemId) {
-                const { error: updateError } = await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
-                error = updateError;
-            } else {
-                const { error: insertError } = await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
-                error = insertError;
-            }
-            if (error) alert('Error: ' + error.message);
-            else {
-                closeModal('itemModal');
-                loadAllData();
-                triggerSync();
-                alert('✅ Item saved successfully!');
-            }
-        }
-        
-        async function deleteItem(itemId) {
-            if (confirm('Delete this item?')) {
-                const { error } = await necoSupabase.from('payment_items').delete().eq('id', itemId);
-                if (error) alert('Error: ' + error.message);
-                else {
-                    loadAllData();
-                    triggerSync();
-                    alert('✅ Item deleted successfully!');
-                }
-            }
-        }
-        
-        function generateRandomPin() {
-            const random = Math.floor(1000 + Math.random() * 9000).toString();
-            document.getElementById('pinCode').value = random;
-        }
-        
-        function openPinModal() {
-            document.getElementById('pinCode').value = '';
-            document.getElementById('pinBankName').value = '';
-            document.getElementById('pinAccountName').value = '';
-            document.getElementById('pinAccountNumber').value = '';
-            document.getElementById('pinModal').style.display = 'flex';
-        }
-        
-        async function savePin() {
-            const pin = document.getElementById('pinCode').value;
-            const bankName = document.getElementById('pinBankName').value;
-            const accountName = document.getElementById('pinAccountName').value;
-            let accountNumber = document.getElementById('pinAccountNumber').value;
-            if (!pin || pin.length < 4) { alert('PIN must be 4-6 digits'); return; }
-            accountNumber = accountNumber.replace(/[^0-9]/g, '');
-            if (accountNumber.length !== 10) { alert('Account number must be 10 digits'); return; }
-            if (!bankName || !accountName) { alert('Fill all fields'); return; }
-            const { error } = await necoSupabase.from('payment_pins').insert({ pin, bank_name: bankName, account_name: accountName, account_number: accountNumber, status: 'active' });
-            if (error) alert('Error: ' + error.message);
-            else {
-                closeModal('pinModal');
-                loadAllData();
-                triggerSync();
-                alert(`✅ PIN ${pin} generated successfully!`);
-            }
-        }
-        
-        async function deletePin(pinId) {
-            if (confirm('Delete this PIN?')) {
-                const { error } = await necoSupabase.from('payment_pins').delete().eq('id', pinId);
-                if (error) alert('Error: ' + error.message);
-                else {
-                    loadAllData();
-                    triggerSync();
-                }
-            }
-        }
-        
-        async function deletePayment(paymentId) {
-            if (confirm('Delete this payment record?')) {
-                const { error } = await necoSupabase.from('payments').delete().eq('id', paymentId);
-                if (error) alert('Error: ' + error.message);
-                else {
-                    loadAllData();
-                    triggerSync();
-                }
-            }
-        }
-        
-        function startPinExpiryChecker() {
-            if (pinExpiryInterval) clearInterval(pinExpiryInterval);
-            pinExpiryInterval = setInterval(() => {
-                renderPins();
-            }, 1000);
-        }
-        
-        function renderPins() {
-            const tbody = document.getElementById('pinsTableBody');
-            if (!tbody) return;
-            if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
-            let html = '';
-            for (let pin of currentPaymentPins) {
-                const timeRemaining = getTimeRemaining(pin);
-                let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
-                html += `<tr>
-                    <td><code>${escapeHtml(pin.pin)}</code></td>
-                    <td>${escapeHtml(pin.bank_name)}</td>
-                    <td>${escapeHtml(pin.account_name)}</td>
-                    <td>${escapeHtml(pin.account_number)}</td>
-                    <td><span class="badge ${statusClass}">${pin.status}</span></td>
-                    <td>${new Date(pin.created_at).toLocaleString()}</td>
-                    <td>${timeRemaining.text}</td>
-                    <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
-                </tr>`;
-            }
-            tbody.innerHTML = html;
-        }
-        
-        function renderPayments() {
-            const tbody = document.getElementById('paymentsTableBody');
-            if (!tbody) return;
-            if (currentPayments.length === 0) { 
-                tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; 
-                return; 
-            }
-            let html = '';
-            for (let p of currentPayments) {
-                html += `<tr>
-                    <td>${new Date(p.created_at).toLocaleDateString()}</td>
-                    <td>${escapeHtml(p.item_name)}</td>
-                    <td>₦${Number(p.amount).toLocaleString()}</td>
-                    <td><code>${escapeHtml(p.payment_code)}</code></td>
-                    <td>${escapeHtml(p.full_name)}</td>
-                    <td>${escapeHtml(p.phone)}</td>
-                    <td>${escapeHtml(p.email)}</td>
-                    <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
-                    <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
-                </tr>`;
-            }
-            tbody.innerHTML = html;
-        }
-        
-        function loadHomePreview() {
-            const container = document.getElementById('homePreview');
-            if (!container) return;
-            
-            let stepsHtml = '';
-            for (let i = 0; i < homeContent.steps.length; i++) {
-                const step = homeContent.steps[i];
-                stepsHtml += `
-                    <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]" style="background: #f8fff8; border-radius: 16px;">
-                        <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
-                            <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
+    }
+}
+
+function startPinExpiryChecker() {
+    if (pinExpiryInterval) clearInterval(pinExpiryInterval);
+    pinExpiryInterval = setInterval(() => {
+        renderPins();
+    }, 1000);
+}
+
+function renderPins() {
+    const tbody = document.getElementById('pinsTableBody');
+    if (!tbody) return;
+    if (currentPaymentPins.length === 0) { tbody.innerHTML = '<tr><td colspan="8" style="text-align:center">No PINs generated yet</td></tr>'; return; }
+    let html = '';
+    for (let pin of currentPaymentPins) {
+        const timeRemaining = getTimeRemaining(pin);
+        let statusClass = pin.status === 'active' ? 'badge-active' : (pin.status === 'used' ? 'badge-used' : 'badge-expired');
+        html += `<tr>
+            <td><code>${escapeHtml(pin.pin)}</code></td>
+            <td>${escapeHtml(pin.bank_name)}</td>
+            <td>${escapeHtml(pin.account_name)}</td>
+            <td>${escapeHtml(pin.account_number)}</td>
+            <td><span class="badge ${statusClass}">${pin.status}</span></td>
+            <td>${new Date(pin.created_at).toLocaleString()}</td>
+            <td>${timeRemaining.text}</td>
+            <td><button class="delete-btn" onclick="deletePin(${pin.id})">Delete</button></td>
+        </tr>`;
+    }
+    tbody.innerHTML = html;
+}
+
+function renderPayments() {
+    const tbody = document.getElementById('paymentsTableBody');
+    if (!tbody) return;
+    if (currentPayments.length === 0) { 
+        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; 
+        return; 
+    }
+    let html = '';
+    for (let p of currentPayments) {
+        html += `<tr>
+            <td>${new Date(p.created_at).toLocaleDateString()}</td>
+            <td>${escapeHtml(p.item_name)}</td>
+            <td>₦${Number(p.amount).toLocaleString()}</td>
+            <td><code>${escapeHtml(p.payment_code)}</code></td>
+            <td>${escapeHtml(p.full_name)}</td>
+            <td>${escapeHtml(p.phone)}</td>
+            <td>${escapeHtml(p.email)}</td>
+            <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
+            <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
+        </tr>`;
+    }
+    tbody.innerHTML = html;
+}
+
+function loadHomePreview() {
+    const container = document.getElementById('homePreview');
+    if (!container) return;
+    
+    let stepsHtml = '';
+    for (let i = 0; i < homeContent.steps.length; i++) {
+        const step = homeContent.steps[i];
+        stepsHtml += `
+            <div class="py-10 px-14 bg-primary-200 rounded text-center text-[#4E4E4E]" style="background: #f8fff8; border-radius: 16px;">
+                <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
+                    <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
+                </div>
+                <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
+                <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
+            </div>
+        `;
+    }
+    
+    container.innerHTML = `
+        <div style="max-width: 1280px; margin: 0 auto;">
+            <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                <div style="display: flex; flex-direction: column; gap: 2.5rem;">
+                    <div style="flex: 1;">
+                        <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
+                            <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
+                            <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
                         </div>
-                        <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
-                        <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
+                        <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
+                        <div style="margin-top: 1.75rem;">
+                            <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
+                        </div>
                     </div>
-                `;
-            }
-            
-            container.innerHTML = `
-                <div style="max-width: 1280px; margin: 0 auto;">
-                    <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                        <div style="display: flex; flex-direction: column; gap: 2.5rem;">
-                            <div style="flex: 1;">
-                                <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
-                                    <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
-                                    <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
-                                </div>
-                                <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
-                                <div style="margin-top: 1.75rem;">
-                                    <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
-                                </div>
+                    <div>
+                        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; max-width: 500px;">
+                            <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" alt="" style="background: #0ca60c; padding: 1.25rem; width: 100%; height: 100%;">
+                            <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" alt="" style="width: 100%; height: 100%;">
+                            <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" alt="" style="background: #145596; padding: 1.25rem; width: 100%; height: 100%;">
+                            <div style="grid-row: span 2;">
+                                <img src="https://payments.neco.gov.ng/assets/boy-writing.e175dc8e.png" alt="" style="width: 100%; height: 100%;">
                             </div>
-                            <div>
-                                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; max-width: 500px;">
-                                    <img src="https://payments.neco.gov.ng/assets/Dawn.47aa1852.svg" alt="" style="background: #0ca60c; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/atm-pos.5d78e317.png" alt="" style="width: 100%; height: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Vector.fe7a3b6b.svg" alt="" style="background: #145596; padding: 1.25rem; width: 100%; height: 100%;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/boy-writing.e175dc8e.png" alt="" style="width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/child.58ead653.png" alt="" style="width: 100%; height: 100%; grid-column: span 2;">
-                                    <div style="grid-row: span 2;">
-                                        <img src="https://payments.neco.gov.ng/assets/girl.5dffe80d.png" alt="" style="background: #145596; width: 100%; height: 100%;">
-                                    </div>
-                                    <img src="https://payments.neco.gov.ng/assets/girl-school.14798cb1.png" alt="" style="background: #642d56; height: 100%; width: 100%;">
-                                    <img src="https://payments.neco.gov.ng/assets/Asterisk.96355d4c.svg" alt="" style="width: 100%; height: 100%; background: #1887eb; padding: 1.25rem;">
-                                    <img src="https://payments.neco.gov.ng/assets/Butterfly.758edbeb.svg" alt="" style="width: 100%; height: 100%; background: #642d56; padding: 1.25rem;">
-                                </div>
+                            <img src="https://payments.neco.gov.ng/assets/child.58ead653.png" alt="" style="width: 100%; height: 100%; grid-column: span 2;">
+                            <div style="grid-row: span 2;">
+                                <img src="https://payments.neco.gov.ng/assets/girl.5dffe80d.png" alt="" style="background: #145596; width: 100%; height: 100%;">
                             </div>
+                            <img src="https://payments.neco.gov.ng/assets/girl-school.14798cb1.png" alt="" style="background: #642d56; height: 100%; width: 100%;">
+                            <img src="https://payments.neco.gov.ng/assets/Asterisk.96355d4c.svg" alt="" style="width: 100%; height: 100%; background: #1887eb; padding: 1.25rem;">
+                            <img src="https://payments.neco.gov.ng/assets/Butterfly.758edbeb.svg" alt="" style="width: 100%; height: 100%; background: #642d56; padding: 1.25rem;">
                         </div>
-                        <section style="padding: 2.5rem 0;">
-                            <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
-                                <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
-                            </div>
-                            <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
-                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
-                                ${stepsHtml}
-                            </div>
-                        </section>
                     </div>
                 </div>
-            `;
-        }
-        
-        function openTextEditor(key) {
-            currentEditingKey = key;
-            let val = '';
-            if (key === 'heroTitle') val = homeContent.heroTitle;
-            else if (key === 'heroNote') val = homeContent.heroNote;
-            else if (key === 'howItWorksTitle') val = homeContent.howItWorksTitle;
-            else if (key === 'footerNote') val = homeContent.footerNote;
-            else if (key.startsWith('step_')) {
-                const parts = key.split('_');
-                const idx = parseInt(parts[1]);
-                if (parts[2] === 'title') val = homeContent.steps[idx].title;
-                else if (parts[2] === 'desc') val = homeContent.steps[idx].description;
-            }
-            document.getElementById('editTextContent').value = val;
-            document.getElementById('editTextModal').style.display = 'flex';
-        }
-        
-        async function saveTextEdit() {
-            const newVal = document.getElementById('editTextContent').value;
-            if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newVal;
-            else if (currentEditingKey === 'heroNote') homeContent.heroNote = newVal;
-            else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newVal;
-            else if (currentEditingKey === 'footerNote') homeContent.footerNote = newVal;
-            else if (currentEditingKey.startsWith('step_')) {
-                const parts = currentEditingKey.split('_');
-                const idx = parseInt(parts[1]);
-                if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
-                else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
-            }
-            closeModal('editTextModal');
-            loadHomePreview();
-        }
-        
-        async function saveHomeChanges() {
-            try {
-                const { error } = await necoSupabase.from('home_content').upsert({ 
-                    id: 1, 
-                    hero_title: homeContent.heroTitle, 
-                    hero_note: homeContent.heroNote, 
-                    how_it_works_title: homeContent.howItWorksTitle, 
-                    footer_note: homeContent.footerNote, 
-                    steps: homeContent.steps 
-                });
-                if (error) throw error;
-                alert('✅ Home page changes saved to database! They will persist after reload.');
-                triggerSync();
-            } catch (err) { 
-                alert('Error: ' + err.message);
-                console.error('Save home error:', err);
-            }
-        }
-        
-        async function loadWhatsAppSettings() {
-            try {
-                const { data, error } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
-                if (error) console.error('Load settings error:', error);
-                if (data) {
-                    document.getElementById('whatsappNumber').value = data.admin_whatsapp || "2348123456789";
-                    document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link || "";
-                } else {
-                    // Create default settings
-                    await necoSupabase.from('settings').insert({
-                        id: 1,
-                        admin_whatsapp: "2348123456789",
-                        whatsapp_telegram_link: "",
-                        pin_expiry_minutes: 30
-                    });
-                    document.getElementById('whatsappNumber').value = "2348123456789";
-                    document.getElementById('whatsappTelegramLink').value = "";
-                }
-                updateWhatsAppPreview();
-            } catch (err) {
-                console.log('Error loading WhatsApp settings:', err);
-            }
-        }
-        
-        function updateWhatsAppPreview() {
-            const number = document.getElementById('whatsappNumber').value;
-            const customLink = document.getElementById('whatsappTelegramLink').value;
-            if (customLink && customLink.trim() !== '') {
-                document.getElementById('previewLink').innerHTML = customLink;
-            } else if (number && number.trim() !== '') {
-                document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
-            } else {
-                document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
-            }
-        }
-        
-        async function saveWhatsAppSettings() {
-            const whatsapp = document.getElementById('whatsappNumber').value;
-            const telegramLink = document.getElementById('whatsappTelegramLink').value;
-            if (!whatsapp && !telegramLink) {
-                alert('Please enter either a WhatsApp number or a custom link');
-                return;
-            }
-            try {
-                const { error } = await necoSupabase.from('settings').upsert({ 
-                    id: 1, 
-                    admin_whatsapp: whatsapp, 
-                    whatsapp_telegram_link: telegramLink,
-                    pin_expiry_minutes: 30
-                });
-                if (error) throw error;
-                alert('✅ WhatsApp settings saved to database! They will persist after reload.');
-                triggerSync();
-            } catch (err) { 
-                alert('Error: ' + err.message);
-                console.error('Save settings error:', err);
-            }
-        }
-        
-        document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
-        document.getElementById('whatsappTelegramLink')?.addEventListener('input', updateWhatsAppPreview);
-        
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
-        function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
-        
-        function showTab(tabId, title) {
-            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
-            const targetTab = document.getElementById(tabId);
-            if (targetTab) targetTab.classList.add('active');
-            document.getElementById('pageTitle').innerHTML = title;
-            if (tabId === 'pin-manager') renderPins();
-            if (tabId === 'view-payments') renderPayments();
-            if (tabId === 'home-editor') loadHomePreview();
-            if (tabId === 'dashboard') updateDashboard();
-            if (tabId === 'payment-editor') renderItemsForCategory();
-            if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
-            closeSidebar();
-        }
-        
-        function triggerSync() { 
-            localStorage.setItem('neco_sync_timestamp', Date.now().toString()); 
-        }
-        
-        function initDashboard() {
-            renderCategoriesList();
-            renderItemsForCategory();
-            document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
-                item.onclick = function(e) {
-                    e.stopPropagation();
-                    const tabId = this.getAttribute('data-tab');
-                    const titleSpan = this.querySelector('span');
-                    document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-                    this.classList.add('active');
-                    showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
-                };
+                <section style="padding: 2.5rem 0;">
+                    <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
+                        <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
+                    </div>
+                    <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
+                        ${stepsHtml}
+                    </div>
+                </section>
+            </div>
+        </div>
+    `;
+}
+
+function openTextEditor(key) {
+    currentEditingKey = key;
+    let val = '';
+    if (key === 'heroTitle') val = homeContent.heroTitle;
+    else if (key === 'heroNote') val = homeContent.heroNote;
+    else if (key === 'howItWorksTitle') val = homeContent.howItWorksTitle;
+    else if (key === 'footerNote') val = homeContent.footerNote;
+    else if (key.startsWith('step_')) {
+        const parts = key.split('_');
+        const idx = parseInt(parts[1]);
+        if (parts[2] === 'title') val = homeContent.steps[idx].title;
+        else if (parts[2] === 'desc') val = homeContent.steps[idx].description;
+    }
+    document.getElementById('editTextContent').value = val;
+    document.getElementById('editTextModal').style.display = 'flex';
+}
+
+async function saveTextEdit() {
+    const newVal = document.getElementById('editTextContent').value;
+    if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newVal;
+    else if (currentEditingKey === 'heroNote') homeContent.heroNote = newVal;
+    else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newVal;
+    else if (currentEditingKey === 'footerNote') homeContent.footerNote = newVal;
+    else if (currentEditingKey.startsWith('step_')) {
+        const parts = currentEditingKey.split('_');
+        const idx = parseInt(parts[1]);
+        if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
+        else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
+    }
+    closeModal('editTextModal');
+    loadHomePreview();
+}
+
+async function saveHomeChanges() {
+    try {
+        const { error } = await necoSupabase.from('home_content').upsert({ 
+            id: 1, 
+            hero_title: homeContent.heroTitle, 
+            hero_note: homeContent.heroNote, 
+            how_it_works_title: homeContent.howItWorksTitle, 
+            footer_note: homeContent.footerNote, 
+            steps: homeContent.steps 
+        });
+        if (error) throw error;
+        alert('✅ Home page changes saved to database! They will persist after reload.');
+        triggerSync();
+    } catch (err) { 
+        alert('Error: ' + err.message);
+        console.error('Save home error:', err);
+    }
+}
+
+async function loadWhatsAppSettings() {
+    try {
+        const { data, error } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
+        if (error) console.error('Load settings error:', error);
+        if (data) {
+            document.getElementById('whatsappNumber').value = data.admin_whatsapp || "2348123456789";
+            document.getElementById('whatsappTelegramLink').value = data.whatsapp_telegram_link || "";
+        } else {
+            await necoSupabase.from('settings').insert({
+                id: 1,
+                admin_whatsapp: "2348123456789",
+                whatsapp_telegram_link: "",
+                pin_expiry_minutes: 30
             });
-            const dashboardMenuItem = document.querySelector('.menu-item[data-tab="dashboard"]');
-            if (dashboardMenuItem) dashboardMenuItem.classList.add('active');
+            document.getElementById('whatsappNumber').value = "2348123456789";
+            document.getElementById('whatsappTelegramLink').value = "";
         }
-        
-        window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
+        updateWhatsAppPreview();
+    } catch (err) {
+        console.log('Error loading WhatsApp settings:', err);
+    }
+}
+
+function updateWhatsAppPreview() {
+    const number = document.getElementById('whatsappNumber').value;
+    const customLink = document.getElementById('whatsappTelegramLink').value;
+    if (customLink && customLink.trim() !== '') {
+        document.getElementById('previewLink').innerHTML = customLink;
+    } else if (number && number.trim() !== '') {
+        document.getElementById('previewLink').innerHTML = `https://wa.me/${number}`;
+    } else {
+        document.getElementById('previewLink').innerHTML = 'https://wa.me/2348123456789';
+    }
+}
+
+async function saveWhatsAppSettings() {
+    const whatsapp = document.getElementById('whatsappNumber').value;
+    const telegramLink = document.getElementById('whatsappTelegramLink').value;
+    if (!whatsapp && !telegramLink) {
+        alert('Please enter either a WhatsApp number or a custom link');
+        return;
+    }
+    try {
+        const { error } = await necoSupabase.from('settings').upsert({ 
+            id: 1, 
+            admin_whatsapp: whatsapp, 
+            whatsapp_telegram_link: telegramLink,
+            pin_expiry_minutes: 30
+        });
+        if (error) throw error;
+        alert('✅ WhatsApp settings saved to database! They will persist after reload.');
+        triggerSync();
+    } catch (err) { 
+        alert('Error: ' + err.message);
+        console.error('Save settings error:', err);
+    }
+}
+
+document.getElementById('whatsappNumber')?.addEventListener('input', updateWhatsAppPreview);
+document.getElementById('whatsappTelegramLink')?.addEventListener('input', updateWhatsAppPreview);
+
+function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('mobileOverlay').classList.toggle('active'); }
+function closeSidebar() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileOverlay').classList.remove('active'); }
+
+function showTab(tabId, title) {
+    document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+    const targetTab = document.getElementById(tabId);
+    if (targetTab) targetTab.classList.add('active');
+    document.getElementById('pageTitle').innerHTML = title;
+    if (tabId === 'pin-manager') renderPins();
+    if (tabId === 'view-payments') renderPayments();
+    if (tabId === 'home-editor') loadHomePreview();
+    if (tabId === 'dashboard') updateDashboard();
+    if (tabId === 'payment-editor') renderItemsForCategory();
+    if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
+    closeSidebar();
+}
+
+function triggerSync() { 
+    localStorage.setItem('neco_sync_timestamp', Date.now().toString()); 
+}
+
+function initDashboard() {
+    renderCategoriesList();
+    renderItemsForCategory();
+    document.querySelectorAll('.menu-item[data-tab]').forEach(item => {
+        item.onclick = function(e) {
+            e.stopPropagation();
+            const tabId = this.getAttribute('data-tab');
+            const titleSpan = this.querySelector('span');
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            showTab(tabId, titleSpan ? titleSpan.innerHTML : tabId);
+        };
+    });
+    const dashboardMenuItem = document.querySelector('.menu-item[data-tab="dashboard"]');
+    if (dashboardMenuItem) dashboardMenuItem.classList.add('active');
+}
+
+window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
     </script>
 </body>
 </html>
