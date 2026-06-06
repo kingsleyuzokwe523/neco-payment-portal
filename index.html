@@ -34,19 +34,18 @@
         
         /* When expanded, show the menu item */
         .mobile-menu-item.expanded {
-            max-height: 60px;
+            max-height: 80px;
             opacity: 1;
-            padding: 12px 0 12px 0;
+            padding: 12px 0;
             margin-top: 8px;
-            border-top: 1px solid #f0f0f0;
         }
         
-        /* Style for the mobile menu link - inside logo box */
+        /* Style for the mobile menu link - INSIDE logo box - added 2px to original (was 16px, now 18px) */
         .mobile-menu-link {
             display: block;
             color: #4b5563;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 500;
             transition: all 0.2s ease;
             text-align: left;
@@ -56,6 +55,12 @@
         .mobile-menu-link:hover {
             color: #054c0f;
             padding-left: 8px;
+        }
+        
+        /* LINE AT THE BOTTOM OF MAKE PAYMENT */
+        .mobile-menu-item.expanded .mobile-menu-link {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 12px;
         }
         
         /* Make the nav container relative */
@@ -131,7 +136,7 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Mobile menu item - INSIDE the logo box, shows below logo when expanded -->
+                        <!-- Mobile menu item - INSIDE the logo box, font size 18px (original 16px + 2px) -->
                         <div class="mobile-menu-item" id="mobileMenuItem">
                             <a href="payment.html" class="mobile-menu-link">Make payment</a>
                         </div>
