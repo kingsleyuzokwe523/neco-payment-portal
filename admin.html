@@ -467,7 +467,7 @@
             color: white;
         }
         
-        /* Payment Form Editor Styles */
+        /* Form Editor Styles */
         .form-editor-container {
             background: white;
             border-radius: 20px;
@@ -526,16 +526,17 @@
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            border: 2px solid transparent;
         }
         
         .form-element:hover {
             background: #fef3c7;
-            outline: 1px solid #f59e0b;
+            border-color: #f59e0b;
         }
         
         .form-element.selected {
             background: #fef3c7;
-            outline: 2px solid #f59e0b;
+            border-color: #f59e0b;
         }
         
         @media (max-width: 768px) {
@@ -555,6 +556,20 @@
             }
             .items-table th, .items-table td {
                 padding: 10px 8px;
+            }
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 100;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .menu-toggle {
+                display: block;
             }
         }
         
@@ -722,27 +737,6 @@
         
         .mobile-overlay.active {
             display: block;
-        }
-        
-        @media (max-width: 768px) {
-            .sidebar {
-                left: -280px;
-                transition: left 0.3s ease;
-                z-index: 100;
-            }
-            .sidebar.open {
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .menu-toggle {
-                display: block;
-            }
-            .items-table {
-                display: block;
-                overflow-x: auto;
-            }
         }
         
         .menu-toggle {
@@ -978,7 +972,7 @@
                 <div class="form-editor-container">
                     <div class="preview-header" style="margin-bottom: 20px;">
                         <h3>✏️ Payment Form Editor</h3>
-                        <p style="font-size:12px; color:#666;">Click on any element to edit its style (bold, color, etc.)</p>
+                        <p style="font-size:12px; color:#666;">Click on any element below to edit its style</p>
                     </div>
                     
                     <div class="form-preview" id="formPreview">
@@ -988,8 +982,8 @@
                     <div class="form-controls" id="styleControls" style="display: none;">
                         <h4 style="margin-bottom: 15px;">🎨 Style Editor</h4>
                         <div class="style-control">
-                            <label>Element:</label>
-                            <span id="selectedElementName" style="font-weight: 600;">None selected</span>
+                            <label>Selected Element:</label>
+                            <span id="selectedElementName" style="font-weight: 600; color: #054c0f;">None selected</span>
                         </div>
                         <div class="style-control">
                             <label>Font Weight:</label>
@@ -1000,24 +994,29 @@
                                 <option value="700">Bold</option>
                                 <option value="800">Extra Bold</option>
                             </select>
-                            <button onclick="applyFontWeight()">Apply Bold</button>
+                            <button onclick="applyFontWeight()">Apply</button>
                         </div>
                         <div class="style-control">
                             <label>Text Color:</label>
                             <input type="color" id="textColorInput" value="#000000">
-                            <button onclick="applyTextColor()">Apply Color</button>
+                            <button onclick="applyTextColor()">Apply</button>
                         </div>
                         <div class="style-control">
                             <label>Background Color:</label>
-                            <input type="color" id="bgColorInput" value="#ffffff">
-                            <button onclick="applyBgColor()">Apply BG Color</button>
+                            <input type="color" id="bgColorInput" value="#f2f2f2">
+                            <button onclick="applyBgColor()">Apply to Inputs</button>
                         </div>
                         <div class="style-control">
                             <label>Button Color:</label>
                             <input type="color" id="btnColorInput" value="#054c0f">
-                            <button onclick="applyBtnColor()">Apply Button Color</button>
+                            <button onclick="applyBtnColor()">Apply to Button</button>
                         </div>
-                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save Form Styles</button>
+                        <div class="style-control">
+                            <label>Button Text Color:</label>
+                            <input type="color" id="btnTextColorInput" value="#ffffff">
+                            <button onclick="applyBtnTextColor()">Apply</button>
+                        </div>
+                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save All Form Styles</button>
                     </div>
                 </div>
             </div>
@@ -1038,7 +1037,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    \dash
+                    </table>
                 </div>
             </div>
             
@@ -1046,7 +1045,7 @@
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
                     <div style="overflow-x: auto;">
-                        <table class="items-table" id="paymentsTable">
+                        <table class="items-table">
                             <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Receipt</th><th>Actions</th></tr></thead>
                             <tbody id="paymentsTableBody"></tbody>
                         </table>
@@ -1118,15 +1117,18 @@ let pinExpiryInterval = null;
 
 // Form styles stored in Supabase
 let formStyles = {
-    itemNameBold: false,
-    itemNameColor: '#000000',
-    labelBold: false,
-    labelColor: '#374151',
-    buttonBgColor: '#054c0f',
-    buttonTextColor: '#ffffff',
-    inputBgColor: '#f2f2f2',
-    inputBorderColor: '#e2e8f0'
+    item_name_bold: false,
+    item_name_color: '#000000',
+    label_bold: false,
+    label_color: '#374151',
+    button_bg_color: '#054c0f',
+    button_text_color: '#ffffff',
+    input_bg_color: '#f2f2f2',
+    input_border_color: '#e2e8f0'
 };
+
+let selectedFormElement = null;
+let selectedElementType = null;
 
 let homeContent = {
     heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -1359,7 +1361,7 @@ function renderItemsForCategory() {
                 <button class="edit-btn" onclick="openEditItemModal(${item.id})">Edit</button>
                 <button class="delete-btn" onclick="deleteItem(${item.id})">Delete</button>
             </td>
-        </tr>`;
+        </table>`;
     }
     html += '</tbody></table>';
     container.innerHTML = html;
@@ -1681,7 +1683,16 @@ async function loadFormStyles() {
         const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
         if (error) console.error('Load form styles error:', error);
         if (data) {
-            formStyles = data;
+            formStyles = {
+                item_name_bold: data.item_name_bold || false,
+                item_name_color: data.item_name_color || '#000000',
+                label_bold: data.label_bold || false,
+                label_color: data.label_color || '#374151',
+                button_bg_color: data.button_bg_color || '#054c0f',
+                button_text_color: data.button_text_color || '#ffffff',
+                input_bg_color: data.input_bg_color || '#f2f2f2',
+                input_border_color: data.input_border_color || '#e2e8f0'
+            };
         } else {
             await necoSupabase.from('form_styles').insert({
                 id: 1,
@@ -1701,23 +1712,78 @@ async function loadFormStyles() {
     }
 }
 
+function selectFormElement(elementType) {
+    selectedElementType = elementType;
+    
+    // Remove selected class from all elements
+    document.querySelectorAll('.form-element').forEach(el => {
+        el.classList.remove('selected');
+    });
+    
+    // Add selected class to the clicked element
+    const selectedEl = document.querySelector(`[data-element-type="${elementType}"]`);
+    if (selectedEl) {
+        selectedEl.classList.add('selected');
+    }
+    
+    // Show style controls
+    document.getElementById('styleControls').style.display = 'block';
+    
+    // Update selected element name display
+    const elementNames = {
+        'itemName': 'Item Name',
+        'label': 'Form Labels',
+        'input': 'Input Fields',
+        'button': 'Proceed Button'
+    };
+    document.getElementById('selectedElementName').innerHTML = elementNames[elementType] || elementType;
+    
+    // Update controls with current values
+    if (elementType === 'itemName') {
+        document.getElementById('fontWeightSelect').value = formStyles.item_name_bold ? '700' : 'normal';
+        document.getElementById('textColorInput').value = formStyles.item_name_color;
+        document.getElementById('bgColorInput').style.display = 'none';
+        document.querySelector('.style-control:nth-child(4)').style.display = 'none';
+        document.querySelector('.style-control:nth-child(5)').style.display = 'none';
+        document.querySelector('.style-control:nth-child(6)').style.display = 'none';
+    } else if (elementType === 'label') {
+        document.getElementById('fontWeightSelect').value = formStyles.label_bold ? '700' : 'normal';
+        document.getElementById('textColorInput').value = formStyles.label_color;
+        document.getElementById('bgColorInput').style.display = 'none';
+    } else if (elementType === 'input') {
+        document.getElementById('bgColorInput').value = formStyles.input_bg_color;
+        document.getElementById('bgColorInput').style.display = 'flex';
+        document.querySelector('.style-control:nth-child(4)').style.display = 'flex';
+        document.querySelector('.style-control:nth-child(5)').style.display = 'none';
+        document.querySelector('.style-control:nth-child(6)').style.display = 'none';
+    } else if (elementType === 'button') {
+        document.getElementById('btnColorInput').value = formStyles.button_bg_color;
+        document.getElementById('btnTextColorInput').value = formStyles.button_text_color;
+        document.querySelector('.style-control:nth-child(4)').style.display = 'none';
+        document.querySelector('.style-control:nth-child(5)').style.display = 'flex';
+        document.querySelector('.style-control:nth-child(6)').style.display = 'flex';
+    }
+}
+
 function loadFormPreview() {
     const container = document.getElementById('formPreview');
     if (!container) return;
     
-    const itemNameStyle = formStyles.item_name_bold ? 'font-weight: 700;' : 'font-weight: normal;';
+    const itemNameStyle = formStyles.item_name_bold ? 'font-weight: 700;' : 'font-weight: 500;';
     const labelStyle = formStyles.label_bold ? 'font-weight: 700;' : 'font-weight: 500;';
     
     container.innerHTML = `
         <div style="padding: 20px;">
-            <div style="margin-bottom: 15px;">
+            <div style="margin-bottom: 15px;" class="form-element" data-element-type="itemName" onclick="selectFormElement('itemName')">
                 <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
                 <p id="previewItemName" style="font-size: 18px; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.item_name_color}; ${itemNameStyle} margin-top: 5px;">Four Figure Table</p>
             </div>
             
-            <div style="margin-bottom: 20px;">
+            <div style="margin-bottom: 20px;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                 <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
-                <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                </div>
                 <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
             </div>
             
@@ -1725,23 +1791,31 @@ function loadFormPreview() {
             
             <div style="margin-bottom: 20px;">
                 <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
-                <div style="margin-bottom: 15px;">
+                <div style="margin-bottom: 15px;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                     <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
-                    <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
                 </div>
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
+                    <div style="flex: 1;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                         <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
-                        <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        </div>
                     </div>
-                    <div style="flex: 1;">
+                    <div style="flex: 1;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                         <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
-                        <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        </div>
                     </div>
                 </div>
-                <div>
+                <div class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                     <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
-                    <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
                 </div>
             </div>
             
@@ -1750,50 +1824,58 @@ function loadFormPreview() {
             <div>
                 <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
+                    <div style="flex: 1;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                         <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
-                        <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        </div>
                     </div>
-                    <div style="flex: 1;">
+                    <div style="flex: 1;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                         <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Currency</label>
-                        <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
-                            <option>NGN</option>
-                            <option>USD</option>
-                        </select>
+                        <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                                <option>NGN</option>
+                                <option>USD</option>
+                            </select>
+                        </div>
                     </div>
-                    <div style="flex: 1;">
+                    <div style="flex: 1;" class="form-element" data-element-type="label" onclick="selectFormElement('label')">
                         <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
-                        <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <div class="form-element" data-element-type="input" onclick="event.stopPropagation(); selectFormElement('input')">
+                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        </div>
                     </div>
                 </div>
                 <div style="display: flex; gap: 15px; margin-top: 20px;">
                     <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    <button style="flex: 2; padding: 12px; background: ${formStyles.button_bg_color}; color: ${formStyles.button_text_color}; border: none; border-radius: 8px; cursor: pointer;">Proceed</button>
+                    <div class="form-element" data-element-type="button" onclick="selectFormElement('button')" style="flex: 2; padding: 0;">
+                        <button id="previewButton" style="width: 100%; padding: 12px; background: ${formStyles.button_bg_color}; color: ${formStyles.button_text_color}; border: none; border-radius: 8px; cursor: pointer;">Proceed</button>
+                    </div>
                 </div>
             </div>
         </div>
     `;
 }
 
-let selectedElement = null;
-
 function applyFontWeight() {
     const weight = document.getElementById('fontWeightSelect').value;
-    if (selectedElement === 'itemName') {
-        formStyles.item_name_bold = weight === '700' || weight === 'bold' || weight === '800';
-        document.getElementById('previewItemName').style.fontWeight = formStyles.item_name_bold ? '700' : '400';
-    } else if (selectedElement === 'label') {
-        formStyles.label_bold = weight === '700' || weight === 'bold' || weight === '800';
+    const isBold = weight === '700' || weight === 'bold' || weight === '800';
+    
+    if (selectedElementType === 'itemName') {
+        formStyles.item_name_bold = isBold;
+        document.getElementById('previewItemName').style.fontWeight = isBold ? '700' : '500';
+    } else if (selectedElementType === 'label') {
+        formStyles.label_bold = isBold;
         loadFormPreview();
     }
 }
 
 function applyTextColor() {
     const color = document.getElementById('textColorInput').value;
-    if (selectedElement === 'itemName') {
+    if (selectedElementType === 'itemName') {
         formStyles.item_name_color = color;
         document.getElementById('previewItemName').style.color = color;
-    } else if (selectedElement === 'label') {
+    } else if (selectedElementType === 'label') {
         formStyles.label_color = color;
         loadFormPreview();
     }
@@ -1808,7 +1890,15 @@ function applyBgColor() {
 function applyBtnColor() {
     const color = document.getElementById('btnColorInput').value;
     formStyles.button_bg_color = color;
-    loadFormPreview();
+    const previewBtn = document.getElementById('previewButton');
+    if (previewBtn) previewBtn.style.background = color;
+}
+
+function applyBtnTextColor() {
+    const color = document.getElementById('btnTextColorInput').value;
+    formStyles.button_text_color = color;
+    const previewBtn = document.getElementById('previewButton');
+    if (previewBtn) previewBtn.style.color = color;
 }
 
 async function saveFormStyles() {
