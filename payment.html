@@ -180,7 +180,7 @@
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
             height: auto;
-            max-height: 500px;
+            max-height: 550px;
             overflow-y: auto;
         }
         #accountModal .account-inner {
@@ -215,34 +215,37 @@
             flex: 1;
             word-break: break-word;
         }
+        /* FIXED: Layout for warning row to prevent overlap */
         #accountModal .warning-timer-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin: 20px 0 16px 0;
-            gap: 15px;
+            gap: 10px;
+            flex-wrap: wrap;
         }
         #accountModal .warning-text-small {
             color: #dc2626;
-            font-size: 15px;
+            font-size: 12px;
             font-weight: 500;
             background: transparent;
             padding: 0;
-            white-space: nowrap;
+            white-space: normal;
+            flex: 1;
         }
         #accountModal .timer-box-small {
             background: white;
             border: 1.5px solid #16a34a;
             border-radius: 4px;
-            padding: 2px 8px;
+            padding: 4px 12px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
         #accountModal .timer-small {
-            font-size: 11px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: #dc2626;
             font-family: monospace;
             text-align: center;
@@ -922,6 +925,7 @@
     // ============ MARK PIN AS USED IMMEDIATELY ============
     async function markPinAsUsed(pinCode) {
         const now = new Date();
+        console.log('Marking PIN as used at:', now.toISOString());
         
         const { error } = await supabaseClient
             .from('payment_pins')
@@ -933,6 +937,7 @@
             .eq('status', 'active');
         
         if (error) throw error;
+        console.log('PIN marked as used successfully');
     }
     
     // ============ RENDER GRID - WITH COLORED TOP BAR ============
@@ -1147,7 +1152,18 @@
                 // We show account details, NOT an error
                 
                 const usedTime = new Date(pinData.used_at);
-                const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+                let expiryTime;
+                
+                // Check if used_at is valid
+                if (isNaN(usedTime.getTime())) {
+                    console.error('Invalid used_at date:', pinData.used_at);
+                    // Fallback: set expiry to 30 minutes from now
+                    expiryTime = new Date().getTime() + (30 * 60 * 1000);
+                    console.log('Using fallback expiry time:', new Date(expiryTime));
+                } else {
+                    expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+                    console.log('Expiry time calculated from used_at:', new Date(expiryTime));
+                }
                 
                 const amount = parseFloat(currentFormData.amount) || 0;
                 const serviceCharge = 50;
@@ -1212,17 +1228,22 @@
         }
     }
     
-    // ============ START COUNTDOWN TIMER ============
+    // ============ START COUNTDOWN TIMER - FIXED ============
     function startCountdown(expiryTime) {
         const timerElement = document.getElementById('countdownTimer');
         if (countdownInterval) clearInterval(countdownInterval);
         
         function updateTimer() {
-            const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
+            const now = new Date().getTime();
+            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+            
+            console.log('Countdown - Remaining seconds:', remaining);
+            console.log('Expiry time:', new Date(expiryTime));
+            console.log('Current time:', new Date(now));
             
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
-                timerElement.textContent = "Expired";
+                timerElement.textContent = "00:00";
                 timerElement.style.color = "#9ca3af";
                 return;
             }
