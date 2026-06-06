@@ -1678,7 +1678,176 @@ async function loadFormStyles() {
         loadFormPreview();
     }
 }
+// ============ HELPER FUNCTION FOR SMART UPPERCASE PREVIEW ============
+function applySmartUppercasePreview(text) {
+    if (!text) return text;
+    // Check if text contains brackets
+    if (text.includes('(') && text.includes(')')) {
+        // Split the text by brackets - keep bracket content as is, uppercase outside
+        return text.replace(/\([^)]*\)/g, function(match) {
+            return match; // Keep bracket content as is
+        }).replace(/[^(]+(?=\(|$)/g, function(match) {
+            return match.toUpperCase(); // Uppercase everything outside brackets
+        });
+    }
+    return text.toUpperCase();
+}
 
+// ============ UPDATE THE loadFormPreview FUNCTION ============
+// Replace your existing loadFormPreview function with this one:
+
+function loadFormPreview() {
+    const container = document.getElementById('formPreview');
+    if (!container) return;
+    
+    const itemNameStyle = formStyles.itemNameBold ? 'font-weight: 700;' : 'font-weight: 500;';
+    const labelStyle = `font-weight: ${formStyles.labelBold ? '700' : '500'}; font-size: ${formStyles.labelSize}; color: ${formStyles.labelColor};`;
+    const buttonStyle = `font-weight: ${formStyles.buttonTextBold ? '700' : '500'}; font-size: ${formStyles.buttonTextSize}; color: ${formStyles.buttonTextColor}; background: ${formStyles.buttonBgColor};`;
+    
+    // Apply smart uppercase to item name
+    let displayItemName = formStyles.itemNameText;
+    if (formStyles.itemNameUppercase) {
+        displayItemName = applySmartUppercasePreview(displayItemName);
+    }
+    
+    // Apply smart uppercase to labels for preview
+    let displayConfirmCode = "Confirm payment code";
+    let displayFullName = "Full name";
+    let displayPhone = "Phone number";
+    let displayEmail = "Email";
+    let displayDescription = "Description";
+    let displayAmount = "Amount";
+    let displayCurrency = "Currency";
+    let displayQuantity = "Quantity";
+    
+    if (formStyles.labelUppercase) {
+        displayConfirmCode = applySmartUppercasePreview(displayConfirmCode);
+        displayFullName = applySmartUppercasePreview(displayFullName);
+        displayPhone = applySmartUppercasePreview(displayPhone);
+        displayEmail = applySmartUppercasePreview(displayEmail);
+        displayDescription = applySmartUppercasePreview(displayDescription);
+        displayAmount = applySmartUppercasePreview(displayAmount);
+        displayCurrency = applySmartUppercasePreview(displayCurrency);
+        displayQuantity = applySmartUppercasePreview(displayQuantity);
+    }
+    
+    // Apply uppercase to button text
+    let displayButtonText = formStyles.buttonText;
+    if (formStyles.buttonTextUppercase) {
+        displayButtonText = displayButtonText.toUpperCase();
+    }
+    
+    container.innerHTML = `
+        <div style="padding: 20px;">
+            <!-- Item Name -->
+            <div style="margin-bottom: 15px;">
+                <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
+                <div class="editable-element" onclick="openFormTextEditor('itemName')" style="display: inline-block; cursor: pointer;">
+                    <p id="previewItemName" style="font-size: ${formStyles.itemNameSize}; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.itemNameColor}; ${itemNameStyle} margin: 0;">${escapeHtml(displayItemName)}</p>
+                </div>
+            </div>
+            
+            <!-- Payment Code Section -->
+            <div style="margin-bottom: 20px;">
+                <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                    <label id="previewLabel1" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayConfirmCode)} <span style="color: #dc2626;">*</span></label>
+                </div>
+                <div>
+                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                </div>
+                <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <!-- Payer Information -->
+            <div style="margin-bottom: 20px;">
+                <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
+                
+                <div style="margin-bottom: 15px;">
+                    <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                        <label id="previewLabel2" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayFullName)} <span style="color: #dc2626;">*</span></label>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                            <label id="previewLabel3" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayPhone)} <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                            <label id="previewLabel4" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayEmail)} <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                        <label id="previewLabel5" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayDescription)} <span style="color: #dc2626;">*</span></label>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <!-- Payment Information -->
+            <div>
+                <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                            <label id="previewLabel6" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayAmount)} <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                            <label id="previewLabel7" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayCurrency)}</label>
+                        </div>
+                        <div>
+                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                                <option>NGN</option>
+                                <option>USD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label')" style="cursor: pointer; display: inline-block;">
+                            <label id="previewLabel8" style="${labelStyle} margin-bottom: 8px;">${escapeHtml(displayQuantity)} <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
+                    <div class="editable-element" onclick="openFormTextEditor('button')" style="flex: 2; cursor: pointer;">
+                        <button id="previewButton" style="width: 100%; padding: 12px; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">${escapeHtml(displayButtonText)}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
 function openFormTextEditor(type, currentValue) {
     currentEditingType = type;
     document.getElementById('editTextModalTitle').innerText = `Edit ${type === 'itemName' ? 'Item Name' : type === 'button' ? 'Button Text' : 'Form Label'}`;
@@ -1891,6 +2060,7 @@ function loadFormPreview() {
     `;
 }
 
+// ============ MAKE SURE SAVE FUNCTION WORKS ============
 async function saveFormStyles() {
     try {
         const { error } = await necoSupabase.from('form_styles').upsert({
@@ -1916,11 +2086,24 @@ async function saveFormStyles() {
         if (error) throw error;
         alert('✅ Form styles saved to database! They will reflect on the payment page.');
         triggerSync();
+        // Reload preview to show saved styles
+        loadFormPreview();
     } catch (err) {
         alert('Error: ' + err.message);
     }
 }
 
+function applySmartUppercase(text) {
+    if (!text) return text;
+    if (text.includes('(') && text.includes(')')) {
+        return text.replace(/\([^)]*\)/g, function(match) {
+            return match;
+        }).replace(/[^(]+(?=\(|$)/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
+    return text.toUpperCase();
+}
 async function saveHomeChanges() {
     try {
         const { error } = await necoSupabase.from('home_content').upsert({ 
