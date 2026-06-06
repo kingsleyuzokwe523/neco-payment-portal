@@ -1620,10 +1620,37 @@ function openHomeTextEditor(key, currentValue) {
 }
 
 // ============ PAYMENT FORM EDITOR FUNCTIONS ============
+// Replace the loadFormStyles function with this version that handles missing tables gracefully
 async function loadFormStyles() {
     try {
         const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
-        if (error) console.error('Load form styles error:', error);
+        
+        if (error) {
+            // If table doesn't exist, create default styles
+            console.log('Form styles table not found, using defaults');
+            formStyles = {
+                itemNameText: "Four Figure Table",
+                itemNameBold: false,
+                itemNameSize: '18px',
+                itemNameColor: '#000000',
+                itemNameUppercase: false,
+                labelBold: false,
+                labelSize: '14px',
+                labelColor: '#374151',
+                labelUppercase: false,
+                buttonText: "Proceed",
+                buttonBgColor: '#054c0f',
+                buttonTextColor: '#ffffff',
+                buttonTextSize: '14px',
+                buttonTextBold: false,
+                buttonTextUppercase: false,
+                inputBgColor: '#f2f2f2',
+                inputBorderColor: '#e2e8f0'
+            };
+            loadFormPreview();
+            return;
+        }
+        
         if (data) {
             formStyles = {
                 itemNameText: data.item_name_text || "Four Figure Table",
@@ -1644,31 +1671,11 @@ async function loadFormStyles() {
                 inputBgColor: data.input_bg_color || '#f2f2f2',
                 inputBorderColor: data.input_border_color || '#e2e8f0'
             };
-        } else {
-            await necoSupabase.from('form_styles').insert({
-                id: 1,
-                item_name_text: "Four Figure Table",
-                item_name_bold: false,
-                item_name_size: '18px',
-                item_name_color: '#000000',
-                item_name_uppercase: false,
-                label_bold: false,
-                label_size: '14px',
-                label_color: '#374151',
-                label_uppercase: false,
-                button_text: "Proceed",
-                button_bg_color: '#054c0f',
-                button_text_color: '#ffffff',
-                button_text_size: '14px',
-                button_text_bold: false,
-                button_text_uppercase: false,
-                input_bg_color: '#f2f2f2',
-                input_border_color: '#e2e8f0'
-            });
         }
         loadFormPreview();
     } catch (err) {
-        console.log('Error loading form styles:', err);
+        console.log('Error loading form styles, using defaults:', err);
+        loadFormPreview();
     }
 }
 
