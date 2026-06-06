@@ -8,7 +8,6 @@
     <!-- Supabase SDK -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* ===== YOUR EXACT CSS FROM ORIGINAL CODE - KEPT INTACT ===== */
         *,:before,:after{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}:before,:after{--tw-content: ""}
         html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif}
         body{margin:0;line-height:inherit;background:#fff}
@@ -392,7 +391,6 @@
             <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
         
-        <!-- Hero Section -->
         <div class="container mt-20">
             <div class="flex items-center flex-col md:flex-row justify-between">
                 <div class="w-full md:w-3/5">
@@ -414,7 +412,6 @@
             </div>
         </div>
         
-        <!-- Category Filters -->
         <div class="container mt-10">
             <div class="flex gap-3 flex-wrap" id="categoryFilters">
                 <div data-category="SSCE Internal" class="category-btn bg-[#EBEBEB] rounded p-3 text-[#747474] flex items-center gap-2 cursor-pointer !bg-white drop-shadow-md">
@@ -444,7 +441,6 @@
             </div>
         </div>
         
-        <!-- Payment Grid -->
         <div class="container mt-10">
             <div class="grid md:grid-cols-2 xl:grid-cols-4 lg:grid-cols-3 gap-5 md:gap-6 lg:gap-8" id="paymentGrid"></div>
         </div>
@@ -623,7 +619,7 @@
                 </div>
                 <div id="accountDetailsBox"></div>
                 <div class="warning-timer-row">
-                    <span class="warning-text-small"> Pay to this account within 30 minutes</span>
+                    <span class="warning-text-small">Pay to this account within 30 minutes</span>
                     <span class="timer-box-small">
                         <span id="countdownTimer" class="timer-small">30:00</span>
                     </span>
@@ -683,7 +679,7 @@
     // Load settings immediately
     loadSettings();
     
-    // ============ DEFAULT PAYMENT DATA (Shows Immediately with unique category colors) ============
+    // ============ DEFAULT PAYMENT DATA ============
     let paymentData = {
         "SSCE Internal": { color: "#0CA60C", items: [
             { name: "Four Figure Table", amount: 500 },
@@ -742,7 +738,6 @@
     let currentPinDetails = null;
     let countdownInterval = null;
     
-    // ============ VALIDATION FUNCTIONS ============
     function validatePhone(phone) {
         return phone && /^[0-9]+$/.test(phone) && phone.length === 11;
     }
@@ -755,7 +750,6 @@
         return quantity && parseInt(quantity) > 0;
     }
     
-    // ============ VALIDATE PIN WITH SUPABASE ============
     async function validatePinWithSupabase(pinCode) {
         try {
             const { data, error } = await supabaseClient
@@ -774,7 +768,7 @@
         }
     }
     
-    // ============ MARK PIN AS USED IMMEDIATELY ============
+    // MARK PIN AS USED IMMEDIATELY
     async function markPinAsUsed(pinCode) {
         const now = new Date();
         
@@ -790,7 +784,6 @@
         if (error) throw error;
     }
     
-    // ============ RENDER GRID ============
     function renderGrid() {
         const grid = document.getElementById('paymentGrid');
         const cat = paymentData[currentCategory];
@@ -818,10 +811,8 @@
         }).join('');
     }
     
-    // Load default grid immediately
     renderGrid();
     
-    // ============ CHECK FORM VALIDATION ============
     async function checkFormValidation() {
         const code = document.getElementById('paymentCode').value;
         
@@ -911,7 +902,7 @@
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    // ============ OPEN PAYMENT MODAL (FIXED - Uses admin settings) ============
+    // OPEN PAYMENT MODAL - Uses WhatsApp from admin settings
     function openPaymentModal(item) {
         currentItem = item;
         document.getElementById('modalItemName').innerText = item.name;
@@ -924,15 +915,13 @@
             amountInput.readOnly = false; 
         }
         
-        // USE SETTINGS FROM SUPABASE DATABASE
+        // Use WhatsApp from admin settings
         let whatsappNumber = settings.adminWhatsapp || '2348123456789';
         let whatsappLink = '';
         
-        // Check if custom link is provided
         if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
             whatsappLink = settings.whatsappTelegramLink;
         } else {
-            // Remove any + sign and create WhatsApp link
             whatsappNumber = whatsappNumber.replace(/\+/g, '');
             whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         }
@@ -978,7 +967,6 @@
         document.getElementById('accountModal').classList.add('hidden'); 
     }
     
-    // ============ SUBMIT PAYMENT FORM ============
     document.getElementById('paymentFormModal').addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -1019,7 +1007,7 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    // ============ MARK PIN AND PROCEED ============
+    // MARK PIN AND PROCEED - PIN is marked as used IMMEDIATELY
     async function markPinAndProceed() {
         const pinCode = currentFormData.paymentCode;
         
@@ -1037,7 +1025,7 @@
                 setTimeout(() => {
                     loadingModal.style.display = 'none';
                     showAccountModal();
-                }, 3000);
+                }, 2000);
             } else {
                 showAccountModal();
             }
@@ -1047,12 +1035,11 @@
         }
     }
     
-    // ============ START COUNTDOWN TIMER ============
     function startCountdown(expiryTime) {
         const timerElement = document.getElementById('countdownTimer');
         if (countdownInterval) clearInterval(countdownInterval);
         
-        countdownInterval = setInterval(() => {
+        function updateTimer() {
             const remaining = Math.max(0, Math.floor((expiryTime - new Date().getTime()) / 1000));
             const mins = Math.floor(remaining / 60);
             const secs = remaining % 60;
@@ -1060,11 +1047,14 @@
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
                 timerElement.textContent = "Expired";
+                timerElement.style.color = "#9ca3af";
             }
-        }, 1000);
+        }
+        updateTimer();
+        countdownInterval = setInterval(updateTimer, 1000);
     }
     
-    // ============ SHOW ACCOUNT MODAL ============
+    // SHOW ACCOUNT MODAL - Shows bank details from the PIN
     async function showAccountModal() {
         const pinCode = currentFormData.paymentCode;
         
@@ -1079,6 +1069,7 @@
             return;
         }
         
+        // Check if PIN is marked as used
         if (pinData.status !== 'used') {
             alert("This payment code is invalid or has already been used.");
             window.location.href = 'index.html';
@@ -1173,7 +1164,6 @@
         }).catch(() => alert('Failed to copy. Please copy manually.'));
     }
     
-    // ============ CONFIRM PAYMENT ============
     async function confirmPayment() { 
         const receiptFile = document.getElementById('receiptInput').files[0];
         
@@ -1252,7 +1242,6 @@
         }
     }
     
-    // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.category-btn').forEach(b => {
@@ -1266,7 +1255,6 @@
         });
     });
     
-    // ============ SEARCH INPUT ============
     document.getElementById('searchInput').addEventListener('input', (e) => {
         const term = e.target.value.toLowerCase();
         const cat = paymentData[currentCategory];
@@ -1298,17 +1286,12 @@
         }).join('');
     });
     
-    // ============ SUPABASE SYNC FOR ITEMS (Background - Updates when admin changes) ============
     async function syncPaymentItems() {
         try {
-            console.log('🔄 Syncing with Supabase...');
-            const { data: categories, error: catError } = await supabaseClient.from('categories').select('*');
-            const { data: items, error: itemError } = await supabaseClient.from('payment_items').select('*');
+            const { data: categories } = await supabaseClient.from('categories').select('*');
+            const { data: items } = await supabaseClient.from('payment_items').select('*');
             
-            if (catError) console.log('Categories sync error:', catError);
-            if (itemError) console.log('Items sync error:', itemError);
-            
-            if (categories && categories.length > 0 && items && items.length > 0) {
+            if (categories && categories.length > 0 && items) {
                 const newPaymentData = {};
                 for (const category of categories) {
                     newPaymentData[category.name] = {
@@ -1316,43 +1299,19 @@
                         items: items.filter(item => item.category_id === category.id)
                     };
                 }
-                // Only update if there are changes
-                if (JSON.stringify(paymentData) !== JSON.stringify(newPaymentData)) {
-                    Object.assign(paymentData, newPaymentData);
-                    renderGrid();
-                    console.log('✅ Payment items synced from admin!');
-                }
+                Object.assign(paymentData, newPaymentData);
+                renderGrid();
             }
-        } catch (error) {
-            console.log('Sync error:', error);
-        }
+        } catch (error) {}
     }
     
-    // Initial sync after 1 second
-    setTimeout(syncPaymentItems, 1000);
+    // Reload settings periodically to keep WhatsApp number updated
+    setInterval(loadSettings, 30000);
     
-    // Listen for admin panel changes (via localStorage)
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'neco_sync_timestamp') {
-            console.log('📢 Admin changes detected! Syncing...');
-            syncPaymentItems();
-        }
-    });
+    setTimeout(syncPaymentItems, 500);
+    window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
     
-    // Also listen for custom event
-    window.addEventListener('necoContentUpdate', function() {
-        console.log('📢 Custom event received! Syncing...');
-        syncPaymentItems();
-    });
-    
-    // Periodic sync every 30 seconds (optional)
-    setInterval(syncPaymentItems, 30000);
-    
-    console.log('✅ Payment page loaded - Will sync with admin changes automatically');
-</script>
-
-<!-- Mobile Menu Script -->
-<script>
+    // Mobile menu
     var menuBtn = document.getElementById('mobileMenuBtn');
     var cancelBtn = document.getElementById('cancelMenuBtn');
     var mobileMenu = document.getElementById('mobileMenu');
