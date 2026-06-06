@@ -1184,22 +1184,50 @@ if (localStorage.getItem('adminLoggedIn') === 'true') {
     loadFormStyles();
 }
 
+// ============ REPLACE THE getTimeRemaining FUNCTION WITH THIS ============
 function getTimeRemaining(pin) {
-    if (pin.status === 'active') return { text: 'Not used yet', class: 'timer-active' };
-    if (pin.status === 'expired') return { text: 'Expired', class: 'timer-expired' };
+    // For active (unused) PINs - show "Not used yet" instead of a countdown
+    if (pin.status === 'active') {
+        return { text: 'Not used yet', class: 'timer-active' };
+    }
+    
+    // For expired PINs
+    if (pin.status === 'expired') {
+        return { text: 'Expired', class: 'timer-expired' };
+    }
+    
+    // For used PINs - calculate time remaining from used_at
     if (pin.status === 'used' && pin.used_at) {
         const usedTime = new Date(pin.used_at);
-        const expiryFromUse = new Date(usedTime.getTime() + (30 * 60 * 1000));
-        const now = new Date();
-        const remainingMs = expiryFromUse - now;
-        if (remainingMs <= 0) return { text: 'Expired', class: 'timer-expired' };
+        // Check if used_at is valid
+        if (isNaN(usedTime.getTime())) {
+            return { text: 'Invalid date', class: 'timer-expired' };
+        }
+        
+        const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
+        const now = new Date().getTime();
+        const remainingMs = expiryTime - now;
+        
+        // If already expired
+        if (remainingMs <= 0) {
+            return { text: 'Expired', class: 'timer-expired' };
+        }
+        
+        // Calculate minutes and seconds
         const mins = Math.floor(remainingMs / (1000 * 60));
         const secs = Math.floor((remainingMs % (1000 * 60)) / 1000);
-        return { text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`, class: mins < 5 ? 'timer-warning' : 'timer-active' };
+        
+        // Show warning if less than 5 minutes remaining
+        const timerClass = mins < 5 ? 'timer-warning' : 'timer-active';
+        
+        return { 
+            text: `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`, 
+            class: timerClass 
+        };
     }
+    
     return { text: 'Unknown', class: 'timer-expired' };
 }
-
 async function loadAllData() {
     try {
         const { data: categories, error: catError } = await necoSupabase.from('categories').select('*').order('id');
