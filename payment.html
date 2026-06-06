@@ -1477,36 +1477,34 @@ async function openPaymentModal(item) {
     // Load form styles from Supabase
     const styles = await loadFormStyles();
     
-    // Set basic item name first
-    document.getElementById('modalItemName').innerText = item.name;
-    
-    // Apply styles if available
-    if (styles) {
-        // Apply Item Name style
-        const modalItemName = document.getElementById('modalItemName');
-        if (modalItemName) {
-            // Set text
-            let displayText = styles.itemNameText || item.name;
-            if (styles.itemNameUppercase) {
-                displayText = applySmartUppercase(displayText);
-            }
-            modalItemName.innerText = displayText;
-            
-            // Apply styles
+    // FIXED: Use the ACTUAL item name, NOT the saved style text
+    const modalItemName = document.getElementById('modalItemName');
+    if (modalItemName) {
+        // IMPORTANT: Use item.name (the actual clicked item), NOT styles.itemNameText
+        let displayText = item.name;
+        
+        // Only apply uppercase if enabled in styles
+        if (styles && styles.itemNameUppercase) {
+            displayText = applySmartUppercase(displayText);
+        }
+        modalItemName.innerText = displayText;
+        
+        // Apply styling (bold, size, color) without changing the text content
+        if (styles) {
             modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
             modalItemName.style.fontSize = styles.itemNameSize || '18px';
             modalItemName.style.color = styles.itemNameColor || '#000000';
         }
-        
-        // Apply Label styles with proper uppercase handling
+    }
+    
+    // Apply Label styles with proper uppercase handling
+    if (styles) {
         const labels = document.querySelectorAll('#paymentModal label');
         labels.forEach(label => {
-            // Get original text
             let originalText = label.innerText;
             let displayText = originalText;
             
             if (styles.labelUppercase) {
-                // Apply smart uppercase to label text (brackets remain normal)
                 displayText = applySmartUppercase(originalText);
             }
             
@@ -1531,7 +1529,6 @@ async function openPaymentModal(item) {
             proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
             proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
             
-            // Apply uppercase to button text if needed
             let buttonText = styles.buttonText || 'Proceed';
             if (styles.buttonTextUppercase) {
                 buttonText = buttonText.toUpperCase();
@@ -1590,20 +1587,21 @@ async function openPaymentModal(item) {
         }
     });
 }
-    // ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
-    var menuBtn = document.getElementById('mobileMenuBtn');
-    var mobileMenuItem = document.getElementById('mobileMenuItem');
-    
-    if (menuBtn) {
-        menuBtn.onclick = function(e) {
-            e.stopPropagation();
-            if (mobileMenuItem.classList.contains('expanded')) {
-                mobileMenuItem.classList.remove('expanded');
-            } else {
-                mobileMenuItem.classList.add('expanded');
-            }
-        };
-    }
+
+// ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
+var menuBtn = document.getElementById('mobileMenuBtn');
+var mobileMenuItem = document.getElementById('mobileMenuItem');
+
+if (menuBtn) {
+    menuBtn.onclick = function(e) {
+        e.stopPropagation();
+        if (mobileMenuItem.classList.contains('expanded')) {
+            mobileMenuItem.classList.remove('expanded');
+        } else {
+            mobileMenuItem.classList.add('expanded');
+        }
+    };
+}
 
     
 </script>
