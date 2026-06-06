@@ -984,53 +984,53 @@
         </div>
     </div>
     
-    <!-- EDIT TEXT MODAL - Used for both Home and Form Editor -->
-    <div id="editTextModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="editTextModalTitle">Edit Text</h3>
-                <button onclick="closeModal('editTextModal')">&times;</button>
+   <!-- EDIT TEXT MODAL - Used for both Home and Form Editor -->
+<div id="editTextModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="editTextModalTitle">Edit Text</h3>
+            <button onclick="closeModal('editTextModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="neco-form-group">
+                <label>Text Content</label>
+                <textarea id="editTextContent" rows="4" placeholder="Enter your text here..."></textarea>
             </div>
-            <div class="modal-body">
-                <div class="neco-form-group">
-                    <label>Text Content</label>
-                    <textarea id="editTextContent" rows="4" placeholder="Enter your text here..."></textarea>
+            
+            <div class="style-options">
+                <div class="style-option">
+                    <label>Bold:</label>
+                    <input type="checkbox" id="boldCheckbox">
                 </div>
-                
-                <div class="style-options">
-                    <div class="style-option">
-                        <label>Bold:</label>
-                        <input type="checkbox" id="boldCheckbox">
-                    </div>
-                    <div class="style-option">
-                        <label>Font Size:</label>
-                        <select id="fontSizeSelect">
-                            <option value="12px">12px (Small)</option>
-                            <option value="14px">14px (Normal)</option>
-                            <option value="16px">16px (Medium)</option>
-                            <option value="18px">18px (Large)</option>
-                            <option value="20px">20px (Extra Large)</option>
-                            <option value="24px">24px (Heading)</option>
-                            <option value="32px">32px (Title)</option>
-                        </select>
-                    </div>
-                    <div class="style-option">
-                        <label>Color:</label>
-                        <input type="color" id="textColorPicker" value="#000000">
-                    </div>
-                    <div class="style-option uppercase-checkbox">
-                        <label>UPPERCASE:</label>
-                        <input type="checkbox" id="uppercaseCheckbox">
-                        <small style="font-size: 10px; color: #666;">(Text in brackets will remain normal)</small>
-                    </div>
+                <div class="style-option">
+                    <label>Font Size:</label>
+                    <select id="fontSizeSelect">
+                        <option value="12px">12px (Small)</option>
+                        <option value="14px">14px (Normal)</option>
+                        <option value="16px">16px (Medium)</option>
+                        <option value="18px">18px (Large)</option>
+                        <option value="20px">20px (Extra Large)</option>
+                        <option value="24px">24px (Heading)</option>
+                        <option value="32px">32px (Title)</option>
+                    </select>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('editTextModal')">Cancel</button>
-                <button class="btn-save" onclick="saveTextEdit()">Save Changes</button>
+                <div class="style-option">
+                    <label>Color:</label>
+                    <input type="color" id="textColorPicker" value="#000000">
+                </div>
+                <div class="style-option uppercase-checkbox">
+                    <label>UPPERCASE:</label>
+                    <input type="checkbox" id="uppercaseCheckbox">
+                    <small style="font-size: 10px; color: #666;">(Text in brackets will remain normal)</small>
+                </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('editTextModal')">Cancel</button>
+            <button class="btn-save" onclick="saveTextEdit()">Save Changes</button>
+        </div>
     </div>
+</div>
     
     <!-- ADD CATEGORY MODAL -->
     <div id="addCategoryModal" class="modal">
@@ -1848,23 +1848,32 @@ function loadFormPreview() {
         </div>
     `;
 }
-function openFormTextEditor(type, currentValue) {
-    currentEditingType = type;
-    document.getElementById('editTextModalTitle').innerText = `Edit ${type === 'itemName' ? 'Item Name' : type === 'button' ? 'Button Text' : 'Form Label'}`;
+// ============ VARIABLES TO TRACK WHICH LABEL IS BEING EDITED ============
+let currentEditingElement = null;
+let currentEditingElementType = null;
+let currentEditingElementId = null;
+
+// ============ OPEN FORM TEXT EDITOR FOR SPECIFIC ELEMENT ============
+function openFormTextEditor(elementType, elementId, currentValue) {
+    currentEditingElementType = elementType;
+    currentEditingElementId = elementId;
+    
+    document.getElementById('editTextModalTitle').innerText = `Edit ${elementType === 'itemName' ? 'Item Name' : elementType === 'button' ? 'Button Text' : 'Form Label'}`;
     document.getElementById('editTextContent').value = currentValue;
     
-    // Set current style values
-    if (type === 'itemName') {
+    // Set current style values based on type
+    if (elementType === 'itemName') {
         document.getElementById('boldCheckbox').checked = formStyles.itemNameBold;
         document.getElementById('fontSizeSelect').value = formStyles.itemNameSize;
         document.getElementById('textColorPicker').value = formStyles.itemNameColor;
         document.getElementById('uppercaseCheckbox').checked = formStyles.itemNameUppercase;
-    } else if (type === 'button') {
+    } else if (elementType === 'button') {
         document.getElementById('boldCheckbox').checked = formStyles.buttonTextBold;
         document.getElementById('fontSizeSelect').value = formStyles.buttonTextSize;
         document.getElementById('textColorPicker').value = formStyles.buttonTextColor;
         document.getElementById('uppercaseCheckbox').checked = formStyles.buttonTextUppercase;
     } else {
+        // For labels - these affect all labels uniformly
         document.getElementById('boldCheckbox').checked = formStyles.labelBold;
         document.getElementById('fontSizeSelect').value = formStyles.labelSize;
         document.getElementById('textColorPicker').value = formStyles.labelColor;
@@ -1874,6 +1883,7 @@ function openFormTextEditor(type, currentValue) {
     document.getElementById('editTextModal').style.display = 'flex';
 }
 
+// ============ SAVE TEXT EDIT ============
 function saveTextEdit() {
     const newText = document.getElementById('editTextContent').value;
     const isBold = document.getElementById('boldCheckbox').checked;
@@ -1881,90 +1891,81 @@ function saveTextEdit() {
     const textColor = document.getElementById('textColorPicker').value;
     const isUppercase = document.getElementById('uppercaseCheckbox').checked;
     
-    if (currentEditingKey) {
-        // Home Editor save
-        if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newText;
-        else if (currentEditingKey === 'heroNote') homeContent.heroNote = newText;
-        else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newText;
-        else if (currentEditingKey === 'footerNote') homeContent.footerNote = newText;
-        else if (currentEditingKey.startsWith('step_')) {
-            const parts = currentEditingKey.split('_');
-            const idx = parseInt(parts[1]);
-            if (parts[2] === 'title') homeContent.steps[idx].title = newText;
-            else if (parts[2] === 'desc') homeContent.steps[idx].description = newText;
-        }
-        loadHomePreview();
-        closeModal('editTextModal');
-    } else if (currentEditingType) {
-        // Form Editor save
-        if (currentEditingType === 'itemName') {
-            formStyles.itemNameText = newText;
-            formStyles.itemNameBold = isBold;
-            formStyles.itemNameSize = fontSize;
-            formStyles.itemNameColor = textColor;
-            formStyles.itemNameUppercase = isUppercase;
-        } else if (currentEditingType === 'button') {
-            formStyles.buttonText = newText;
-            formStyles.buttonTextBold = isBold;
-            formStyles.buttonTextSize = fontSize;
-            formStyles.buttonTextColor = textColor;
-            formStyles.buttonTextUppercase = isUppercase;
-        } else {
-            formStyles.labelBold = isBold;
-            formStyles.labelSize = fontSize;
-            formStyles.labelColor = textColor;
-            formStyles.labelUppercase = isUppercase;
-        }
-        loadFormPreview();
-        closeModal('editTextModal');
+    if (currentEditingElementType === 'itemName') {
+        formStyles.itemNameText = newText;
+        formStyles.itemNameBold = isBold;
+        formStyles.itemNameSize = fontSize;
+        formStyles.itemNameColor = textColor;
+        formStyles.itemNameUppercase = isUppercase;
+    } else if (currentEditingElementType === 'button') {
+        formStyles.buttonText = newText;
+        formStyles.buttonTextBold = isBold;
+        formStyles.buttonTextSize = fontSize;
+        formStyles.buttonTextColor = textColor;
+        formStyles.buttonTextUppercase = isUppercase;
+    } else if (currentEditingElementType === 'label') {
+        // Label styles apply to ALL labels uniformly
+        formStyles.labelBold = isBold;
+        formStyles.labelSize = fontSize;
+        formStyles.labelColor = textColor;
+        formStyles.labelUppercase = isUppercase;
     }
+    
+    closeModal('editTextModal');
+    loadFormPreview();
 }
 
+// ============ HELPER FUNCTION FOR SMART UPPERCASE ============
+function applySmartUppercasePreview(text) {
+    if (!text) return text;
+    if (text.includes('(') && text.includes(')')) {
+        return text.replace(/\([^)]*\)/g, function(match) {
+            return match;
+        }).replace(/[^(]+(?=\(|$)/g, function(match) {
+            return match.toUpperCase();
+        });
+    }
+    return text.toUpperCase();
+}
+
+// ============ LOAD FORM PREVIEW WITH PROPER LABEL TEXT ============
 function loadFormPreview() {
     const container = document.getElementById('formPreview');
     if (!container) return;
     
-    // Apply styles with uppercase handling (brackets content remains normal)
-    function applyTextStyle(text, isUppercase, isBold, size, color) {
-        let styledText = text;
-        if (isUppercase) {
-            // Check if text contains brackets - don't uppercase bracket content
-            if (text.includes('(') && text.includes(')')) {
-                styledText = text.replace(/\([^)]*\)/g, function(match) {
-                    return match;
-                });
-                // Uppercase the parts outside brackets
-                styledText = styledText.replace(/[^(]+(?=\(|$)/g, function(match) {
-                    return match.toUpperCase();
-                });
-            } else {
-                styledText = text.toUpperCase();
-            }
-        }
-        return `<span style="font-weight: ${isBold ? '700' : '500'}; font-size: ${size}; color: ${color};">${escapeHtml(styledText)}</span>`;
+    const itemNameStyle = formStyles.itemNameBold ? 'font-weight: 700;' : 'font-weight: 500;';
+    const labelStyle = `font-weight: ${formStyles.labelBold ? '700' : '500'}; font-size: ${formStyles.labelSize}; color: ${formStyles.labelColor};`;
+    const buttonStyle = `font-weight: ${formStyles.buttonTextBold ? '700' : '500'}; font-size: ${formStyles.buttonTextSize}; color: ${formStyles.buttonTextColor}; background: ${formStyles.buttonBgColor};`;
+    
+    // Apply smart uppercase to item name
+    let displayItemName = formStyles.itemNameText;
+    if (formStyles.itemNameUppercase) {
+        displayItemName = applySmartUppercasePreview(displayItemName);
     }
     
-    const itemNameHtml = applyTextStyle(formStyles.itemNameText, formStyles.itemNameUppercase, formStyles.itemNameBold, formStyles.itemNameSize, formStyles.itemNameColor);
-    const labelStyle = `font-weight: ${formStyles.labelBold ? '700' : '500'}; font-size: ${formStyles.labelSize}; color: ${formStyles.labelColor}; ${formStyles.labelUppercase ? 'text-transform: uppercase;' : ''}`;
-    const buttonStyle = `font-weight: ${formStyles.buttonTextBold ? '700' : '500'}; font-size: ${formStyles.buttonTextSize}; color: ${formStyles.buttonTextColor}; ${formStyles.buttonTextUppercase ? 'text-transform: uppercase;' : ''}`;
+    // Apply uppercase to button text
+    let displayButtonText = formStyles.buttonText;
+    if (formStyles.buttonTextUppercase) {
+        displayButtonText = displayButtonText.toUpperCase();
+    }
     
     container.innerHTML = `
         <div style="padding: 20px;">
             <!-- Item Name -->
             <div style="margin-bottom: 15px;">
                 <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
-                <div class="editable-element" onclick="openFormTextEditor('itemName', '${escapeHtml(formStyles.itemNameText)}')" style="display: inline-block; cursor: pointer;">
-                    ${itemNameHtml}
+                <div class="editable-element" onclick="openFormTextEditor('itemName', 'itemName', '${escapeHtml(formStyles.itemNameText)}')" style="display: inline-block; cursor: pointer;">
+                    <p id="previewItemName" style="font-size: ${formStyles.itemNameSize}; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.itemNameColor}; ${itemNameStyle} margin: 0;">${escapeHtml(displayItemName)}</p>
                 </div>
             </div>
             
             <!-- Payment Code Section -->
             <div style="margin-bottom: 20px;">
-                <div class="editable-element" onclick="openFormTextEditor('label', 'Confirm payment code')" style="cursor: pointer; display: inline-block;">
+                <div class="editable-element" onclick="openFormTextEditor('label', 'confirmCode', 'Confirm payment code')" style="cursor: pointer; display: inline-block;">
                     <label style="${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
                 </div>
                 <div>
-                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                 </div>
                 <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
             </div>
@@ -1976,39 +1977,39 @@ function loadFormPreview() {
                 <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
                 
                 <div style="margin-bottom: 15px;">
-                    <div class="editable-element" onclick="openFormTextEditor('label', 'Full name')" style="cursor: pointer; display: inline-block;">
+                    <div class="editable-element" onclick="openFormTextEditor('label', 'fullName', 'Full name')" style="cursor: pointer; display: inline-block;">
                         <label style="${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
                     </div>
                     <div>
-                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                     </div>
                 </div>
                 
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
                     <div style="flex: 1;">
-                        <div class="editable-element" onclick="openFormTextEditor('label', 'Phone number')" style="cursor: pointer; display: inline-block;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'phone', 'Phone number')" style="cursor: pointer; display: inline-block;">
                             <label style="${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
                         </div>
                         <div>
-                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                         </div>
                     </div>
                     <div style="flex: 1;">
-                        <div class="editable-element" onclick="openFormTextEditor('label', 'Email')" style="cursor: pointer; display: inline-block;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'email', 'Email')" style="cursor: pointer; display: inline-block;">
                             <label style="${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
                         </div>
                         <div>
-                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                         </div>
                     </div>
                 </div>
                 
                 <div>
-                    <div class="editable-element" onclick="openFormTextEditor('label', 'Description')" style="cursor: pointer; display: inline-block;">
+                    <div class="editable-element" onclick="openFormTextEditor('label', 'description', 'Description')" style="cursor: pointer; display: inline-block;">
                         <label style="${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
                     </div>
                     <div>
-                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                     </div>
                 </div>
             </div>
@@ -2021,45 +2022,44 @@ function loadFormPreview() {
                 
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
                     <div style="flex: 1;">
-                        <div class="editable-element" onclick="openFormTextEditor('label', 'Amount')" style="cursor: pointer; display: inline-block;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'amount', 'Amount')" style="cursor: pointer; display: inline-block;">
                             <label style="${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
                         </div>
                         <div>
-                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                         </div>
                     </div>
                     <div style="flex: 1;">
-                        <div class="editable-element" onclick="openFormTextEditor('label', 'Currency')" style="cursor: pointer; display: inline-block;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'currency', 'Currency')" style="cursor: pointer; display: inline-block;">
                             <label style="${labelStyle} margin-bottom: 8px;">Currency</label>
                         </div>
                         <div>
-                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                                 <option>NGN</option>
                                 <option>USD</option>
                             </select>
                         </div>
                     </div>
                     <div style="flex: 1;">
-                        <div class="editable-element" onclick="openFormTextEditor('label', 'Quantity')" style="cursor: pointer; display: inline-block;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'quantity', 'Quantity')" style="cursor: pointer; display: inline-block;">
                             <label style="${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
                         </div>
                         <div>
-                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.inputBorderColor}; border-radius: 8px; background: ${formStyles.inputBgColor}; margin-top: 5px;">
                         </div>
                     </div>
                 </div>
                 
                 <div style="display: flex; gap: 15px; margin-top: 20px;">
                     <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    <div class="editable-element" onclick="openFormTextEditor('button', '${escapeHtml(formStyles.buttonText)}')" style="flex: 2; cursor: pointer;">
-                        <button id="previewButton" style="width: 100%; padding: 12px; background: ${formStyles.buttonBgColor}; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">${escapeHtml(formStyles.buttonText)}</button>
+                    <div class="editable-element" onclick="openFormTextEditor('button', 'button', '${escapeHtml(formStyles.buttonText)}')" style="flex: 2; cursor: pointer;">
+                        <button id="previewButton" style="width: 100%; padding: 12px; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">${escapeHtml(displayButtonText)}</button>
                     </div>
                 </div>
             </div>
         </div>
     `;
 }
-
 // ============ MAKE SURE SAVE FUNCTION WORKS ============
 async function saveFormStyles() {
     try {
