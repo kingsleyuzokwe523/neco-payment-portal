@@ -1056,57 +1056,7 @@
         if (proceedBtn) proceedBtn.disabled = !allValid;
     }
     
-    // ============ OPEN PAYMENT MODAL (USES ADMIN WHATSAPP) ============
-    function openPaymentModal(item) {
-        currentItem = item;
-        document.getElementById('modalItemName').innerText = item.name;
-        const amountInput = document.getElementById('amount');
-        if (item.amount) { 
-            amountInput.value = item.amount; 
-            amountInput.readOnly = true; 
-        } else { 
-            amountInput.value = ''; 
-            amountInput.readOnly = false; 
-        }
-        
-        // USE SETTINGS FROM SUPABASE
-        let whatsappNumber = settings.adminWhatsapp || '2348123456789';
-        let whatsappLink = '';
-        
-        if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
-            whatsappLink = settings.whatsappTelegramLink;
-        } else {
-            whatsappNumber = whatsappNumber.replace(/\+/g, '');
-            whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-        }
-        
-        document.getElementById('whatsappLink').href = whatsappLink;
-        
-        document.getElementById('paymentCode').value = ''; 
-        document.getElementById('fullName').value = ''; 
-        document.getElementById('phone').value = ''; 
-        document.getElementById('email').value = '';
-        document.getElementById('paymentDescription').value = ''; 
-        document.getElementById('quantity').value = '';
-        document.getElementById('currency').value = 'NGN';
-        
-        document.getElementById('codeError').style.display = 'none';
-        document.getElementById('phoneError').style.display = 'none';
-        document.getElementById('emailError').style.display = 'none';
-        document.getElementById('quantityError').style.display = 'none';
-        document.getElementById('codeRequiredError').style.display = 'none';
-        
-        document.getElementById('proceedBtn').disabled = true;
-        document.getElementById('paymentModal').classList.remove('hidden');
-        
-        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.removeEventListener('input', checkFormValidation);
-                element.addEventListener('input', checkFormValidation);
-            }
-        });
-    }
+    
     
     function closePaymentModal() { 
         document.getElementById('paymentModal').classList.add('hidden'); 
@@ -1467,6 +1417,21 @@
     
     setTimeout(syncPaymentItems, 500);
     window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
+// ============ HELPER FUNCTION TO APPLY UPPERCASE WITHOUT AFFECTING BRACKETS ============
+function applySmartUppercase(text) {
+    if (!text) return text;
+    // Check if text contains brackets
+    if (text.includes('(') && text.includes(')')) {
+        // Split the text by brackets
+        return text.replace(/\([^)]*\)/g, function(match) {
+            return match; // Keep bracket content as is
+        }).replace(/[^(]+(?=\(|$)/g, function(match) {
+            return match.toUpperCase(); // Uppercase everything outside brackets
+        });
+    }
+    return text.toUpperCase();
+}
+
 // ============ LOAD FORM STYLES FROM SUPABASE ============
 async function loadFormStyles() {
     try {
@@ -1505,7 +1470,7 @@ async function loadFormStyles() {
     }
 }
 
-// ============ REPLACE THE EXISTING openPaymentModal WITH THIS ============
+// ============ OPEN PAYMENT MODAL WITH STYLES (FIXED UPPERCASE) ============
 async function openPaymentModal(item) {
     currentItem = item;
     
@@ -1520,26 +1485,35 @@ async function openPaymentModal(item) {
         // Apply Item Name style
         const modalItemName = document.getElementById('modalItemName');
         if (modalItemName) {
-            if (styles.itemNameText && styles.itemNameText !== 'Four Figure Table') {
-                modalItemName.innerText = styles.itemNameText;
+            // Set text
+            let displayText = styles.itemNameText || item.name;
+            if (styles.itemNameUppercase) {
+                displayText = applySmartUppercase(displayText);
             }
+            modalItemName.innerText = displayText;
+            
+            // Apply styles
             modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
             modalItemName.style.fontSize = styles.itemNameSize || '18px';
             modalItemName.style.color = styles.itemNameColor || '#000000';
-            if (styles.itemNameUppercase) {
-                modalItemName.style.textTransform = 'uppercase';
-            }
         }
         
-        // Apply Label styles
+        // Apply Label styles with proper uppercase handling
         const labels = document.querySelectorAll('#paymentModal label');
         labels.forEach(label => {
+            // Get original text
+            let originalText = label.innerText;
+            let displayText = originalText;
+            
+            if (styles.labelUppercase) {
+                // Apply smart uppercase to label text (brackets remain normal)
+                displayText = applySmartUppercase(originalText);
+            }
+            
+            label.innerText = displayText;
             label.style.fontWeight = styles.labelBold ? '700' : '500';
             label.style.fontSize = styles.labelSize || '14px';
             label.style.color = styles.labelColor || '#374151';
-            if (styles.labelUppercase) {
-                label.style.textTransform = 'uppercase';
-            }
         });
         
         // Apply Input styles
@@ -1556,13 +1530,13 @@ async function openPaymentModal(item) {
             proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
             proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
             proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
+            
+            // Apply uppercase to button text if needed
+            let buttonText = styles.buttonText || 'Proceed';
             if (styles.buttonTextUppercase) {
-                proceedBtn.style.textTransform = 'uppercase';
+                buttonText = buttonText.toUpperCase();
             }
-            // Update button text if custom text exists
-            if (styles.buttonText && styles.buttonText !== 'Proceed') {
-                proceedBtn.innerText = styles.buttonText;
-            }
+            proceedBtn.innerText = buttonText;
         }
         
         // Apply WhatsApp link color
