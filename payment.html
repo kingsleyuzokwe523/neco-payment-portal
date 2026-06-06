@@ -1352,30 +1352,7 @@
             created_at: new Date().toISOString()
         };
         
-        try {
-            const { error } = await supabaseClient
-                .from('payments')
-                .insert([paymentData]);
-            
-            if (error) throw error;
-            
-            closeAccountModal();
-            
-            // Update the payment loading modal text for success
-            const mainText = paymentLoadingModal.querySelector('p:first-of-type');
-            const subText = paymentLoadingModal.querySelector('p:last-of-type');
-            if (mainText) mainText.innerHTML = 'Payment Successful!';
-            if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
-            
-            setTimeout(() => { 
-                window.location.href = 'index.html'; 
-            }, 3000);
-            
-        } catch (error) {
-            paymentLoadingModal.style.display = 'none';
-            alert('Error saving payment: ' + error.message);
-        }
-    }
+       
     
     // ============ CATEGORY FILTERS ============
     document.querySelectorAll('.category-btn').forEach(btn => {
