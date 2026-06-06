@@ -16,6 +16,65 @@
         button{background-color:transparent;cursor:pointer}
         img,svg{display:block;vertical-align:middle}
         
+        /* ===== MOBILE MENU STYLES - SAME AS HOME PAGE ===== */
+        
+        /* Make the logo area expandable */
+        .logo-area {
+            transition: all 0.3s ease;
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+        }
+        
+        /* Mobile menu item - hidden by default */
+        .mobile-menu-item {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0 0 0 0;
+            margin-top: 0;
+        }
+        
+        /* When expanded, show the menu item */
+        .mobile-menu-item.expanded {
+            max-height: 80px;
+            opacity: 1;
+            padding: 12px 0;
+            margin-top: 8px;
+        }
+        
+        /* Style for the mobile menu link - inside logo box, aligned left */
+        .mobile-menu-link {
+            display: block;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: left;
+            padding: 8px 0;
+        }
+        
+        .mobile-menu-link:hover {
+            color: #054c0f;
+            padding-left: 8px;
+        }
+        
+        /* LINE AT THE BOTTOM OF Back to Home */
+        .mobile-menu-item.expanded .mobile-menu-link {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+        
+        /* Logo top area */
+        .logo-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
         /* Global container spacing fix */
         .container {
             width: 100%;
@@ -98,7 +157,7 @@
     padding: 0.7rem 1.2rem;
     font-weight: 500;
     transition: all 0.2s ease;
-    background: transparent;  /* Changed from 'white' to 'transparent' */
+    background: transparent;
 }
         .make-payment-btn:hover {
             transform: scale(1.02);
@@ -123,30 +182,6 @@
             height: auto;
             max-height: 500px;
             overflow-y: auto;
-        }
-        #mobileMenu {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 9999;
-        }
-        #mobileMenu a {
-            display: block;
-            padding: 16px 20px;
-            color: #4b5563;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-            transition: all 0.2s ease;
-        }
-        #mobileMenu a:hover {
-            background-color: #f0fdf4;
-            color: #054c0f;
         }
         #accountModal .account-inner {
             padding: 20px 24px;
@@ -472,36 +507,34 @@
 <div id="app">
     <div class="router">
         <div class="shadow-md bg-white sticky w-full z-10 top-0">
-            <div class="container py-2 relative">
-                <nav class="flex justify-between items-center">
-                    <div class="h-14 w-14">
-                        <a href="index.html">
-                            <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
-                        </a>
+            <div class="container py-2">
+                <div class="logo-area" id="logoArea">
+                    <div class="logo-top">
+                        <div class="h-14 w-14">
+                            <a href="index.html">
+                                <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
+                            </a>
+                        </div>
+                        <div>
+                            <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm">
+                                <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center gap-2 lg:hidden">
+                            <button type="button" id="mobileMenuBtn">
+                                <span class="sr-only">Open main menu</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                                </svg>
+                            </button>
+                        </div>
                     </div>
-                    <div>
-                        <ul class="hidden lg:flex lg:items-center lg:gap-8 lg:text-xs xl:text-sm text-slate-600">
-                            <li><a class="text-gray-600 hover:text-gray-900 group flex items-center text-sm font-medium" href="index.html">Back to Home</a></li>
-                        </ul>
+                    <!-- Mobile menu item - INSIDE the logo box, expands like home page -->
+                    <div class="mobile-menu-item" id="mobileMenuItem">
+                        <a href="index.html" class="mobile-menu-link">Back to Home</a>
                     </div>
-                    <div class="flex items-center gap-2 lg:hidden">
-                        <button type="button" id="cancelMenuBtn" style="display: none;">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8 text-gray-600 hover:text-red-600">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <button type="button" id="mobileMenuBtn">
-                            <span class="sr-only">Open main menu</span>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="block h-8 w-8">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </nav>
+                </div>
             </div>
-        </div>
-        <div id="mobileMenu" style="display: none; position: fixed; top: 70px; left: 0; right: 0; background: white; border-radius: 0; box-shadow: 0 4px 20px rgba(0,0,0,0.15); z-index: 9999;">
-            <a href="index.html" style="display: block; padding: 16px 20px; color: #4b5563; text-decoration: none; font-size: 16px; font-weight: 500; text-align: center; margin: 0;">Back to Home</a>
         </div>
         
         <!-- Hero Section -->
@@ -1434,34 +1467,18 @@
     
     setTimeout(syncPaymentItems, 500);
     window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
-</script>
-
-<!-- Mobile Menu Script -->
-<script>
+    
+    // ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
     var menuBtn = document.getElementById('mobileMenuBtn');
-    var cancelBtn = document.getElementById('cancelMenuBtn');
-    var mobileMenu = document.getElementById('mobileMenu');
+    var mobileMenuItem = document.getElementById('mobileMenuItem');
     
     if (menuBtn) {
         menuBtn.onclick = function(e) {
             e.stopPropagation();
-            mobileMenu.style.display = 'block';
-            menuBtn.style.display = 'none';
-            cancelBtn.style.display = 'block';
-        };
-        cancelBtn.onclick = function(e) {
-            e.stopPropagation();
-            mobileMenu.style.display = 'none';
-            cancelBtn.style.display = 'none';
-            menuBtn.style.display = 'block';
-        };
-        document.onclick = function(e) {
-            if (mobileMenu && mobileMenu.style.display === 'block') {
-                if ((!menuBtn.contains(e.target) && (!cancelBtn || !cancelBtn.contains(e.target))) && !mobileMenu.contains(e.target)) {
-                    mobileMenu.style.display = 'none';
-                    cancelBtn.style.display = 'none';
-                    menuBtn.style.display = 'block';
-                }
+            if (mobileMenuItem.classList.contains('expanded')) {
+                mobileMenuItem.classList.remove('expanded');
+            } else {
+                mobileMenuItem.classList.add('expanded');
             }
         };
     }
