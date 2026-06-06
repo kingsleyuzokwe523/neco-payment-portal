@@ -1467,7 +1467,155 @@
     
     setTimeout(syncPaymentItems, 500);
     window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
+// ============ LOAD FORM STYLES FROM SUPABASE ============
+async function loadFormStyles() {
+    try {
+        const { data, error } = await supabaseClient
+            .from('form_styles')
+            .select('*')
+            .maybeSingle();
+        
+        if (error || !data) {
+            console.log('No form styles found, using defaults');
+            return null;
+        }
+        
+        return {
+            itemNameText: data.item_name_text,
+            itemNameBold: data.item_name_bold,
+            itemNameSize: data.item_name_size,
+            itemNameColor: data.item_name_color,
+            itemNameUppercase: data.item_name_uppercase,
+            labelBold: data.label_bold,
+            labelSize: data.label_size,
+            labelColor: data.label_color,
+            labelUppercase: data.label_uppercase,
+            buttonText: data.button_text,
+            buttonBgColor: data.button_bg_color,
+            buttonTextColor: data.button_text_color,
+            buttonTextSize: data.button_text_size,
+            buttonTextBold: data.button_text_bold,
+            buttonTextUppercase: data.button_text_uppercase,
+            inputBgColor: data.input_bg_color,
+            inputBorderColor: data.input_border_color
+        };
+    } catch (err) {
+        console.log('Error loading form styles:', err);
+        return null;
+    }
+}
+
+// ============ REPLACE THE EXISTING openPaymentModal WITH THIS ============
+async function openPaymentModal(item) {
+    currentItem = item;
     
+    // Load form styles from Supabase
+    const styles = await loadFormStyles();
+    
+    // Set basic item name first
+    document.getElementById('modalItemName').innerText = item.name;
+    
+    // Apply styles if available
+    if (styles) {
+        // Apply Item Name style
+        const modalItemName = document.getElementById('modalItemName');
+        if (modalItemName) {
+            if (styles.itemNameText && styles.itemNameText !== 'Four Figure Table') {
+                modalItemName.innerText = styles.itemNameText;
+            }
+            modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
+            modalItemName.style.fontSize = styles.itemNameSize || '18px';
+            modalItemName.style.color = styles.itemNameColor || '#000000';
+            if (styles.itemNameUppercase) {
+                modalItemName.style.textTransform = 'uppercase';
+            }
+        }
+        
+        // Apply Label styles
+        const labels = document.querySelectorAll('#paymentModal label');
+        labels.forEach(label => {
+            label.style.fontWeight = styles.labelBold ? '700' : '500';
+            label.style.fontSize = styles.labelSize || '14px';
+            label.style.color = styles.labelColor || '#374151';
+            if (styles.labelUppercase) {
+                label.style.textTransform = 'uppercase';
+            }
+        });
+        
+        // Apply Input styles
+        const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
+        inputs.forEach(input => {
+            input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
+            input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
+        });
+        
+        // Apply Button styles
+        const proceedBtn = document.getElementById('proceedBtn');
+        if (proceedBtn) {
+            proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
+            proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
+            proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
+            proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
+            if (styles.buttonTextUppercase) {
+                proceedBtn.style.textTransform = 'uppercase';
+            }
+            // Update button text if custom text exists
+            if (styles.buttonText && styles.buttonText !== 'Proceed') {
+                proceedBtn.innerText = styles.buttonText;
+            }
+        }
+        
+        // Apply WhatsApp link color
+        const whatsappLink = document.getElementById('whatsappLink');
+        if (whatsappLink) {
+            whatsappLink.style.color = styles.labelColor || '#009515';
+        }
+    }
+    
+    // Set amount field
+    const amountInput = document.getElementById('amount');
+    if (item.amount) { 
+        amountInput.value = item.amount; 
+        amountInput.readOnly = true; 
+    } else { 
+        amountInput.value = ''; 
+        amountInput.readOnly = false; 
+    }
+    
+    // Set WhatsApp link
+    let whatsappNumber = settings.adminWhatsapp || '2348123456789';
+    let whatsappLink = '';
+    if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
+        whatsappLink = settings.whatsappTelegramLink;
+    } else {
+        whatsappNumber = whatsappNumber.replace(/\+/g, '');
+        whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+    }
+    document.getElementById('whatsappLink').href = whatsappLink;
+    
+    // Reset form fields
+    document.getElementById('paymentCode').value = ''; 
+    document.getElementById('fullName').value = ''; 
+    document.getElementById('phone').value = ''; 
+    document.getElementById('email').value = '';
+    document.getElementById('paymentDescription').value = ''; 
+    document.getElementById('quantity').value = '';
+    document.getElementById('currency').value = 'NGN';
+    
+    // Hide errors
+    document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+    document.getElementById('proceedBtn').disabled = true;
+    document.getElementById('paymentModal').classList.remove('hidden');
+    
+    // Add event listeners
+    ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.removeEventListener('input', checkFormValidation);
+            element.addEventListener('input', checkFormValidation);
+        }
+    });
+}
     // ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
     var menuBtn = document.getElementById('mobileMenuBtn');
     var mobileMenuItem = document.getElementById('mobileMenuItem');
@@ -1482,6 +1630,8 @@
             }
         };
     }
+
+    
 </script>
 </body>
 </html>
