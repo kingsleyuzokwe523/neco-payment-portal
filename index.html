@@ -10,27 +10,29 @@
     <style>
         /* ===== YOUR ORIGINAL CSS STAYS EXACTLY THE SAME ===== */
         
-        /* Improved Mobile Menu Styles - Fixed Alignment */
+        /* Mobile Menu Styles - Seamless with Logo Box */
         #mobileMenu {
             position: absolute;
-            top: 70px;
+            top: 100%;
             left: 0;
             right: 0;
             background: white;
             box-shadow: 0 4px 20px rgba(0,0,0,0.15);
             z-index: 9999;
             display: none;
-            border-radius: 0;
+            border-radius: 0 0 12px 12px;
+            overflow: hidden;
         }
 
         #mobileMenu a {
-            display: block;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             padding: 16px 20px;
             color: #4b5563;
             text-decoration: none;
             font-size: 16px;
             font-weight: 500;
-            text-align: left;
             transition: all 0.2s ease;
             border-bottom: 1px solid #f0f0f0;
         }
@@ -44,8 +46,25 @@
             color: #054c0f;
         }
         
+        /* Dropdown arrow/bullet at the end */
+        .menu-arrow {
+            font-size: 18px;
+            color: #9ca3af;
+            transition: transform 0.2s ease;
+        }
+        
+        #mobileMenu a:hover .menu-arrow {
+            color: #054c0f;
+            transform: translateX(3px);
+        }
+        
         /* Make the nav container relative for absolute positioning */
         .nav-container {
+            position: relative;
+        }
+        
+        /* Ensure the logo area and dropdown connect seamlessly */
+        .nav-wrapper {
             position: relative;
         }
         
@@ -61,11 +80,6 @@
             opacity: 1;
         }
         
-        /* Make the nav container relative for proper mobile menu positioning */
-        .nav-wrapper {
-            position: relative;
-        }
-        
         /* Fix mobile menu button styles */
         #mobileMenuBtn, #cancelMenuBtn {
             background: none;
@@ -79,7 +93,7 @@
     <div id="app">
         <div class="router">
             <div class="shadow-md bg-white sticky w-full z-10 top-0">
-                <div class="container py-2 relative">
+                <div class="container py-2 relative nav-container">
                     <nav class="flex justify-between items-center">
                         <div class="h-14 w-14">
                             <a href="index.html">
@@ -107,9 +121,12 @@
                             </button>
                         </div>
                     </nav>
-                    <!-- Mobile Menu Dropdown - Properly aligned -->
+                    <!-- Mobile Menu Dropdown - Seamless with Logo Box -->
                     <div id="mobileMenu" style="display: none;">
-                        <a href="payment.html">Make payment</a>
+                        <a href="payment.html">
+                            Make payment
+                            <span class="menu-arrow">›</span>
+                        </a>
                     </div>
                 </div>
             </div>
