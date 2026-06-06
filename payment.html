@@ -758,7 +758,7 @@
     </div>
 </div>
 
-<!-- LOADING MODAL -->
+<!-- LOADING MODAL - Account details generation -->
 <div id="loadingModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 9999;">
     <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
         <div class="loader" style="margin: 0 auto;"></div>
@@ -1285,8 +1285,23 @@
         
         if (countdownInterval) clearInterval(countdownInterval);
         
-        const loadingModal = document.getElementById('loadingModal');
-        loadingModal.style.display = 'flex';
+        // Create a new loading modal for payment confirmation
+        let paymentLoadingModal = document.getElementById('paymentLoadingModal');
+        if (!paymentLoadingModal) {
+            paymentLoadingModal = document.createElement('div');
+            paymentLoadingModal.id = 'paymentLoadingModal';
+            paymentLoadingModal.style.cssText = 'display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: white; z-index: 10000;';
+            paymentLoadingModal.innerHTML = `
+                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
+                    <div class="loader" style="margin: 0 auto;"></div>
+                    <p style="margin-top: 16px; font-size: 16px; color: black; font-weight: 500;">Please wait...</p>
+                    <p style="margin-top: 8px; font-size: 14px; color: #6b7280;">While we confirm your payment</p>
+                </div>
+            `;
+            document.body.appendChild(paymentLoadingModal);
+        }
+        
+        paymentLoadingModal.style.display = 'flex';
         
         let receiptUrl = null;
         let receiptName = null;
@@ -1311,8 +1326,8 @@
             receiptUrl = urlData.publicUrl;
             
         } catch (error) {
+            paymentLoadingModal.style.display = 'none';
             alert('Failed to upload receipt: ' + error.message);
-            loadingModal.style.display = 'none';
             return;
         }
         
@@ -1346,8 +1361,9 @@
             
             closeAccountModal();
             
-            const mainText = loadingModal.querySelector('p:first-of-type');
-            const subText = loadingModal.querySelector('p:last-of-type');
+            // Update the payment loading modal text for success
+            const mainText = paymentLoadingModal.querySelector('p:first-of-type');
+            const subText = paymentLoadingModal.querySelector('p:last-of-type');
             if (mainText) mainText.innerHTML = 'Payment Successful!';
             if (subText) subText.innerHTML = 'Thank you. Redirecting to home page...';
             
@@ -1356,8 +1372,8 @@
             }, 3000);
             
         } catch (error) {
+            paymentLoadingModal.style.display = 'none';
             alert('Error saving payment: ' + error.message);
-            loadingModal.style.display = 'none';
         }
     }
     
