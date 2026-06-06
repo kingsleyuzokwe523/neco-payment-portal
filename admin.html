@@ -173,16 +173,6 @@
             height: 20px;
         }
         
-        .logout-menu-item {
-            margin-top: auto;
-            margin-bottom: 20px;
-            background: rgba(220,38,38,0.2);
-        }
-        
-        .logout-menu-item:hover {
-            background: rgba(220,38,38,0.4);
-        }
-        
         .category-section-title {
             padding: 12px 16px;
             font-size: 12px;
@@ -453,7 +443,6 @@
             color: #374151;
         }
         
-        /* Fixed: Better spacing for action buttons on mobile */
         .items-table td:last-child {
             white-space: nowrap;
         }
@@ -478,7 +467,77 @@
             color: white;
         }
         
-        /* Mobile responsive fixes for buttons */
+        /* Payment Form Editor Styles */
+        .form-editor-container {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        
+        .form-preview {
+            background: #f9fafb;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .form-controls {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .style-control {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .style-control label {
+            font-weight: 600;
+            min-width: 120px;
+            color: #374151;
+        }
+        
+        .style-control input, .style-control select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        
+        .style-control button {
+            background: #054c0f;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        
+        .form-element {
+            padding: 12px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .form-element:hover {
+            background: #fef3c7;
+            outline: 1px solid #f59e0b;
+        }
+        
+        .form-element.selected {
+            background: #fef3c7;
+            outline: 2px solid #f59e0b;
+        }
+        
         @media (max-width: 768px) {
             .items-table td:last-child {
                 white-space: normal;
@@ -826,6 +885,11 @@
                     <span>WhatsApp Manager</span>
                 </div>
                 
+                <div class="menu-item" data-tab="form-editor">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v16h16V4H4zm2 2h12v12H6V6zm2 2h8v8H8V8z"/></svg>
+                    <span>Payment Form Editor</span>
+                </div>
+                
                 <div class="category-section-title">📁 CATEGORIES</div>
                 <div id="categoryListContainer" class="category-list-container"></div>
                 <button class="add-category-btn" onclick="openAddCategoryModal()">
@@ -847,11 +911,11 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <span>View Payments</span>
                 </div>
-            </div>
-            
-            <div class="menu-item logout-menu-item" onclick="doLogout()">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span>Logout</span>
+                
+                <div class="menu-item" data-tab="logout" style="margin-top: 20px; background: rgba(220,38,38,0.2);">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="20" height="20"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    <span>Logout</span>
+                </div>
             </div>
         </div>
         
@@ -909,6 +973,55 @@
                 </div>
             </div>
             
+            <!-- PAYMENT FORM EDITOR TAB -->
+            <div id="form-editor" class="tab-content">
+                <div class="form-editor-container">
+                    <div class="preview-header" style="margin-bottom: 20px;">
+                        <h3>✏️ Payment Form Editor</h3>
+                        <p style="font-size:12px; color:#666;">Click on any element to edit its style (bold, color, etc.)</p>
+                    </div>
+                    
+                    <div class="form-preview" id="formPreview">
+                        <!-- Payment form preview will be loaded here -->
+                    </div>
+                    
+                    <div class="form-controls" id="styleControls" style="display: none;">
+                        <h4 style="margin-bottom: 15px;">🎨 Style Editor</h4>
+                        <div class="style-control">
+                            <label>Element:</label>
+                            <span id="selectedElementName" style="font-weight: 600;">None selected</span>
+                        </div>
+                        <div class="style-control">
+                            <label>Font Weight:</label>
+                            <select id="fontWeightSelect">
+                                <option value="normal">Normal</option>
+                                <option value="500">Medium</option>
+                                <option value="600">Semi Bold</option>
+                                <option value="700">Bold</option>
+                                <option value="800">Extra Bold</option>
+                            </select>
+                            <button onclick="applyFontWeight()">Apply Bold</button>
+                        </div>
+                        <div class="style-control">
+                            <label>Text Color:</label>
+                            <input type="color" id="textColorInput" value="#000000">
+                            <button onclick="applyTextColor()">Apply Color</button>
+                        </div>
+                        <div class="style-control">
+                            <label>Background Color:</label>
+                            <input type="color" id="bgColorInput" value="#ffffff">
+                            <button onclick="applyBgColor()">Apply BG Color</button>
+                        </div>
+                        <div class="style-control">
+                            <label>Button Color:</label>
+                            <input type="color" id="btnColorInput" value="#054c0f">
+                            <button onclick="applyBtnColor()">Apply Button Color</button>
+                        </div>
+                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save Form Styles</button>
+                    </div>
+                </div>
+            </div>
+            
             <div id="payment-editor" class="tab-content">
                 <div class="category-items-container">
                     <div class="category-items-header">
@@ -925,16 +1038,19 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    </table>
+                    \dash
                 </div>
             </div>
             
             <div id="view-payments" class="tab-content">
                 <div class="table-container">
                     <div class="table-header"><h3>💰 All Payment Records</h3></div>
-                    <table class="items-table">
-                       <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Payment Code</th><th>Full Name</th><th>Phone</th><th>Email</th><th>Receipt</th><th>Actions</th></tr></thead>
-                    </table>
+                    <div style="overflow-x: auto;">
+                        <table class="items-table" id="paymentsTable">
+                            <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Receipt</th><th>Actions</th></tr></thead>
+                            <tbody id="paymentsTableBody"></tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -986,6 +1102,7 @@
     </div>
 
     <script>
+// ============ SUPABASE CONFIGURATION ============
 const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
 let necoSupabase = null;
@@ -998,6 +1115,18 @@ let selectedCategoryId = null;
 let currentEditingItemId = null;
 let currentEditingKey = null;
 let pinExpiryInterval = null;
+
+// Form styles stored in Supabase
+let formStyles = {
+    itemNameBold: false,
+    itemNameColor: '#000000',
+    labelBold: false,
+    labelColor: '#374151',
+    buttonBgColor: '#054c0f',
+    buttonTextColor: '#ffffff',
+    inputBgColor: '#f2f2f2',
+    inputBorderColor: '#e2e8f0'
+};
 
 let homeContent = {
     heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -1041,6 +1170,7 @@ function doLogin() {
         initDashboard();
         startPinExpiryChecker();
         loadWhatsAppSettings();
+        loadFormStyles();
     } else {
         const errorMsg = document.getElementById('errorMsg');
         errorMsg.textContent = 'Invalid username or password';
@@ -1063,6 +1193,7 @@ if (localStorage.getItem('adminLoggedIn') === 'true') {
     initDashboard();
     startPinExpiryChecker();
     loadWhatsAppSettings();
+    loadFormStyles();
 }
 
 function getTimeRemaining(pin) {
@@ -1145,6 +1276,7 @@ async function loadAllData() {
         renderPayments();
         loadHomePreview();
         renderCategoriesList();
+        loadFormPreview();
         
         if (currentCategories.length > 0 && !selectedCategoryId) {
             selectedCategoryId = currentCategories[0].id;
@@ -1411,19 +1543,15 @@ function renderPayments() {
     const tbody = document.getElementById('paymentsTableBody');
     if (!tbody) return;
     if (currentPayments.length === 0) { 
-        tbody.innerHTML = '<tr><td colspan="9" style="text-align:center">No payments recorded yet</td></tr>'; 
+        tbody.innerHTML = '<tr><td colspan="5" style="text-align:center">No payments recorded yet</td></tr>'; 
         return; 
     }
     let html = '';
     for (let p of currentPayments) {
         html += `<tr>
             <td>${new Date(p.created_at).toLocaleDateString()}</td>
-            <td>${escapeHtml(p.item_name)}</td>
+            <td style="font-weight:500;">${escapeHtml(p.item_name)}</td>
             <td>₦${Number(p.amount).toLocaleString()}</td>
-            <td><code>${escapeHtml(p.payment_code)}</code></td>
-            <td>${escapeHtml(p.full_name)}</td>
-            <td>${escapeHtml(p.phone)}</td>
-            <td>${escapeHtml(p.email)}</td>
             <td>${p.receipt_url ? `<a href="${p.receipt_url}" target="_blank" style="color:#054c0f;">View Receipt</a>` : 'No receipt'}</td>
             <td><button class="delete-btn" onclick="deletePayment('${p.id}')">Delete</button></td>
         </tr>`;
@@ -1547,6 +1675,164 @@ async function saveHomeChanges() {
     }
 }
 
+// ============ PAYMENT FORM EDITOR FUNCTIONS ============
+async function loadFormStyles() {
+    try {
+        const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
+        if (error) console.error('Load form styles error:', error);
+        if (data) {
+            formStyles = data;
+        } else {
+            await necoSupabase.from('form_styles').insert({
+                id: 1,
+                item_name_bold: false,
+                item_name_color: '#000000',
+                label_bold: false,
+                label_color: '#374151',
+                button_bg_color: '#054c0f',
+                button_text_color: '#ffffff',
+                input_bg_color: '#f2f2f2',
+                input_border_color: '#e2e8f0'
+            });
+        }
+        loadFormPreview();
+    } catch (err) {
+        console.log('Error loading form styles:', err);
+    }
+}
+
+function loadFormPreview() {
+    const container = document.getElementById('formPreview');
+    if (!container) return;
+    
+    const itemNameStyle = formStyles.item_name_bold ? 'font-weight: 700;' : 'font-weight: normal;';
+    const labelStyle = formStyles.label_bold ? 'font-weight: 700;' : 'font-weight: 500;';
+    
+    container.innerHTML = `
+        <div style="padding: 20px;">
+            <div style="margin-bottom: 15px;">
+                <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
+                <p id="previewItemName" style="font-size: 18px; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.item_name_color}; ${itemNameStyle} margin-top: 5px;">Four Figure Table</p>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
+                <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <div style="margin-bottom: 20px;">
+                <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
+                <div style="margin-bottom: 15px;">
+                    <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
+                    <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
+                        <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
+                        <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
+                </div>
+                <div>
+                    <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
+                    <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                </div>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <div>
+                <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
+                        <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Currency</label>
+                        <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <option>NGN</option>
+                            <option>USD</option>
+                        </select>
+                    </div>
+                    <div style="flex: 1;">
+                        <label style="display: block; font-size: 14px; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
+                        <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                    </div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
+                    <button style="flex: 2; padding: 12px; background: ${formStyles.button_bg_color}; color: ${formStyles.button_text_color}; border: none; border-radius: 8px; cursor: pointer;">Proceed</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+let selectedElement = null;
+
+function applyFontWeight() {
+    const weight = document.getElementById('fontWeightSelect').value;
+    if (selectedElement === 'itemName') {
+        formStyles.item_name_bold = weight === '700' || weight === 'bold' || weight === '800';
+        document.getElementById('previewItemName').style.fontWeight = formStyles.item_name_bold ? '700' : '400';
+    } else if (selectedElement === 'label') {
+        formStyles.label_bold = weight === '700' || weight === 'bold' || weight === '800';
+        loadFormPreview();
+    }
+}
+
+function applyTextColor() {
+    const color = document.getElementById('textColorInput').value;
+    if (selectedElement === 'itemName') {
+        formStyles.item_name_color = color;
+        document.getElementById('previewItemName').style.color = color;
+    } else if (selectedElement === 'label') {
+        formStyles.label_color = color;
+        loadFormPreview();
+    }
+}
+
+function applyBgColor() {
+    const color = document.getElementById('bgColorInput').value;
+    formStyles.input_bg_color = color;
+    loadFormPreview();
+}
+
+function applyBtnColor() {
+    const color = document.getElementById('btnColorInput').value;
+    formStyles.button_bg_color = color;
+    loadFormPreview();
+}
+
+async function saveFormStyles() {
+    try {
+        const { error } = await necoSupabase.from('form_styles').upsert({
+            id: 1,
+            item_name_bold: formStyles.item_name_bold,
+            item_name_color: formStyles.item_name_color,
+            label_bold: formStyles.label_bold,
+            label_color: formStyles.label_color,
+            button_bg_color: formStyles.button_bg_color,
+            button_text_color: formStyles.button_text_color,
+            input_bg_color: formStyles.input_bg_color,
+            input_border_color: formStyles.input_border_color
+        });
+        if (error) throw error;
+        alert('✅ Form styles saved to database! They will reflect on the payment page.');
+        triggerSync();
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
+}
+
+// ============ WHATSAPP SETTINGS ============
 async function loadWhatsAppSettings() {
     try {
         const { data, error } = await necoSupabase.from('settings').select('admin_whatsapp', 'whatsapp_telegram_link').maybeSingle();
@@ -1623,6 +1909,7 @@ function showTab(tabId, title) {
     if (tabId === 'dashboard') updateDashboard();
     if (tabId === 'payment-editor') renderItemsForCategory();
     if (tabId === 'whatsapp-manager') loadWhatsAppSettings();
+    if (tabId === 'form-editor') loadFormPreview();
     closeSidebar();
 }
 
@@ -1637,6 +1924,10 @@ function initDashboard() {
         item.onclick = function(e) {
             e.stopPropagation();
             const tabId = this.getAttribute('data-tab');
+            if (tabId === 'logout') {
+                doLogout();
+                return;
+            }
             const titleSpan = this.querySelector('span');
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
             this.classList.add('active');
