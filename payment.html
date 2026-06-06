@@ -173,6 +173,11 @@
             color: #222222;
         }
         
+        /* FIXED: Account Modal - Shifted 3% to the left */
+        #accountModal .fixed.inset-0.flex.items-center.justify-center {
+            left: -3% !important;
+        }
+        
         #accountModal .account-box {
             max-width: 400px;
             width: 100%;
@@ -182,7 +187,9 @@
             height: auto;
             max-height: 550px;
             overflow-y: auto;
+            margin-left: -3%;
         }
+        
         #accountModal .account-inner {
             padding: 20px 24px;
         }
@@ -215,7 +222,7 @@
             flex: 1;
             word-break: break-word;
         }
-        /* FIXED: Layout for warning row to prevent overlap */
+        /* Fixed: Layout for warning row to prevent overlap */
         #accountModal .warning-timer-row {
             display: flex;
             justify-content: space-between;
@@ -1117,7 +1124,7 @@
         document.getElementById('invoiceModal').style.display = 'block';
     });
     
-    // ============ MARK PIN AND PROCEED - FIXED TO SHOW ACCOUNT DETAILS ============
+    // ============ MARK PIN AND PROCEED - FIXED TIMER ============
     async function markPinAndProceed() {
         const pinCode = currentFormData.paymentCode;
         const loadingModal = document.getElementById('loadingModal');
@@ -1148,22 +1155,11 @@
                     return;
                 }
                 
-                // CRITICAL: PIN status is 'used' - this is CORRECT
-                // We show account details, NOT an error
-                
-                const usedTime = new Date(pinData.used_at);
-                let expiryTime;
-                
-                // Check if used_at is valid
-                if (isNaN(usedTime.getTime())) {
-                    console.error('Invalid used_at date:', pinData.used_at);
-                    // Fallback: set expiry to 30 minutes from now
-                    expiryTime = new Date().getTime() + (30 * 60 * 1000);
-                    console.log('Using fallback expiry time:', new Date(expiryTime));
-                } else {
-                    expiryTime = usedTime.getTime() + (30 * 60 * 1000);
-                    console.log('Expiry time calculated from used_at:', new Date(expiryTime));
-                }
+                // FIXED: Calculate expiry time - 30 minutes from NOW
+                // This ensures timer starts at 30:00
+                const expiryTime = new Date().getTime() + (30 * 60 * 1000);
+                console.log('Timer will expire at:', new Date(expiryTime));
+                console.log('Current time:', new Date());
                 
                 const amount = parseFloat(currentFormData.amount) || 0;
                 const serviceCharge = 50;
@@ -1238,8 +1234,6 @@
             const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
             
             console.log('Countdown - Remaining seconds:', remaining);
-            console.log('Expiry time:', new Date(expiryTime));
-            console.log('Current time:', new Date(now));
             
             if (remaining <= 0) {
                 clearInterval(countdownInterval);
@@ -1438,193 +1432,192 @@
     
     setTimeout(syncPaymentItems, 500);
     window.addEventListener('storage', (e) => { if (e.key === 'neco_sync_timestamp') { syncPaymentItems(); loadSettings(); } });
-// ============ HELPER FUNCTION TO APPLY UPPERCASE WITHOUT AFFECTING BRACKETS ============
-function applySmartUppercase(text) {
-    if (!text) return text;
-    // Check if text contains brackets
-    if (text.includes('(') && text.includes(')')) {
-        // Split the text by brackets
-        return text.replace(/\([^)]*\)/g, function(match) {
-            return match; // Keep bracket content as is
-        }).replace(/[^(]+(?=\(|$)/g, function(match) {
-            return match.toUpperCase(); // Uppercase everything outside brackets
-        });
+    
+    // ============ HELPER FUNCTION TO APPLY UPPERCASE WITHOUT AFFECTING BRACKETS ============
+    function applySmartUppercase(text) {
+        if (!text) return text;
+        // Check if text contains brackets
+        if (text.includes('(') && text.includes(')')) {
+            // Split the text by brackets
+            return text.replace(/\([^)]*\)/g, function(match) {
+                return match; // Keep bracket content as is
+            }).replace(/[^(]+(?=\(|$)/g, function(match) {
+                return match.toUpperCase(); // Uppercase everything outside brackets
+            });
+        }
+        return text.toUpperCase();
     }
-    return text.toUpperCase();
-}
-
-// ============ LOAD FORM STYLES FROM SUPABASE ============
-async function loadFormStyles() {
-    try {
-        const { data, error } = await supabaseClient
-            .from('form_styles')
-            .select('*')
-            .maybeSingle();
-        
-        if (error || !data) {
-            console.log('No form styles found, using defaults');
+    
+    // ============ LOAD FORM STYLES FROM SUPABASE ============
+    async function loadFormStyles() {
+        try {
+            const { data, error } = await supabaseClient
+                .from('form_styles')
+                .select('*')
+                .maybeSingle();
+            
+            if (error || !data) {
+                console.log('No form styles found, using defaults');
+                return null;
+            }
+            
+            return {
+                itemNameText: data.item_name_text,
+                itemNameBold: data.item_name_bold,
+                itemNameSize: data.item_name_size,
+                itemNameColor: data.item_name_color,
+                itemNameUppercase: data.item_name_uppercase,
+                labelBold: data.label_bold,
+                labelSize: data.label_size,
+                labelColor: data.label_color,
+                labelUppercase: data.label_uppercase,
+                buttonText: data.button_text,
+                buttonBgColor: data.button_bg_color,
+                buttonTextColor: data.button_text_color,
+                buttonTextSize: data.button_text_size,
+                buttonTextBold: data.button_text_bold,
+                buttonTextUppercase: data.button_text_uppercase,
+                inputBgColor: data.input_bg_color,
+                inputBorderColor: data.input_border_color
+            };
+        } catch (err) {
+            console.log('Error loading form styles:', err);
             return null;
         }
-        
-        return {
-            itemNameText: data.item_name_text,
-            itemNameBold: data.item_name_bold,
-            itemNameSize: data.item_name_size,
-            itemNameColor: data.item_name_color,
-            itemNameUppercase: data.item_name_uppercase,
-            labelBold: data.label_bold,
-            labelSize: data.label_size,
-            labelColor: data.label_color,
-            labelUppercase: data.label_uppercase,
-            buttonText: data.button_text,
-            buttonBgColor: data.button_bg_color,
-            buttonTextColor: data.button_text_color,
-            buttonTextSize: data.button_text_size,
-            buttonTextBold: data.button_text_bold,
-            buttonTextUppercase: data.button_text_uppercase,
-            inputBgColor: data.input_bg_color,
-            inputBorderColor: data.input_border_color
-        };
-    } catch (err) {
-        console.log('Error loading form styles:', err);
-        return null;
     }
-}
-
-// ============ OPEN PAYMENT MODAL WITH STYLES (FIXED UPPERCASE) ============
-async function openPaymentModal(item) {
-    currentItem = item;
     
-    // Load form styles from Supabase
-    const styles = await loadFormStyles();
-    
-    // FIXED: Use the ACTUAL item name, NOT the saved style text
-    const modalItemName = document.getElementById('modalItemName');
-    if (modalItemName) {
-        // IMPORTANT: Use item.name (the actual clicked item), NOT styles.itemNameText
-        let displayText = item.name;
+    // ============ OPEN PAYMENT MODAL WITH STYLES (FIXED UPPERCASE) ============
+    async function openPaymentModal(item) {
+        currentItem = item;
         
-        // Only apply uppercase if enabled in styles
-        if (styles && styles.itemNameUppercase) {
-            displayText = applySmartUppercase(displayText);
+        // Load form styles from Supabase
+        const styles = await loadFormStyles();
+        
+        // FIXED: Use the ACTUAL item name, NOT the saved style text
+        const modalItemName = document.getElementById('modalItemName');
+        if (modalItemName) {
+            // IMPORTANT: Use item.name (the actual clicked item), NOT styles.itemNameText
+            let displayText = item.name;
+            
+            // Only apply uppercase if enabled in styles
+            if (styles && styles.itemNameUppercase) {
+                displayText = applySmartUppercase(displayText);
+            }
+            modalItemName.innerText = displayText;
+            
+            // Apply styling (bold, size, color) without changing the text content
+            if (styles) {
+                modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
+                modalItemName.style.fontSize = styles.itemNameSize || '18px';
+                modalItemName.style.color = styles.itemNameColor || '#000000';
+            }
         }
-        modalItemName.innerText = displayText;
         
-        // Apply styling (bold, size, color) without changing the text content
+        // Apply Label styles with proper uppercase handling
         if (styles) {
-            modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
-            modalItemName.style.fontSize = styles.itemNameSize || '18px';
-            modalItemName.style.color = styles.itemNameColor || '#000000';
-        }
-    }
-    
-    // Apply Label styles with proper uppercase handling
-    if (styles) {
-        const labels = document.querySelectorAll('#paymentModal label');
-        labels.forEach(label => {
-            let originalText = label.innerText;
-            let displayText = originalText;
+            const labels = document.querySelectorAll('#paymentModal label');
+            labels.forEach(label => {
+                let originalText = label.innerText;
+                let displayText = originalText;
+                
+                if (styles.labelUppercase) {
+                    displayText = applySmartUppercase(originalText);
+                }
+                
+                label.innerText = displayText;
+                label.style.fontWeight = styles.labelBold ? '700' : '500';
+                label.style.fontSize = styles.labelSize || '14px';
+                label.style.color = styles.labelColor || '#374151';
+            });
             
-            if (styles.labelUppercase) {
-                displayText = applySmartUppercase(originalText);
+            // Apply Input styles
+            const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
+            inputs.forEach(input => {
+                input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
+                input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
+            });
+            
+            // Apply Button styles
+            const proceedBtn = document.getElementById('proceedBtn');
+            if (proceedBtn) {
+                proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
+                proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
+                proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
+                proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
+                
+                let buttonText = styles.buttonText || 'Proceed';
+                if (styles.buttonTextUppercase) {
+                    buttonText = buttonText.toUpperCase();
+                }
+                proceedBtn.innerText = buttonText;
             }
             
-            label.innerText = displayText;
-            label.style.fontWeight = styles.labelBold ? '700' : '500';
-            label.style.fontSize = styles.labelSize || '14px';
-            label.style.color = styles.labelColor || '#374151';
-        });
-        
-        // Apply Input styles
-        const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
-        inputs.forEach(input => {
-            input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
-            input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
-        });
-        
-        // Apply Button styles
-        const proceedBtn = document.getElementById('proceedBtn');
-        if (proceedBtn) {
-            proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
-            proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
-            proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
-            proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
-            
-            let buttonText = styles.buttonText || 'Proceed';
-            if (styles.buttonTextUppercase) {
-                buttonText = buttonText.toUpperCase();
+            // Apply WhatsApp link color
+            const whatsappLink = document.getElementById('whatsappLink');
+            if (whatsappLink) {
+                whatsappLink.style.color = styles.labelColor || '#009515';
             }
-            proceedBtn.innerText = buttonText;
         }
         
-        // Apply WhatsApp link color
-        const whatsappLink = document.getElementById('whatsappLink');
-        if (whatsappLink) {
-            whatsappLink.style.color = styles.labelColor || '#009515';
+        // Set amount field
+        const amountInput = document.getElementById('amount');
+        if (item.amount) { 
+            amountInput.value = item.amount; 
+            amountInput.readOnly = true; 
+        } else { 
+            amountInput.value = ''; 
+            amountInput.readOnly = false; 
         }
-    }
-    
-    // Set amount field
-    const amountInput = document.getElementById('amount');
-    if (item.amount) { 
-        amountInput.value = item.amount; 
-        amountInput.readOnly = true; 
-    } else { 
-        amountInput.value = ''; 
-        amountInput.readOnly = false; 
-    }
-    
-    // Set WhatsApp link
-    let whatsappNumber = settings.adminWhatsapp || '2348123456789';
-    let whatsappLink = '';
-    if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
-        whatsappLink = settings.whatsappTelegramLink;
-    } else {
-        whatsappNumber = whatsappNumber.replace(/\+/g, '');
-        whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-    }
-    document.getElementById('whatsappLink').href = whatsappLink;
-    
-    // Reset form fields
-    document.getElementById('paymentCode').value = ''; 
-    document.getElementById('fullName').value = ''; 
-    document.getElementById('phone').value = ''; 
-    document.getElementById('email').value = '';
-    document.getElementById('paymentDescription').value = ''; 
-    document.getElementById('quantity').value = '';
-    document.getElementById('currency').value = 'NGN';
-    
-    // Hide errors
-    document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
-    document.getElementById('proceedBtn').disabled = true;
-    document.getElementById('paymentModal').classList.remove('hidden');
-    
-    // Add event listeners
-    ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-        const element = document.getElementById(id);
-        if (element) {
-            element.removeEventListener('input', checkFormValidation);
-            element.addEventListener('input', checkFormValidation);
-        }
-    });
-}
-
-// ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
-var menuBtn = document.getElementById('mobileMenuBtn');
-var mobileMenuItem = document.getElementById('mobileMenuItem');
-
-if (menuBtn) {
-    menuBtn.onclick = function(e) {
-        e.stopPropagation();
-        if (mobileMenuItem.classList.contains('expanded')) {
-            mobileMenuItem.classList.remove('expanded');
+        
+        // Set WhatsApp link
+        let whatsappNumber = settings.adminWhatsapp || '2348123456789';
+        let whatsappLink = '';
+        if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
+            whatsappLink = settings.whatsappTelegramLink;
         } else {
-            mobileMenuItem.classList.add('expanded');
+            whatsappNumber = whatsappNumber.replace(/\+/g, '');
+            whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
         }
-    };
-}
-
+        document.getElementById('whatsappLink').href = whatsappLink;
+        
+        // Reset form fields
+        document.getElementById('paymentCode').value = ''; 
+        document.getElementById('fullName').value = ''; 
+        document.getElementById('phone').value = ''; 
+        document.getElementById('email').value = '';
+        document.getElementById('paymentDescription').value = ''; 
+        document.getElementById('quantity').value = '';
+        document.getElementById('currency').value = 'NGN';
+        
+        // Hide errors
+        document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+        document.getElementById('proceedBtn').disabled = true;
+        document.getElementById('paymentModal').classList.remove('hidden');
+        
+        // Add event listeners
+        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+            const element = document.getElementById(id);
+            if (element) {
+                element.removeEventListener('input', checkFormValidation);
+                element.addEventListener('input', checkFormValidation);
+            }
+        });
+    }
     
+    // ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
+    var menuBtn = document.getElementById('mobileMenuBtn');
+    var mobileMenuItem = document.getElementById('mobileMenuItem');
+    
+    if (menuBtn) {
+        menuBtn.onclick = function(e) {
+            e.stopPropagation();
+            if (mobileMenuItem.classList.contains('expanded')) {
+                mobileMenuItem.classList.remove('expanded');
+            } else {
+                mobileMenuItem.classList.add('expanded');
+            }
+        };
+    }
 </script>
 </body>
 </html>
