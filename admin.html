@@ -386,6 +386,7 @@
             transition: all 0.2s;
             padding: 8px;
             border-radius: 10px;
+            display: inline-block;
         }
         
         .editable-element:hover {
@@ -467,113 +468,7 @@
             color: white;
         }
         
-        /* Form Editor Styles - Simplified */
-        .form-editor-container {
-            background: white;
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-        }
-        
-        .form-preview {
-            background: #f9fafb;
-            border-radius: 16px;
-            padding: 24px;
-            margin-bottom: 24px;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .form-controls {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            border: 1px solid #e5e7eb;
-        }
-        
-        .editable-text {
-            cursor: pointer;
-            padding: 4px 8px;
-            margin: -4px -8px;
-            border-radius: 8px;
-            transition: all 0.2s;
-            display: inline-block;
-        }
-        
-        .editable-text:hover {
-            background: #fef3c7;
-            outline: 1px solid #f59e0b;
-        }
-        
-        .editable-text.selected {
-            background: #fef3c7;
-            outline: 2px solid #f59e0b;
-        }
-        
-        .quick-style-panel {
-            display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
-            padding: 15px;
-            background: #f0fdf4;
-            border-radius: 12px;
-            margin-bottom: 15px;
-        }
-        
-        .quick-style-panel label {
-            font-weight: 600;
-            color: #054c0f;
-        }
-        
-        .quick-style-panel input, .quick-style-panel select {
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 8px;
-        }
-        
-        .quick-style-panel button {
-            background: #054c0f;
-            color: white;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        
-        @media (max-width: 768px) {
-            .items-table td:last-child {
-                white-space: normal;
-                padding: 12px 8px;
-            }
-            .edit-btn, .delete-btn {
-                margin: 2px;
-                padding: 6px 10px;
-                font-size: 11px;
-                min-width: 60px;
-            }
-            .category-items-header {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-            .items-table th, .items-table td {
-                padding: 10px 8px;
-            }
-            .sidebar {
-                left: -280px;
-                transition: left 0.3s ease;
-                z-index: 100;
-            }
-            .sidebar.open {
-                left: 0;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .menu-toggle {
-                display: block;
-            }
-        }
-        
+        /* Modal Styles */
         .modal {
             display: none;
             position: fixed;
@@ -655,7 +550,7 @@
             color: #374151;
         }
         
-        .neco-form-group input, .neco-form-group select {
+        .neco-form-group input, .neco-form-group select, .neco-form-group textarea {
             width: 100%;
             padding: 12px 16px;
             border: 1px solid #e2e8f0;
@@ -740,6 +635,40 @@
             display: block;
         }
         
+        @media (max-width: 768px) {
+            .items-table td:last-child {
+                white-space: normal;
+                padding: 12px 8px;
+            }
+            .edit-btn, .delete-btn {
+                margin: 2px;
+                padding: 6px 10px;
+                font-size: 11px;
+                min-width: 60px;
+            }
+            .category-items-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .items-table th, .items-table td {
+                padding: 10px 8px;
+            }
+            .sidebar {
+                left: -280px;
+                transition: left 0.3s ease;
+                z-index: 100;
+            }
+            .sidebar.open {
+                left: 0;
+            }
+            .main-content {
+                margin-left: 0;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+        
         .menu-toggle {
             display: none;
             position: fixed;
@@ -814,6 +743,42 @@
             color: #059669;
             word-break: break-all;
             border: 1px solid #e5e7eb;
+        }
+        
+        /* Style Options in Modal */
+        .style-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .style-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .style-option label {
+            font-weight: 500;
+            margin-bottom: 0;
+        }
+        
+        .style-option input {
+            width: auto;
+            padding: 6px 10px;
+        }
+        
+        .uppercase-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .uppercase-checkbox input {
+            width: 18px;
+            height: 18px;
+            margin: 0;
         }
         
         @font-face {
@@ -968,44 +933,20 @@
                 </div>
             </div>
             
-            <!-- PAYMENT FORM EDITOR TAB - SIMPLIFIED WITH WORKING CLICK -->
+            <!-- PAYMENT FORM EDITOR TAB -->
             <div id="form-editor" class="tab-content">
                 <div class="form-editor-container">
                     <div class="preview-header" style="margin-bottom: 20px;">
                         <h3>✏️ Payment Form Editor</h3>
-                        <p style="font-size:12px; color:#666;">Click on any text below to edit its style (Bold, Size, Color)</p>
+                        <p style="font-size:12px; color:#666;">Click on any text to edit (Bold, Uppercase, Color, Size)</p>
+                        <p style="font-size:11px; color:#f59e0b; margin-top:5px;">⚠️ Text in brackets (like www.neco.gov.ng) will NOT be uppercased</p>
                     </div>
                     
-                    <div class="form-preview" id="formPreview">
+                    <div class="form-preview" id="formPreview" style="background: #f9fafb; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb;">
                         <!-- Payment form preview will be loaded here -->
                     </div>
                     
-                    <div class="form-controls" id="styleControls">
-                        <div class="quick-style-panel">
-                            <span>🎨 Currently Editing:</span>
-                            <strong id="selectedElementDisplay" style="color: #054c0f; background: #f0fdf4; padding: 5px 12px; border-radius: 20px;">Click any text above</strong>
-                        </div>
-                        <div class="quick-style-panel" id="stylePanel" style="display: none;">
-                            <label>🔤 Bold:</label>
-                            <button id="boldBtn" style="background: #054c0f; color: white; padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Bold</button>
-                            
-                            <label>📏 Font Size:</label>
-                            <select id="fontSizeSelect">
-                                <option value="12px">Small (12px)</option>
-                                <option value="14px">Normal (14px)</option>
-                                <option value="16px">Medium (16px)</option>
-                                <option value="18px">Large (18px)</option>
-                                <option value="20px">Extra Large (20px)</option>
-                                <option value="24px">Heading (24px)</option>
-                            </select>
-                            
-                            <label>🎨 Color:</label>
-                            <input type="color" id="colorPicker" value="#000000" style="width: 50px; height: 40px;">
-                            
-                            <button id="applyStyleBtn" style="background: #054c0f; color: white; padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer;">Apply Changes</button>
-                        </div>
-                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save All Form Styles to Database</button>
-                    </div>
+                    <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:20px;">💾 Save All Form Styles to Database</button>
                 </div>
             </div>
             
@@ -1025,7 +966,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    \dash
+                    </table>
                 </div>
             </div>
             
@@ -1036,14 +977,62 @@
                         <table class="items-table">
                             <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Receipt</th><th>Actions</th></tr></thead>
                             <tbody id="paymentsTableBody"></tbody>
-                        \dash
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- MODALS -->
+    <!-- EDIT TEXT MODAL - Used for both Home and Form Editor -->
+    <div id="editTextModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="editTextModalTitle">Edit Text</h3>
+                <button onclick="closeModal('editTextModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="neco-form-group">
+                    <label>Text Content</label>
+                    <textarea id="editTextContent" rows="4" placeholder="Enter your text here..."></textarea>
+                </div>
+                
+                <div class="style-options">
+                    <div class="style-option">
+                        <label>Bold:</label>
+                        <input type="checkbox" id="boldCheckbox">
+                    </div>
+                    <div class="style-option">
+                        <label>Font Size:</label>
+                        <select id="fontSizeSelect">
+                            <option value="12px">12px (Small)</option>
+                            <option value="14px">14px (Normal)</option>
+                            <option value="16px">16px (Medium)</option>
+                            <option value="18px">18px (Large)</option>
+                            <option value="20px">20px (Extra Large)</option>
+                            <option value="24px">24px (Heading)</option>
+                            <option value="32px">32px (Title)</option>
+                        </select>
+                    </div>
+                    <div class="style-option">
+                        <label>Color:</label>
+                        <input type="color" id="textColorPicker" value="#000000">
+                    </div>
+                    <div class="style-option uppercase-checkbox">
+                        <label>UPPERCASE:</label>
+                        <input type="checkbox" id="uppercaseCheckbox">
+                        <small style="font-size: 10px; color: #666;">(Text in brackets will remain normal)</small>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal('editTextModal')">Cancel</button>
+                <button class="btn-save" onclick="saveTextEdit()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- ADD CATEGORY MODAL -->
     <div id="addCategoryModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Add New Category</h3><button onclick="closeModal('addCategoryModal')">&times;</button></div>
@@ -1055,14 +1044,7 @@
         </div>
     </div>
     
-    <div id="editTextModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h3>Edit Text</h3><button onclick="closeModal('editTextModal')">&times;</button></div>
-            <div class="modal-body"><textarea id="editTextContent" rows="5" style="width:100%;padding:12px;border:1px solid #e2e8f0;border-radius:12px;"></textarea></div>
-            <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('editTextModal')">Cancel</button><button class="btn-save" onclick="saveTextEdit()">Save</button></div>
-        </div>
-    </div>
-    
+    <!-- ITEM MODAL -->
     <div id="itemModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3 id="itemModalTitle">Add Payment Item</h3><button onclick="closeModal('itemModal')">&times;</button></div>
@@ -1075,6 +1057,7 @@
         </div>
     </div>
     
+    <!-- PIN MODAL -->
     <div id="pinModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h3>Generate Payment PIN</h3><button onclick="closeModal('pinModal')">&times;</button></div>
@@ -1100,27 +1083,34 @@ let currentPaymentPins = [];
 let currentPayments = [];
 let selectedCategoryId = null;
 let currentEditingItemId = null;
-let currentEditingKey = null;
 let pinExpiryInterval = null;
+
+// Current editing variables for modals
+let currentEditingKey = null;
+let currentEditingElement = null;
+let currentEditingType = null;
+let currentEditingOriginalText = null;
 
 // Form styles stored in Supabase
 let formStyles = {
-    item_name_bold: false,
-    item_name_size: '18px',
-    item_name_color: '#000000',
-    label_bold: false,
-    label_size: '14px',
-    label_color: '#374151',
-    button_bg_color: '#054c0f',
-    button_text_color: '#ffffff',
-    button_text_size: '14px',
-    button_text_bold: false,
-    input_bg_color: '#f2f2f2',
-    input_border_color: '#e2e8f0'
+    itemNameText: "Four Figure Table",
+    itemNameBold: false,
+    itemNameSize: '18px',
+    itemNameColor: '#000000',
+    itemNameUppercase: false,
+    labelBold: false,
+    labelSize: '14px',
+    labelColor: '#374151',
+    labelUppercase: false,
+    buttonText: "Proceed",
+    buttonBgColor: '#054c0f',
+    buttonTextColor: '#ffffff',
+    buttonTextSize: '14px',
+    buttonTextBold: false,
+    buttonTextUppercase: false,
+    inputBgColor: '#f2f2f2',
+    inputBorderColor: '#e2e8f0'
 };
-
-let selectedElementType = null;
-let selectedElementId = null;
 
 let homeContent = {
     heroTitle: "NECO Corrections Just Got Faster and Simpler.",
@@ -1553,6 +1543,7 @@ function renderPayments() {
     tbody.innerHTML = html;
 }
 
+// ============ HOME EDITOR FUNCTIONS ============
 function loadHomePreview() {
     const container = document.getElementById('homePreview');
     if (!container) return;
@@ -1565,8 +1556,8 @@ function loadHomePreview() {
                 <div class="bg-[#51B55F] w-fit mx-auto p-3 rounded-full">
                     <img src="https://payments.neco.gov.ng/assets/receipt.92ed528e.svg" alt="" style="width: 32px; height: 32px;">
                 </div>
-                <p class="font-semibold mt-5 editable-element" onclick="openTextEditor('step_${i}_title')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
-                <p class="mt-5 text-xs editable-element" onclick="openTextEditor('step_${i}_desc')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
+                <p class="font-semibold mt-5 editable-element" onclick="openHomeTextEditor('step_${i}_title', '${escapeHtml(step.title)}')" style="cursor:pointer; font-weight: 600;">${escapeHtml(step.title)}</p>
+                <p class="mt-5 text-xs editable-element" onclick="openHomeTextEditor('step_${i}_desc', '${escapeHtml(step.description)}')" style="cursor:pointer; font-size: 0.75rem; color: #4e4e4e;">${escapeHtml(step.description)}</p>
             </div>
         `;
     }
@@ -1578,9 +1569,9 @@ function loadHomePreview() {
                     <div style="flex: 1;">
                         <div style="display: flex; background: #f5fbf5; width: fit-content; gap: 0.5rem; border-radius: 9999px; align-items: center; padding: 0.5rem;">
                             <p style="background: #009515; color: #f2fff4; border-radius: 9999px; padding: 0.25rem 0.75rem; font-size: 0.75rem;">Note</p>
-                            <p class="editable-element" onclick="openTextEditor('heroNote')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
+                            <p class="editable-element" onclick="openHomeTextEditor('heroNote', '${escapeHtml(homeContent.heroNote)}')" style="cursor:pointer; font-size: 0.75rem; color: #009515; padding-right: 0.75rem;">${escapeHtml(homeContent.heroNote)}</p>
                         </div>
-                        <h1 class="editable-element" onclick="openTextEditor('heroTitle')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
+                        <h1 class="editable-element" onclick="openHomeTextEditor('heroTitle', '${escapeHtml(homeContent.heroTitle)}')" style="cursor:pointer; font-size: 3rem; font-family: 'CircularStdBold', sans-serif; margin: 1.25rem 0; letter-spacing: -0.025em;">${escapeHtml(homeContent.heroTitle)}</h1>
                         <div style="margin-top: 1.75rem;">
                             <button style="background: #16a34a; color: white; padding: 0.75rem 1.25rem; border-radius: 0.25rem; border: none; cursor: default;">Make payment</button>
                         </div>
@@ -1605,9 +1596,9 @@ function loadHomePreview() {
                 </div>
                 <section style="padding: 2.5rem 0;">
                     <div style="background-image: url('https://payments.neco.gov.ng/assets/images/group.png'); height: 10rem; display: flex; align-items: center; background-size: contain; background-repeat: no-repeat;">
-                        <p class="editable-element" onclick="openTextEditor('howItWorksTitle')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
+                        <p class="editable-element" onclick="openHomeTextEditor('howItWorksTitle', '${escapeHtml(homeContent.howItWorksTitle)}')" style="cursor:pointer; font-size: 1.875rem; font-family: 'CircularStdBold', sans-serif;">${escapeHtml(homeContent.howItWorksTitle)}</p>
                     </div>
-                    <p class="editable-element" onclick="openTextEditor('footerNote')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
+                    <p class="editable-element" onclick="openHomeTextEditor('footerNote', '${escapeHtml(homeContent.footerNote)}')" style="cursor:pointer; font-size: 0.75rem; margin-top: 1.25rem; color: #4e4e4e; max-width: 50%;">${homeContent.footerNote}</p>
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 2.5rem;">
                         ${stepsHtml}
                     </div>
@@ -1617,37 +1608,310 @@ function loadHomePreview() {
     `;
 }
 
-function openTextEditor(key) {
+function openHomeTextEditor(key, currentValue) {
     currentEditingKey = key;
-    let val = '';
-    if (key === 'heroTitle') val = homeContent.heroTitle;
-    else if (key === 'heroNote') val = homeContent.heroNote;
-    else if (key === 'howItWorksTitle') val = homeContent.howItWorksTitle;
-    else if (key === 'footerNote') val = homeContent.footerNote;
-    else if (key.startsWith('step_')) {
-        const parts = key.split('_');
-        const idx = parseInt(parts[1]);
-        if (parts[2] === 'title') val = homeContent.steps[idx].title;
-        else if (parts[2] === 'desc') val = homeContent.steps[idx].description;
-    }
-    document.getElementById('editTextContent').value = val;
+    document.getElementById('editTextModalTitle').innerText = 'Edit Home Page Text';
+    document.getElementById('editTextContent').value = currentValue;
+    document.getElementById('boldCheckbox').checked = false;
+    document.getElementById('fontSizeSelect').value = '14px';
+    document.getElementById('textColorPicker').value = '#000000';
+    document.getElementById('uppercaseCheckbox').checked = false;
     document.getElementById('editTextModal').style.display = 'flex';
 }
 
-async function saveTextEdit() {
-    const newVal = document.getElementById('editTextContent').value;
-    if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newVal;
-    else if (currentEditingKey === 'heroNote') homeContent.heroNote = newVal;
-    else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newVal;
-    else if (currentEditingKey === 'footerNote') homeContent.footerNote = newVal;
-    else if (currentEditingKey.startsWith('step_')) {
-        const parts = currentEditingKey.split('_');
-        const idx = parseInt(parts[1]);
-        if (parts[2] === 'title') homeContent.steps[idx].title = newVal;
-        else if (parts[2] === 'desc') homeContent.steps[idx].description = newVal;
+// ============ PAYMENT FORM EDITOR FUNCTIONS ============
+async function loadFormStyles() {
+    try {
+        const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
+        if (error) console.error('Load form styles error:', error);
+        if (data) {
+            formStyles = {
+                itemNameText: data.item_name_text || "Four Figure Table",
+                itemNameBold: data.item_name_bold || false,
+                itemNameSize: data.item_name_size || '18px',
+                itemNameColor: data.item_name_color || '#000000',
+                itemNameUppercase: data.item_name_uppercase || false,
+                labelBold: data.label_bold || false,
+                labelSize: data.label_size || '14px',
+                labelColor: data.label_color || '#374151',
+                labelUppercase: data.label_uppercase || false,
+                buttonText: data.button_text || "Proceed",
+                buttonBgColor: data.button_bg_color || '#054c0f',
+                buttonTextColor: data.button_text_color || '#ffffff',
+                buttonTextSize: data.button_text_size || '14px',
+                buttonTextBold: data.button_text_bold || false,
+                buttonTextUppercase: data.button_text_uppercase || false,
+                inputBgColor: data.input_bg_color || '#f2f2f2',
+                inputBorderColor: data.input_border_color || '#e2e8f0'
+            };
+        } else {
+            await necoSupabase.from('form_styles').insert({
+                id: 1,
+                item_name_text: "Four Figure Table",
+                item_name_bold: false,
+                item_name_size: '18px',
+                item_name_color: '#000000',
+                item_name_uppercase: false,
+                label_bold: false,
+                label_size: '14px',
+                label_color: '#374151',
+                label_uppercase: false,
+                button_text: "Proceed",
+                button_bg_color: '#054c0f',
+                button_text_color: '#ffffff',
+                button_text_size: '14px',
+                button_text_bold: false,
+                button_text_uppercase: false,
+                input_bg_color: '#f2f2f2',
+                input_border_color: '#e2e8f0'
+            });
+        }
+        loadFormPreview();
+    } catch (err) {
+        console.log('Error loading form styles:', err);
     }
-    closeModal('editTextModal');
-    loadHomePreview();
+}
+
+function openFormTextEditor(type, currentValue) {
+    currentEditingType = type;
+    document.getElementById('editTextModalTitle').innerText = `Edit ${type === 'itemName' ? 'Item Name' : type === 'button' ? 'Button Text' : 'Form Label'}`;
+    document.getElementById('editTextContent').value = currentValue;
+    
+    // Set current style values
+    if (type === 'itemName') {
+        document.getElementById('boldCheckbox').checked = formStyles.itemNameBold;
+        document.getElementById('fontSizeSelect').value = formStyles.itemNameSize;
+        document.getElementById('textColorPicker').value = formStyles.itemNameColor;
+        document.getElementById('uppercaseCheckbox').checked = formStyles.itemNameUppercase;
+    } else if (type === 'button') {
+        document.getElementById('boldCheckbox').checked = formStyles.buttonTextBold;
+        document.getElementById('fontSizeSelect').value = formStyles.buttonTextSize;
+        document.getElementById('textColorPicker').value = formStyles.buttonTextColor;
+        document.getElementById('uppercaseCheckbox').checked = formStyles.buttonTextUppercase;
+    } else {
+        document.getElementById('boldCheckbox').checked = formStyles.labelBold;
+        document.getElementById('fontSizeSelect').value = formStyles.labelSize;
+        document.getElementById('textColorPicker').value = formStyles.labelColor;
+        document.getElementById('uppercaseCheckbox').checked = formStyles.labelUppercase;
+    }
+    
+    document.getElementById('editTextModal').style.display = 'flex';
+}
+
+function saveTextEdit() {
+    const newText = document.getElementById('editTextContent').value;
+    const isBold = document.getElementById('boldCheckbox').checked;
+    const fontSize = document.getElementById('fontSizeSelect').value;
+    const textColor = document.getElementById('textColorPicker').value;
+    const isUppercase = document.getElementById('uppercaseCheckbox').checked;
+    
+    if (currentEditingKey) {
+        // Home Editor save
+        if (currentEditingKey === 'heroTitle') homeContent.heroTitle = newText;
+        else if (currentEditingKey === 'heroNote') homeContent.heroNote = newText;
+        else if (currentEditingKey === 'howItWorksTitle') homeContent.howItWorksTitle = newText;
+        else if (currentEditingKey === 'footerNote') homeContent.footerNote = newText;
+        else if (currentEditingKey.startsWith('step_')) {
+            const parts = currentEditingKey.split('_');
+            const idx = parseInt(parts[1]);
+            if (parts[2] === 'title') homeContent.steps[idx].title = newText;
+            else if (parts[2] === 'desc') homeContent.steps[idx].description = newText;
+        }
+        loadHomePreview();
+        closeModal('editTextModal');
+    } else if (currentEditingType) {
+        // Form Editor save
+        if (currentEditingType === 'itemName') {
+            formStyles.itemNameText = newText;
+            formStyles.itemNameBold = isBold;
+            formStyles.itemNameSize = fontSize;
+            formStyles.itemNameColor = textColor;
+            formStyles.itemNameUppercase = isUppercase;
+        } else if (currentEditingType === 'button') {
+            formStyles.buttonText = newText;
+            formStyles.buttonTextBold = isBold;
+            formStyles.buttonTextSize = fontSize;
+            formStyles.buttonTextColor = textColor;
+            formStyles.buttonTextUppercase = isUppercase;
+        } else {
+            formStyles.labelBold = isBold;
+            formStyles.labelSize = fontSize;
+            formStyles.labelColor = textColor;
+            formStyles.labelUppercase = isUppercase;
+        }
+        loadFormPreview();
+        closeModal('editTextModal');
+    }
+}
+
+function loadFormPreview() {
+    const container = document.getElementById('formPreview');
+    if (!container) return;
+    
+    // Apply styles with uppercase handling (brackets content remains normal)
+    function applyTextStyle(text, isUppercase, isBold, size, color) {
+        let styledText = text;
+        if (isUppercase) {
+            // Check if text contains brackets - don't uppercase bracket content
+            if (text.includes('(') && text.includes(')')) {
+                styledText = text.replace(/\([^)]*\)/g, function(match) {
+                    return match;
+                });
+                // Uppercase the parts outside brackets
+                styledText = styledText.replace(/[^(]+(?=\(|$)/g, function(match) {
+                    return match.toUpperCase();
+                });
+            } else {
+                styledText = text.toUpperCase();
+            }
+        }
+        return `<span style="font-weight: ${isBold ? '700' : '500'}; font-size: ${size}; color: ${color};">${escapeHtml(styledText)}</span>`;
+    }
+    
+    const itemNameHtml = applyTextStyle(formStyles.itemNameText, formStyles.itemNameUppercase, formStyles.itemNameBold, formStyles.itemNameSize, formStyles.itemNameColor);
+    const labelStyle = `font-weight: ${formStyles.labelBold ? '700' : '500'}; font-size: ${formStyles.labelSize}; color: ${formStyles.labelColor}; ${formStyles.labelUppercase ? 'text-transform: uppercase;' : ''}`;
+    const buttonStyle = `font-weight: ${formStyles.buttonTextBold ? '700' : '500'}; font-size: ${formStyles.buttonTextSize}; color: ${formStyles.buttonTextColor}; ${formStyles.buttonTextUppercase ? 'text-transform: uppercase;' : ''}`;
+    
+    container.innerHTML = `
+        <div style="padding: 20px;">
+            <!-- Item Name -->
+            <div style="margin-bottom: 15px;">
+                <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
+                <div class="editable-element" onclick="openFormTextEditor('itemName', '${escapeHtml(formStyles.itemNameText)}')" style="display: inline-block; cursor: pointer;">
+                    ${itemNameHtml}
+                </div>
+            </div>
+            
+            <!-- Payment Code Section -->
+            <div style="margin-bottom: 20px;">
+                <div class="editable-element" onclick="openFormTextEditor('label', 'Confirm payment code')" style="cursor: pointer; display: inline-block;">
+                    <label style="${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
+                </div>
+                <div>
+                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                </div>
+                <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <!-- Payer Information -->
+            <div style="margin-bottom: 20px;">
+                <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
+                
+                <div style="margin-bottom: 15px;">
+                    <div class="editable-element" onclick="openFormTextEditor('label', 'Full name')" style="cursor: pointer; display: inline-block;">
+                        <label style="${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'Phone number')" style="cursor: pointer; display: inline-block;">
+                            <label style="${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'Email')" style="cursor: pointer; display: inline-block;">
+                            <label style="${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <div class="editable-element" onclick="openFormTextEditor('label', 'Description')" style="cursor: pointer; display: inline-block;">
+                        <label style="${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
+                    </div>
+                    <div>
+                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                    </div>
+                </div>
+            </div>
+            
+            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
+            
+            <!-- Payment Information -->
+            <div>
+                <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
+                
+                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'Amount')" style="cursor: pointer; display: inline-block;">
+                            <label style="${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'Currency')" style="cursor: pointer; display: inline-block;">
+                            <label style="${labelStyle} margin-bottom: 8px;">Currency</label>
+                        </div>
+                        <div>
+                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                                <option>NGN</option>
+                                <option>USD</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="flex: 1;">
+                        <div class="editable-element" onclick="openFormTextEditor('label', 'Quantity')" style="cursor: pointer; display: inline-block;">
+                            <label style="${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
+                        </div>
+                        <div>
+                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="display: flex; gap: 15px; margin-top: 20px;">
+                    <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
+                    <div class="editable-element" onclick="openFormTextEditor('button', '${escapeHtml(formStyles.buttonText)}')" style="flex: 2; cursor: pointer;">
+                        <button id="previewButton" style="width: 100%; padding: 12px; background: ${formStyles.buttonBgColor}; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">${escapeHtml(formStyles.buttonText)}</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+async function saveFormStyles() {
+    try {
+        const { error } = await necoSupabase.from('form_styles').upsert({
+            id: 1,
+            item_name_text: formStyles.itemNameText,
+            item_name_bold: formStyles.itemNameBold,
+            item_name_size: formStyles.itemNameSize,
+            item_name_color: formStyles.itemNameColor,
+            item_name_uppercase: formStyles.itemNameUppercase,
+            label_bold: formStyles.labelBold,
+            label_size: formStyles.labelSize,
+            label_color: formStyles.labelColor,
+            label_uppercase: formStyles.labelUppercase,
+            button_text: formStyles.buttonText,
+            button_bg_color: formStyles.buttonBgColor,
+            button_text_color: formStyles.buttonTextColor,
+            button_text_size: formStyles.buttonTextSize,
+            button_text_bold: formStyles.buttonTextBold,
+            button_text_uppercase: formStyles.buttonTextUppercase,
+            input_bg_color: formStyles.inputBgColor,
+            input_border_color: formStyles.inputBorderColor
+        });
+        if (error) throw error;
+        alert('✅ Form styles saved to database! They will reflect on the payment page.');
+        triggerSync();
+    } catch (err) {
+        alert('Error: ' + err.message);
+    }
 }
 
 async function saveHomeChanges() {
@@ -1666,354 +1930,6 @@ async function saveHomeChanges() {
     } catch (err) { 
         alert('Error: ' + err.message);
         console.error('Save home error:', err);
-    }
-}
-
-// ============ PAYMENT FORM EDITOR FUNCTIONS - WORKING CLICK ============
-async function loadFormStyles() {
-    try {
-        const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
-        if (error) console.error('Load form styles error:', error);
-        if (data) {
-            formStyles = {
-                item_name_bold: data.item_name_bold || false,
-                item_name_size: data.item_name_size || '18px',
-                item_name_color: data.item_name_color || '#000000',
-                label_bold: data.label_bold || false,
-                label_size: data.label_size || '14px',
-                label_color: data.label_color || '#374151',
-                button_bg_color: data.button_bg_color || '#054c0f',
-                button_text_color: data.button_text_color || '#ffffff',
-                button_text_size: data.button_text_size || '14px',
-                button_text_bold: data.button_text_bold || false,
-                input_bg_color: data.input_bg_color || '#f2f2f2',
-                input_border_color: data.input_border_color || '#e2e8f0'
-            };
-        } else {
-            await necoSupabase.from('form_styles').insert({
-                id: 1,
-                item_name_bold: false,
-                item_name_size: '18px',
-                item_name_color: '#000000',
-                label_bold: false,
-                label_size: '14px',
-                label_color: '#374151',
-                button_bg_color: '#054c0f',
-                button_text_color: '#ffffff',
-                button_text_size: '14px',
-                button_text_bold: false,
-                input_bg_color: '#f2f2f2',
-                input_border_color: '#e2e8f0'
-            });
-        }
-        loadFormPreview();
-    } catch (err) {
-        console.log('Error loading form styles:', err);
-    }
-}
-
-// Global variable to track current editing element
-let currentEditingElement = null;
-let currentEditingType = null;
-
-function selectFormElement(element, type) {
-    // Remove selected class from all editable elements
-    document.querySelectorAll('.editable-text').forEach(el => {
-        el.classList.remove('selected');
-    });
-    
-    // Add selected class to clicked element
-    element.classList.add('selected');
-    
-    // Store reference to current editing element
-    currentEditingElement = element;
-    currentEditingType = type;
-    
-    // Show style panel
-    document.getElementById('stylePanel').style.display = 'flex';
-    
-    // Update display text
-    const elementNames = {
-        'itemName': 'Item Name',
-        'label': 'Form Label',
-        'button': 'Proceed Button'
-    };
-    document.getElementById('selectedElementDisplay').innerHTML = elementNames[type] || type;
-    
-    // Set current values in controls based on type
-    if (type === 'itemName') {
-        document.getElementById('fontSizeSelect').value = formStyles.item_name_size;
-        document.getElementById('colorPicker').value = formStyles.item_name_color;
-    } else if (type === 'label') {
-        document.getElementById('fontSizeSelect').value = formStyles.label_size;
-        document.getElementById('colorPicker').value = formStyles.label_color;
-    } else if (type === 'button') {
-        document.getElementById('fontSizeSelect').value = formStyles.button_text_size;
-        document.getElementById('colorPicker').value = formStyles.button_text_color;
-    }
-}
-
-function loadFormPreview() {
-    const container = document.getElementById('formPreview');
-    if (!container) return;
-    
-    const itemNameStyle = formStyles.item_name_bold ? 'font-weight: 700;' : 'font-weight: 500;';
-    const labelStyle = formStyles.label_bold ? 'font-weight: 700;' : 'font-weight: 500;';
-    const buttonStyle = formStyles.button_text_bold ? 'font-weight: 700;' : 'font-weight: 500;';
-    
-    container.innerHTML = `
-        <div style="padding: 20px;">
-            <!-- Item Name -->
-            <div style="margin-bottom: 15px;">
-                <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
-                <div class="editable-text" id="itemNameElement" style="display: inline-block; cursor: pointer;" onclick="selectFormElement(this, 'itemName')">
-                    <p style="font-size: ${formStyles.item_name_size}; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.item_name_color}; ${itemNameStyle} margin: 0;">Four Figure Table</p>
-                </div>
-            </div>
-            
-            <!-- Payment Code Section -->
-            <div style="margin-bottom: 20px;">
-                <div class="editable-text" id="labelElement1" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                    <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
-                </div>
-                <div onclick="event.stopPropagation()">
-                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                </div>
-                <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
-            </div>
-            
-            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
-            
-            <!-- Payer Information -->
-            <div style="margin-bottom: 20px;">
-                <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
-                
-                <div style="margin-bottom: 15px;">
-                    <div class="editable-text" id="labelElement2" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                        <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
-                    </div>
-                    <div onclick="event.stopPropagation()">
-                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
-                        <div class="editable-text" id="labelElement3" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
-                        </div>
-                        <div onclick="event.stopPropagation()">
-                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                        </div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div class="editable-text" id="labelElement4" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
-                        </div>
-                        <div onclick="event.stopPropagation()">
-                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                        </div>
-                    </div>
-                </div>
-                
-                <div>
-                    <div class="editable-text" id="labelElement5" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                        <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
-                    </div>
-                    <div onclick="event.stopPropagation()">
-                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                    </div>
-                </div>
-            </div>
-            
-            <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
-            
-            <!-- Payment Information -->
-            <div>
-                <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
-                
-                <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;">
-                        <div class="editable-text" id="labelElement6" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
-                        </div>
-                        <div onclick="event.stopPropagation()">
-                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                        </div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div class="editable-text" id="labelElement7" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Currency</label>
-                        </div>
-                        <div onclick="event.stopPropagation()">
-                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                                <option>NGN</option>
-                                <option>USD</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div style="flex: 1;">
-                        <div class="editable-text" id="labelElement8" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
-                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
-                        </div>
-                        <div onclick="event.stopPropagation()">
-                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
-                        </div>
-                    </div>
-                </div>
-                
-                <div style="display: flex; gap: 15px; margin-top: 20px;">
-                    <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    <div class="editable-text" id="buttonElement" style="flex: 2; cursor: pointer;" onclick="selectFormElement(this, 'button')">
-                        <button id="previewButton" style="width: 100%; padding: 12px; background: ${formStyles.button_bg_color}; color: ${formStyles.button_text_color}; font-size: ${formStyles.button_text_size}; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">Proceed</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Apply bold to selected element
-document.getElementById('boldBtn')?.addEventListener('click', function() {
-    if (currentEditingType === 'itemName') {
-        formStyles.item_name_bold = !formStyles.item_name_bold;
-        const element = document.getElementById('itemNameElement');
-        if (element) {
-            const p = element.querySelector('p');
-            if (p) p.style.fontWeight = formStyles.item_name_bold ? '700' : '500';
-        }
-    } else if (currentEditingType === 'label') {
-        formStyles.label_bold = !formStyles.label_bold;
-        loadFormPreview();
-        // Re-select after reload
-        setTimeout(() => {
-            document.querySelectorAll('.editable-text').forEach(el => {
-                if (el.id === currentEditingElement?.id) {
-                    selectFormElement(el, currentEditingType);
-                }
-            });
-        }, 50);
-    } else if (currentEditingType === 'button') {
-        formStyles.button_text_bold = !formStyles.button_text_bold;
-        const previewBtn = document.getElementById('previewButton');
-        if (previewBtn) previewBtn.style.fontWeight = formStyles.button_text_bold ? '700' : '500';
-    }
-});
-
-// Apply font size to selected element
-document.getElementById('fontSizeSelect')?.addEventListener('change', function(e) {
-    const size = e.target.value;
-    if (currentEditingType === 'itemName') {
-        formStyles.item_name_size = size;
-        const element = document.getElementById('itemNameElement');
-        if (element) {
-            const p = element.querySelector('p');
-            if (p) p.style.fontSize = size;
-        }
-    } else if (currentEditingType === 'label') {
-        formStyles.label_size = size;
-        loadFormPreview();
-        setTimeout(() => {
-            document.querySelectorAll('.editable-text').forEach(el => {
-                if (el.id === currentEditingElement?.id) {
-                    selectFormElement(el, currentEditingType);
-                }
-            });
-        }, 50);
-    } else if (currentEditingType === 'button') {
-        formStyles.button_text_size = size;
-        const previewBtn = document.getElementById('previewButton');
-        if (previewBtn) previewBtn.style.fontSize = size;
-    }
-});
-
-// Apply color to selected element
-document.getElementById('colorPicker')?.addEventListener('change', function(e) {
-    const color = e.target.value;
-    if (currentEditingType === 'itemName') {
-        formStyles.item_name_color = color;
-        const element = document.getElementById('itemNameElement');
-        if (element) {
-            const p = element.querySelector('p');
-            if (p) p.style.color = color;
-        }
-    } else if (currentEditingType === 'label') {
-        formStyles.label_color = color;
-        loadFormPreview();
-        setTimeout(() => {
-            document.querySelectorAll('.editable-text').forEach(el => {
-                if (el.id === currentEditingElement?.id) {
-                    selectFormElement(el, currentEditingType);
-                }
-            });
-        }, 50);
-    } else if (currentEditingType === 'button') {
-        formStyles.button_text_color = color;
-        const previewBtn = document.getElementById('previewButton');
-        if (previewBtn) previewBtn.style.color = color;
-    }
-});
-
-// Apply all styles at once
-document.getElementById('applyStyleBtn')?.addEventListener('click', function() {
-    const size = document.getElementById('fontSizeSelect').value;
-    const color = document.getElementById('colorPicker').value;
-    
-    if (currentEditingType === 'itemName') {
-        formStyles.item_name_size = size;
-        formStyles.item_name_color = color;
-        const element = document.getElementById('itemNameElement');
-        if (element) {
-            const p = element.querySelector('p');
-            if (p) {
-                p.style.fontSize = size;
-                p.style.color = color;
-            }
-        }
-    } else if (currentEditingType === 'label') {
-        formStyles.label_size = size;
-        formStyles.label_color = color;
-        loadFormPreview();
-        setTimeout(() => {
-            document.querySelectorAll('.editable-text').forEach(el => {
-                if (el.id === currentEditingElement?.id) {
-                    selectFormElement(el, currentEditingType);
-                }
-            });
-        }, 50);
-    } else if (currentEditingType === 'button') {
-        formStyles.button_text_size = size;
-        formStyles.button_text_color = color;
-        const previewBtn = document.getElementById('previewButton');
-        if (previewBtn) {
-            previewBtn.style.fontSize = size;
-            previewBtn.style.color = color;
-        }
-    }
-});
-
-async function saveFormStyles() {
-    try {
-        const { error } = await necoSupabase.from('form_styles').upsert({
-            id: 1,
-            item_name_bold: formStyles.item_name_bold,
-            item_name_size: formStyles.item_name_size,
-            item_name_color: formStyles.item_name_color,
-            label_bold: formStyles.label_bold,
-            label_size: formStyles.label_size,
-            label_color: formStyles.label_color,
-            button_bg_color: formStyles.button_bg_color,
-            button_text_color: formStyles.button_text_color,
-            button_text_size: formStyles.button_text_size,
-            button_text_bold: formStyles.button_text_bold,
-            input_bg_color: formStyles.input_bg_color,
-            input_border_color: formStyles.input_border_color
-        });
-        if (error) throw error;
-        alert('✅ Form styles saved to database! They will reflect on the payment page.');
-        triggerSync();
-    } catch (err) {
-        alert('Error: ' + err.message);
     }
 }
 
