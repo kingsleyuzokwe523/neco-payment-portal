@@ -488,30 +488,25 @@
             border-radius: 16px;
             padding: 20px;
             border: 1px solid #e5e7eb;
-            display: none;
         }
         
-        .form-controls.show {
-            display: block;
-        }
-        
-        .form-element {
-            padding: 8px;
-            margin-bottom: 8px;
-            border-radius: 8px;
+        .editable-text {
             cursor: pointer;
+            padding: 4px 8px;
+            margin: -4px -8px;
+            border-radius: 8px;
             transition: all 0.2s;
-            border: 2px solid transparent;
+            display: inline-block;
         }
         
-        .form-element:hover {
+        .editable-text:hover {
             background: #fef3c7;
-            border-color: #f59e0b;
+            outline: 1px solid #f59e0b;
         }
         
-        .form-element.selected {
+        .editable-text.selected {
             background: #fef3c7;
-            border-color: #f59e0b;
+            outline: 2px solid #f59e0b;
         }
         
         .quick-style-panel {
@@ -530,7 +525,7 @@
             color: #054c0f;
         }
         
-        .quick-style-panel input {
+        .quick-style-panel input, .quick-style-panel select {
             padding: 8px 12px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
@@ -973,12 +968,12 @@
                 </div>
             </div>
             
-            <!-- PAYMENT FORM EDITOR TAB - SIMPLIFIED -->
+            <!-- PAYMENT FORM EDITOR TAB - SIMPLIFIED WITH WORKING CLICK -->
             <div id="form-editor" class="tab-content">
                 <div class="form-editor-container">
                     <div class="preview-header" style="margin-bottom: 20px;">
                         <h3>✏️ Payment Form Editor</h3>
-                        <p style="font-size:12px; color:#666;">Click on any text to edit its style</p>
+                        <p style="font-size:12px; color:#666;">Click on any text below to edit its style (Bold, Size, Color)</p>
                     </div>
                     
                     <div class="form-preview" id="formPreview">
@@ -987,29 +982,29 @@
                     
                     <div class="form-controls" id="styleControls">
                         <div class="quick-style-panel">
-                            <span>🎨 Editing:</span>
-                            <strong id="selectedElementDisplay" style="color: #054c0f;">Click any text above</strong>
+                            <span>🎨 Currently Editing:</span>
+                            <strong id="selectedElementDisplay" style="color: #054c0f; background: #f0fdf4; padding: 5px 12px; border-radius: 20px;">Click any text above</strong>
                         </div>
                         <div class="quick-style-panel" id="stylePanel" style="display: none;">
-                            <label>Bold:</label>
-                            <button id="boldBtn" style="background: #054c0f; color: white; padding: 8px 16px;">B</button>
+                            <label>🔤 Bold:</label>
+                            <button id="boldBtn" style="background: #054c0f; color: white; padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold;">Bold</button>
                             
-                            <label>Font Size:</label>
+                            <label>📏 Font Size:</label>
                             <select id="fontSizeSelect">
-                                <option value="12px">Small</option>
-                                <option value="14px">Normal</option>
-                                <option value="16px">Medium</option>
-                                <option value="18px">Large</option>
-                                <option value="20px">Extra Large</option>
-                                <option value="24px">Heading</option>
+                                <option value="12px">Small (12px)</option>
+                                <option value="14px">Normal (14px)</option>
+                                <option value="16px">Medium (16px)</option>
+                                <option value="18px">Large (18px)</option>
+                                <option value="20px">Extra Large (20px)</option>
+                                <option value="24px">Heading (24px)</option>
                             </select>
                             
-                            <label>Color:</label>
-                            <input type="color" id="colorPicker" value="#000000">
+                            <label>🎨 Color:</label>
+                            <input type="color" id="colorPicker" value="#000000" style="width: 50px; height: 40px;">
                             
-                            <button id="applyStyleBtn" style="background: #054c0f; color: white; padding: 8px 20px;">Apply</button>
+                            <button id="applyStyleBtn" style="background: #054c0f; color: white; padding: 8px 20px; border: none; border-radius: 8px; cursor: pointer;">Apply Changes</button>
                         </div>
-                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save All Form Styles</button>
+                        <button class="add-btn" onclick="saveFormStyles()" style="width:100%; margin-top:15px;">💾 Save All Form Styles to Database</button>
                     </div>
                 </div>
             </div>
@@ -1030,7 +1025,7 @@
                     <table class="items-table">
                         <thead><tr><th>PIN</th><th>Bank Name</th><th>Account Name</th><th>Account Number</th><th>Status</th><th>Created</th><th>Time Remaining</th><th>Actions</th></tr></thead>
                         <tbody id="pinsTableBody"></tbody>
-                    </table>
+                    \dash
                 </div>
             </div>
             
@@ -1041,7 +1036,7 @@
                         <table class="items-table">
                             <thead><tr><th>Date</th><th>Item Name</th><th>Amount</th><th>Receipt</th><th>Actions</th></tr></thead>
                             <tbody id="paymentsTableBody"></tbody>
-                        </table>
+                        \dash
                     </div>
                 </div>
             </div>
@@ -1674,7 +1669,7 @@ async function saveHomeChanges() {
     }
 }
 
-// ============ PAYMENT FORM EDITOR FUNCTIONS - SIMPLIFIED ============
+// ============ PAYMENT FORM EDITOR FUNCTIONS - WORKING CLICK ============
 async function loadFormStyles() {
     try {
         const { data, error } = await necoSupabase.from('form_styles').select('*').maybeSingle();
@@ -1717,20 +1712,22 @@ async function loadFormStyles() {
     }
 }
 
-function selectFormElement(elementType, elementId) {
-    selectedElementType = elementType;
-    selectedElementId = elementId;
-    
-    // Remove selected class from all elements
-    document.querySelectorAll('.form-element').forEach(el => {
+// Global variable to track current editing element
+let currentEditingElement = null;
+let currentEditingType = null;
+
+function selectFormElement(element, type) {
+    // Remove selected class from all editable elements
+    document.querySelectorAll('.editable-text').forEach(el => {
         el.classList.remove('selected');
     });
     
-    // Add selected class to the clicked element
-    const selectedEl = document.getElementById(elementId);
-    if (selectedEl) {
-        selectedEl.classList.add('selected');
-    }
+    // Add selected class to clicked element
+    element.classList.add('selected');
+    
+    // Store reference to current editing element
+    currentEditingElement = element;
+    currentEditingType = type;
     
     // Show style panel
     document.getElementById('stylePanel').style.display = 'flex';
@@ -1741,16 +1738,16 @@ function selectFormElement(elementType, elementId) {
         'label': 'Form Label',
         'button': 'Proceed Button'
     };
-    document.getElementById('selectedElementDisplay').innerHTML = elementNames[elementType] || elementType;
+    document.getElementById('selectedElementDisplay').innerHTML = elementNames[type] || type;
     
-    // Set current values in controls
-    if (elementType === 'itemName') {
+    // Set current values in controls based on type
+    if (type === 'itemName') {
         document.getElementById('fontSizeSelect').value = formStyles.item_name_size;
         document.getElementById('colorPicker').value = formStyles.item_name_color;
-    } else if (elementType === 'label') {
+    } else if (type === 'label') {
         document.getElementById('fontSizeSelect').value = formStyles.label_size;
         document.getElementById('colorPicker').value = formStyles.label_color;
-    } else if (elementType === 'button') {
+    } else if (type === 'button') {
         document.getElementById('fontSizeSelect').value = formStyles.button_text_size;
         document.getElementById('colorPicker').value = formStyles.button_text_color;
     }
@@ -1766,83 +1763,108 @@ function loadFormPreview() {
     
     container.innerHTML = `
         <div style="padding: 20px;">
-            <div style="margin-bottom: 15px;" class="form-element" id="itemNameElement" onclick="selectFormElement('itemName', 'itemNameElement')">
+            <!-- Item Name -->
+            <div style="margin-bottom: 15px;">
                 <p style="font-size: 12px; color: #4e4e4e;">You are making payment for</p>
-                <p style="font-size: ${formStyles.item_name_size}; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.item_name_color}; ${itemNameStyle} margin-top: 5px;">Four Figure Table</p>
+                <div class="editable-text" id="itemNameElement" style="display: inline-block; cursor: pointer;" onclick="selectFormElement(this, 'itemName')">
+                    <p style="font-size: ${formStyles.item_name_size}; font-family: 'CircularStdBold', sans-serif; color: ${formStyles.item_name_color}; ${itemNameStyle} margin: 0;">Four Figure Table</p>
+                </div>
             </div>
             
+            <!-- Payment Code Section -->
             <div style="margin-bottom: 20px;">
-                <div class="form-element" id="labelElement1" onclick="selectFormElement('label', 'labelElement1')">
-                    <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
-                    <div onclick="event.stopPropagation()">
-                        <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
-                    </div>
+                <div class="editable-text" id="labelElement1" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                    <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Confirm payment code <span style="color: #dc2626;">*</span></label>
+                </div>
+                <div onclick="event.stopPropagation()">
+                    <input type="text" placeholder="Enter payment code" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                 </div>
                 <a href="#" style="display: block; text-align: right; font-size: 12px; color: #009515; margin-top: 8px; text-decoration: none;">Click to get payment code from admin</a>
             </div>
             
             <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
             
+            <!-- Payer Information -->
             <div style="margin-bottom: 20px;">
                 <p style="margin-bottom: 15px; font-weight: 500;">Payer's information</p>
-                <div style="margin-bottom: 15px;" class="form-element" id="labelElement2" onclick="selectFormElement('label', 'labelElement2')">
-                    <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
+                
+                <div style="margin-bottom: 15px;">
+                    <div class="editable-text" id="labelElement2" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                        <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Full name <span style="color: #dc2626;">*</span></label>
+                    </div>
                     <div onclick="event.stopPropagation()">
-                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <input type="text" placeholder="John Doe" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                     </div>
                 </div>
+                
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;" class="form-element" id="labelElement3" onclick="selectFormElement('label', 'labelElement3')">
-                        <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
+                    <div style="flex: 1;">
+                        <div class="editable-text" id="labelElement3" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Phone number <span style="color: #dc2626;">*</span></label>
+                        </div>
                         <div onclick="event.stopPropagation()">
-                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <input type="tel" placeholder="08000000000" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                         </div>
                     </div>
-                    <div style="flex: 1;" class="form-element" id="labelElement4" onclick="selectFormElement('label', 'labelElement4')">
-                        <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
+                    <div style="flex: 1;">
+                        <div class="editable-text" id="labelElement4" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Email <span style="color: #dc2626;">*</span></label>
+                        </div>
                         <div onclick="event.stopPropagation()">
-                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <input type="email" placeholder="johndoe@gmail.com" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                         </div>
                     </div>
                 </div>
-                <div class="form-element" id="labelElement5" onclick="selectFormElement('label', 'labelElement5')">
-                    <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
+                
+                <div>
+                    <div class="editable-text" id="labelElement5" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                        <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Description <span style="color: #dc2626;">*</span></label>
+                    </div>
                     <div onclick="event.stopPropagation()">
-                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                        <input type="text" placeholder="Enter description" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                     </div>
                 </div>
             </div>
             
             <div style="height: 1px; background: #e5e7eb; margin: 20px 0;"></div>
             
+            <!-- Payment Information -->
             <div>
                 <p style="margin-bottom: 15px; font-weight: 500;">Payment information</p>
+                
                 <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                    <div style="flex: 1;" class="form-element" id="labelElement6" onclick="selectFormElement('label', 'labelElement6')">
-                        <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
+                    <div style="flex: 1;">
+                        <div class="editable-text" id="labelElement6" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Amount <span style="color: #dc2626;">*</span></label>
+                        </div>
                         <div onclick="event.stopPropagation()">
-                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <input type="text" placeholder="Enter payment amount" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                         </div>
                     </div>
-                    <div style="flex: 1;" class="form-element" id="labelElement7" onclick="selectFormElement('label', 'labelElement7')">
-                        <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Currency</label>
+                    <div style="flex: 1;">
+                        <div class="editable-text" id="labelElement7" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Currency</label>
+                        </div>
                         <div onclick="event.stopPropagation()">
-                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <select style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                                 <option>NGN</option>
                                 <option>USD</option>
                             </select>
                         </div>
                     </div>
-                    <div style="flex: 1;" class="form-element" id="labelElement8" onclick="selectFormElement('label', 'labelElement8')">
-                        <label style="display: block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
+                    <div style="flex: 1;">
+                        <div class="editable-text" id="labelElement8" style="cursor: pointer; display: inline-block;" onclick="selectFormElement(this, 'label')">
+                            <label style="display: inline-block; font-size: ${formStyles.label_size}; color: ${formStyles.label_color}; ${labelStyle} margin-bottom: 8px;">Quantity <span style="color: #dc2626;">*</span></label>
+                        </div>
                         <div onclick="event.stopPropagation()">
-                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color};">
+                            <input type="number" placeholder="Enter quantity" style="width: 100%; padding: 12px; border: 1px solid ${formStyles.input_border_color}; border-radius: 8px; background: ${formStyles.input_bg_color}; margin-top: 5px;">
                         </div>
                     </div>
                 </div>
+                
                 <div style="display: flex; gap: 15px; margin-top: 20px;">
                     <button style="flex: 1; padding: 12px; background: white; border: 1px solid #054c0f; color: #054c0f; border-radius: 8px; cursor: pointer;">Cancel</button>
-                    <div class="form-element" id="buttonElement" onclick="selectFormElement('button', 'buttonElement')" style="flex: 2; padding: 0;">
+                    <div class="editable-text" id="buttonElement" style="flex: 2; cursor: pointer;" onclick="selectFormElement(this, 'button')">
                         <button id="previewButton" style="width: 100%; padding: 12px; background: ${formStyles.button_bg_color}; color: ${formStyles.button_text_color}; font-size: ${formStyles.button_text_size}; ${buttonStyle} border: none; border-radius: 8px; cursor: pointer;">Proceed</button>
                     </div>
                 </div>
@@ -1853,17 +1875,25 @@ function loadFormPreview() {
 
 // Apply bold to selected element
 document.getElementById('boldBtn')?.addEventListener('click', function() {
-    if (selectedElementType === 'itemName') {
+    if (currentEditingType === 'itemName') {
         formStyles.item_name_bold = !formStyles.item_name_bold;
         const element = document.getElementById('itemNameElement');
         if (element) {
-            const p = element.querySelector('p:last-child');
+            const p = element.querySelector('p');
             if (p) p.style.fontWeight = formStyles.item_name_bold ? '700' : '500';
         }
-    } else if (selectedElementType === 'label') {
+    } else if (currentEditingType === 'label') {
         formStyles.label_bold = !formStyles.label_bold;
         loadFormPreview();
-    } else if (selectedElementType === 'button') {
+        // Re-select after reload
+        setTimeout(() => {
+            document.querySelectorAll('.editable-text').forEach(el => {
+                if (el.id === currentEditingElement?.id) {
+                    selectFormElement(el, currentEditingType);
+                }
+            });
+        }, 50);
+    } else if (currentEditingType === 'button') {
         formStyles.button_text_bold = !formStyles.button_text_bold;
         const previewBtn = document.getElementById('previewButton');
         if (previewBtn) previewBtn.style.fontWeight = formStyles.button_text_bold ? '700' : '500';
@@ -1873,17 +1903,24 @@ document.getElementById('boldBtn')?.addEventListener('click', function() {
 // Apply font size to selected element
 document.getElementById('fontSizeSelect')?.addEventListener('change', function(e) {
     const size = e.target.value;
-    if (selectedElementType === 'itemName') {
+    if (currentEditingType === 'itemName') {
         formStyles.item_name_size = size;
         const element = document.getElementById('itemNameElement');
         if (element) {
-            const p = element.querySelector('p:last-child');
+            const p = element.querySelector('p');
             if (p) p.style.fontSize = size;
         }
-    } else if (selectedElementType === 'label') {
+    } else if (currentEditingType === 'label') {
         formStyles.label_size = size;
         loadFormPreview();
-    } else if (selectedElementType === 'button') {
+        setTimeout(() => {
+            document.querySelectorAll('.editable-text').forEach(el => {
+                if (el.id === currentEditingElement?.id) {
+                    selectFormElement(el, currentEditingType);
+                }
+            });
+        }, 50);
+    } else if (currentEditingType === 'button') {
         formStyles.button_text_size = size;
         const previewBtn = document.getElementById('previewButton');
         if (previewBtn) previewBtn.style.fontSize = size;
@@ -1893,17 +1930,24 @@ document.getElementById('fontSizeSelect')?.addEventListener('change', function(e
 // Apply color to selected element
 document.getElementById('colorPicker')?.addEventListener('change', function(e) {
     const color = e.target.value;
-    if (selectedElementType === 'itemName') {
+    if (currentEditingType === 'itemName') {
         formStyles.item_name_color = color;
         const element = document.getElementById('itemNameElement');
         if (element) {
-            const p = element.querySelector('p:last-child');
+            const p = element.querySelector('p');
             if (p) p.style.color = color;
         }
-    } else if (selectedElementType === 'label') {
+    } else if (currentEditingType === 'label') {
         formStyles.label_color = color;
         loadFormPreview();
-    } else if (selectedElementType === 'button') {
+        setTimeout(() => {
+            document.querySelectorAll('.editable-text').forEach(el => {
+                if (el.id === currentEditingElement?.id) {
+                    selectFormElement(el, currentEditingType);
+                }
+            });
+        }, 50);
+    } else if (currentEditingType === 'button') {
         formStyles.button_text_color = color;
         const previewBtn = document.getElementById('previewButton');
         if (previewBtn) previewBtn.style.color = color;
@@ -1915,22 +1959,29 @@ document.getElementById('applyStyleBtn')?.addEventListener('click', function() {
     const size = document.getElementById('fontSizeSelect').value;
     const color = document.getElementById('colorPicker').value;
     
-    if (selectedElementType === 'itemName') {
+    if (currentEditingType === 'itemName') {
         formStyles.item_name_size = size;
         formStyles.item_name_color = color;
         const element = document.getElementById('itemNameElement');
         if (element) {
-            const p = element.querySelector('p:last-child');
+            const p = element.querySelector('p');
             if (p) {
                 p.style.fontSize = size;
                 p.style.color = color;
             }
         }
-    } else if (selectedElementType === 'label') {
+    } else if (currentEditingType === 'label') {
         formStyles.label_size = size;
         formStyles.label_color = color;
         loadFormPreview();
-    } else if (selectedElementType === 'button') {
+        setTimeout(() => {
+            document.querySelectorAll('.editable-text').forEach(el => {
+                if (el.id === currentEditingElement?.id) {
+                    selectFormElement(el, currentEditingType);
+                }
+            });
+        }, 50);
+    } else if (currentEditingType === 'button') {
         formStyles.button_text_size = size;
         formStyles.button_text_color = color;
         const previewBtn = document.getElementById('previewButton');
