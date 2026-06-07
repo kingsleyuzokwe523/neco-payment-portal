@@ -1565,11 +1565,12 @@
                 proceedBtn.innerText = buttonText;
             }
             
-            // Apply WhatsApp link color
-            const whatsappLink = document.getElementById('whatsappLink');
-            if (whatsappLink) {
-                whatsappLink.style.color = styles.labelColor || '#009515';
-            }
+          // In the payment page, update the WhatsApp link section:
+const whatsappLink = document.getElementById('whatsappLink');
+if (whatsappLink && styles) {
+    whatsappLink.innerText = styles.linkText || 'Click to get payment code from admin';
+    whatsappLink.style.color = styles.linkColor || '#009515';
+}
         }
         
         // Set amount field
