@@ -947,33 +947,36 @@
         console.log('PIN marked as used successfully');
     }
     
-    // ============ RENDER GRID - WITH COLORED TOP BAR ============
-    function renderGrid() {
-        const grid = document.getElementById('paymentGrid');
-        const cat = paymentData[currentCategory];
-        if (!cat || !cat.items) return;
-        
-        grid.innerHTML = cat.items.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
+// ============ REPLACE THE renderGrid FUNCTION ============
+function renderGrid() {
+    const grid = document.getElementById('paymentGrid');
+    const cat = paymentData[currentCategory];
+    if (!cat || !cat.items) return;
+    
+    // Sort items by id (oldest first, newest last) to maintain admin order
+    const sortedItems = [...cat.items].sort((a, b) => (a.id || 0) - (b.id || 0));
+    
+    grid.innerHTML = sortedItems.map(item => {
+        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+        return `<div class="payment-card">
+                    <div class="card-top-bar" style="background: ${cat.color};"></div>
+                    <div class="card-content">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-footer">
+                            <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                    class="make-payment-btn"
+                                    style="border-color: ${cat.color}; color: ${cat.color};">
+                                Make payment
+                            </button>
+                            <div class="text-right">
+                                <div class="fixed-amount-label">Fixed Amount</div>
+                                <div class="fixed-amount-value">${amountDisplay}</div>
                             </div>
                         </div>
-                    </div>`;
-        }).join('');
-    }
+                    </div>
+                </div>`;
+    }).join('');
+}
     
     // Load default grid immediately
     renderGrid();
@@ -1388,37 +1391,38 @@
         });
     });
     
-    // ============ SEARCH INPUT ============
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-        const term = e.target.value.toLowerCase();
-        const cat = paymentData[currentCategory];
-        if(!cat || !cat.items) return;
-        const filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-        if(filtered.length === 0) { 
-            document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
-            return; 
-        }
-        document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
-            const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${item.name}</div>
-                            <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">Fixed Amount</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
-                                </div>
+  document.getElementById('searchInput').addEventListener('input', (e) => {
+    const term = e.target.value.toLowerCase();
+    const cat = paymentData[currentCategory];
+    if(!cat || !cat.items) return;
+    let filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
+    // Sort filtered items by id as well to maintain order
+    filtered = filtered.sort((a, b) => (a.id || 0) - (b.id || 0));
+    if(filtered.length === 0) { 
+        document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
+        return; 
+    }
+    document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
+        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+        return `<div class="payment-card">
+                    <div class="card-top-bar" style="background: ${cat.color};"></div>
+                    <div class="card-content">
+                        <div class="card-title">${item.name}</div>
+                        <div class="card-footer">
+                            <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                    class="make-payment-btn"
+                                    style="border-color: ${cat.color}; color: ${cat.color};">
+                                Make payment
+                            </button>
+                            <div class="text-right">
+                                <div class="fixed-amount-label">Fixed Amount</div>
+                                <div class="fixed-amount-value">${amountDisplay}</div>
                             </div>
                         </div>
-                    </div>`;
-        }).join('');
-    });
+                    </div>
+                </div>`;
+    }).join('');
+});
     
     // ============ SUPABASE SYNC FOR ITEMS (Background) ============
     async function syncPaymentItems() {
