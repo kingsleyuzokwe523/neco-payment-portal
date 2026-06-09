@@ -998,7 +998,7 @@
         console.log('PIN marked as used successfully');
     }
     
-// ============ RENDER GRID - CUSTOM AMOUNT INPUT ON CARD ============
+// ============ RENDER GRID - BUTTON LEFT, AMOUNT INPUT RIGHT ============
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
@@ -1012,7 +1012,7 @@ function renderGrid() {
         const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
         
         if (item.amount) {
-            // Fixed amount item - show button and fixed amount
+            // Fixed amount item - button left, amount right
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1031,24 +1031,24 @@ function renderGrid() {
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - input field and button side by side, both same size
+            // Custom amount item - button LEFT, amount input RIGHT (same size)
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer" style="flex-direction: column; gap: 12px; align-items: stretch;">
-                                <div style="display: flex; gap: 10px; width: 100%;">
+                            <div class="card-footer">
+                                <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div style="text-align: right;">
+                                    <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
                                            class="custom-amount-input"
-                                           style="flex: 1; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; transition: all 0.2s ease;">
-                                    <button onclick='openPaymentModalWithAmount(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
-                                            class="make-payment-btn"
-                                            style="border-color: ${cat.color}; color: ${cat.color}; white-space: nowrap;">
-                                        Make payment
-                                    </button>
+                                           style="width: 100%; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right;">
                                 </div>
-                                <div class="custom-amount-error" id="error_${item.id}" style="color: #dc2626; font-size: 11px; display: none;">Amount is required</div>
                             </div>
                         </div>
                     </div>`;
@@ -1541,19 +1541,19 @@ function startCountdown(expiryTime) {
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer" style="flex-direction: column; gap: 12px; align-items: stretch;">
-                                <div style="display: flex; gap: 10px; width: 100%;">
+                            <div class="card-footer">
+                                <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <div style="text-align: right;">
+                                    <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
                                            class="custom-amount-input"
-                                           style="flex: 1; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent;">
-                                    <button onclick='openPaymentModalWithAmount(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
-                                            class="make-payment-btn"
-                                            style="border-color: ${cat.color}; color: ${cat.color}; white-space: nowrap;">
-                                        Make payment
-                                    </button>
+                                           style="width: 100%; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right;">
                                 </div>
-                                <div class="custom-amount-error" id="error_${item.id}" style="color: #dc2626; font-size: 11px; display: none;">Amount is required</div>
                             </div>
                         </div>
                     </div>`;
@@ -1837,6 +1837,116 @@ async function openPaymentModalWithAmount(item, customAmount) {
     const amountInput = document.getElementById('amount');
     amountInput.value = enteredAmount;
     amountInput.readOnly = false;
+    
+    // Set WhatsApp link URL
+    let whatsappNumber = settings.adminWhatsapp || '2348123456789';
+    let whatsappLinkUrl = '';
+    if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
+        whatsappLinkUrl = settings.whatsappTelegramLink;
+    } else {
+        whatsappNumber = whatsappNumber.replace(/\+/g, '');
+        whatsappLinkUrl = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+    }
+    document.getElementById('whatsappLink').href = whatsappLinkUrl;
+    
+    // Reset other form fields
+    document.getElementById('paymentCode').value = ''; 
+    document.getElementById('fullName').value = ''; 
+    document.getElementById('phone').value = ''; 
+    document.getElementById('email').value = '';
+    document.getElementById('paymentDescription').value = ''; 
+    document.getElementById('quantity').value = '1';
+    document.getElementById('currency').value = 'NGN';
+    
+    // Hide all errors
+    document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+    document.getElementById('proceedBtn').disabled = true;
+    document.getElementById('paymentModal').classList.remove('hidden');
+    
+    // Add event listeners for validation
+    ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.removeEventListener('input', checkFormValidation);
+            element.addEventListener('input', checkFormValidation);
+        }
+    });
+}
+// ============ OPEN PAYMENT MODAL WITH AMOUNT CHECK ============
+async function openPaymentModalWithAmountCheck(item, customAmount) {
+    currentItem = item;
+    const styles = await loadFormStyles();
+    
+    // Set the item name in modal
+    const modalItemName = document.getElementById('modalItemName');
+    if (modalItemName) {
+        let displayText = item.name;
+        if (styles && styles.itemNameUppercase) {
+            displayText = applySmartUppercase(displayText);
+        }
+        modalItemName.innerText = displayText;
+        
+        if (styles) {
+            modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
+            modalItemName.style.fontSize = styles.itemNameSize || '18px';
+            modalItemName.style.color = styles.itemNameColor || '#000000';
+        }
+    }
+    
+    // Apply Label styles
+    if (styles) {
+        const labels = document.querySelectorAll('#paymentModal label');
+        labels.forEach(label => {
+            let originalText = label.innerText;
+            let displayText = originalText;
+            if (styles.labelUppercase) {
+                displayText = applySmartUppercase(originalText);
+            }
+            label.innerText = displayText;
+            label.style.fontWeight = styles.labelBold ? '700' : '500';
+            label.style.fontSize = styles.labelSize || '14px';
+            label.style.color = styles.labelColor || '#374151';
+        });
+        
+        // Apply Input styles
+        const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
+        inputs.forEach(input => {
+            input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
+            input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
+        });
+        
+        // Apply Button styles
+        const proceedBtn = document.getElementById('proceedBtn');
+        if (proceedBtn) {
+            proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
+            proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
+            proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
+            proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
+            
+            let buttonText = styles.buttonText || 'Proceed';
+            if (styles.buttonTextUppercase) {
+                buttonText = buttonText.toUpperCase();
+            }
+            proceedBtn.innerText = buttonText;
+        }
+        
+        // Apply WhatsApp link color and text
+        const whatsappLink = document.getElementById('whatsappLink');
+        if (whatsappLink) {
+            if (styles.linkText) whatsappLink.innerText = styles.linkText;
+            whatsappLink.style.color = styles.linkColor || '#009515';
+        }
+    }
+    
+    // Set amount field - if amount was entered on card, pre-fill it
+    const amountInput = document.getElementById('amount');
+    if (customAmount && parseFloat(customAmount) > 0) {
+        amountInput.value = parseFloat(customAmount);
+    } else {
+        amountInput.value = '';
+    }
+    amountInput.readOnly = false;
+    amountInput.placeholder = 'Enter payment amount';
     
     // Set WhatsApp link URL
     let whatsappNumber = settings.adminWhatsapp || '2348123456789';
