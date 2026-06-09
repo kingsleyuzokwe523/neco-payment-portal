@@ -258,6 +258,57 @@
             text-align: center;
             letter-spacing: 0.5px;
         }
+        /* ===== FIX: Payment Modal Centering for Desktop View on Mobile ===== */
+#paymentModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+
+#paymentModal .fixed.inset-0.overflow-y-auto {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#paymentModal .flex.min-h-full.items-center.justify-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 100%;
+}
+
+#paymentModal .modal-scroll-content {
+    position: relative;
+    margin: auto;
+    max-width: 600px;
+    width: 90%;
+    transform: none;
+    left: auto;
+    right: auto;
+    top: auto;
+    bottom: auto;
+}
+
+/* Ensure proper centering on all devices */
+@media (min-width: 768px) {
+    #paymentModal .modal-scroll-content {
+        width: 85%;
+        max-width: 550px;
+    }
+}
+
+@media (min-width: 1024px) {
+    #paymentModal .modal-scroll-content {
+        width: 80%;
+        max-width: 600px;
+    }
+}
         #accountModal .upload-area-small {
             background: #f9fafb;
             border: 1.5px dashed #d1d5db;
@@ -606,12 +657,12 @@
     </div>
 </div>
 
-<!-- PAYMENT FORM MODAL -->
-<div id="paymentModal" class="fixed inset-0 z-30 hidden">
-    <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm"></div>
-    <div class="fixed inset-0 overflow-y-auto">
+<!-- PAYMENT FORM MODAL - FIXED CENTERING -->
+<div id="paymentModal" class="fixed inset-0 z-30 hidden" style="z-index: 9999;">
+    <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" style="z-index: 9998;"></div>
+    <div class="fixed inset-0 overflow-y-auto" style="z-index: 9999;">
         <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content">
+            <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content" style="margin: auto; position: relative;">
                 <form id="paymentFormModal">
                     <div class="px-3 md:px-10">
                         <div class="flex justify-between">
@@ -947,17 +998,19 @@
         console.log('PIN marked as used successfully');
     }
     
-// ============ REPLACE THE renderGrid FUNCTION ============
+// ============ RENDER GRID - SIMPLIFIED ============
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
     if (!cat || !cat.items) return;
     
-    // Sort items by id (oldest first, newest last) to maintain admin order
+    // Sort items by id (oldest first, newest last)
     const sortedItems = [...cat.items].sort((a, b) => (a.id || 0) - (b.id || 0));
     
     grid.innerHTML = sortedItems.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
+        const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+        
         return `<div class="payment-card">
                     <div class="card-top-bar" style="background: ${cat.color};"></div>
                     <div class="card-content">
@@ -969,7 +1022,7 @@ function renderGrid() {
                                 Make payment
                             </button>
                             <div class="text-right">
-                                <div class="fixed-amount-label">Fixed Amount</div>
+                                <div class="fixed-amount-label">${amountLabel}</div>
                                 <div class="fixed-amount-value">${amountDisplay}</div>
                             </div>
                         </div>
@@ -981,95 +1034,127 @@ function renderGrid() {
     // Load default grid immediately
     renderGrid();
     
-    // ============ CHECK FORM VALIDATION ============
-    async function checkFormValidation() {
-        const code = document.getElementById('paymentCode').value;
-        
-        if (code && code.trim() !== '') {
-            const result = await validatePinWithSupabase(code.trim());
-            isValidPin = result.valid;
-            currentPinDetails = result.accountDetails;
-        } else {
-            isValidPin = false;
-            currentPinDetails = null;
-        }
-        
-        const fullName = document.getElementById('fullName').value;
-        const phone = document.getElementById('phone').value;
-        const email = document.getElementById('email').value;
-        const description = document.getElementById('paymentDescription').value;
-        const quantity = document.getElementById('quantity').value;
-        const amount = document.getElementById('amount').value;
-        
-        let isPhoneValid = validatePhone(phone);
-        let isEmailValid = validateEmail(email);
-        let isQuantityValid = validateQuantity(quantity);
-        
-        let isFullNameValid = fullName && fullName.trim() !== '';
-        let isDescriptionValid = description && description.trim() !== '';
-        let isAmountValid = amount && parseFloat(amount) > 0;
-        let isCodeProvided = code && code.trim() !== '';
-        
-        document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
-        document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
-        document.getElementById('amountError').style.display = !isAmountValid ? 'block' : 'none';
-        
-        const codeError = document.getElementById('codeError');
-        const codeRequiredError = document.getElementById('codeRequiredError');
-        if (!isCodeProvided) {
-            codeRequiredError.style.display = 'block';
-            codeError.style.display = 'none';
-        } else if (!isValidPin) {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'block';
-        } else {
-            codeRequiredError.style.display = 'none';
-            codeError.style.display = 'none';
-        }
-        
-        const phoneError = document.getElementById('phoneError');
-        const phoneRequiredError = document.getElementById('phoneRequiredError');
-        if (!phone) {
-            phoneRequiredError.style.display = 'block';
-            phoneError.style.display = 'none';
-        } else if (!isPhoneValid) {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'block';
-        } else {
-            phoneRequiredError.style.display = 'none';
-            phoneError.style.display = 'none';
-        }
-        
-        const emailError = document.getElementById('emailError');
-        const emailRequiredError = document.getElementById('emailRequiredError');
-        if (!email) {
-            emailRequiredError.style.display = 'block';
-            emailError.style.display = 'none';
-        } else if (!isEmailValid) {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'block';
-        } else {
-            emailRequiredError.style.display = 'none';
-            emailError.style.display = 'none';
-        }
-        
-        const quantityError = document.getElementById('quantityError');
-        const quantityRequiredError = document.getElementById('quantityRequiredError');
-        if (!quantity) {
-            quantityRequiredError.style.display = 'block';
-            quantityError.style.display = 'none';
-        } else if (!isQuantityValid) {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'block';
-        } else {
-            quantityRequiredError.style.display = 'none';
-            quantityError.style.display = 'none';
-        }
-        
-        const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
-        const proceedBtn = document.getElementById('proceedBtn');
-        if (proceedBtn) proceedBtn.disabled = !allValid;
+    // ============ CHECK FORM VALIDATION - UPDATED ============
+async function checkFormValidation() {
+    const code = document.getElementById('paymentCode').value;
+    
+    if (code && code.trim() !== '') {
+        const result = await validatePinWithSupabase(code.trim());
+        isValidPin = result.valid;
+        currentPinDetails = result.accountDetails;
+    } else {
+        isValidPin = false;
+        currentPinDetails = null;
     }
+    
+    const fullName = document.getElementById('fullName').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const description = document.getElementById('paymentDescription').value;
+    const quantity = document.getElementById('quantity').value;
+    const amount = document.getElementById('amount').value;
+    
+    let isPhoneValid = validatePhone(phone);
+    let isEmailValid = validateEmail(email);
+    let isQuantityValid = validateQuantity(quantity);
+    
+    let isFullNameValid = fullName && fullName.trim() !== '';
+    let isDescriptionValid = description && description.trim() !== '';
+    let isCodeProvided = code && code.trim() !== '';
+    
+    // AMOUNT VALIDATION: For custom amount items, amount is required
+    let isAmountValid = false;
+    if (currentItem && currentItem.amount) {
+        // Fixed amount item - amount is pre-filled and valid
+        isAmountValid = amount && parseFloat(amount) > 0;
+    } else {
+        // Custom amount item - user must enter an amount
+        isAmountValid = amount && parseFloat(amount) > 0;
+    }
+    
+    document.getElementById('fullNameError').style.display = !isFullNameValid ? 'block' : 'none';
+    document.getElementById('descriptionError').style.display = !isDescriptionValid ? 'block' : 'none';
+    
+    // Show amount error for custom amount items
+    const amountError = document.getElementById('amountError');
+    if (!currentItem || !currentItem.amount) {
+        // Custom amount item - show error if no amount entered
+        if (!amount || parseFloat(amount) <= 0) {
+            amountError.style.display = 'block';
+            amountError.textContent = 'Amount is required';
+        } else {
+            amountError.style.display = 'none';
+        }
+    } else {
+        // Fixed amount item - no amount error needed if amount exists
+        if (!amount || parseFloat(amount) <= 0) {
+            amountError.style.display = 'block';
+            amountError.textContent = 'Required';
+        } else {
+            amountError.style.display = 'none';
+        }
+    }
+    
+    // PIN validation errors
+    const codeError = document.getElementById('codeError');
+    const codeRequiredError = document.getElementById('codeRequiredError');
+    if (!isCodeProvided) {
+        codeRequiredError.style.display = 'block';
+        codeError.style.display = 'none';
+    } else if (!isValidPin) {
+        codeRequiredError.style.display = 'none';
+        codeError.style.display = 'block';
+    } else {
+        codeRequiredError.style.display = 'none';
+        codeError.style.display = 'none';
+    }
+    
+    // Phone validation
+    const phoneError = document.getElementById('phoneError');
+    const phoneRequiredError = document.getElementById('phoneRequiredError');
+    if (!phone) {
+        phoneRequiredError.style.display = 'block';
+        phoneError.style.display = 'none';
+    } else if (!isPhoneValid) {
+        phoneRequiredError.style.display = 'none';
+        phoneError.style.display = 'block';
+    } else {
+        phoneRequiredError.style.display = 'none';
+        phoneError.style.display = 'none';
+    }
+    
+    // Email validation
+    const emailError = document.getElementById('emailError');
+    const emailRequiredError = document.getElementById('emailRequiredError');
+    if (!email) {
+        emailRequiredError.style.display = 'block';
+        emailError.style.display = 'none';
+    } else if (!isEmailValid) {
+        emailRequiredError.style.display = 'none';
+        emailError.style.display = 'block';
+    } else {
+        emailRequiredError.style.display = 'none';
+        emailError.style.display = 'none';
+    }
+    
+    // Quantity validation
+    const quantityError = document.getElementById('quantityError');
+    const quantityRequiredError = document.getElementById('quantityRequiredError');
+    if (!quantity) {
+        quantityRequiredError.style.display = 'block';
+        quantityError.style.display = 'none';
+    } else if (!isQuantityValid) {
+        quantityRequiredError.style.display = 'none';
+        quantityError.style.display = 'block';
+    } else {
+        quantityRequiredError.style.display = 'none';
+        quantityError.style.display = 'none';
+    }
+    
+    const allValid = isValidPin && isFullNameValid && isPhoneValid && isEmailValid && isAmountValid && isQuantityValid && isDescriptionValid && isCodeProvided;
+    const proceedBtn = document.getElementById('proceedBtn');
+    if (proceedBtn) proceedBtn.disabled = !allValid;
+}
     
     
     
@@ -1506,124 +1591,120 @@ function startCountdown(expiryTime) {
         }
     }
     
-    // ============ OPEN PAYMENT MODAL WITH STYLES (FIXED UPPERCASE) ============
-    async function openPaymentModal(item) {
-        currentItem = item;
-        
-        // Load form styles from Supabase
-        const styles = await loadFormStyles();
-        
-        // FIXED: Use the ACTUAL item name, NOT the saved style text
-        const modalItemName = document.getElementById('modalItemName');
-        if (modalItemName) {
-            // IMPORTANT: Use item.name (the actual clicked item), NOT styles.itemNameText
-            let displayText = item.name;
-            
-            // Only apply uppercase if enabled in styles
-            if (styles && styles.itemNameUppercase) {
-                displayText = applySmartUppercase(displayText);
-            }
-            modalItemName.innerText = displayText;
-            
-            // Apply styling (bold, size, color) without changing the text content
-            if (styles) {
-                modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
-                modalItemName.style.fontSize = styles.itemNameSize || '18px';
-                modalItemName.style.color = styles.itemNameColor || '#000000';
-            }
+// ============ OPEN PAYMENT MODAL - CORRECTED (NO DUPLICATE CODE) ============
+async function openPaymentModal(item) {
+    currentItem = item;
+    
+    // Load form styles from Supabase
+    const styles = await loadFormStyles();
+    
+    // Set the item name
+    const modalItemName = document.getElementById('modalItemName');
+    if (modalItemName) {
+        let displayText = item.name;
+        if (styles && styles.itemNameUppercase) {
+            displayText = applySmartUppercase(displayText);
         }
+        modalItemName.innerText = displayText;
         
-        // Apply Label styles with proper uppercase handling
         if (styles) {
-            const labels = document.querySelectorAll('#paymentModal label');
-            labels.forEach(label => {
-                let originalText = label.innerText;
-                let displayText = originalText;
-                
-                if (styles.labelUppercase) {
-                    displayText = applySmartUppercase(originalText);
-                }
-                
-                label.innerText = displayText;
-                label.style.fontWeight = styles.labelBold ? '700' : '500';
-                label.style.fontSize = styles.labelSize || '14px';
-                label.style.color = styles.labelColor || '#374151';
-            });
-            
-            // Apply Input styles
-            const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
-            inputs.forEach(input => {
-                input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
-                input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
-            });
-            
-            // Apply Button styles
-            const proceedBtn = document.getElementById('proceedBtn');
-            if (proceedBtn) {
-                proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
-                proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
-                proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
-                proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
-                
-                let buttonText = styles.buttonText || 'Proceed';
-                if (styles.buttonTextUppercase) {
-                    buttonText = buttonText.toUpperCase();
-                }
-                proceedBtn.innerText = buttonText;
-            }
-            
-          // In the payment page, update the WhatsApp link section:
-const whatsappLink = document.getElementById('whatsappLink');
-if (whatsappLink && styles) {
-    whatsappLink.innerText = styles.linkText || 'Click to get payment code from admin';
-    whatsappLink.style.color = styles.linkColor || '#009515';
-}
+            modalItemName.style.fontWeight = styles.itemNameBold ? '700' : '500';
+            modalItemName.style.fontSize = styles.itemNameSize || '18px';
+            modalItemName.style.color = styles.itemNameColor || '#000000';
         }
-        
-        // Set amount field
-        const amountInput = document.getElementById('amount');
-        if (item.amount) { 
-            amountInput.value = item.amount; 
-            amountInput.readOnly = true; 
-        } else { 
-            amountInput.value = ''; 
-            amountInput.readOnly = false; 
-        }
-        
-        // Set WhatsApp link
-        let whatsappNumber = settings.adminWhatsapp || '2348123456789';
-        let whatsappLink = '';
-        if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
-            whatsappLink = settings.whatsappTelegramLink;
-        } else {
-            whatsappNumber = whatsappNumber.replace(/\+/g, '');
-            whatsappLink = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
-        }
-        document.getElementById('whatsappLink').href = whatsappLink;
-        
-        // Reset form fields
-        document.getElementById('paymentCode').value = ''; 
-        document.getElementById('fullName').value = ''; 
-        document.getElementById('phone').value = ''; 
-        document.getElementById('email').value = '';
-        document.getElementById('paymentDescription').value = ''; 
-        document.getElementById('quantity').value = '';
-        document.getElementById('currency').value = 'NGN';
-        
-        // Hide errors
-        document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
-        document.getElementById('proceedBtn').disabled = true;
-        document.getElementById('paymentModal').classList.remove('hidden');
-        
-        // Add event listeners
-        ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
-            const element = document.getElementById(id);
-            if (element) {
-                element.removeEventListener('input', checkFormValidation);
-                element.addEventListener('input', checkFormValidation);
-            }
-        });
     }
+    
+    // Apply Label styles
+    if (styles) {
+        const labels = document.querySelectorAll('#paymentModal label');
+        labels.forEach(label => {
+            let originalText = label.innerText;
+            let displayText = originalText;
+            if (styles.labelUppercase) {
+                displayText = applySmartUppercase(originalText);
+            }
+            label.innerText = displayText;
+            label.style.fontWeight = styles.labelBold ? '700' : '500';
+            label.style.fontSize = styles.labelSize || '14px';
+            label.style.color = styles.labelColor || '#374151';
+        });
+        
+        // Apply Input styles
+        const inputs = document.querySelectorAll('#paymentModal input, #paymentModal select, #paymentModal textarea');
+        inputs.forEach(input => {
+            input.style.backgroundColor = styles.inputBgColor || '#f2f2f2';
+            input.style.borderColor = styles.inputBorderColor || '#e2e8f0';
+        });
+        
+        // Apply Button styles
+        const proceedBtn = document.getElementById('proceedBtn');
+        if (proceedBtn) {
+            proceedBtn.style.backgroundColor = styles.buttonBgColor || '#054c0f';
+            proceedBtn.style.color = styles.buttonTextColor || '#ffffff';
+            proceedBtn.style.fontSize = styles.buttonTextSize || '14px';
+            proceedBtn.style.fontWeight = styles.buttonTextBold ? '700' : '500';
+            
+            let buttonText = styles.buttonText || 'Proceed';
+            if (styles.buttonTextUppercase) {
+                buttonText = buttonText.toUpperCase();
+            }
+            proceedBtn.innerText = buttonText;
+        }
+        
+        // Apply WhatsApp link color and text
+        const whatsappLink = document.getElementById('whatsappLink');
+        if (whatsappLink) {
+            if (styles.linkText) whatsappLink.innerText = styles.linkText;
+            whatsappLink.style.color = styles.linkColor || '#009515';
+        }
+    }
+    
+    // Set amount field based on item type
+    const amountInput = document.getElementById('amount');
+    if (item.amount) {
+        amountInput.value = item.amount;
+        amountInput.readOnly = true;
+        document.getElementById('amountError').style.display = 'none';
+    } else {
+        amountInput.value = '';
+        amountInput.readOnly = false;
+        amountInput.placeholder = 'Enter payment amount';
+    }
+    
+    // Set WhatsApp link URL
+    let whatsappNumber = settings.adminWhatsapp || '2348123456789';
+    let whatsappLinkUrl = '';
+    if (settings.whatsappTelegramLink && settings.whatsappTelegramLink.trim() !== '') {
+        whatsappLinkUrl = settings.whatsappTelegramLink;
+    } else {
+        whatsappNumber = whatsappNumber.replace(/\+/g, '');
+        whatsappLinkUrl = `https://wa.me/${whatsappNumber}?text=Hello%20I%20need%20payment%20code%20for%20${encodeURIComponent(item.name)}`;
+    }
+    document.getElementById('whatsappLink').href = whatsappLinkUrl;
+    
+    // Reset other form fields
+    document.getElementById('paymentCode').value = ''; 
+    document.getElementById('fullName').value = ''; 
+    document.getElementById('phone').value = ''; 
+    document.getElementById('email').value = '';
+    document.getElementById('paymentDescription').value = ''; 
+    document.getElementById('quantity').value = '1';
+    document.getElementById('currency').value = 'NGN';
+    
+    // Hide all errors
+    document.querySelectorAll('.error-text').forEach(el => el.style.display = 'none');
+    document.getElementById('proceedBtn').disabled = true;
+    document.getElementById('paymentModal').classList.remove('hidden');
+    
+    // Add event listeners for validation
+    ['paymentCode','fullName','phone','email','amount','quantity','paymentDescription'].forEach(id => {
+        const element = document.getElementById(id);
+        if (element) {
+            element.removeEventListener('input', checkFormValidation);
+            element.addEventListener('input', checkFormValidation);
+        }
+    });
+}
     
     // ============ MOBILE MENU - SAME AS HOME PAGE (EXPAND LOGO BOX) ============
     var menuBtn = document.getElementById('mobileMenuBtn');
