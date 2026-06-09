@@ -1227,33 +1227,36 @@ function renderGrid() {
         }
     }
     
-    // ============ START COUNTDOWN TIMER - FIXED ============
-    function startCountdown(expiryTime) {
-        const timerElement = document.getElementById('countdownTimer');
-        if (countdownInterval) clearInterval(countdownInterval);
+    // ============ REPLACE THE startCountdown FUNCTION WITH THIS ============
+function startCountdown(expiryTime) {
+    const timerElement = document.getElementById('countdownTimer');
+    if (countdownInterval) clearInterval(countdownInterval);
+    
+    function updateTimer() {
+        const now = new Date().getTime();
+        const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
         
-        function updateTimer() {
-            const now = new Date().getTime();
-            const remaining = Math.max(0, Math.floor((expiryTime - now) / 1000));
+        console.log('Countdown - Remaining seconds:', remaining);
+        
+        if (remaining <= 0) {
+            clearInterval(countdownInterval);
+            timerElement.textContent = "00:00";
+            timerElement.style.color = "#9ca3af";
             
-            console.log('Countdown - Remaining seconds:', remaining);
-            
-            if (remaining <= 0) {
-                clearInterval(countdownInterval);
-                timerElement.textContent = "00:00";
-                timerElement.style.color = "#9ca3af";
-                return;
-            }
-            
-            const mins = Math.floor(remaining / 60);
-            const secs = remaining % 60;
-            timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-            timerElement.style.color = "#dc2626";
+            // Silently redirect to index.html when timer expires
+            window.location.href = 'index.html';
+            return;
         }
         
-        updateTimer();
-        countdownInterval = setInterval(updateTimer, 1000);
+        const mins = Math.floor(remaining / 60);
+        const secs = remaining % 60;
+        timerElement.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        timerElement.style.color = "#dc2626";
     }
+    
+    updateTimer();
+    countdownInterval = setInterval(updateTimer, 1000);
+}
     
     function escapeHtml(str) {
         if (!str) return '';
