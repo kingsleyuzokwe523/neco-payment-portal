@@ -998,7 +998,7 @@
         console.log('PIN marked as used successfully');
     }
     
-// ============ RENDER GRID - BUTTON LEFT, AMOUNT INPUT RIGHT (SAME STYLE) ============
+// ============ RENDER GRID - BUTTON AND INPUT SAME STYLE ============
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
@@ -1012,7 +1012,7 @@ function renderGrid() {
         const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
         
         if (item.amount) {
-            // Fixed amount item - button left, amount right
+            // Fixed amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1031,7 +1031,7 @@ function renderGrid() {
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - button LEFT, amount input RIGHT (EXACT SAME STYLE)
+            // Custom amount item - button and input SAME STYLE side by side
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1046,8 +1046,7 @@ function renderGrid() {
                                     <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
-                                           class="custom-amount-input"
-                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 100%;">
+                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: auto; min-width: 120px;">
                                 </div>
                             </div>
                         </div>
