@@ -998,7 +998,7 @@
         console.log('PIN marked as used successfully');
     }
     
-// ============ RENDER GRID - BUTTON LEFT, AMOUNT INPUT RIGHT ============
+// ============ RENDER GRID - BUTTON LEFT, AMOUNT INPUT RIGHT (SAME STYLE) ============
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
@@ -1031,7 +1031,7 @@ function renderGrid() {
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - button LEFT, amount input RIGHT (same size)
+            // Custom amount item - button LEFT, amount input RIGHT (EXACT SAME STYLE)
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1042,12 +1042,12 @@ function renderGrid() {
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div style="text-align: right;">
+                                <div class="text-right">
                                     <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
                                            class="custom-amount-input"
-                                           style="width: 100%; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right;">
+                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 100%;">
                                 </div>
                             </div>
                         </div>
