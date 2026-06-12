@@ -1040,15 +1040,17 @@ function renderGrid() {
     
     grid.innerHTML = sortedItems.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
+        // Escape the item name for safe use in onclick
+        const escapedItemName = JSON.stringify(item).replace(/'/g, "&#39;");
         
         if (item.amount) {
             // Fixed amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
-                            <div class="card-title">${item.name}</div>
+                            <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                <button onclick='openPaymentModal(${escapedItemName})' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
@@ -1064,9 +1066,9 @@ function renderGrid() {
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
-                            <div class="card-title">${item.name}</div>
+                            <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                                <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
+                                <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
@@ -1542,14 +1544,15 @@ function startCountdown(expiryTime) {
     }
     document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
+        const escapedItemName = JSON.stringify(item).replace(/'/g, "&#39;");
         
         if (item.amount) {
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
-                            <div class="card-title">${item.name}</div>
+                            <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
-                                <button onclick='openPaymentModal(${JSON.stringify(item).replace(/'/g, "&apos;")})' 
+                                <button onclick='openPaymentModal(${escapedItemName})' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
@@ -1564,9 +1567,9 @@ function startCountdown(expiryTime) {
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
-                            <div class="card-title">${item.name}</div>
+                            <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                                <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
+                                <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
@@ -1580,7 +1583,7 @@ function startCountdown(expiryTime) {
                     </div>`;
         }
     }).join('');
-}
+});
     
     // ============ SUPABASE SYNC FOR ITEMS (Background) ============
     async function syncPaymentItems() {
