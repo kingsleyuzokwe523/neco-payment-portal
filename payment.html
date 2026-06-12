@@ -150,21 +150,22 @@
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
         }
- /* Make input fields match button styling exactly */
+/* Make input fields match button styling exactly */
 .make-payment-btn,
 input.make-payment-btn {
     font-size: 0.75rem;
     border: 1px solid;
     border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.8rem;
     font-weight: 500;
     transition: all 0.2s ease;
     background: transparent;
-    height: 38px;
+    height: 34px;
     box-sizing: border-box;
     line-height: 1.2;
     width: auto;
-    min-width: 110px;
+    min-width: 90px;
+    max-width: 120px;
     cursor: pointer;
     display: inline-flex;
     align-items: center;
@@ -173,7 +174,7 @@ input.make-payment-btn {
 
 /* Make the button have same height */
 button.make-payment-btn {
-    height: 38px;
+    height: 34px;
     white-space: nowrap;
 }
 
@@ -191,7 +192,6 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 .make-payment-btn:hover {
     transform: scale(1.02);
 }
-
 /* For fixed amount value to align properly */
 .fixed-amount-value {
     font-size: 0.875rem;
@@ -1072,23 +1072,24 @@ function renderGrid() {
                     </div>`;
         } else {
             // Custom amount item - button + input field (SAME STYLE, NO LABEL)
-            return `<div class="payment-card">
-                        <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
-                            <div class="card-title">${escapeHtml(item.name)}</div>
-                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
-                                <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
-                                        class="make-payment-btn"
-                                        style="border-color: ${cat.color}; color: ${cat.color};">
-                                    Make payment
-                                </button>
-                                <input type="number" id="customAmount_${item.id}" 
-                                       placeholder="Enter amount" 
-                                       class="make-payment-btn"
-                                       style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: auto; min-width: 110px; background: transparent;">
-                            </div>
-                        </div>
-                    </div>`;
+           // For custom amount items, change the card-footer style:
+return `<div class="payment-card">
+            <div class="card-top-bar" style="background: ${cat.color};"></div>
+            <div class="card-content">
+                <div class="card-title">${escapeHtml(item.name)}</div>
+                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                    <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
+                            class="make-payment-btn"
+                            style="border-color: ${cat.color}; color: ${cat.color};">
+                        Make payment
+                    </button>
+                    <input type="number" id="customAmount_${item.id}" 
+                           placeholder="Enter amount" 
+                           class="make-payment-btn"
+                           style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: 100px; min-width: 90px; background: transparent;">
+                </div>
+            </div>
+        </div>`;
         }
     }).join('');
 }
