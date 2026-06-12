@@ -1008,11 +1008,10 @@ function renderGrid() {
     const sortedItems = [...cat.items].sort((a, b) => (a.id || 0) - (b.id || 0));
     
     grid.innerHTML = sortedItems.map(item => {
-        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-        const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
         
         if (item.amount) {
-            // Fixed amount item - button only
+            // Fixed amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1023,32 +1022,28 @@ function renderGrid() {
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">${amountLabel}</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                <div class="fixed-amount-value" style="font-size: 0.875rem; font-weight: 600; color: #222222;">
+                                    ${amountDisplay}
                                 </div>
                             </div>
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - button (SAME STYLE) + input field
+            // Custom amount item - button + input field (SAME STYLE, NO LABEL)
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                                 <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="custom-amount-wrapper" style="text-align: right;">
-                                    <div class="fixed-amount-label">Custom Amount</div>
-                                    <input type="number" id="customAmount_${item.id}" 
-                                           placeholder="Enter amount" 
-                                           class="custom-amount-input"
-                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 130px;">
-                                </div>
+                                <input type="number" id="customAmount_${item.id}" 
+                                       placeholder="Enter amount" 
+                                       class="make-payment-btn"
+                                       style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: auto; min-width: 110px; background: transparent;">
                             </div>
                         </div>
                     </div>`;
@@ -1515,8 +1510,7 @@ function startCountdown(expiryTime) {
         return; 
     }
     document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
-        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : 'Enter amount';
-        const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
+        const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
         
         if (item.amount) {
             return `<div class="payment-card">
@@ -1529,9 +1523,8 @@ function startCountdown(expiryTime) {
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="text-right">
-                                    <div class="fixed-amount-label">${amountLabel}</div>
-                                    <div class="fixed-amount-value">${amountDisplay}</div>
+                                <div class="fixed-amount-value" style="font-size: 0.875rem; font-weight: 600; color: #222222;">
+                                    ${amountDisplay}
                                 </div>
                             </div>
                         </div>
@@ -1541,25 +1534,22 @@ function startCountdown(expiryTime) {
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                                 <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="custom-amount-wrapper" style="text-align: right;">
-                                    <div class="fixed-amount-label">Custom Amount</div>
-                                    <input type="number" id="customAmount_${item.id}" 
-                                           placeholder="Enter amount" 
-                                           class="custom-amount-input"
-                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 130px;">
-                                </div>
+                                <input type="number" id="customAmount_${item.id}" 
+                                       placeholder="Enter amount" 
+                                       class="make-payment-btn"
+                                       style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: auto; min-width: 110px; background: transparent;">
                             </div>
                         </div>
                     </div>`;
         }
     }).join('');
-});
+}
     
     // ============ SUPABASE SYNC FOR ITEMS (Background) ============
     async function syncPaymentItems() {
