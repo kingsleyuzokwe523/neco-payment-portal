@@ -356,7 +356,7 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 @media (max-width: 767px) {
     #paymentModal .modal-scroll-content {
         max-width: 800px;
-        width: 800px;
+        width: 900px;
         padding-left: 8px;
         padding-right: 8px;
     }
@@ -1065,6 +1065,12 @@ function renderGrid() {
     // Sort items by id (oldest first, newest last)
     const sortedItems = [...cat.items].sort((a, b) => (a.id || 0) - (b.id || 0));
     
+    // Set card background color based on category
+    let cardBgColor = '#ECFAF3'; // default greenish
+    if (currentCategory === 'BECE') {
+        cardBgColor = '#FCE4EC'; // light pink
+    }
+    
     grid.innerHTML = sortedItems.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
         // Escape the item name for safe use in onclick
@@ -1074,7 +1080,7 @@ function renderGrid() {
             // Fixed amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
+                        <div class="card-content" style="background: ${cardBgColor};">
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
                                 <button onclick='openPaymentModal(${escapedItemName})' 
@@ -1090,24 +1096,23 @@ function renderGrid() {
                     </div>`;
         } else {
             // Custom amount item - button + input field (SAME STYLE, NO LABEL)
-           // For custom amount items, change the card-footer style:
-return `<div class="payment-card">
-            <div class="card-top-bar" style="background: ${cat.color};"></div>
-            <div class="card-content">
-                <div class="card-title">${escapeHtml(item.name)}</div>
-                <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
-                    <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
-                            class="make-payment-btn"
-                            style="border-color: ${cat.color}; color: ${cat.color};">
-                        Make payment
-                    </button>
-                    <input type="number" id="customAmount_${item.id}" 
-                           placeholder="Enter amount" 
-                           class="make-payment-btn"
-                           style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: 100px; min-width: 90px; background: transparent;">
-                </div>
-            </div>
-        </div>`;
+            return `<div class="payment-card">
+                        <div class="card-top-bar" style="background: ${cat.color};"></div>
+                        <div class="card-content" style="background: ${cardBgColor};">
+                            <div class="card-title">${escapeHtml(item.name)}</div>
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 12px;">
+                                <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
+                                        class="make-payment-btn"
+                                        style="border-color: ${cat.color}; color: ${cat.color};">
+                                    Make payment
+                                </button>
+                                <input type="number" id="customAmount_${item.id}" 
+                                       placeholder="Enter amount" 
+                                       class="make-payment-btn"
+                                       style="border-color: ${cat.color}; color: ${cat.color}; text-align: right; width: 100px; min-width: 90px; background: transparent;">
+                            </div>
+                        </div>
+                    </div>`;
         }
     }).join('');
 }
@@ -1560,7 +1565,7 @@ function startCountdown(expiryTime) {
         });
     });
     
- document.getElementById('searchInput').addEventListener('input', (e) => {
+document.getElementById('searchInput').addEventListener('input', (e) => {
     const term = e.target.value.toLowerCase();
     const cat = paymentData[currentCategory];
     if(!cat || !cat.items) return;
@@ -1570,6 +1575,13 @@ function startCountdown(expiryTime) {
         document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
         return; 
     }
+    
+    // Set card background color based on category
+    let cardBgColor = '#ECFAF3'; // default greenish
+    if (currentCategory === 'BECE') {
+        cardBgColor = '#FCE4EC'; // light pink
+    }
+    
     document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
         const escapedItemName = JSON.stringify(item).replace(/'/g, "&#39;");
@@ -1577,7 +1589,7 @@ function startCountdown(expiryTime) {
         if (item.amount) {
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
+                        <div class="card-content" style="background: ${cardBgColor};">
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer">
                                 <button onclick='openPaymentModal(${escapedItemName})' 
@@ -1594,7 +1606,7 @@ function startCountdown(expiryTime) {
         } else {
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
-                        <div class="card-content">
+                        <div class="card-content" style="background: ${cardBgColor};">
                             <div class="card-title">${escapeHtml(item.name)}</div>
                             <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center;">
                                 <button onclick='openPaymentModalWithAmountCheck(${escapedItemName}, document.getElementById("customAmount_${item.id}").value)' 
