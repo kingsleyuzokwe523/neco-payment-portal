@@ -998,7 +998,7 @@
         console.log('PIN marked as used successfully');
     }
     
-// ============ RENDER GRID - BUTTON AND INPUT SAME STYLE ============
+// Replace the renderGrid function with this:
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
@@ -1012,7 +1012,7 @@ function renderGrid() {
         const amountLabel = item.amount ? 'Fixed Amount' : 'Custom Amount';
         
         if (item.amount) {
-            // Fixed amount item
+            // Fixed amount item - button only
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
@@ -1031,22 +1031,23 @@ function renderGrid() {
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - button and input SAME STYLE side by side
+            // Custom amount item - button (SAME STYLE) + input field
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer">
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                                 <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="text-right">
+                                <div class="custom-amount-wrapper" style="text-align: right;">
                                     <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
-                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: auto; min-width: 120px;">
+                                           class="custom-amount-input"
+                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 130px;">
                                 </div>
                             </div>
                         </div>
@@ -1540,18 +1541,18 @@ function startCountdown(expiryTime) {
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content">
                             <div class="card-title">${item.name}</div>
-                            <div class="card-footer">
+                            <div class="card-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                                 <button onclick='openPaymentModalWithAmountCheck(${JSON.stringify(item).replace(/'/g, "&apos;")}, document.getElementById("customAmount_${item.id}").value)' 
                                         class="make-payment-btn"
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div style="text-align: right;">
+                                <div class="custom-amount-wrapper" style="text-align: right;">
                                     <div class="fixed-amount-label">Custom Amount</div>
                                     <input type="number" id="customAmount_${item.id}" 
                                            placeholder="Enter amount" 
                                            class="custom-amount-input"
-                                           style="width: 100%; padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right;">
+                                           style="padding: 0.7rem 1.2rem; border: 1px solid ${cat.color}; border-radius: 0.5rem; font-size: 0.75rem; font-weight: 500; outline: none; background: transparent; text-align: right; width: 130px;">
                                 </div>
                             </div>
                         </div>
