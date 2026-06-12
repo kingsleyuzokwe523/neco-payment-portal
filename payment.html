@@ -150,7 +150,9 @@
             padding-top: 1rem;
             border-top: 1px solid #e5e7eb;
         }
-      .make-payment-btn {
+ /* Make input fields match button styling exactly */
+.make-payment-btn,
+input.make-payment-btn {
     font-size: 0.75rem;
     border: 1px solid;
     border-radius: 0.5rem;
@@ -158,6 +160,35 @@
     font-weight: 500;
     transition: all 0.2s ease;
     background: transparent;
+    height: auto;
+    box-sizing: border-box;
+    line-height: normal;
+    width: auto;
+    min-width: 110px;
+    cursor: pointer;
+}
+
+/* Remove spinner arrows for number input */
+input.make-payment-btn[type="number"] {
+    -moz-appearance: textfield;
+}
+
+input.make-payment-btn[type="number"]::-webkit-inner-spin-button,
+input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input.make-payment-btn:hover {
+    transform: scale(1.02);
+}
+
+/* For fixed amount value to align properly */
+.fixed-amount-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #222222;
+    white-space: nowrap;
 }
         .make-payment-btn:hover {
             transform: scale(1.02);
