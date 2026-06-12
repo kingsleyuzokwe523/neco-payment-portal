@@ -323,11 +323,11 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
     min-height: 100%;
 }
 
-/* Update the payment modal width - increase by 2x */
+/* Update the payment modal width */
 #paymentModal .modal-scroll-content {
     position: relative;
     margin: auto;
-    max-width: 1050px;  /* Changed from 600px to 900px (1.5x increase) */
+    max-width: 1050px;
     width: 95%;
     transform: none;
     left: auto;
@@ -336,18 +336,35 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
     bottom: auto;
 }
 
-/* Ensure proper centering on all devices */
-@media (min-width: 768px) {
+/* Tablet view */
+@media (min-width: 768px) and (max-width: 1023px) {
     #paymentModal .modal-scroll-content {
         width: 90%;
         max-width: 850px;
     }
 }
 
+/* Desktop view */
 @media (min-width: 1024px) {
     #paymentModal .modal-scroll-content {
         width: 85%;
-        max-width: 1000px;  /* Even larger on desktop */
+        max-width: 1000px;
+    }
+}
+
+/* Mobile view - phones only (up to 767px) */
+@media (max-width: 767px) {
+    #paymentModal .modal-scroll-content {
+        max-width: 96%;
+        width: 96%;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+    
+    /* Make the form fields fit better on mobile */
+    #paymentModal .px-3.md\:px-10 {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
     }
 }
         #accountModal .upload-area-small {
