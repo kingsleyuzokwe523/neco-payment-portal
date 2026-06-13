@@ -340,7 +340,7 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 @media (min-width: 768px) and (max-width: 1023px) {
     #paymentModal .modal-scroll-content {
         width: 90%;
-        max-width: 850px;
+        max-width: 950px;
     }
 }
 
@@ -365,6 +365,21 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
     #paymentModal .px-3.md\:px-10 {
         padding-left: 0.5rem;
         padding-right: 0.5rem;
+    }
+}
+/* Mobile view - keep text in straight line */
+@media (max-width: 767px) {
+    .text-xs.text-text-subtitle {
+        white-space: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        display: inline-block;
+        width: 100%;
+    }
+    
+    /* Make the parent container allow horizontal scroll if needed */
+    .px-3.md\:px-10 {
+        overflow-x: auto;
     }
 }
         #accountModal .upload-area-small {
