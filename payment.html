@@ -327,8 +327,8 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 #paymentModal .modal-scroll-content {
     position: relative;
     margin: auto;
-    max-width: 1050px;
-    width: 95%;
+    max-width: 700px;
+    width: 90%;
     transform: none;
     left: auto;
     right: auto;
@@ -339,47 +339,47 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 /* Tablet view */
 @media (min-width: 768px) and (max-width: 1023px) {
     #paymentModal .modal-scroll-content {
-        width: 90%;
-        max-width: 950px;
+        width: 85%;
+        max-width: 650px;
     }
 }
 
-/* Desktop view */
+/* Desktop view - normal size */
 @media (min-width: 1024px) {
     #paymentModal .modal-scroll-content {
-        width: 85%;
-        max-width: 1000px;
+        width: 80%;
+        max-width: 700px;
     }
 }
 
-/* Mobile view - set width to 800px */
+/* Mobile view - wider to fit text in one line */
 @media (max-width: 767px) {
     #paymentModal .modal-scroll-content {
-        max-width: 800px;
-        width: 900px;
-        padding-left: 8px;
-        padding-right: 8px;
+        max-width: 95%;
+        width: 95%;
+        padding-left: 10px;
+        padding-right: 10px;
     }
     
     /* Make the form fields fit better on mobile */
     #paymentModal .px-3.md\:px-10 {
-        padding-left: 0.5rem;
-        padding-right: 0.5rem;
-    }
-}
-/* Mobile view - keep text in straight line */
-@media (max-width: 767px) {
-    .text-xs.text-text-subtitle {
-        white-space: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        display: inline-block;
-        width: 100%;
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
     }
     
-    /* Make the parent container allow horizontal scroll if needed */
-    .px-3.md\:px-10 {
-        overflow-x: auto;
+    /* Keep text in straight line on mobile */
+    .text-xs.text-text-subtitle,
+    #paymentModal .text-xs.text-text-subtitle {
+        white-space: nowrap;
+        font-size: 0.7rem;
+    }
+    
+    /* For very small screens, allow tiny text */
+    @media (max-width: 480px) {
+        .text-xs.text-text-subtitle,
+        #paymentModal .text-xs.text-text-subtitle {
+            font-size: 0.6rem;
+        }
     }
 }
         #accountModal .upload-area-small {
