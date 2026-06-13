@@ -344,15 +344,7 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
     }
 }
 
-/* Desktop view - normal size */
-@media (min-width: 1024px) {
-    #paymentModal .modal-scroll-content {
-        width: 80%;
-        max-width: 700px;
-    }
-}
-
-/* Mobile view - wider to fit text in one line */
+/* Mobile view adjustments */
 @media (max-width: 767px) {
     #paymentModal .modal-scroll-content {
         max-width: 95%;
@@ -361,24 +353,34 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
         padding-right: 10px;
     }
     
-    /* Make the form fields fit better on mobile */
+    /* Make form fields fit better */
     #paymentModal .px-3.md\:px-10 {
         padding-left: 0.75rem;
         padding-right: 0.75rem;
     }
     
-    /* Keep text in straight line on mobile */
-    .text-xs.text-text-subtitle,
-    #paymentModal .text-xs.text-text-subtitle {
+    /* First line - INCREASE size but keep in one line */
+    .text-xs.mt-5.text-text-subtitle {
+        font-size: 0.85rem !important;
         white-space: nowrap;
-        font-size: 0.7rem;
+        font-weight: 500;
     }
     
-    /* For very small screens, allow tiny text */
+    /* Description text - INCREASE size so "for" wraps to next line */
+    .text-xs.my-2.pb-2.text-text-subtitle {
+        font-size: 0.85rem !important;
+        white-space: normal;
+        word-break: normal;
+        line-height: 1.3;
+    }
+    
+    /* For very small screens, adjust slightly */
     @media (max-width: 480px) {
-        .text-xs.text-text-subtitle,
-        #paymentModal .text-xs.text-text-subtitle {
-            font-size: 0.6rem;
+        .text-xs.mt-5.text-text-subtitle {
+            font-size: 0.75rem !important;
+        }
+        .text-xs.my-2.pb-2.text-text-subtitle {
+            font-size: 0.75rem !important;
         }
     }
 }
