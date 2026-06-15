@@ -35,7 +35,24 @@
             padding: 0 0 0 0;
             margin-top: 0;
         }
-        
+        /* Remove scrollbar from inside the modal on mobile */
+@media (max-width: 767px) {
+    /* Make the modal content use browser's native scrollbar */
+    #paymentModal .modal-scroll-content {
+        overflow-y: visible !important;
+        max-height: none !important;
+    }
+    
+    /* Let the modal itself scroll with browser scrollbar */
+    #paymentModal {
+        overflow-y: auto !important;
+    }
+    
+    /* Remove internal scrollbar styling */
+    .modal-scroll-content {
+        overflow-y: visible !important;
+    }
+}
         /* When expanded, show the menu item */
         .mobile-menu-item.expanded {
             max-height: 80px;
@@ -351,6 +368,17 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
         width: 95%;
         padding-left: 10px;
         padding-right: 10px;
+        overflow-y: visible !important;
+        max-height: none !important;
+    }
+    
+    /* Let the modal use browser's native scrollbar */
+    #paymentModal {
+        overflow-y: auto !important;
+    }
+    
+    #paymentModal .fixed.inset-0.overflow-y-auto {
+        overflow-y: visible !important;
     }
     
     /* Make form fields fit better */
