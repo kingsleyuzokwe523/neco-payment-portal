@@ -1079,8 +1079,15 @@ function renderGrid() {
     const cat = paymentData[currentCategory];
     if (!cat || !cat.items) return;
     
-    // Sort items by id (oldest first, newest last)
-    const sortedItems = [...cat.items].sort((a, b) => (a.id || 0) - (b.id || 0));
+    // Sort items consistently by id (fallback to name if id missing)
+    const sortedItems = [...cat.items].sort((a, b) => {
+        const idA = a.id || 0;
+        const idB = b.id || 0;
+        if (idA === idB) {
+            return (a.name || '').localeCompare(b.name || '');
+        }
+        return idA - idB;
+    });
     
     // Set card background color based on category
     let cardBgColor = '#ECFAF3'; // default greenish
@@ -1090,11 +1097,10 @@ function renderGrid() {
     
     grid.innerHTML = sortedItems.map(item => {
         const amountDisplay = item.amount ? `NGN ${item.amount.toLocaleString()}` : '';
-        // Escape the item name for safe use in onclick
         const escapedItemName = JSON.stringify(item).replace(/'/g, "&#39;");
         
         if (item.amount) {
-            // Fixed amount item
+            // Fixed amount item - WITH label and amount
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content" style="background: ${cardBgColor};">
@@ -1105,14 +1111,15 @@ function renderGrid() {
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="fixed-amount-value" style="font-size: 0.875rem; font-weight: 600; color: #222222;">
-                                    ${amountDisplay}
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
                                 </div>
                             </div>
                         </div>
                     </div>`;
         } else {
-            // Custom amount item - button + input field (SAME STYLE, NO LABEL)
+            // Custom amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content" style="background: ${cardBgColor};">
@@ -1587,16 +1594,23 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     const cat = paymentData[currentCategory];
     if(!cat || !cat.items) return;
     let filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-    filtered = filtered.sort((a, b) => (a.id || 0) - (b.id || 0));
+    // Sort consistently by id (fallback to name)
+    filtered = filtered.sort((a, b) => {
+        const idA = a.id || 0;
+        const idB = b.id || 0;
+        if (idA === idB) {
+            return (a.name || '').localeCompare(b.name || '');
+        }
+        return idA - idB;
+    });
     if(filtered.length === 0) { 
         document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
         return; 
     }
     
-    // Set card background color based on category
-    let cardBgColor = '#ECFAF3'; // default greenish
+    let cardBgColor = '#ECFAF3';
     if (currentCategory === 'BECE') {
-        cardBgColor = '#FCE4EC'; // light pink
+        cardBgColor = '#FCE4EC';
     }
     
     document.getElementById('paymentGrid').innerHTML = filtered.map(item => {
@@ -1614,8 +1628,9 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
                                         style="border-color: ${cat.color}; color: ${cat.color};">
                                     Make payment
                                 </button>
-                                <div class="fixed-amount-value" style="font-size: 0.875rem; font-weight: 600; color: #222222;">
-                                    ${amountDisplay}
+                                <div class="text-right">
+                                    <div class="fixed-amount-label">Fixed Amount</div>
+                                    <div class="fixed-amount-value">${amountDisplay}</div>
                                 </div>
                             </div>
                         </div>
