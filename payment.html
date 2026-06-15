@@ -1079,17 +1079,17 @@ function renderGrid() {
     const cat = paymentData[currentCategory];
     if (!cat || !cat.items) return;
     
-    // STRICT sort by id only - ascending (oldest first, newest last)
-    // This ensures items NEVER change position - new items always at the end
+    // Sort by created_at (oldest first, newest last) - THIS IS PERMANENT
     const sortedItems = [...cat.items].sort((a, b) => {
-        // Use id for sorting - higher id = newer item = goes to end
-        return (a.id || 0) - (b.id || 0);
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : a.id;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : b.id;
+        return dateA - dateB;
     });
     
     // Set card background color based on category
-    let cardBgColor = '#ECFAF3'; // default greenish
+    let cardBgColor = '#ECFAF3';
     if (currentCategory === 'BECE') {
-        cardBgColor = '#FCE4EC'; // light pink
+        cardBgColor = '#FCE4EC';
     }
     
     grid.innerHTML = sortedItems.map(item => {
@@ -1097,7 +1097,6 @@ function renderGrid() {
         const escapedItemName = JSON.stringify(item).replace(/'/g, "&#39;");
         
         if (item.amount) {
-            // Fixed amount item - WITH label and amount
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content" style="background: ${cardBgColor};">
@@ -1116,7 +1115,6 @@ function renderGrid() {
                         </div>
                     </div>`;
         } else {
-            // Custom amount item
             return `<div class="payment-card">
                         <div class="card-top-bar" style="background: ${cat.color};"></div>
                         <div class="card-content" style="background: ${cardBgColor};">
@@ -1591,9 +1589,11 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     const cat = paymentData[currentCategory];
     if(!cat || !cat.items) return;
     let filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-    // STRICT sort by id only - ascending (maintains order)
+    // Sort by created_at
     filtered = filtered.sort((a, b) => {
-        return (a.id || 0) - (b.id || 0);
+        const dateA = a.created_at ? new Date(a.created_at).getTime() : a.id;
+        const dateB = b.created_at ? new Date(b.created_at).getTime() : b.id;
+        return dateA - dateB;
     });
     if(filtered.length === 0) { 
         document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
@@ -1649,18 +1649,21 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }).join('');
 });
     
-   // ============ SUPABASE SYNC FOR ITEMS (Background) - PRESERVE ORDER ============
-async function syncPaymentItems() {
+ async function syncPaymentItems() {
     try {
+        // IMPORTANT: Order by id when fetching from Supabase
         const { data: categories } = await supabaseClient.from('categories').select('*');
-        const { data: items } = await supabaseClient.from('payment_items').select('*').order('id', { ascending: true });
+        const { data: items } = await supabaseClient
+            .from('payment_items')
+            .select('*')
+            .order('id', { ascending: true });  // ← ADD THIS LINE
         
         if (categories && categories.length > 0 && items) {
             const newPaymentData = {};
             for (const category of categories) {
                 newPaymentData[category.name] = {
                     color: category.color,
-                    items: items.filter(item => item.category_id === category.id).sort((a, b) => (a.id || 0) - (b.id || 0))
+                    items: items.filter(item => item.category_id === category.id)
                 };
             }
             Object.assign(paymentData, newPaymentData);
