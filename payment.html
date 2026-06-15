@@ -1073,18 +1073,13 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
         console.log('PIN marked as used successfully');
     }
     
-// Replace the renderGrid function with this:
 function renderGrid() {
     const grid = document.getElementById('paymentGrid');
     const cat = paymentData[currentCategory];
     if (!cat || !cat.items) return;
     
-    // Sort by created_at (oldest first, newest last) - THIS IS PERMANENT
-    const sortedItems = [...cat.items].sort((a, b) => {
-        const dateA = a.created_at ? new Date(a.created_at).getTime() : a.id;
-        const dateB = b.created_at ? new Date(b.created_at).getTime() : b.id;
-        return dateA - dateB;
-    });
+    // Sort by item_order (the order you specified in the SQL)
+    const sortedItems = [...cat.items].sort((a, b) => (a.item_order || 999) - (b.item_order || 999));
     
     // Set card background color based on category
     let cardBgColor = '#ECFAF3';
