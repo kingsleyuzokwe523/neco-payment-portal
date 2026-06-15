@@ -1079,14 +1079,11 @@ function renderGrid() {
     const cat = paymentData[currentCategory];
     if (!cat || !cat.items) return;
     
-    // Sort items consistently by id (fallback to name if id missing)
+    // STRICT sort by id only - ascending (oldest first, newest last)
+    // This ensures items NEVER change position - new items always at the end
     const sortedItems = [...cat.items].sort((a, b) => {
-        const idA = a.id || 0;
-        const idB = b.id || 0;
-        if (idA === idB) {
-            return (a.name || '').localeCompare(b.name || '');
-        }
-        return idA - idB;
+        // Use id for sorting - higher id = newer item = goes to end
+        return (a.id || 0) - (b.id || 0);
     });
     
     // Set card background color based on category
@@ -1594,14 +1591,9 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     const cat = paymentData[currentCategory];
     if(!cat || !cat.items) return;
     let filtered = cat.items.filter(i => i.name.toLowerCase().includes(term));
-    // Sort consistently by id (fallback to name)
+    // STRICT sort by id only - ascending (maintains order)
     filtered = filtered.sort((a, b) => {
-        const idA = a.id || 0;
-        const idB = b.id || 0;
-        if (idA === idB) {
-            return (a.name || '').localeCompare(b.name || '');
-        }
-        return idA - idB;
+        return (a.id || 0) - (b.id || 0);
     });
     if(filtered.length === 0) { 
         document.getElementById('paymentGrid').innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">No payment items found</div>'; 
@@ -1657,25 +1649,25 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
     }).join('');
 });
     
-    // ============ SUPABASE SYNC FOR ITEMS (Background) ============
-    async function syncPaymentItems() {
-        try {
-            const { data: categories } = await supabaseClient.from('categories').select('*');
-            const { data: items } = await supabaseClient.from('payment_items').select('*');
-            
-            if (categories && categories.length > 0 && items) {
-                const newPaymentData = {};
-                for (const category of categories) {
-                    newPaymentData[category.name] = {
-                        color: category.color,
-                        items: items.filter(item => item.category_id === category.id)
-                    };
-                }
-                Object.assign(paymentData, newPaymentData);
-                renderGrid();
+   // ============ SUPABASE SYNC FOR ITEMS (Background) - PRESERVE ORDER ============
+async function syncPaymentItems() {
+    try {
+        const { data: categories } = await supabaseClient.from('categories').select('*');
+        const { data: items } = await supabaseClient.from('payment_items').select('*').order('id', { ascending: true });
+        
+        if (categories && categories.length > 0 && items) {
+            const newPaymentData = {};
+            for (const category of categories) {
+                newPaymentData[category.name] = {
+                    color: category.color,
+                    items: items.filter(item => item.category_id === category.id).sort((a, b) => (a.id || 0) - (b.id || 0))
+                };
             }
-        } catch (error) {}
-    }
+            Object.assign(paymentData, newPaymentData);
+            renderGrid();
+        }
+    } catch (error) {}
+}
     
     // Reload settings periodically
     setInterval(loadSettings, 30000);
