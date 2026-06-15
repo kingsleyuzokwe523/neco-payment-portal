@@ -1445,10 +1445,18 @@ async function saveItem() {
     if (!name) { alert('Enter item name'); return; }
     let error;
     if (currentEditingItemId) {
-        const { error: updateError } = await necoSupabase.from('payment_items').update({ name, amount, category_id: categoryId }).eq('id', currentEditingItemId);
+        const { error: updateError } = await necoSupabase.from('payment_items').update({ 
+            name, amount, category_id: categoryId 
+        }).eq('id', currentEditingItemId);
         error = updateError;
     } else {
-        const { error: insertError } = await necoSupabase.from('payment_items').insert({ name, category_id: categoryId, amount });
+        // Add created_at for new items
+        const { error: insertError } = await necoSupabase.from('payment_items').insert({ 
+            name, 
+            category_id: categoryId, 
+            amount,
+            created_at: new Date().toISOString()
+        });
         error = insertError;
     }
     if (error) alert('Error: ' + error.message);
@@ -1459,7 +1467,6 @@ async function saveItem() {
         alert('✅ Item saved successfully!');
     }
 }
-
 async function deleteItem(itemId) {
     if (confirm('Delete this item?')) {
         const { error } = await necoSupabase.from('payment_items').delete().eq('id', itemId);
