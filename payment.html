@@ -363,6 +363,17 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
 
 /* Mobile view adjustments */
 @media (max-width: 767px) {
+    /* Make the modal use browser's native scrollbar */
+    #paymentModal {
+        overflow-y: auto !important;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+    }
+    
+    /* Remove internal scrollbar from modal content */
     #paymentModal .modal-scroll-content {
         max-width: 95%;
         width: 95%;
@@ -370,15 +381,27 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
         padding-right: 10px;
         overflow-y: visible !important;
         max-height: none !important;
+        position: relative !important;
+        margin: 20px auto !important;
     }
     
-    /* Let the modal use browser's native scrollbar */
-    #paymentModal {
-        overflow-y: auto !important;
-    }
-    
+    /* Remove overflow from the overlay container */
     #paymentModal .fixed.inset-0.overflow-y-auto {
-        overflow-y: visible !important;
+        overflow: visible !important;
+        position: static !important;
+    }
+    
+    /* Make the flex container not restrict height */
+    #paymentModal .flex.min-h-full.items-center.justify-center {
+        display: block !important;
+        min-height: auto !important;
+        padding: 0 !important;
+    }
+    
+    /* Remove the backdrop overlay's fixed positioning interference */
+    #paymentModal .fixed.inset-0.bg-black.bg-opacity-25 {
+        position: fixed !important;
+        z-index: 9998 !important;
     }
     
     /* Make form fields fit better */
@@ -770,7 +793,7 @@ input.make-payment-btn[type="number"]::-webkit-outer-spin-button {
     <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" style="z-index: 9998;"></div>
     <div class="fixed inset-0 overflow-y-auto" style="z-index: 9999;">
         <div class="flex min-h-full items-center justify-center p-4 text-center">
-            <div class="w-full transform overflow-y-auto rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10 modal-scroll-content" style="margin: auto; position: relative;">
+            <div class="w-full transform rounded-md bg-white text-left align-middle shadow-xl transition-all max-w-xl py-10" style="margin: auto; position: relative;">
                 <form id="paymentFormModal">
                     <div class="px-3 md:px-10">
                         <div class="flex justify-between">
