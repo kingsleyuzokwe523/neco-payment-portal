@@ -1217,72 +1217,168 @@
             <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('pinModal')">Cancel</button><button class="btn-save" onclick="savePin()">Generate PIN</button></div>
         </div>
     </div>
-    
-    <!-- POP-UP MODAL (Add/Edit) -->
-    <div id="popupModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="popupModalTitle">Add Pop-up</h3>
-                <button onclick="closeModal('popupModal')">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="neco-form-group">
-                    <label>Icon Type</label>
-                    <div class="icon-selector" id="iconSelector">
-                        <div class="icon-option" data-icon="information" onclick="selectIcon(this)">
-                            <svg fill="none" stroke="#3b82f6" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Information
+<!-- POP-UP MODAL with all improvements -->
+<div id="popupModal" class="modal">
+    <div class="modal-content" style="max-width: 800px;">
+        <div class="modal-header">
+            <h3 id="popupModalTitle">Add Pop-up</h3>
+            <button onclick="closeModal('popupModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <!-- Message Editor with Inline Icon -->
+            <div class="neco-form-group">
+                <label>Pop-up Message <span style="font-weight:400;color:#6b7280;font-size:12px;">(Select text to format)</span></label>
+                <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white;">
+                    <!-- Toolbar -->
+                    <div id="popupToolbar" style="background: #f9fafb; padding: 8px 12px; border-bottom: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
+                        <button type="button" onclick="formatText('bold')" title="Bold" style="padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-weight: 600;">B</button>
+                        <button type="button" onclick="formatText('italic')" title="Italic" style="padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-style: italic;">I</button>
+                        <button type="button" onclick="formatText('underline')" title="Underline" style="padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; text-decoration: underline;">U</button>
+                        <button type="button" onclick="formatText('strikeThrough')" title="Strikethrough" style="padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; text-decoration: line-through;">S</button>
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <input type="color" id="textColorPicker" onchange="formatText('foreColor', this.value)" style="width:24px;height:24px;border:none;padding:0;cursor:pointer;" title="Text Color">
+                        <input type="color" id="bgColorPicker" onchange="formatText('hiliteColor', this.value)" style="width:24px;height:24px;border:none;padding:0;cursor:pointer;" title="Background Color">
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <select onchange="formatText('fontSize', this.value)" style="padding:2px 4px;font-size:12px;border:1px solid #d1d5db;border-radius:4px;">
+                            <option value="12px">12px</option>
+                            <option value="14px" selected>14px</option>
+                            <option value="16px">16px</option>
+                            <option value="18px">18px</option>
+                            <option value="20px">20px</option>
+                            <option value="24px">24px</option>
+                        </select>
+                        <select onchange="formatText('fontName', this.value)" style="padding:2px 4px;font-size:12px;border:1px solid #d1d5db;border-radius:4px;">
+                            <option value="Arial">Arial</option>
+                            <option value="Times New Roman">Times New Roman</option>
+                            <option value="Georgia">Georgia</option>
+                            <option value="Verdana">Verdana</option>
+                            <option value="Tahoma">Tahoma</option>
+                            <option value="Courier New">Courier New</option>
+                        </select>
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <button type="button" onclick="formatText('insertUnorderedList')" title="Bullet List" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">•</button>
+                        <button type="button" onclick="formatText('insertOrderedList')" title="Numbered List" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">1.</button>
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <button type="button" onclick="formatText('justifyLeft')" title="Align Left" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">≡</button>
+                        <button type="button" onclick="formatText('justifyCenter')" title="Align Center" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">≡</button>
+                        <button type="button" onclick="formatText('justifyRight')" title="Align Right" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">≡</button>
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <button type="button" onclick="formatText('removeFormat')" title="Remove Formatting" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;color:#dc2626;">✕</button>
+                        <button type="button" onclick="undoFormat()" title="Undo" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">↩</button>
+                        <button type="button" onclick="redoFormat()" title="Redo" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">↪</button>
+                        <div style="width:1px;height:24px;background:#d1d5db;"></div>
+                        <button type="button" onclick="insertLink()" title="Insert Link" style="padding:4px 8px;border:none;background:transparent;cursor:pointer;border-radius:4px;">🔗</button>
+                    </div>
+                    
+                    <!-- Editor with Icon -->
+                    <div style="position: relative; padding: 12px 16px; min-height: 150px;" id="popupEditorContainer">
+                        <div id="popupIconDisplay" style="display: none; position: absolute; left: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; z-index: 2;">
+                            <span id="popupIconPreview"></span>
                         </div>
-                        <div class="icon-option" data-icon="warning" onclick="selectIcon(this)">
-                            <svg fill="none" stroke="#f59e0b" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                            Warning
-                        </div>
-                        <div class="icon-option" data-icon="success" onclick="selectIcon(this)">
-                            <svg fill="none" stroke="#16a34a" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Success
-                        </div>
-                        <div class="icon-option" data-icon="custom" onclick="selectIcon(this)">
-                            <svg fill="none" stroke="#dc2626" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Custom
-                        </div>
+                        <div id="popupMessageEditor" contenteditable="true" style="
+                            min-height: 150px;
+                            outline: none;
+                            font-size: 14px;
+                            line-height: 1.6;
+                            padding-left: 0px;
+                            transition: padding-left 0.2s ease;
+                            color: #1f2937;
+                        "></div>
                     </div>
                 </div>
-                
-                <div class="neco-form-group">
-                    <label>Pop-up Message</label>
-                    <div id="popupMessageEditor" style="height: 200px;"></div>
+                <div style="margin-top: 6px; display: flex; align-items: center; gap: 12px; font-size: 12px; color: #6b7280;">
+                    <span>💡 Tip: Select text to format it</span>
+                    <span>|</span>
+                    <span id="wordCount">0 words</span>
                 </div>
-                
-                <div class="neco-form-group" style="display: flex; gap: 20px; align-items: center;">
-                    <label style="margin-bottom: 0;">Status:</label>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="popupStatus">
+            </div>
+
+            <!-- Icon Selection - Small inline icons -->
+            <div class="neco-form-group">
+                <label>Icon Type <span style="font-weight:400;color:#6b7280;font-size:12px;">(appears inline with text)</span></label>
+                <div class="icon-selector" id="iconSelector" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                    <div class="icon-option" data-icon="information" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                        <svg fill="none" stroke="#3b82f6" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Info
+                    </div>
+                    <div class="icon-option" data-icon="warning" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                        <svg fill="none" stroke="#f59e0b" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                        Warning
+                    </div>
+                    <div class="icon-option" data-icon="success" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                        <svg fill="none" stroke="#16a34a" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Success
+                    </div>
+                    <div class="icon-option" data-icon="custom" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                        <svg fill="none" stroke="#dc2626" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Custom
+                    </div>
+                    <div class="icon-option" data-icon="none" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                        <svg fill="none" stroke="#9ca3af" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                        None
+                    </div>
+                </div>
+            </div>
+
+            <!-- Status & Order -->
+            <div style="display: flex; gap: 30px; flex-wrap: wrap; margin-bottom: 20px;">
+                <div class="neco-form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 12px;">
+                    <label style="margin-bottom: 0; font-weight: 600; font-size: 14px; color: #374151;">Status:</label>
+                    <label class="toggle-switch" style="width: 40px; height: 22px;">
+                        <input type="checkbox" id="popupStatus" onchange="document.getElementById('popupStatusLabel').innerText = this.checked ? 'Active' : 'Inactive'">
                         <span class="toggle-slider"></span>
                     </label>
-                    <span id="popupStatusLabel" style="font-size: 14px; font-weight: 500; color: #374151;">Inactive</span>
+                    <span id="popupStatusLabel" style="font-size: 13px; font-weight: 500; color: #374151;">Inactive</span>
                 </div>
-                
-                <div class="neco-form-group">
-                    <label>Display Order</label>
-                    <input type="number" id="popupOrder" value="0" min="0">
-                    <small>Lower numbers appear first</small>
+
+                <div class="neco-form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 12px;">
+                    <label style="margin-bottom: 0; font-weight: 600; font-size: 14px; color: #374151;">Display Order:</label>
+                    <input type="number" id="popupOrder" value="0" min="0" style="width: 80px; padding: 8px 12px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <small style="font-size: 11px; color: #6b7280;">(Lower numbers appear first)</small>
                 </div>
-                
-                <div class="neco-form-group">
-                    <label>Live Preview</label>
-                    <div id="popupLivePreview" style="background: #f0f2f5; padding: 20px; border-radius: 12px; min-height: 150px; display: flex; justify-content: center; align-items: center;">
-                        <p style="color: #9ca3af;">Preview will appear here</p>
-                    </div>
+
+                <!-- Small "I Understand" Checkbox -->
+                <div class="neco-form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="showUnderstandCheckbox" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                    <label for="showUnderstandCheckbox" style="margin-bottom: 0; font-size: 13px; font-weight: 400; color: #374151; cursor: pointer;">Show "I Understand" checkbox</label>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('popupModal')">Cancel</button>
-                <button class="btn-save" onclick="savePopup()">Save Pop-up</button>
+
+            <!-- Live Preview -->
+            <div class="neco-form-group">
+                <label>Live Preview</label>
+                <div id="popupLivePreview" style="background: #f0f2f5; padding: 30px; border-radius: 12px; min-height: 120px; display: flex; justify-content: center; align-items: center; border: 1px dashed #d1d5db;">
+                    <p style="color: #9ca3af; font-size: 13px;">Preview will appear here</p>
+                </div>
             </div>
         </div>
+        <div class="modal-footer">
+            <button class="btn-cancel" onclick="closeModal('popupModal')">Cancel</button>
+            <button class="btn-save" onclick="savePopup()">💾 Save Pop-up</button>
+        </div>
     </div>
+</div>
 
-    <script>
+<style>
+/* Icon position styles */
+#popupMessageEditor {
+    padding-left: 0px !important;
+}
+#popupMessageEditor.has-icon {
+    padding-left: 32px !important;
+}
+#popupIconDisplay {
+    display: none !important;
+}
+#popupMessageEditor.has-icon ~ #popupIconDisplay {
+    display: block !important;
+}
+.icon-option.selected {
+    border-color: #054c0f !important;
+    background: #d1fae5 !important;
+}
+</style>
+ <script>
     // ============ SUPABASE CONFIGURATION ============
     const SUPABASE_URL = 'https://zdnsnqkzpnpnrlodrqqh.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_C-GKXUstl0mT3jtY6Qe4Xg_c36LjkvI';
@@ -1297,7 +1393,6 @@
     let currentEditingItemId = null;
     let currentEditingPopupId = null;
     let pinExpiryInterval = null;
-    let quillEditor = null;
 
     // SINGLE DECLARATION of these variables
     let currentEditingKey = null;
@@ -1305,6 +1400,10 @@
     let currentEditingElementId = null;
     let currentEditingOriginalText = null;
     let selectedIcon = 'information';
+
+    // Editor history for undo/redo
+    let editorHistory = [];
+    let editorHistoryIndex = -1;
 
     // Form styles stored in Supabase
     let formStyles = {
@@ -1420,34 +1519,213 @@
         return colors[iconType] || '#3b82f6';
     }
 
+    // ============ CUSTOM EDITOR FUNCTIONS ============
+    
+    function getEditor() {
+        return document.getElementById('popupMessageEditor');
+    }
+
+    function getEditorContainer() {
+        return document.getElementById('popupEditorContainer');
+    }
+
+    function saveEditorState() {
+        const editor = getEditor();
+        if (!editor) return;
+        const content = editor.innerHTML;
+        editorHistory = editorHistory.slice(0, editorHistoryIndex + 1);
+        editorHistory.push(content);
+        editorHistoryIndex = editorHistory.length - 1;
+        // Limit history to 50 entries
+        if (editorHistory.length > 50) {
+            editorHistory.shift();
+            editorHistoryIndex--;
+        }
+    }
+
+    function formatText(command, value) {
+        const editor = getEditor();
+        if (!editor) return;
+        
+        // Save state before change
+        saveEditorState();
+        
+        editor.focus();
+        
+        // Check if there's a selection
+        const selection = window.getSelection();
+        if (!selection || selection.isCollapsed) {
+            // No text selected - insert at cursor or do nothing
+            if (command === 'insertUnorderedList' || command === 'insertOrderedList') {
+                document.execCommand(command, false, null);
+            }
+            return;
+        }
+        
+        switch(command) {
+            case 'bold':
+                document.execCommand('bold', false, null);
+                break;
+            case 'italic':
+                document.execCommand('italic', false, null);
+                break;
+            case 'underline':
+                document.execCommand('underline', false, null);
+                break;
+            case 'strikeThrough':
+                document.execCommand('strikeThrough', false, null);
+                break;
+            case 'foreColor':
+                document.execCommand('foreColor', false, value);
+                break;
+            case 'hiliteColor':
+                document.execCommand('hiliteColor', false, value);
+                break;
+            case 'fontSize':
+                // Use a temporary font size
+                document.execCommand('fontSize', false, '7');
+                // Fix: replace with actual size
+                const fontElements = editor.querySelectorAll('font[size="7"]');
+                fontElements.forEach(el => {
+                    el.removeAttribute('size');
+                    el.style.fontSize = value;
+                });
+                break;
+            case 'fontName':
+                document.execCommand('fontName', false, value);
+                break;
+            case 'insertUnorderedList':
+                document.execCommand('insertUnorderedList', false, null);
+                break;
+            case 'insertOrderedList':
+                document.execCommand('insertOrderedList', false, null);
+                break;
+            case 'justifyLeft':
+                document.execCommand('justifyLeft', false, null);
+                break;
+            case 'justifyCenter':
+                document.execCommand('justifyCenter', false, null);
+                break;
+            case 'justifyRight':
+                document.execCommand('justifyRight', false, null);
+                break;
+            case 'removeFormat':
+                document.execCommand('removeFormat', false, null);
+                break;
+            case 'createLink':
+                if (value) {
+                    document.execCommand('createLink', false, value);
+                }
+                break;
+            default:
+                break;
+        }
+        
+        updatePopupPreview();
+        updateWordCount();
+    }
+
+    function insertLink() {
+        const url = prompt('Enter URL:', 'https://');
+        if (url) {
+            saveEditorState();
+            formatText('createLink', url);
+        }
+    }
+
+    function undoFormat() {
+        if (editorHistoryIndex > 0) {
+            editorHistoryIndex--;
+            const editor = getEditor();
+            if (editor) {
+                editor.innerHTML = editorHistory[editorHistoryIndex];
+                updatePopupPreview();
+                updateWordCount();
+            }
+        }
+    }
+
+    function redoFormat() {
+        if (editorHistoryIndex < editorHistory.length - 1) {
+            editorHistoryIndex++;
+            const editor = getEditor();
+            if (editor) {
+                editor.innerHTML = editorHistory[editorHistoryIndex];
+                updatePopupPreview();
+                updateWordCount();
+            }
+        }
+    }
+
+    function updateWordCount() {
+        const editor = getEditor();
+        if (!editor) return;
+        const text = editor.innerText || '';
+        const words = text.trim().split(/\s+/).filter(w => w.length > 0).length;
+        const wordCountEl = document.getElementById('wordCount');
+        if (wordCountEl) {
+            wordCountEl.innerHTML = words + ' words';
+        }
+    }
+
     function selectIcon(el) {
         document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
         el.classList.add('selected');
         selectedIcon = el.getAttribute('data-icon');
+        
+        // Update icon display in editor
+        const iconDisplay = document.getElementById('popupIconDisplay');
+        const iconPreview = document.getElementById('popupIconPreview');
+        const editor = document.getElementById('popupMessageEditor');
+        
+        if (selectedIcon && selectedIcon !== 'none') {
+            iconDisplay.style.display = 'block';
+            iconPreview.innerHTML = getIconSVG(selectedIcon, 18);
+            editor.classList.add('has-icon');
+        } else {
+            iconDisplay.style.display = 'none';
+            editor.classList.remove('has-icon');
+        }
+        
         updatePopupPreview();
     }
 
+    // ============ POPUP PREVIEW ============
+    
     function updatePopupPreview() {
         const previewContainer = document.getElementById('popupLivePreview');
         if (!previewContainer) return;
         
-        const message = quillEditor ? quillEditor.root.innerHTML : '';
+        const editor = document.getElementById('popupMessageEditor');
+        const message = editor ? editor.innerHTML : '';
         const iconType = selectedIcon || 'information';
+        const showCheckbox = document.getElementById('showUnderstandCheckbox')?.checked !== false;
+        
+        // Get the actual icon HTML with size 20 for preview
+        const iconHTML = getIconSVG(iconType, 20);
         
         previewContainer.innerHTML = `
-            <div style="background: white; border-radius: 16px; padding: 30px 40px; max-width: 450px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">
-                <div style="margin-bottom: 16px; display: flex; justify-content: center;">
-                    ${getIconSVG(iconType, 48)}
+            <div style="background: white; border-radius: 16px; padding: 24px 30px; max-width: 480px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb;">
+                <div style="display: flex; align-items: flex-start; gap: 10px; margin-bottom: 16px;">
+                    ${iconType && iconType !== 'none' ? `<div style="flex-shrink: 0; margin-top: 2px;">${iconHTML}</div>` : ''}
+                    <div style="font-size: 15px; color: #1f2937; line-height: 1.6; flex: 1; word-wrap: break-word;">
+                        ${message || '<span style="color: #9ca3af;">Your message will appear here</span>'}
+                    </div>
                 </div>
-                <div style="font-size: 16px; color: #1f2937; line-height: 1.6; margin-bottom: 20px;">
-                    ${message || '<span style="color: #9ca3af;">Your message will appear here</span>'}
-                </div>
-                <div style="display: flex; justify-content: flex-end;">
-                    <button style="background: #16a34a; color: white; border: none; padding: 10px 32px; border-radius: 8px; font-weight: 500; cursor: default;">I Understand</button>
+                <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 8px;">
+                    ${showCheckbox ? `
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <input type="checkbox" style="width: 14px; height: 14px; margin: 0; cursor: default; accent-color: #16a34a;">
+                            <span style="font-size: 13px; color: #374151; user-select: none;">I understand</span>
+                        </div>
+                    ` : ''}
+                    <button style="background: #16a34a; color: white; border: none; padding: 8px 24px; border-radius: 8px; font-weight: 500; cursor: default; font-size: 14px;">Confirm</button>
                 </div>
             </div>
         `;
     }
+
+    // ============ OPEN/SAVE POPUP FUNCTIONS ============
 
     function openAddPopupModal() {
         currentEditingPopupId = null;
@@ -1455,21 +1733,39 @@
         document.getElementById('popupStatus').checked = false;
         document.getElementById('popupStatusLabel').innerText = 'Inactive';
         document.getElementById('popupOrder').value = currentPopups.length;
+        document.getElementById('showUnderstandCheckbox').checked = true;
         
         // Reset icon selection
         document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
         selectedIcon = 'information';
-        document.querySelector('.icon-option[data-icon="information"]').classList.add('selected');
+        const defaultIcon = document.querySelector('.icon-option[data-icon="information"]');
+        if (defaultIcon) defaultIcon.classList.add('selected');
         
-        // Clear quill editor
-        if (quillEditor) {
-            quillEditor.root.innerHTML = '';
+        // Clear editor
+        const editor = document.getElementById('popupMessageEditor');
+        if (editor) {
+            editor.innerHTML = '';
+            editor.classList.add('has-icon');
         }
         
+        // Show icon
+        const iconDisplay = document.getElementById('popupIconDisplay');
+        const iconPreview = document.getElementById('popupIconPreview');
+        if (iconDisplay && iconPreview) {
+            iconDisplay.style.display = 'block';
+            iconPreview.innerHTML = getIconSVG('information', 18);
+        }
+        
+        // Reset history
+        editorHistory = [];
+        editorHistoryIndex = -1;
+        saveEditorState();
+        
         updatePopupPreview();
+        updateWordCount();
         document.getElementById('popupModal').style.display = 'flex';
         setTimeout(() => {
-            if (quillEditor) quillEditor.focus();
+            if (editor) editor.focus();
         }, 300);
     }
 
@@ -1482,6 +1778,7 @@
         document.getElementById('popupStatus').checked = popup.status === 'active';
         document.getElementById('popupStatusLabel').innerText = popup.status === 'active' ? 'Active' : 'Inactive';
         document.getElementById('popupOrder').value = popup.display_order || 0;
+        document.getElementById('showUnderstandCheckbox').checked = true;
         
         // Set icon
         document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
@@ -1489,27 +1786,55 @@
         const iconEl = document.querySelector(`.icon-option[data-icon="${selectedIcon}"]`);
         if (iconEl) iconEl.classList.add('selected');
         
-        // Set message in quill
-        if (quillEditor) {
-            quillEditor.root.innerHTML = popup.message || '';
+        // Set message in editor
+        const editor = document.getElementById('popupMessageEditor');
+        if (editor) {
+            editor.innerHTML = popup.message || '';
+            if (selectedIcon && selectedIcon !== 'none') {
+                editor.classList.add('has-icon');
+            } else {
+                editor.classList.remove('has-icon');
+            }
         }
         
+        // Show icon
+        const iconDisplay = document.getElementById('popupIconDisplay');
+        const iconPreview = document.getElementById('popupIconPreview');
+        if (iconDisplay && iconPreview) {
+            if (selectedIcon && selectedIcon !== 'none') {
+                iconDisplay.style.display = 'block';
+                iconPreview.innerHTML = getIconSVG(selectedIcon, 18);
+            } else {
+                iconDisplay.style.display = 'none';
+            }
+        }
+        
+        // Reset history
+        editorHistory = [];
+        editorHistoryIndex = -1;
+        saveEditorState();
+        
         updatePopupPreview();
+        updateWordCount();
         document.getElementById('popupModal').style.display = 'flex';
+        setTimeout(() => {
+            if (editor) editor.focus();
+        }, 300);
     }
 
     async function savePopup() {
-        const message = quillEditor ? quillEditor.root.innerHTML : '';
+        const editor = document.getElementById('popupMessageEditor');
+        const message = editor ? editor.innerHTML : '';
         const status = document.getElementById('popupStatus').checked ? 'active' : 'inactive';
         const displayOrder = parseInt(document.getElementById('popupOrder').value) || 0;
         
-        if (!message || message.trim() === '<p><br></p>') {
+        if (!message || message.trim() === '' || message === '<br>') {
             alert('Please enter a message for the pop-up.');
             return;
         }
         
         const data = {
-            icon_type: selectedIcon,
+            icon_type: selectedIcon || 'information',
             message: message,
             status: status,
             display_order: displayOrder,
@@ -1575,19 +1900,16 @@
     }
 
     async function reorderPopup(popupId, direction) {
-        // direction: 1 = move down, -1 = move up
         const popup = currentPopups.find(p => p.id === popupId);
         if (!popup) return;
         
         const currentOrder = popup.display_order || 0;
         const newOrder = Math.max(0, currentOrder + direction);
         
-        // Find another popup with the same order and swap
         const conflicting = currentPopups.find(p => p.id !== popupId && (p.display_order || 0) === newOrder);
         
         try {
             if (conflicting) {
-                // Swap orders
                 const { error: error1 } = await necoSupabase
                     .from('popups')
                     .update({ display_order: currentOrder, updated_at: new Date().toISOString() })
@@ -1708,39 +2030,8 @@
         html += '</tbody></table>';
         container.innerHTML = html;
         
-        // Show first popup as preview by default if none selected
         if (currentPopups.length > 0) {
             previewPopup(currentPopups[0].id);
-        }
-    }
-
-    // ============ POP-UP QUILT EDITOR INITIALIZATION ============
-    function initQuillEditor() {
-        if (document.getElementById('popupMessageEditor')) {
-            quillEditor = new Quill('#popupMessageEditor', {
-                theme: 'snow',
-                placeholder: 'Enter your pop-up message here...',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        ['blockquote', 'code-block'],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'align': [] }],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'font': [] }, { 'size': ['small', false, 'large', 'huge'] }],
-                        ['link', 'image', 'video'],
-                        ['clean'],
-                        ['undo', 'redo']
-                    ]
-                }
-            });
-            
-            quillEditor.on('text-change', function() {
-                updatePopupPreview();
-            });
         }
     }
 
@@ -1854,9 +2145,6 @@
                     document.getElementById('selectedCategoryTitle').innerHTML = `${escapeHtml(selectedCat.name)} Items (${itemCount} items)`;
                 }
             }
-            
-            // Initialize Quill editor after DOM is ready
-            initQuillEditor();
             
         } catch (error) {
             console.error('Error loading data:', error);
@@ -2669,6 +2957,7 @@
     }
 
     window.onclick = function(e) { if (e.target.classList.contains('modal')) e.target.style.display = 'none'; }
-    </script>
+</script>   
+    
 </body>
 </html>
