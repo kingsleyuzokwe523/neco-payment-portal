@@ -325,7 +325,188 @@
                 menuBtn.style.display = 'block';
             };
         }
+        // Add this to your homepage script section
+
+// ============ POP-UP SYSTEM ============
+let activePopups = [];
+let currentPopupIndex = 0;
+let popupQueue = [];
+
+async function loadActivePopups() {
+    try {
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await supabase
+            .from('popups')
+            .select('*')
+            .eq('status', 'active')
+            .order('display_order', { ascending: true });
         
+        if (error) throw error;
+        activePopups = data || [];
+        
+        if (activePopups.length > 0) {
+            showPopupQueue();
+        }
+    } catch (err) {
+        console.log('Error loading popups:', err);
+    }
+}
+
+function showPopupQueue() {
+    if (activePopups.length === 0) return;
+    popupQueue = [...activePopups];
+    currentPopupIndex = 0;
+    showNextPopup();
+}
+
+function showNextPopup() {
+    if (currentPopupIndex >= popupQueue.length) {
+        // All popups shown - remove overlay
+        removePopupOverlay();
+        return;
+    }
+    
+    const popup = popupQueue[currentPopupIndex];
+    displayPopup(popup);
+}
+
+function displayPopup(popup) {
+    // Create overlay if it doesn't exist
+    let overlay = document.getElementById('popupOverlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'popupOverlay';
+        overlay.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        `;
+        document.body.appendChild(overlay);
+    }
+    
+    // Prevent scroll
+    document.body.style.overflow = 'hidden';
+    
+    // Create popup card
+    const iconType = popup.icon_type || 'information';
+    const iconColors = {
+        'information': '#3b82f6',
+        'warning': '#f59e0b',
+        'success': '#16a34a',
+        'custom': '#dc2626'
+    };
+    const iconColor = iconColors[iconType] || '#3b82f6';
+    
+    const iconSVGs = {
+        'information': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'warning': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+        'success': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'custom': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+    };
+    
+    const popupHTML = `
+        <div id="popupCard" style="
+            background: white;
+            border-radius: 24px;
+            padding: 40px 50px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+            text-align: center;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.3s ease;
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+        ">
+            <div style="margin-bottom: 20px; display: flex; justify-content: center;">
+                ${iconSVGs[iconType] || iconSVGs['information']}
+            </div>
+            <div style="font-size: 16px; color: #1f2937; line-height: 1.7; margin-bottom: 28px; word-wrap: break-word;">
+                ${popup.message}
+            </div>
+            <div style="display: flex; justify-content: flex-end;">
+                <button onclick="dismissPopup()" style="
+                    background: #16a34a;
+                    color: white;
+                    border: none;
+                    padding: 12px 36px;
+                    border-radius: 10px;
+                    font-weight: 600;
+                    cursor: pointer;
+                    font-size: 15px;
+                    transition: background 0.2s;
+                " onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
+                    I Understand
+                </button>
+            </div>
+            ${popupQueue.length > 1 ? `<div style="margin-top: 12px; font-size: 12px; color: #9ca3af;">${currentPopupIndex + 1} of ${popupQueue.length}</div>` : ''}
+        </div>
+    `;
+    
+    overlay.innerHTML = popupHTML;
+    overlay.style.display = 'flex';
+    
+    // Trigger animation after a small delay
+    setTimeout(() => {
+        overlay.style.opacity = '1';
+        const card = document.getElementById('popupCard');
+        if (card) {
+            card.style.transform = 'scale(1)';
+            card.style.opacity = '1';
+        }
+    }, 50);
+}
+
+function dismissPopup() {
+    const overlay = document.getElementById('popupOverlay');
+    if (!overlay) return;
+    
+    // Animate out
+    const card = document.getElementById('popupCard');
+    if (card) {
+        card.style.transform = 'scale(0.9)';
+        card.style.opacity = '0';
+    }
+    overlay.style.opacity = '0';
+    
+    // After animation, show next popup or close
+    setTimeout(() => {
+        currentPopupIndex++;
+        if (currentPopupIndex < popupQueue.length) {
+            showNextPopup();
+        } else {
+            removePopupOverlay();
+        }
+    }, 300);
+}
+
+function removePopupOverlay() {
+    const overlay = document.getElementById('popupOverlay');
+    if (overlay) {
+        overlay.remove();
+    }
+    document.body.style.overflow = '';
+}
+
+// Call this when homepage loads
+// Add this to your loadHomeContent function or after it:
+document.addEventListener('DOMContentLoaded', function() {
+    // Load popups after page is ready
+    setTimeout(loadActivePopups, 500);
+});
         // ============ REAL-TIME SYNC FROM ADMIN PANEL ============
         async function syncFromAdmin() {
             try {
