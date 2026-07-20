@@ -1228,7 +1228,7 @@
             <!-- Message Editor with Inline Icon -->
             <div class="neco-form-group">
                 <label>Pop-up Message <span style="font-weight:400;color:#6b7280;font-size:12px;">(Select text to format)</span></label>
-                <div style="border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: white;">
+                <div style="border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; background: white;">
                     <!-- Toolbar -->
                     <div id="popupToolbar" style="background: #f9fafb; padding: 8px 12px; border-bottom: 1px solid #e2e8f0; display: flex; flex-wrap: wrap; gap: 4px; align-items: center;">
                         <button type="button" onclick="formatText('bold')" title="Bold" style="padding: 4px 8px; border: none; background: transparent; cursor: pointer; border-radius: 4px; font-weight: 600;">B</button>
@@ -1293,31 +1293,48 @@
                 </div>
             </div>
 
-            <!-- Icon Selection - Small inline icons -->
+            <!-- Icon Selection with Color Picker -->
             <div class="neco-form-group">
                 <label>Icon Type <span style="font-weight:400;color:#6b7280;font-size:12px;">(appears inline with text)</span></label>
-                <div class="icon-selector" id="iconSelector" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                    <div class="icon-option" data-icon="information" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
-                        <svg fill="none" stroke="#3b82f6" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Info
+                <div style="display: flex; gap: 12px; flex-wrap: wrap; align-items: center;">
+                    <div class="icon-selector" id="iconSelector" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                        <div class="icon-option" data-icon="information" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                            <svg fill="none" stroke="#3b82f6" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Info
+                        </div>
+                        <div class="icon-option" data-icon="warning" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                            <svg fill="none" stroke="#f59e0b" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                            Warning
+                        </div>
+                        <div class="icon-option" data-icon="success" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                            <svg fill="none" stroke="#16a34a" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Success
+                        </div>
+                        <div class="icon-option" data-icon="custom" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                            <svg fill="none" stroke="#dc2626" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Custom
+                        </div>
+                        <div class="icon-option" data-icon="none" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
+                            <svg fill="none" stroke="#9ca3af" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                            None
+                        </div>
                     </div>
-                    <div class="icon-option" data-icon="warning" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
-                        <svg fill="none" stroke="#f59e0b" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
-                        Warning
-                    </div>
-                    <div class="icon-option" data-icon="success" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
-                        <svg fill="none" stroke="#16a34a" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Success
-                    </div>
-                    <div class="icon-option" data-icon="custom" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
-                        <svg fill="none" stroke="#dc2626" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Custom
-                    </div>
-                    <div class="icon-option" data-icon="none" onclick="selectIcon(this)" style="padding: 6px 12px; border: 2px solid #e2e8f0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; background: #f9fafb;">
-                        <svg fill="none" stroke="#9ca3af" viewBox="0 0 24 24" stroke-width="2" width="18" height="18"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
-                        None
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label style="font-size: 13px; font-weight: 500; color: #374151;">Icon Color:</label>
+                        <input type="color" id="iconColorPicker" value="#3b82f6" onchange="updateIconColor(this.value)" style="width: 32px; height: 32px; border: 2px solid #e2e8f0; border-radius: 8px; padding: 2px; cursor: pointer;">
                     </div>
                 </div>
+            </div>
+
+            <!-- Icon Position -->
+            <div class="neco-form-group">
+                <label>Icon Position</label>
+                <select id="iconPosition" onchange="updateIconPosition(this.value)" style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f9fafb; font-size: 14px;">
+                    <option value="left">Left (inline with text)</option>
+                    <option value="above">Above text (centered)</option>
+                    <option value="right">Right (inline with text)</option>
+                </select>
+                <small style="font-size: 11px; color: #6b7280;">Choose where the icon appears relative to the message text</small>
             </div>
 
             <!-- Status & Order -->
@@ -1337,17 +1354,32 @@
                     <small style="font-size: 11px; color: #6b7280;">(Lower numbers appear first)</small>
                 </div>
 
-                <!-- Small "I Understand" Checkbox -->
+                <!-- "I Understand" Checkbox -->
                 <div class="neco-form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
-                    <input type="checkbox" id="showUnderstandCheckbox" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer;">
+                    <input type="checkbox" id="showUnderstandCheckbox" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer; border-radius: 2px !important;">
                     <label for="showUnderstandCheckbox" style="margin-bottom: 0; font-size: 13px; font-weight: 400; color: #374151; cursor: pointer;">Show "I Understand" checkbox</label>
                 </div>
+                
+                <!-- Show Counter -->
+                <div class="neco-form-group" style="margin-bottom: 0; display: flex; align-items: center; gap: 8px;">
+                    <input type="checkbox" id="showCounter" checked style="width: 16px; height: 16px; margin: 0; cursor: pointer; border-radius: 2px !important;">
+                    <label for="showCounter" style="margin-bottom: 0; font-size: 13px; font-weight: 400; color: #374151; cursor: pointer;">Show counter (1 of 3)</label>
+                </div>
+            </div>
+
+            <!-- Square Button Preview Option -->
+            <div class="neco-form-group">
+                <label>Button Style</label>
+                <select id="buttonStyle" onchange="updatePopupPreview()" style="width: 100%; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 8px; background: #f9fafb; font-size: 14px;">
+                    <option value="rounded">Rounded (8px)</option>
+                    <option value="square" selected>Square (0px)</option>
+                </select>
             </div>
 
             <!-- Live Preview -->
             <div class="neco-form-group">
                 <label>Live Preview</label>
-                <div id="popupLivePreview" style="background: #f0f2f5; padding: 30px; border-radius: 12px; min-height: 120px; display: flex; justify-content: center; align-items: center; border: 1px dashed #d1d5db;">
+                <div id="popupLivePreview" style="background: #f0f2f5; padding: 30px; border-radius: 8px; min-height: 120px; display: flex; justify-content: center; align-items: center; border: 1px dashed #d1d5db;">
                     <p style="color: #9ca3af; font-size: 13px;">Preview will appear here</p>
                 </div>
             </div>
@@ -1358,9 +1390,27 @@
         </div>
     </div>
 </div>
-
 <style>
 /* Icon position styles */
+/* Square style for popups */
+.popup-preview-square .popup-card {
+    border-radius: 0 !important;
+}
+
+.popup-preview-square button {
+    border-radius: 0 !important;
+}
+
+.popup-preview-square .popup-container {
+    border-radius: 0 !important;
+}
+
+/* Square checkbox */
+#popupModal input[type="checkbox"] {
+    border-radius: 2px !important;
+    width: 16px;
+    height: 16px;
+}
 #popupMessageEditor {
     padding-left: 0px !important;
 }
@@ -1484,7 +1534,173 @@
         localStorage.removeItem('adminLoggedIn');
         location.reload();
     }
+// ============ ICON COLOR AND POSITION FUNCTIONS ============
 
+let iconColor = '#3b82f6';
+let iconPosition = 'left';
+let buttonStyle = 'square';
+let showCounter = true;
+
+function updateIconColor(color) {
+    iconColor = color;
+    // Update the icon preview in the editor
+    const iconPreview = document.getElementById('popupIconPreview');
+    if (iconPreview && selectedIcon && selectedIcon !== 'none') {
+        iconPreview.innerHTML = getIconSVGWithColor(selectedIcon, 18, iconColor);
+    }
+    updatePopupPreview();
+}
+
+function updateIconPosition(position) {
+    iconPosition = position;
+    const editor = document.getElementById('popupMessageEditor');
+    const iconDisplay = document.getElementById('popupIconDisplay');
+    
+    if (iconDisplay) {
+        if (position === 'above') {
+            iconDisplay.style.position = 'relative';
+            iconDisplay.style.top = 'auto';
+            iconDisplay.style.left = 'auto';
+            iconDisplay.style.transform = 'none';
+            iconDisplay.style.display = 'block';
+            iconDisplay.style.textAlign = 'center';
+            iconDisplay.style.marginBottom = '8px';
+            editor.style.paddingLeft = '0px';
+            editor.classList.remove('has-icon');
+        } else if (position === 'right') {
+            iconDisplay.style.position = 'absolute';
+            iconDisplay.style.right = '12px';
+            iconDisplay.style.left = 'auto';
+            iconDisplay.style.top = '50%';
+            iconDisplay.style.transform = 'translateY(-50%)';
+            iconDisplay.style.display = 'block';
+            editor.style.paddingRight = '32px';
+            editor.classList.add('has-icon');
+        } else {
+            // Left (default)
+            iconDisplay.style.position = 'absolute';
+            iconDisplay.style.left = '12px';
+            iconDisplay.style.right = 'auto';
+            iconDisplay.style.top = '50%';
+            iconDisplay.style.transform = 'translateY(-50%)';
+            iconDisplay.style.display = 'block';
+            editor.style.paddingLeft = '32px';
+            editor.classList.add('has-icon');
+        }
+    }
+    updatePopupPreview();
+}
+
+function getIconSVGWithColor(iconType, size = 24, color = null) {
+    const iconColors = {
+        'information': color || '#3b82f6',
+        'warning': color || '#f59e0b',
+        'success': color || '#16a34a',
+        'custom': color || '#dc2626'
+    };
+    const finalColor = iconColors[iconType] || '#3b82f6';
+    
+    const svgs = {
+        'information': `<svg fill="none" stroke="${finalColor}" viewBox="0 0 24 24" stroke-width="2" width="${size}" height="${size}"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'warning': `<svg fill="none" stroke="${finalColor}" viewBox="0 0 24 24" stroke-width="2" width="${size}" height="${size}"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+        'success': `<svg fill="none" stroke="${finalColor}" viewBox="0 0 24 24" stroke-width="2" width="${size}" height="${size}"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'custom': `<svg fill="none" stroke="${finalColor}" viewBox="0 0 24 24" stroke-width="2" width="${size}" height="${size}"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+    };
+    return svgs[iconType] || svgs['information'];
+}
+
+// Override the original getIconSVG to use the color
+function getIconSVG(iconType, size = 24) {
+    return getIconSVGWithColor(iconType, size, iconColor);
+}
+
+// Updated selectIcon function
+function selectIcon(el) {
+    document.querySelectorAll('.icon-option').forEach(opt => opt.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedIcon = el.getAttribute('data-icon');
+    
+    // Update icon display in editor with color
+    const iconDisplay = document.getElementById('popupIconDisplay');
+    const iconPreview = document.getElementById('popupIconPreview');
+    const editor = document.getElementById('popupMessageEditor');
+    const colorPicker = document.getElementById('iconColorPicker');
+    
+    if (selectedIcon && selectedIcon !== 'none') {
+        // Set default color based on icon type
+        const defaultColors = {
+            'information': '#3b82f6',
+            'warning': '#f59e0b',
+            'success': '#16a34a',
+            'custom': '#dc2626'
+        };
+        iconColor = defaultColors[selectedIcon] || '#3b82f6';
+        colorPicker.value = iconColor;
+        
+        iconDisplay.style.display = 'block';
+        iconPreview.innerHTML = getIconSVGWithColor(selectedIcon, 18, iconColor);
+        editor.classList.add('has-icon');
+    } else {
+        iconDisplay.style.display = 'none';
+        editor.classList.remove('has-icon');
+    }
+    
+    updatePopupPreview();
+}
+
+// Updated updatePopupPreview function
+function updatePopupPreview() {
+    const previewContainer = document.getElementById('popupLivePreview');
+    if (!previewContainer) return;
+    
+    const editor = document.getElementById('popupMessageEditor');
+    const message = editor ? editor.innerHTML : '';
+    const iconType = selectedIcon || 'information';
+    const showCheckbox = document.getElementById('showUnderstandCheckbox')?.checked !== false;
+    const showCounter = document.getElementById('showCounter')?.checked !== false;
+    const buttonStyle = document.getElementById('buttonStyle')?.value || 'square';
+    const iconPos = document.getElementById('iconPosition')?.value || 'left';
+    const iconColorVal = document.getElementById('iconColorPicker')?.value || '#3b82f6';
+    
+    const iconHTML = getIconSVGWithColor(iconType, 20, iconColorVal);
+    const borderRadius = buttonStyle === 'square' ? '0px' : '8px';
+    
+    let iconContainer = '';
+    if (iconType && iconType !== 'none') {
+        if (iconPos === 'above') {
+            iconContainer = `<div style="text-align: center; margin-bottom: 12px;">${iconHTML}</div>`;
+        } else if (iconPos === 'right') {
+            iconContainer = `<div style="display: flex; align-items: flex-start; gap: 10px; flex-direction: row-reverse;">
+                <div style="flex-shrink: 0; margin-top: 2px;">${iconHTML}</div>
+                <div style="font-size: 15px; color: #1f2937; line-height: 1.6; flex: 1; word-wrap: break-word;">${message || '<span style="color: #9ca3af;">Your message will appear here</span>'}</div>
+            </div>`;
+        } else {
+            // Left (default)
+            iconContainer = `<div style="display: flex; align-items: flex-start; gap: 10px;">
+                <div style="flex-shrink: 0; margin-top: 2px;">${iconHTML}</div>
+                <div style="font-size: 15px; color: #1f2937; line-height: 1.6; flex: 1; word-wrap: break-word;">${message || '<span style="color: #9ca3af;">Your message will appear here</span>'}</div>
+            </div>`;
+        }
+    } else {
+        iconContainer = `<div style="font-size: 15px; color: #1f2937; line-height: 1.6; word-wrap: break-word;">${message || '<span style="color: #9ca3af;">Your message will appear here</span>'}</div>`;
+    }
+    
+    previewContainer.innerHTML = `
+        <div style="background: white; padding: 24px 30px; max-width: 480px; width: 100%; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: left; border: 1px solid #e5e7eb; border-radius: ${borderRadius};">
+            ${iconContainer}
+            <div style="display: flex; justify-content: flex-end; align-items: center; gap: 12px; margin-top: 16px;">
+                ${showCheckbox ? `
+                    <div style="display: flex; align-items: center; gap: 6px;">
+                        <input type="checkbox" style="width: 14px; height: 14px; margin: 0; cursor: default; accent-color: #16a34a; border-radius: 2px;">
+                        <span style="font-size: 13px; color: #374151; user-select: none;">I understand</span>
+                    </div>
+                ` : ''}
+                <button style="background: #16a34a; color: white; border: none; padding: 8px 24px; font-weight: 500; cursor: default; font-size: 14px; border-radius: ${borderRadius};">Confirm</button>
+            </div>
+            ${showCounter ? `<div style="margin-top: 8px; text-align: center; font-size: 12px; color: #9ca3af;">1 of 3</div>` : ''}
+        </div>
+    `;
+}
     // Check for existing session
     if (localStorage.getItem('adminLoggedIn') === 'true') {
         document.getElementById('loginOverlay').style.display = 'none';
