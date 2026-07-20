@@ -418,7 +418,7 @@ function displayPopup(popup) {
     const popupHTML = `
         <div id="popupCard" style="
             background: white;
-            border-radius: 24px;
+            border-radius: 0px;
             padding: 40px 50px;
             max-width: 520px;
             width: 100%;
@@ -443,7 +443,7 @@ function displayPopup(popup) {
                     color: white;
                     border: none;
                     padding: 12px 36px;
-                    border-radius: 10px;
+                    border-radius: 0px;
                     font-weight: 600;
                     cursor: pointer;
                     font-size: 15px;
@@ -452,7 +452,7 @@ function displayPopup(popup) {
                     I Understand
                 </button>
             </div>
-            ${popupQueue.length > 1 ? `<div style="margin-top: 12px; font-size: 12px; color: #9ca3af;">${currentPopupIndex + 1} of ${popupQueue.length}</div>` : ''}
+            <!-- COUNTER REMOVED - No "1 of 3" text will appear -->
         </div>
     `;
     
