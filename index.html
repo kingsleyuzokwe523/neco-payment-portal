@@ -386,9 +386,9 @@ function displayPopup(popup) {
             backdrop-filter: blur(8px);
             z-index: 99999;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            justify-content: flex-start;
+            align-items: flex-start;
+            padding: 40px 20px;
             opacity: 0;
             transition: opacity 0.4s ease;
         `;
@@ -409,32 +409,35 @@ function displayPopup(popup) {
     const iconColor = iconColors[iconType] || '#3b82f6';
     
     const iconSVGs = {
-        'information': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-        'warning': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
-        'success': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
-        'custom': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="48" height="48"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
+        'information': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'warning': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>`,
+        'success': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`,
+        'custom': `<svg fill="none" stroke="${iconColor}" viewBox="0 0 24 24" stroke-width="2" width="32" height="32"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>`
     };
     
     const popupHTML = `
         <div id="popupCard" style="
             background: white;
             border-radius: 0px;
-            padding: 40px 50px;
-            max-width: 520px;
+            padding: 30px 35px;
+            max-width: 450px;
             width: 100%;
             box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
-            text-align: center;
+            text-align: left;
             transform: scale(0.9);
             opacity: 0;
             transition: all 0.3s ease;
             position: relative;
             max-height: 90vh;
             overflow-y: auto;
+            margin: 0;
+            margin-left: 20px;
         ">
-            <div style="margin-bottom: 20px; display: flex; justify-content: center;">
+            <div style="margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
                 ${iconSVGs[iconType] || iconSVGs['information']}
+                <span style="font-size: 14px; font-weight: 600; color: #1f2937;">Notice</span>
             </div>
-            <div style="font-size: 16px; color: #1f2937; line-height: 1.7; margin-bottom: 28px; word-wrap: break-word;">
+            <div style="font-size: 15px; color: #1f2937; line-height: 1.6; margin-bottom: 24px; word-wrap: break-word;">
                 ${popup.message}
             </div>
             <div style="display: flex; justify-content: flex-end;">
@@ -442,17 +445,16 @@ function displayPopup(popup) {
                     background: #16a34a;
                     color: white;
                     border: none;
-                    padding: 12px 36px;
+                    padding: 10px 30px;
                     border-radius: 0px;
-                    font-weight: 600;
+                    font-weight: 500;
                     cursor: pointer;
-                    font-size: 15px;
+                    font-size: 14px;
                     transition: background 0.2s;
                 " onmouseover="this.style.background='#15803d'" onmouseout="this.style.background='#16a34a'">
                     I Understand
                 </button>
             </div>
-            <!-- COUNTER REMOVED - No "1 of 3" text will appear -->
         </div>
     `;
     
@@ -469,7 +471,6 @@ function displayPopup(popup) {
         }
     }, 50);
 }
-
 function dismissPopup() {
     const overlay = document.getElementById('popupOverlay');
     if (!overlay) return;
